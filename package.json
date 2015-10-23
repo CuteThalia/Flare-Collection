@@ -7,11 +7,9 @@
     "gulp-babel": "5.3.0",
     "gulp-concat": "2.6.0",
     "gulp-uglify": "1.4.2",
-    "browserify": "11.2.0"
+    "gulpify": "0.1.1"
   },
   "scripts": {
-    "gulp": "gulp",
-    "browserify": "browserify",
-    "create": "browserify processed/Flare-AddNewCurrency.js > dist/Flare-AddNewCurrency.js && browserify processed/minified/Flare-AddNewCurrency.js > dist/minified/Flare-AddNewCurrency.js"
+    "gulp": "gulp"
   }
 }
