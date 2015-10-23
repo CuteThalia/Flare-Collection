@@ -1,0 +1,14 @@
+{
+  "name": "flare-collection",
+  "description": "collection of scripts for the RPG Maker MV system.",
+  "version": "0.0.1",
+  "dependencies": {
+    "gulp": "3.9.0",
+    "gulp-babel": "5.3.0",
+    "gulp-concat": "2.6.0",
+    "gulp-uglify": "1.4.2"
+  },
+  "scripts": {
+    "gulp": "gulp"
+  }
+}
