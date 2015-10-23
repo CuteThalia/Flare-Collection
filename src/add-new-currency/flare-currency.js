@@ -5,8 +5,9 @@
  /*:
   * Flare Collection - Currency
   *
-  * @plugindesc Allows you to add a new currency or set of currencies to the Game.
-  * this script depends upon the Flare Currency Shop
+  * @plugindesc Allows you to add a new currency or set of currencies to the game
+  * such currencies can include things like "clay pot" or "silver coin" they are then
+  * used in shops.
   * @author Adam Balan (AKA: DarknessFalls)
   *
   * @help
@@ -33,4 +34,4 @@
 
  };
 
- module.exports=FlareCurrency;
+export {FlareCurrency};
