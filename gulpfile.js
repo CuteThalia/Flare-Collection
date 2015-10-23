@@ -4,21 +4,21 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 
 gulp.task('default', [
-  'compile:add-new-currency',
-  'compile:add-new-currency-minified'
+  'process:add-new-currency',
+  'process:add-new-currency-minified'
 ]);
 
-gulp.task("compile:add-new-currency", function(){
+gulp.task("process:add-new-currency", function(){
   return gulp.src('src/add-new-currency/**/*.js')
              .pipe(babel())
              .pipe(concat('Flare-AddNewCurrency.js'))
-             .pipe(gulp.dest('dist/'));
+             .pipe(gulp.dest('process/'));
 });
 
-gulp.task("compile:add-new-currency-minified", function(){
+gulp.task("process:add-new-currency-minified", function(){
   return gulp.src('src/add-new-currency/**/*.js')
              .pipe(babel())
              .pipe(concat('Flare-AddNewCurrency.js'))
              .pipe(uglify({"preserveComments": "all"}))
-             .pipe(gulp.dest('dist/minified/'));
+             .pipe(gulp.dest('process/minified/'));
 });
