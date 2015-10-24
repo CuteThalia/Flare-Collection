@@ -4,12 +4,8 @@
   "version": "0.0.1",
   "dependencies": {
     "gulp": "3.9.0",
-    "gulp-babel": "5.3.0",
-    "gulp-concat": "2.6.0",
-    "gulp-uglify": "1.4.2",
-    "gulpify": "0.1.1"
-  },
-  "scripts": {
-    "gulp": "gulp"
+    "browserify": "11.2.0",
+    "vinyl-source-stream": "1.1.0",
+    "babelify": "6.4.0"
   }
 }

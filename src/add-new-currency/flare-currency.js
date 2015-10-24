@@ -1,3 +1,5 @@
+var Currency = require('./currency.js');
+
 /**
  * @namespace FlareCollection
  */
@@ -30,8 +32,10 @@
  *
  * Depends upon the Flare-CurrencyShop Plugin
  */
- var FlareCurrency = {
+var FlareCurrency = {
+  hello: function() {
+    Currency.hello();
+  }
+};
 
- };
-
-export {FlareCurrency};
+FlareCurrency.hello();
