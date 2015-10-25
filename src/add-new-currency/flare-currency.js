@@ -1,10 +1,11 @@
-var Currency = require('./currency.js');
+var Currency          = require('./currency.js');
+var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
 
 /**
  * @namespace FlareCollection
  */
 
- /*:
+ /**
   * Flare Collection - Currency
   *
   * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -12,30 +13,32 @@ var Currency = require('./currency.js');
   * used in shops.
   * @author Adam Balan (AKA: DarknessFalls)
   *
-  * @help
-  * There is no Configuration and Plugin Command.
+  * @param ---Currencies---
+  * @desc
   *
-  * ============================================================================
-  *
-  * States
-  * To make a state to be retained on death, use the following notetag:
-  *   <retain on death>
-  *
-  * ============================================================================
+  * @param Currency One
+  * @desc First Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+  * Default: {}
+  * @default {}
   */
 
-/**
- * Allows us to add a new currency type
- *
- * We want to be able to specify a new currency type
- * or set of types based on currencies that exist.
- *
- * Depends upon the Flare-CurrencyShop Plugin
- */
-var FlareCurrency = {
-  hello: function() {
-    Currency.hello();
+var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
+
+class FlareCurrency {
+
+  constructor() {}
+
+  createCurrencies() {
+    Currency.store(FlareCurrencyPluginParamters);
   }
+
+  currencies() {
+    Currency.getCurrencyStore();
+  }
+
 };
 
-FlareCurrency.hello();
+const flareCurrencyMenu = new FlareCurrencyMenu();
+flareCurrencyMenu.menuHandler();
+
+window.FlareCurrency = FlareCurrency;
