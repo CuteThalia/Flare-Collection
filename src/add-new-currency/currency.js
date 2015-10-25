@@ -1,3 +1,5 @@
+var FlareError = require('../flare_error.js');
+
 /**
  * Currency Object Creation Class
  *
@@ -8,7 +10,7 @@
 class Currency {
 
   constructor() {
-    this._currencyStore = []
+    this._currencyStore = [];
   }
 
   /**
@@ -17,14 +19,14 @@ class Currency {
    * @param currency - object
    */
   store(currency) {
-
     for (var key in currency) {
       if (currency.hasOwnProperty(key) && currency[key] !== "") {
+        if (Object.keys(JSON.parse(currency[key])).length > 0) {
+          var currencyObject = JSON.parse(currency[key]);
+          this.currencyValidator(currencyObject);
 
-        var currencyObject = JSON.parse(currency[key]);
-        this.currencyValidator(currencyObject);
-
-        this._currencyStore.push(currencyObject);
+          this._currencyStore.push(currencyObject);
+        }
       }
     }
   }
@@ -36,15 +38,15 @@ class Currency {
    */
   currencyValidator(currencyJson) {
     if (!currencyJson.hasOwnProperty('name')) {
-      throw 'Missing name for currency object.';
+      FlareError.error('Currency must have a name attribute in the json.');
     }
 
     if (!currencyJson.hasOwnProperty('description')) {
-      throw 'Missing description for currency object.';
+      FlareError.error('Currency must have a description attribute in the json.');
     }
 
     if (!currencyJson.hasOwnProperty('icon')) {
-      throw 'Missing icon for currency object.';
+      FlareError.error('Currency must have a icon attribute in the json.');
     }
   }
 

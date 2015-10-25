@@ -1,4 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var FlareError = require('../flare_error.js');
+
 /**
  * Currency Object Creation Class
  *
@@ -6,11 +14,6 @@
  * them in a currency store that can then be fetched and manipulated
  * through out the game.
  */
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var Currency = (function () {
   function Currency() {
@@ -28,14 +31,14 @@ var Currency = (function () {
   _createClass(Currency, [{
     key: 'store',
     value: function store(currency) {
-
       for (var key in currency) {
         if (currency.hasOwnProperty(key) && currency[key] !== "") {
+          if (Object.keys(JSON.parse(currency[key])).length > 0) {
+            var currencyObject = JSON.parse(currency[key]);
+            this.currencyValidator(currencyObject);
 
-          var currencyObject = JSON.parse(currency[key]);
-          this.currencyValidator(currencyObject);
-
-          this._currencyStore.push(currencyObject);
+            this._currencyStore.push(currencyObject);
+          }
         }
       }
     }
@@ -49,15 +52,15 @@ var Currency = (function () {
     key: 'currencyValidator',
     value: function currencyValidator(currencyJson) {
       if (!currencyJson.hasOwnProperty('name')) {
-        throw 'Missing name for currency object.';
+        FlareError.error('Currency must have a name attribute in the json.');
       }
 
       if (!currencyJson.hasOwnProperty('description')) {
-        throw 'Missing description for currency object.';
+        FlareError.error('Currency must have a description attribute in the json.');
       }
 
       if (!currencyJson.hasOwnProperty('icon')) {
-        throw 'Missing icon for currency object.';
+        FlareError.error('Currency must have a icon attribute in the json.');
       }
     }
 
@@ -80,7 +83,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{}],2:[function(require,module,exports){
+},{"../flare_error.js":6}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -89,14 +92,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Currency = require('./currency.js');
 var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
+var FlareError = require('../flare_error.js');
 
 /**
  * @namespace FlareCollection
  */
 
-/**
- * Flare Collection - Currency
- *
+/*:
  * @plugindesc Allows you to add a new currency or set of currencies to the game
  * such currencies can include things like "clay pot" or "silver coin" they are then
  * used in shops.
@@ -109,24 +111,90 @@ var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
  * @desc First Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
  * Default: {}
  * @default {}
+ *
+ * @param Currency Two
+ * @desc Second Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Three
+ * @desc Third Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Four
+ * @desc Fourth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Five
+ * @desc Fifth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Six
+ * @desc Sixth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Seven
+ * @desc Seventh Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Eight
+ * @desc Eigth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Nine
+ * @desc Nineth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @param Currency Ten
+ * @desc TenTh Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
+ * Default: {}
+ * @default {}
+ *
+ * @help
+ *
+ * All Currencies must have the following format:
+ *
+ * {"name": "some name", "description": "something", "icon": index}.
+ *
+ * Any deviation from this will cause an exception to be thrown. I do validate
+ * that you have those fields filled in. Should you not want to use a currency,
+ * you must provide: {} which is the default.
  */
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
 
+/**
+ * Core Currency Class.
+ *
+ * Contains a method called createCurrencies() that creates the currencies based off
+ * the plugin paramters.
+ */
+
 var FlareCurrency = (function () {
   function FlareCurrency() {
     _classCallCheck(this, FlareCurrency);
+
+    this._currency = new Currency();
   }
+
+  /**
+   * Non public API method to create currencies.
+   *
+   * Calls on the Currency class to store the currencies
+   * that were set up via the plugin parameters.
+   */
 
   _createClass(FlareCurrency, [{
     key: 'createCurrencies',
     value: function createCurrencies() {
-      Currency.store(FlareCurrencyPluginParamters);
-    }
-  }, {
-    key: 'currencies',
-    value: function currencies() {
-      Currency.getCurrencyStore();
+      this._currency.store(FlareCurrencyPluginParamters);
     }
   }]);
 
@@ -135,12 +203,30 @@ var FlareCurrency = (function () {
 
 ;
 
+// Create the Currencies menu item.
 var flareCurrencyMenu = new FlareCurrencyMenu();
 flareCurrencyMenu.menuHandler();
 
+// Creates the Currencies.
+var flareCurrency = new FlareCurrency();
+flareCurrency.createCurrencies();
+
+// Handles Errors thrown in classes that do not extend the
+// the RPG Maker classes.
+// @see FlareError
+var mainSceneMapInitializer = Scene_Map.prototype.initialize;
+Scene_Map.prototype.initialize = function () {
+  mainSceneMapInitializer.call(this);
+
+  if (FlareError.getError() !== undefined) {
+    throw new Error(FlareError.getError());
+  }
+};
+
+// Gives the world access to the Flare Currency class.
 window.FlareCurrency = FlareCurrency;
 
-},{"./currency.js":1,"./menus/flare_currency_menu.js":3}],3:[function(require,module,exports){
+},{"../flare_error.js":6,"./currency.js":1,"./menus/flare_currency_menu.js":3}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -213,7 +299,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface.js":6,"../scenes/flare_currency_scene":4}],4:[function(require,module,exports){
+},{"../../flare_menu_scene_interface.js":7,"../scenes/flare_currency_scene":4}],4:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -313,7 +399,6 @@ var FlareCurrencyWindow = (function (_Window_Base) {
     _classCallCheck(this, FlareCurrencyWindow);
 
     _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'constructor', this).call(this);
-
     this.initialize();
     this.refresh();
   }
@@ -349,6 +434,65 @@ var FlareCurrencyWindow = (function (_Window_Base) {
 module.exports = FlareCurrencyWindow;
 
 },{}],6:[function(require,module,exports){
+/**
+ * Custom Error Handler Class.
+ *
+ * Use by doing: FlareError.error('Error Text'); then do:
+ * FlareError.getError() in the Scene Map initializer to throw
+ * errors on the start of the game.
+ *
+ * This class wont be useful in classes that subclass core RPG Maker
+ * classes because the error handler there knows how to catch errors
+ * and deal with them.
+ *
+ * So when would you use this? In classes that dont extend any of the
+ * core RPG Maker classes.
+ *
+ * Alias the Scene_Map initialize method, check if the getError()
+ * returns undefined or not, if not, throw a new Error with the value of
+ * getError()
+ */
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FlareError = (function () {
+  function FlareError() {
+    _classCallCheck(this, FlareError);
+  }
+
+  _createClass(FlareError, null, [{
+    key: "error",
+
+    /**
+     * Use this to set a new error message.
+     *
+     * @param String message
+     */
+    value: function error(message) {
+      this._error = message;
+    }
+
+    /**
+     * Get the error message.
+     *
+     * @return undefined or string
+     */
+  }, {
+    key: "getError",
+    value: function getError() {
+      return this._error;
+    }
+  }]);
+
+  return FlareError;
+})();
+
+module.exports = FlareError;
+
+},{}],7:[function(require,module,exports){
 /**
  * Interace based class.
  *

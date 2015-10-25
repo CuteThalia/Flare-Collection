@@ -9,7 +9,6 @@
 class FlareCurrencyWindow extends Window_Base {
   constructor() {
     super();
-
     this.initialize();
     this.refresh();
   }
