@@ -60,9 +60,9 @@ class FlareCurrencyWindow extends FlareWindowBase {
     var colorCode = 0;
 
     textState.text = currencyName;
-    var colorCode = this.obtainEscapeParam(textState);
     var currencyName = this.convertEscapeCharacters(currencyName);
-
+    var colorCode = this.obtainEscapeParam(currencyName);
+    console.log(colorCode);
     this.changeTextColor(colorCode);
 
     this.drawText(currencyName, 60, baseYForText - 10, this.textWidth(currencyName), 'left');
