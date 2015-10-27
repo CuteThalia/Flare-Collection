@@ -1,9 +1,9 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
+"use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FlareError = require('../flare_error.js');
 
@@ -19,7 +19,7 @@ var Currency = (function () {
   function Currency() {
     _classCallCheck(this, Currency);
 
-    this._currencyStore = [];
+    this._currencyStore;
   }
 
   /**
@@ -29,39 +29,34 @@ var Currency = (function () {
    */
 
   _createClass(Currency, [{
-    key: 'store',
+    key: "store",
     value: function store(currency) {
-      for (var key in currency) {
-        if (currency.hasOwnProperty(key) && currency[key] !== "") {
-          if (Object.keys(JSON.parse(currency[key])).length > 0) {
-            var currencyObject = JSON.parse(currency[key]);
-            this.currencyValidator(currencyObject);
-
-            this._currencyStore.push(currencyObject);
-          }
-        }
-      }
-    }
-
-    /**
-     * Validates the json to make sure we have all the parts we need.
-     *
-     * @param curencyJson - JSON
-     */
-  }, {
-    key: 'currencyValidator',
-    value: function currencyValidator(currencyJson) {
-      if (!currencyJson.hasOwnProperty('name')) {
-        FlareError.error('Currency must have a name attribute in the json.');
-      }
-
-      if (!currencyJson.hasOwnProperty('description')) {
-        FlareError.error('Currency must have a description attribute in the json.');
-      }
-
-      if (!currencyJson.hasOwnProperty('icon')) {
-        FlareError.error('Currency must have a icon attribute in the json.');
-      }
+      this._currencyStore = [{
+        name: currency["Currency One Name"],
+        description: currency["Currency One Description"],
+        icon: currency["Currency One Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Two Name"],
+        description: currency["Currency Two Description"],
+        icon: currency["Currency Two Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Three Name"],
+        description: currency["Currency Three Description"],
+        icon: currency["Currency Three Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Four Name"],
+        description: currency["Currency Four Description"],
+        icon: currency["Currency Four Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Five Name"],
+        description: currency["Currency Five Description"],
+        icon: currency["Currency Five Icon Index"],
+        amount: 0
+      }];
     }
 
     /**
@@ -70,7 +65,7 @@ var Currency = (function () {
      * @return Array of Objects
      */
   }, {
-    key: 'getCurrencyStore',
+    key: "getCurrencyStore",
     value: function getCurrencyStore() {
       return this._currencyStore;
     }
@@ -104,68 +99,108 @@ var FlareError = require('../flare_error.js');
  * used in shops.
  * @author Adam Balan (AKA: DarknessFalls)
  *
- * @param ---Currencies---
+ * @param ---Currency One---
  * @desc
  *
- * @param Currency One
- * @desc First Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency One Name
+ * @desc Name of the Currency
+ * Default: Example Name
+ * @default Example Name
  *
- * @param Currency Two
- * @desc Second Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency One Description
+ * @desc Keep it short. Currency description
+ * Default: Used to buy: something.
+ * @default Used to buy: something.
  *
- * @param Currency Three
- * @desc Third Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency One Icon Index
+ * @desc icon index.
+ * Default: 25
+ * @default 25
  *
- * @param Currency Four
- * @desc Fourth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param ---Currency Two---
+ * @desc
  *
- * @param Currency Five
- * @desc Fifth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency Two Name
+ * @desc Name of the Currency
+ * Default: Example Name
+ * @default Example Name
  *
- * @param Currency Six
- * @desc Sixth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency Two Description
+ * @desc Keep it short. Currency description
+ * Default: Used to buy: something.
+ * @default Used to buy: something.
  *
- * @param Currency Seven
- * @desc Seventh Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency Two Icon Index
+ * @desc icon index.
+ * Default: 25
+ * @default 25
  *
- * @param Currency Eight
- * @desc Eigth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param ---Currency Three---
+ * @desc
  *
- * @param Currency Nine
- * @desc Nineth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency Three Name
+ * @desc Name of the Currency
+ * Default: Example Name
+ * @default Example Name
  *
- * @param Currency Ten
- * @desc TenTh Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
- * Default: {}
- * @default {}
+ * @param Currency Three Description
+ * @desc Keep it short. Currency description
+ * Default: Used to buy: something.
+ * @default Used to buy: something.
+ *
+ * @param Currency Three Icon Index
+ * @desc icon index.
+ * Default: 25
+ * @default 25
+ *
+ * @param ---Currency Four---
+ * @desc
+ *
+ * @param Currency Four Name
+ * @desc Name of the Currency
+ * Default: Example Name
+ * @default Example Name
+ *
+ * @param Currency Four Description
+ * @desc Keep it short. Currency description
+ * Default: Used to buy: something.
+ * @default Used to buy: something.
+ *
+ * @param Currency Four Icon Index
+ * @desc icon index.
+ * Default: 25
+ * @default 25
+ *
+ * @param ---Currency Five---
+ * @desc
+ *
+ * @param Currency Five Name
+ * @desc Name of the Currency
+ * Default: Example Name
+ * @default Example Name
+ *
+ * @param Currency Five Description
+ * @desc Keep it short. Currency description
+ * Default: Used to buy: something.
+ * @default Used to buy: something.
+ *
+ * @param Currency Five Icon Index
+ * @desc icon index.
+ * Default: 25
+ * @default 25
  *
  * @help
  *
- * All Currencies must have the following format:
+ * Currencies can be used in game to buy items that require that specific
+ * currency. For example maybe Demonic Armor needs 5 Demonic Runes. you
+ * would create a currency called Demonic Runes, with a description of:
+ * "Used to buy Demonic Armour" and then set an icon index.
  *
- * {"name": "some name", "description": "something", "icon": index}.
+ * Descriptions must be kept SUPER SUPER short. yes we do allow short codes
+ * but no we do not do anything like word wrapping. Keep the concept of:
  *
- * Any deviation from this will cause an exception to be thrown. I do validate
- * that you have those fields filled in. Should you not want to use a currency,
- * you must provide: {} which is the default.
+ * Used to buy: x
+ *
  */
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
@@ -181,7 +216,7 @@ var FlareCurrency = (function () {
   function FlareCurrency() {
     _classCallCheck(this, FlareCurrency);
 
-    this._currency = new Currency();
+    window.flareCurrency = new Currency();
   }
 
   /**
@@ -194,7 +229,7 @@ var FlareCurrency = (function () {
   _createClass(FlareCurrency, [{
     key: 'createCurrencies',
     value: function createCurrencies() {
-      this._currency.store(FlareCurrencyPluginParamters);
+      window.flareCurrency.store(FlareCurrencyPluginParamters);
     }
   }]);
 
@@ -222,9 +257,6 @@ Scene_Map.prototype.initialize = function () {
     throw new Error(FlareError.getError());
   }
 };
-
-// Gives the world access to the Flare Currency class.
-window.FlareCurrency = FlareCurrency;
 
 },{"../flare_error.js":6,"./currency.js":1,"./menus/flare_currency_menu.js":3}],3:[function(require,module,exports){
 'use strict';
@@ -374,14 +406,6 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 module.exports = FlareCurrencyScene;
 
 },{"../windows/flare_currency_window.js":5}],5:[function(require,module,exports){
-/**
- * Create the currency window.
- *
- * Create a window that is the size of the entire game box.
- * This window displays all the currencies a party has.
- *
- * Currencies not stored here is gold.
- */
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -392,8 +416,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FlareCurrencyWindow = (function (_Window_Base) {
-  _inherits(FlareCurrencyWindow, _Window_Base);
+var Currency = require('../currency.js');
+var FlareWindowBase = require('../../flare_window_base.js');
+
+/**
+ * Create the currency window.
+ *
+ * Create a window that is the size of the entire game box.
+ * This window displays all the currencies a party has.
+ *
+ * Currencies not stored here is gold.
+ */
+
+var FlareCurrencyWindow = (function (_FlareWindowBase) {
+  _inherits(FlareCurrencyWindow, _FlareWindowBase);
 
   function FlareCurrencyWindow() {
     _classCallCheck(this, FlareCurrencyWindow);
@@ -406,34 +442,70 @@ var FlareCurrencyWindow = (function (_Window_Base) {
   _createClass(FlareCurrencyWindow, [{
     key: 'initialize',
     value: function initialize() {
-      _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'initialize', this).call(this, 0, 0, this.windowWidth(), this.windowHeight());
+      _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'initialize', this).call(this, this.tryAndCenter(), this.tryAndCenter() - 120, this.windowWidth(), this.windowHeight());
+    }
+  }, {
+    key: 'tryAndCenter',
+    value: function tryAndCenter() {
+      return Graphics.boxWidth / 2 / 2;
     }
   }, {
     key: 'windowWidth',
     value: function windowWidth() {
-      return Graphics.boxWidth;
+      return Graphics.boxWidth / 2;
     }
   }, {
     key: 'windowHeight',
     value: function windowHeight() {
-      return Graphics.boxHeight;
+      return Graphics.boxWidth / 2 + 50;
     }
   }, {
     key: 'refresh',
     value: function refresh() {
-      this.drawText('Hello World', 150, 200, 100, 'center');
-      this.drawText('Hello World', 150, 300, 100, 'center');
-      this.drawText('Hello World', 300, 300, 100, 'center');
-      this.drawText('Hello World', 450, 300, 100, 'center');
+      this.drawText('Currencies', 10, 10, 100, 'center');
+
+      var currencies = window.flareCurrency.getCurrencyStore();
+      this.contents.fontSize = 16;
+
+      var baseYForText = 70; // the y variable for drawText and drawIcon.
+      var textState = {};
+
+      var self = this;
+      currencies.map(function (currency) {
+        if (typeof currency === 'object') {
+
+          self.drawIcon(currency.icon, 10, baseYForText);
+          self.printCurrencyName(currency.name, baseYForText);
+          self.drawText(currency.description, 60, baseYForText + 10, self.textWidth(currency.description), 'left');
+          self.drawText('Currently Have: ' + currency.amount, 60, baseYForText + 30, 250, 'left');
+
+          baseYForText += 70;
+        }
+      });
+    }
+  }, {
+    key: 'printCurrencyName',
+    value: function printCurrencyName(currencyName, baseYForText) {
+      var textState = {};
+      var colorCode = 0;
+
+      textState.text = currencyName;
+      var colorCode = this.obtainEscapeParam(textState);
+      var currencyName = this.convertEscapeCharacters(currencyName);
+
+      this.changeTextColor(colorCode);
+
+      this.drawText(currencyName, 60, baseYForText - 10, this.textWidth(currencyName), 'left');
+      this.resetTextColor();
     }
   }]);
 
   return FlareCurrencyWindow;
-})(Window_Base);
+})(FlareWindowBase);
 
 module.exports = FlareCurrencyWindow;
 
-},{}],6:[function(require,module,exports){
+},{"../../flare_window_base.js":8,"../currency.js":1}],6:[function(require,module,exports){
 /**
  * Custom Error Handler Class.
  *
@@ -538,5 +610,57 @@ var FlareMenuSceneHandlerInterface = (function () {
 })();
 
 module.exports = FlareMenuSceneHandlerInterface;
+
+},{}],8:[function(require,module,exports){
+/**
+ * All Flare based items use this window base.
+ *
+ * Flare Window Base extends the Window Base Class
+ * and adds some additional generic helper methods
+ * that are useful for creating windows and their contents.
+ */
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowBase = (function (_Window_Base) {
+  _inherits(FlareWindowBase, _Window_Base);
+
+  function FlareWindowBase() {
+    _classCallCheck(this, FlareWindowBase);
+
+    _get(Object.getPrototypeOf(FlareWindowBase.prototype), "constructor", this).call(this);
+  }
+
+  _createClass(FlareWindowBase, [{
+    key: "createBaseRectangle",
+    value: function createBaseRectangle(textWidth, width, height, y) {
+      var rect = new Rectangle();
+      var maxCols = maxCols;
+
+      rect.width = textWidth;
+      rect.height = height;
+      rect.x = textWidth + this.spacing();
+      rect.y = y;
+
+      return rect;
+    }
+  }, {
+    key: "spacing",
+    value: function spacing() {
+      return 50;
+    }
+  }]);
+
+  return FlareWindowBase;
+})(Window_Base);
+
+module.exports = FlareWindowBase;
 
 },{}]},{},[2]);

@@ -12,68 +12,108 @@ var FlareError        = require('../flare_error.js');
   * used in shops.
   * @author Adam Balan (AKA: DarknessFalls)
   *
-  * @param ---Currencies---
+  * @param ---Currency One---
   * @desc
   *
-  * @param Currency One
-  * @desc First Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency One Name
+  * @desc Name of the Currency
+  * Default: Example Name
+  * @default Example Name
   *
-  * @param Currency Two
-  * @desc Second Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency One Description
+  * @desc Keep it short. Currency description
+  * Default: Used to buy: something.
+  * @default Used to buy: something.
   *
-  * @param Currency Three
-  * @desc Third Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency One Icon Index
+  * @desc icon index.
+  * Default: 25
+  * @default 25
   *
-  * @param Currency Four
-  * @desc Fourth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param ---Currency Two---
+  * @desc
   *
-  * @param Currency Five
-  * @desc Fifth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency Two Name
+  * @desc Name of the Currency
+  * Default: Example Name
+  * @default Example Name
   *
-  * @param Currency Six
-  * @desc Sixth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency Two Description
+  * @desc Keep it short. Currency description
+  * Default: Used to buy: something.
+  * @default Used to buy: something.
   *
-  * @param Currency Seven
-  * @desc Seventh Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency Two Icon Index
+  * @desc icon index.
+  * Default: 25
+  * @default 25
   *
-  * @param Currency Eight
-  * @desc Eigth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param ---Currency Three---
+  * @desc
   *
-  * @param Currency Nine
-  * @desc Nineth Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency Three Name
+  * @desc Name of the Currency
+  * Default: Example Name
+  * @default Example Name
   *
-  * @param Currency Ten
-  * @desc TenTh Currency, enter something like: {name: 'currency', description: 'something', icon: 20}
-  * Default: {}
-  * @default {}
+  * @param Currency Three Description
+  * @desc Keep it short. Currency description
+  * Default: Used to buy: something.
+  * @default Used to buy: something.
+  *
+  * @param Currency Three Icon Index
+  * @desc icon index.
+  * Default: 25
+  * @default 25
+  *
+  * @param ---Currency Four---
+  * @desc
+  *
+  * @param Currency Four Name
+  * @desc Name of the Currency
+  * Default: Example Name
+  * @default Example Name
+  *
+  * @param Currency Four Description
+  * @desc Keep it short. Currency description
+  * Default: Used to buy: something.
+  * @default Used to buy: something.
+  *
+  * @param Currency Four Icon Index
+  * @desc icon index.
+  * Default: 25
+  * @default 25
+  *
+  * @param ---Currency Five---
+  * @desc
+  *
+  * @param Currency Five Name
+  * @desc Name of the Currency
+  * Default: Example Name
+  * @default Example Name
+  *
+  * @param Currency Five Description
+  * @desc Keep it short. Currency description
+  * Default: Used to buy: something.
+  * @default Used to buy: something.
+  *
+  * @param Currency Five Icon Index
+  * @desc icon index.
+  * Default: 25
+  * @default 25
   *
   * @help
   *
-  * All Currencies must have the following format:
+  * Currencies can be used in game to buy items that require that specific
+  * currency. For example maybe Demonic Armor needs 5 Demonic Runes. you
+  * would create a currency called Demonic Runes, with a description of:
+  * "Used to buy Demonic Armour" and then set an icon index.
   *
-  * {"name": "some name", "description": "something", "icon": index}.
+  * Descriptions must be kept SUPER SUPER short. yes we do allow short codes
+  * but no we do not do anything like word wrapping. Keep the concept of:
   *
-  * Any deviation from this will cause an exception to be thrown. I do validate
-  * that you have those fields filled in. Should you not want to use a currency,
-  * you must provide: {} which is the default.
+  * Used to buy: x
+  *
   */
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
@@ -87,7 +127,7 @@ var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
 class FlareCurrency {
 
   constructor() {
-    this._currency = new Currency();
+    window.flareCurrency = new Currency();
   }
 
   /**
@@ -97,7 +137,7 @@ class FlareCurrency {
    * that were set up via the plugin parameters.
    */
   createCurrencies() {
-    this._currency.store(FlareCurrencyPluginParamters);
+    window.flareCurrency.store(FlareCurrencyPluginParamters);
   }
 };
 
@@ -120,6 +160,3 @@ Scene_Map.prototype.initialize = function () {
     throw new Error(FlareError.getError());
   }
 };
-
-// Gives the world access to the Flare Currency class.
-window.FlareCurrency = FlareCurrency;

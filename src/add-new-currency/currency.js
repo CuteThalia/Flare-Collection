@@ -10,7 +10,7 @@ var FlareError = require('../flare_error.js');
 class Currency {
 
   constructor() {
-    this._currencyStore = [];
+    this._currencyStore;
   }
 
   /**
@@ -18,36 +18,39 @@ class Currency {
    *
    * @param currency - object
    */
-  store(currency) {
-    for (var key in currency) {
-      if (currency.hasOwnProperty(key) && currency[key] !== "") {
-        if (Object.keys(JSON.parse(currency[key])).length > 0) {
-          var currencyObject = JSON.parse(currency[key]);
-          this.currencyValidator(currencyObject);
-
-          this._currencyStore.push(currencyObject);
-        }
-      }
-    }
-  }
-
-  /**
-   * Validates the json to make sure we have all the parts we need.
-   *
-   * @param curencyJson - JSON
-   */
-  currencyValidator(currencyJson) {
-    if (!currencyJson.hasOwnProperty('name')) {
-      FlareError.error('Currency must have a name attribute in the json.');
-    }
-
-    if (!currencyJson.hasOwnProperty('description')) {
-      FlareError.error('Currency must have a description attribute in the json.');
-    }
-
-    if (!currencyJson.hasOwnProperty('icon')) {
-      FlareError.error('Currency must have a icon attribute in the json.');
-    }
+   store(currency) {
+    this._currencyStore = [
+        {
+          name:         currency["Currency One Name"],
+          description:  currency["Currency One Description"],
+          icon:         currency["Currency One Icon Index"],
+          amount:       0
+        },
+        {
+          name:         currency["Currency Two Name"],
+          description:  currency["Currency Two Description"],
+          icon:         currency["Currency Two Icon Index"],
+          amount:       0
+        },
+        {
+          name:         currency["Currency Three Name"],
+          description:  currency["Currency Three Description"],
+          icon:         currency["Currency Three Icon Index"],
+          amount:       0
+        },
+        {
+          name:         currency["Currency Four Name"],
+          description:  currency["Currency Four Description"],
+          icon:         currency["Currency Four Icon Index"],
+          amount:       0
+        },
+        {
+          name:         currency["Currency Five Name"],
+          description:  currency["Currency Five Description"],
+          icon:         currency["Currency Five Icon Index"],
+          amount:       0
+        },
+      ];
   }
 
   /**
