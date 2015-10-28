@@ -17,7 +17,7 @@ class FlareCurrencyWindow extends FlareWindowBase {
   }
 
   initialize() {
-    super.initialize(this.tryAndCenter(), this.tryAndCenter() - 120, this.windowWidth(), this.windowHeight());
+    super.initialize(this.tryAndCenter(), this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
   }
 
   tryAndCenter() {
@@ -29,46 +29,35 @@ class FlareCurrencyWindow extends FlareWindowBase {
   }
 
   windowHeight() {
-    return Graphics.boxWidth / 2 + 50;
+    return Graphics.boxWidth / 2 + 190;
   }
 
   refresh() {
     this.drawText('Currencies', 10, 10, 100, 'center');
 
     var currencies = window.flareCurrency.getCurrencyStore();
-    this.contents.fontSize = 16;
 
-    var baseYForText = 70; // the y variable for drawText and drawIcon.
-    var textState = {};
+    this.drawFlareCurrencies(currencies);
+    this.resetFontSettings();
+  }
+
+  drawFlareCurrencies(currencies) {
+    var baseYForText       = 70; // the y variable for drawText and drawIcon.
+    this.contents.fontSize = 20;
 
     var self = this;
     currencies.map(function(currency){
       if (typeof currency === 'object') {
 
         self.drawIcon(currency.icon, 10, baseYForText );
-        self.printCurrencyName(currency.name, baseYForText);
-        self.drawText(currency.description, 60, baseYForText + 10, self.textWidth(currency.description), 'left');
-        self.drawText('Currently Have: ' + currency.amount, 60, baseYForText + 30, 250, 'left');
+        self.flareDrawTextEx(currency.name, 60, baseYForText - 10);
+        self.flareDrawTextEx(currency.description, 60, baseYForText + 15);
+        self.flareDrawTextEx('Currently Have: ' + currency.amount, 60, baseYForText + 42, 250, 'left');
 
-        baseYForText += 70;
+        baseYForText += 100;
       }
     });
   }
-
-  printCurrencyName(currencyName, baseYForText) {
-    var textState = {}
-    var colorCode = 0;
-
-    textState.text = currencyName;
-    var currencyName = this.convertEscapeCharacters(currencyName);
-    var colorCode = this.obtainEscapeParam(currencyName);
-    console.log(colorCode);
-    this.changeTextColor(colorCode);
-
-    this.drawText(currencyName, 60, baseYForText - 10, this.textWidth(currencyName), 'left');
-    this.resetTextColor();
-  }
-
 }
 
 module.exports = FlareCurrencyWindow;

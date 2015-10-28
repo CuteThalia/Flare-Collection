@@ -442,7 +442,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
   _createClass(FlareCurrencyWindow, [{
     key: 'initialize',
     value: function initialize() {
-      _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'initialize', this).call(this, this.tryAndCenter(), this.tryAndCenter() - 120, this.windowWidth(), this.windowHeight());
+      _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'initialize', this).call(this, this.tryAndCenter(), this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
     }
   }, {
     key: 'tryAndCenter',
@@ -457,7 +457,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
   }, {
     key: 'windowHeight',
     value: function windowHeight() {
-      return Graphics.boxWidth / 2 + 50;
+      return Graphics.boxWidth / 2 + 190;
     }
   }, {
     key: 'refresh',
@@ -465,38 +465,28 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
       this.drawText('Currencies', 10, 10, 100, 'center');
 
       var currencies = window.flareCurrency.getCurrencyStore();
-      this.contents.fontSize = 16;
 
+      this.drawFlareCurrencies(currencies);
+      this.resetFontSettings();
+    }
+  }, {
+    key: 'drawFlareCurrencies',
+    value: function drawFlareCurrencies(currencies) {
       var baseYForText = 70; // the y variable for drawText and drawIcon.
-      var textState = {};
+      this.contents.fontSize = 20;
 
       var self = this;
       currencies.map(function (currency) {
         if (typeof currency === 'object') {
 
           self.drawIcon(currency.icon, 10, baseYForText);
-          self.printCurrencyName(currency.name, baseYForText);
-          self.drawText(currency.description, 60, baseYForText + 10, self.textWidth(currency.description), 'left');
-          self.drawText('Currently Have: ' + currency.amount, 60, baseYForText + 30, 250, 'left');
+          self.flareDrawTextEx(currency.name, 60, baseYForText - 10);
+          self.flareDrawTextEx(currency.description, 60, baseYForText + 15);
+          self.flareDrawTextEx('Currently Have: ' + currency.amount, 60, baseYForText + 42, 250, 'left');
 
-          baseYForText += 70;
+          baseYForText += 100;
         }
       });
-    }
-  }, {
-    key: 'printCurrencyName',
-    value: function printCurrencyName(currencyName, baseYForText) {
-      var textState = {};
-      var colorCode = 0;
-
-      textState.text = currencyName;
-      var colorCode = this.obtainEscapeParam(textState);
-      var currencyName = this.convertEscapeCharacters(currencyName);
-
-      this.changeTextColor(colorCode);
-
-      this.drawText(currencyName, 60, baseYForText - 10, this.textWidth(currencyName), 'left');
-      this.resetTextColor();
     }
   }]);
 
@@ -638,23 +628,29 @@ var FlareWindowBase = (function (_Window_Base) {
     _get(Object.getPrototypeOf(FlareWindowBase.prototype), "constructor", this).call(this);
   }
 
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
   _createClass(FlareWindowBase, [{
-    key: "createBaseRectangle",
-    value: function createBaseRectangle(textWidth, width, height, y) {
-      var rect = new Rectangle();
-      var maxCols = maxCols;
-
-      rect.width = textWidth;
-      rect.height = height;
-      rect.x = textWidth + this.spacing();
-      rect.y = y;
-
-      return rect;
-    }
-  }, {
-    key: "spacing",
-    value: function spacing() {
-      return 50;
+    key: "flareDrawTextEx",
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.height = this.calcTextHeight(textState, false);
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+        return textState.x - x;
+      } else {
+        return 0;
+      }
     }
   }]);
 
