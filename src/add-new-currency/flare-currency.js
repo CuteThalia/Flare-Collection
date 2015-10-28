@@ -1,10 +1,10 @@
+/**
+ * @namespace FlareCurrency
+ */
+
 var Currency          = require('./currency.js');
 var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
 var FlareError        = require('../flare_error.js');
-
-/**
- * @namespace FlareCollection
- */
 
  /*:
   * @plugindesc Allows you to add a new currency or set of currencies to the game

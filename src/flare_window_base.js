@@ -1,4 +1,8 @@
 /**
+ * @namespace FlareCollection
+ */
+
+/**
  * All Flare based items use this window base.
  *
  * Flare Window Base extends the Window Base Class

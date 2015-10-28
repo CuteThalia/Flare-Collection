@@ -1,4 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -79,6 +83,10 @@ var Currency = (function () {
 module.exports = Currency;
 
 },{"../flare_error.js":6}],2:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -88,10 +96,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Currency = require('./currency.js');
 var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
 var FlareError = require('../flare_error.js');
-
-/**
- * @namespace FlareCollection
- */
 
 /*:
  * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -259,6 +263,10 @@ Scene_Map.prototype.initialize = function () {
 };
 
 },{"../flare_error.js":6,"./currency.js":1,"./menus/flare_currency_menu.js":3}],3:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -332,6 +340,10 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 module.exports = FlareCurrencyMenu;
 
 },{"../../flare_menu_scene_interface.js":7,"../scenes/flare_currency_scene":4}],4:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -406,6 +418,10 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 module.exports = FlareCurrencyScene;
 
 },{"../windows/flare_currency_window.js":5}],5:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -497,6 +513,10 @@ module.exports = FlareCurrencyWindow;
 
 },{"../../flare_window_base.js":8,"../currency.js":1}],6:[function(require,module,exports){
 /**
+ * @namespace FlareCollection
+ */
+
+/**
  * Custom Error Handler Class.
  *
  * Use by doing: FlareError.error('Error Text'); then do:
@@ -556,6 +576,10 @@ module.exports = FlareError;
 
 },{}],7:[function(require,module,exports){
 /**
+ * @namespace FlareCollection
+ */
+
+/**
  * Interace based class.
  *
  * Contains methods to be over ridden by sub classing.
@@ -602,6 +626,10 @@ var FlareMenuSceneHandlerInterface = (function () {
 module.exports = FlareMenuSceneHandlerInterface;
 
 },{}],8:[function(require,module,exports){
+/**
+ * @namespace FlareCollection
+ */
+
 /**
  * All Flare based items use this window base.
  *

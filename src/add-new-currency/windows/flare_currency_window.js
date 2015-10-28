@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareCurrency
+ */
+
 var Currency = require('../currency.js');
 var FlareWindowBase = require('../../flare_window_base.js');
 

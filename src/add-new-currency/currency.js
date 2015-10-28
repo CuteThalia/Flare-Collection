@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareCurrency
+ */
+
 var FlareError = require('../flare_error.js');
 
 /**

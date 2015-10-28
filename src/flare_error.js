@@ -1,4 +1,8 @@
 /**
+ * @namespace FlareCollection
+ */
+
+/**
  * Custom Error Handler Class.
  *
  * Use by doing: FlareError.error('Error Text'); then do:

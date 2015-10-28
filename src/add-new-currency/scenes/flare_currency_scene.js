@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareCurrency
+ */
+
 var FlareCurrencyWindow = require('../windows/flare_currency_window.js');
 
 /**

@@ -1,4 +1,8 @@
 /**
+ * @namespace FlareCollection
+ */
+
+/**
  * Interace based class.
  *
  * Contains methods to be over ridden by sub classing.
