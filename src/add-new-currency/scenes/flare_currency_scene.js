@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-var FlareCurrencyWindow = require('../windows/flare_currency_window.js');
+var FlareCurrencyWindow = require('../windows/flare_currency_window');
 
 /**
  * Create the actual currency scene.

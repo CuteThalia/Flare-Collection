@@ -2,9 +2,7 @@
  * @namespace FlareCurrency
  */
 
-var Currency          = require('./currency.js');
-var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
-var FlareError        = require('../flare_error.js');
+ var UnderscoreInclude = require('../../node_modules/underscore.string/include');
 
  /*:
   * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -114,49 +112,65 @@ var FlareError        = require('../flare_error.js');
   *
   * Used to buy: x
   *
+  * === Public API ===
+  *
+  * There are two new objects that roam in the wile. flareCurrency and
+  * FlareCurrency
+  *
+  * flareCurreency is used internally and is not to be touched. Mutating This
+  * object can cause issues in the script.
+  *
+  * FlareCurrency is a class which conains the public api, such as setting
+  * currency amount and calling currency specific shops.
+  *
+  * All methods on FlareCurrencies is static.
+  *
   */
 
-var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
-
 /**
- * Core Currency Class.
+ * Public Api Class for handeling currencies.
  *
- * Contains a method called createCurrencies() that creates the currencies based off
- * the plugin paramters.
+ * This object is tied to the window object making it public.
+ * It contains methods for setting, getting, opening currency shops
+ * and so on.
  */
-class FlareCurrency {
+class FlareCurrencies {
 
-  constructor() {
-    window.flareCurrency = new Currency();
+  /**
+   * Set the amount for the specific currency.
+   *
+   * Negative numbers are permited. If the total value goes
+   * below 0, we will set the amount to 0.
+   *
+   * @param String currencyName
+   * @param Int currencyAmount
+   */
+  static setAmount(currencyName, currencyAmount) {
+    var currencies = window.flareCurrency.getCurrencyStore();
+
+    var self = this;
+    currencies.map(function(currency){
+      if (UnderscoreInclude(currency.name, currencyName)) {
+        self._setAmount(currency, currencyAmount);
+        return;
+      }
+    });
   }
 
   /**
-   * Non public API method to create currencies.
+   * Private method: sets Currency.
    *
-   * Calls on the Currency class to store the currencies
-   * that were set up via the plugin parameters.
+   * @param Object Currency
+   * @param Int CurrencyAmount
    */
-  createCurrencies() {
-    window.flareCurrency.store(FlareCurrencyPluginParamters);
+  static _setAmount(currency, currencyAmount) {
+    currency.amount = currency.amount + currencyAmount;
+
+    if (currency.amount < 0) {
+      currency.amount = 0;
+    }
   }
-};
+}
 
-// Create the Currencies menu item.
-var flareCurrencyMenu = new FlareCurrencyMenu();
-flareCurrencyMenu.menuHandler();
-
-// Creates the Currencies.
-var flareCurrency = new FlareCurrency();
-flareCurrency.createCurrencies();
-
-// Handles Errors thrown in classes that do not extend the
-// the RPG Maker classes.
-// @see FlareError
-var mainSceneMapInitializer = Scene_Map.prototype.initialize;
-Scene_Map.prototype.initialize = function () {
-	mainSceneMapInitializer.call(this);
-
-  if (FlareError.getError() !== undefined) {
-    throw new Error(FlareError.getError());
-  }
-};
+// Create public API.
+window.FlareCurrencies = FlareCurrencies

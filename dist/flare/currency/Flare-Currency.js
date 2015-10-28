@@ -1,5 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
+ * Ensure some object is a coerced to a string
+ **/
+module.exports = function makeString(object) {
+  if (object == null) return '';
+  return '' + object;
+};
+
+},{}],2:[function(require,module,exports){
+var makeString = require('./helper/makeString');
+
+module.exports = function include(str, needle) {
+  if (needle === '') return true;
+  return makeString(str).indexOf(needle) !== -1;
+};
+
+},{"./helper/makeString":1}],3:[function(require,module,exports){
+/**
  * @namespace FlareCurrency
  */
 
@@ -9,7 +26,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var FlareError = require('../flare_error.js');
+var FlareError = require('../../flare_error');
 
 /**
  * Currency Object Creation Class
@@ -82,7 +99,77 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../flare_error.js":6}],2:[function(require,module,exports){
+},{"../../flare_error":9}],4:[function(require,module,exports){
+/**
+ * @namespace FlareCurrencies
+ */
+
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Currency = require('./currency');
+var FlareCurrencyMenu = require('../menus/flare_currency_menu');
+var FlareError = require('../../flare_error');
+
+var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
+
+/**
+ * Core Currency Class.
+ *
+ * Contains a method called createCurrencies() that creates the currencies based off
+ * the plugin paramters.
+ */
+
+var FlareCurrency = (function () {
+  function FlareCurrency() {
+    _classCallCheck(this, FlareCurrency);
+
+    window.flareCurrency = new Currency();
+  }
+
+  /**
+   * Non public API method to create currencies.
+   *
+   * Calls on the Currency class to store the currencies
+   * that were set up via the plugin parameters.
+   */
+
+  _createClass(FlareCurrency, [{
+    key: 'createCurrencies',
+    value: function createCurrencies() {
+      window.flareCurrency.store(FlareCurrencyPluginParamters);
+    }
+  }]);
+
+  return FlareCurrency;
+})();
+
+;
+
+// Create the Currencies menu item.
+var flareCurrencyMenu = new FlareCurrencyMenu();
+flareCurrencyMenu.menuHandler();
+
+// Creates the Currencies.
+var flareCurrency = new FlareCurrency();
+flareCurrency.createCurrencies();
+
+// Handles Errors thrown in classes that do not extend the
+// the RPG Maker classes.
+// @see FlareError
+var mainSceneMapInitializer = Scene_Map.prototype.initialize;
+Scene_Map.prototype.initialize = function () {
+  mainSceneMapInitializer.call(this);
+
+  if (FlareError.getError() !== undefined) {
+    throw new Error(FlareError.getError());
+  }
+};
+
+},{"../../flare_error":9,"../menus/flare_currency_menu":6,"./currency":3}],5:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -93,9 +180,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var Currency = require('./currency.js');
-var FlareCurrencyMenu = require('./menus/flare_currency_menu.js');
-var FlareError = require('../flare_error.js');
+var UnderscoreInclude = require('../../node_modules/underscore.string/include');
 
 /*:
  * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -205,64 +290,76 @@ var FlareError = require('../flare_error.js');
  *
  * Used to buy: x
  *
+ * === Public API ===
+ *
+ * There are two new objects that roam in the wile. flareCurrency and
+ * FlareCurrency
+ *
+ * flareCurreency is used internally and is not to be touched. Mutating This
+ * object can cause issues in the script.
+ *
+ * FlareCurrency is a class which conains the public api, such as setting
+ * currency amount and calling currency specific shops.
+ *
+ * All methods on FlareCurrencies is static.
+ *
  */
-
-var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
 
 /**
- * Core Currency Class.
+ * Public Api Class for handeling currencies.
  *
- * Contains a method called createCurrencies() that creates the currencies based off
- * the plugin paramters.
+ * This object is tied to the window object making it public.
+ * It contains methods for setting, getting, opening currency shops
+ * and so on.
  */
 
-var FlareCurrency = (function () {
-  function FlareCurrency() {
-    _classCallCheck(this, FlareCurrency);
-
-    window.flareCurrency = new Currency();
+var FlareCurrencies = (function () {
+  function FlareCurrencies() {
+    _classCallCheck(this, FlareCurrencies);
   }
 
-  /**
-   * Non public API method to create currencies.
-   *
-   * Calls on the Currency class to store the currencies
-   * that were set up via the plugin parameters.
-   */
+  // Create public API.
 
-  _createClass(FlareCurrency, [{
-    key: 'createCurrencies',
-    value: function createCurrencies() {
-      window.flareCurrency.store(FlareCurrencyPluginParamters);
+  _createClass(FlareCurrencies, null, [{
+    key: 'setAmount',
+
+    /**
+     * Set the amount for the specific currency.
+     *
+     * Negative numbers are permited. If the total value goes
+     * below 0, we will set the amount to 0.
+     *
+     * @param String currencyName
+     * @param int currencyAmount
+     */
+    value: function setAmount(currencyName, currencyAmount) {
+      var currencies = window.flareCurrency.getCurrencyStore();
+
+      var self = this;
+      currencies.map(function (currency) {
+        if (UnderscoreInclude(currency.name, currencyName)) {
+          self._setAmount(currency, currencyAmount);
+          return;
+        }
+      });
+    }
+  }, {
+    key: '_setAmount',
+    value: function _setAmount(currency, currencyAmount) {
+      currency.amount = currency.amount + currencyAmount;
+
+      if (currency.amount < 0) {
+        currency.amount = 0;
+      }
     }
   }]);
 
-  return FlareCurrency;
+  return FlareCurrencies;
 })();
 
-;
+window.FlareCurrencies = FlareCurrencies;
 
-// Create the Currencies menu item.
-var flareCurrencyMenu = new FlareCurrencyMenu();
-flareCurrencyMenu.menuHandler();
-
-// Creates the Currencies.
-var flareCurrency = new FlareCurrency();
-flareCurrency.createCurrencies();
-
-// Handles Errors thrown in classes that do not extend the
-// the RPG Maker classes.
-// @see FlareError
-var mainSceneMapInitializer = Scene_Map.prototype.initialize;
-Scene_Map.prototype.initialize = function () {
-  mainSceneMapInitializer.call(this);
-
-  if (FlareError.getError() !== undefined) {
-    throw new Error(FlareError.getError());
-  }
-};
-
-},{"../flare_error.js":6,"./currency.js":1,"./menus/flare_currency_menu.js":3}],3:[function(require,module,exports){
+},{"../../node_modules/underscore.string/include":2}],6:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -277,7 +374,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FlareMenuSceneHandlerInterface = require('../../flare_menu_scene_interface.js');
+var FlareMenuSceneHandlerInterface = require('../../flare_menu_scene_interface');
 var FlareCurrencyScene = require('../scenes/flare_currency_scene');
 
 /**
@@ -339,7 +436,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface.js":7,"../scenes/flare_currency_scene":4}],4:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":10,"../scenes/flare_currency_scene":7}],7:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -354,7 +451,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FlareCurrencyWindow = require('../windows/flare_currency_window.js');
+var FlareCurrencyWindow = require('../windows/flare_currency_window');
 
 /**
  * Create the actual currency scene.
@@ -417,7 +514,7 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window.js":5}],5:[function(require,module,exports){
+},{"../windows/flare_currency_window":8}],8:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -432,8 +529,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Currency = require('../currency.js');
-var FlareWindowBase = require('../../flare_window_base.js');
+var Currency = require('../currencies/currency');
+var FlareWindowBase = require('../../flare_window_base');
 
 /**
  * Create the currency window.
@@ -511,7 +608,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base.js":8,"../currency.js":1}],6:[function(require,module,exports){
+},{"../../flare_window_base":11,"../currencies/currency":3}],9:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -574,7 +671,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -625,7 +722,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -687,4 +784,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[2]);
+},{}]},{},[5,4]);

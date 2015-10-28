@@ -2,8 +2,8 @@
  * @namespace FlareCurrency
  */
 
-var Currency = require('../currency.js');
-var FlareWindowBase = require('../../flare_window_base.js');
+var Currency = require('../currencies/currency');
+var FlareWindowBase = require('../../flare_window_base');
 
 /**
  * Create the currency window.

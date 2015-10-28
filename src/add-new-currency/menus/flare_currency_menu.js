@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-var FlareMenuSceneHandlerInterface = require('../../flare_menu_scene_interface.js');
+var FlareMenuSceneHandlerInterface = require('../../flare_menu_scene_interface');
 var FlareCurrencyScene = require('../scenes/flare_currency_scene');
 
 /**
