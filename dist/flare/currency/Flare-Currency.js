@@ -1,4 +1,30 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var trim = require('./trim');
+
+module.exports = function clean(str) {
+  return trim(str).replace(/\s\s+/g, ' ');
+};
+
+},{"./trim":7}],2:[function(require,module,exports){
+var escapeRegExp = require('./escapeRegExp');
+
+module.exports = function defaultToWhiteSpace(characters) {
+  if (characters == null)
+    return '\\s';
+  else if (characters.source)
+    return characters.source;
+  else
+    return '[' + escapeRegExp(characters) + ']';
+};
+
+},{"./escapeRegExp":3}],3:[function(require,module,exports){
+var makeString = require('./makeString');
+
+module.exports = function escapeRegExp(str) {
+  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+};
+
+},{"./makeString":4}],4:[function(require,module,exports){
 /**
  * Ensure some object is a coerced to a string
  **/
@@ -7,7 +33,7 @@ module.exports = function makeString(object) {
   return '' + object;
 };
 
-},{}],2:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var makeString = require('./helper/makeString');
 
 module.exports = function include(str, needle) {
@@ -15,7 +41,35 @@ module.exports = function include(str, needle) {
   return makeString(str).indexOf(needle) !== -1;
 };
 
-},{"./helper/makeString":1}],3:[function(require,module,exports){
+},{"./helper/makeString":4}],6:[function(require,module,exports){
+var makeString = require('./helper/makeString');
+
+module.exports = function isBlank(str) {
+  return (/^\s*$/).test(makeString(str));
+};
+
+},{"./helper/makeString":4}],7:[function(require,module,exports){
+var makeString = require('./helper/makeString');
+var defaultToWhiteSpace = require('./helper/defaultToWhiteSpace');
+var nativeTrim = String.prototype.trim;
+
+module.exports = function trim(str, characters) {
+  str = makeString(str);
+  if (!characters && nativeTrim) return nativeTrim.call(str);
+  characters = defaultToWhiteSpace(characters);
+  return str.replace(new RegExp('^' + characters + '+|' + characters + '+$', 'g'), '');
+};
+
+},{"./helper/defaultToWhiteSpace":2,"./helper/makeString":4}],8:[function(require,module,exports){
+var isBlank = require('./isBlank');
+var trim = require('./trim');
+
+module.exports = function words(str, delimiter) {
+  if (isBlank(str)) return [];
+  return trim(str, delimiter).split(delimiter || /\s+/);
+};
+
+},{"./isBlank":6,"./trim":7}],9:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -99,7 +153,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":9}],4:[function(require,module,exports){
+},{"../../flare_error":17}],10:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -169,7 +223,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":9,"../menus/flare_currency_menu":6,"./currency":3}],5:[function(require,module,exports){
+},{"../../flare_error":17,"../menus/flare_currency_menu":12,"./currency":9}],11:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -330,9 +384,10 @@ var FlareCurrencies = (function () {
      * below 0, we will set the amount to 0.
      *
      * @param String currencyName
-     * @param int currencyAmount
+     * @param Int currencyAmount
      */
     value: function setAmount(currencyName, currencyAmount) {
+      console.log(currencyName, currencyAmount);
       var currencies = window.flareCurrency.getCurrencyStore();
 
       var self = this;
@@ -343,6 +398,13 @@ var FlareCurrencies = (function () {
         }
       });
     }
+
+    /**
+     * Private method: sets Currency.
+     *
+     * @param Object Currency
+     * @param Int CurrencyAmount
+     */
   }, {
     key: '_setAmount',
     value: function _setAmount(currency, currencyAmount) {
@@ -359,7 +421,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/underscore.string/include":2}],6:[function(require,module,exports){
+},{"../../node_modules/underscore.string/include":5}],12:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -436,7 +498,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":10,"../scenes/flare_currency_scene":7}],7:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":18,"../scenes/flare_currency_scene":13}],13:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -514,7 +576,98 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":8}],8:[function(require,module,exports){
+},{"../windows/flare_currency_window":16}],14:[function(require,module,exports){
+'use strict';
+
+var oldBattleManagerDisplayRewardsmethod = BattleManager.displayRewards;
+BattleManager.displayRewards = function () {
+  oldBattleManagerDisplayRewardsmethod.call(this);
+  this.displayCurrencies();
+};
+
+var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
+BattleManager.gainRewards = function () {
+  oldBattleManagerGainRewardsMethod.call(this);
+
+  for (var i = 0; i < $gameTroop.troop().members.length; i++) {
+    if (typeof $gameTroop.troop().members[i] === 'object') {
+      var enemy = this._searchForEnemy($dataEnemies, $gameTroop.troop().members[i].enemyId);
+      this._gainCurrencies(enemy);
+    }
+  }
+};
+
+BattleManager.displayCurrencies = function () {
+  var self = this;
+
+  for (var i = 0; i < $gameTroop.troop().members.length; i++) {
+    if (typeof $gameTroop.troop().members[i] === 'object') {
+      var enemy = this._searchForEnemy($dataEnemies, $gameTroop.troop().members[i].enemyId);
+      this._gatherCurrenciesForgameMessage(enemy);
+    }
+  }
+};
+
+BattleManager._gatherCurrenciesForgameMessage = function (enemy) {
+  enemy.enemyCurrencyRewardData.map(function (currency) {
+    $gameMessage.add('Gained: ' + currency.amount + ' of ' + currency.name);
+  });
+};
+
+BattleManager._gainCurrencies = function (enemy) {
+  enemy.enemyCurrencyRewardData.map(function (currency) {
+    window.FlareCurrencies.setAmount(currency.name, currency.amount);
+  });
+};
+
+BattleManager._searchForEnemy = function (enemies, id) {
+  for (var i = 0; i < enemies.length; i++) {
+    if (typeof enemies[i] === 'object' && enemies[i] !== null) {
+      return enemies[i];
+    }
+  }
+};
+
+},{}],15:[function(require,module,exports){
+'use strict';
+
+var UnderscoreClean = require('../../../node_modules/underscore.string/clean');
+var UnderscoreWords = require('../../../node_modules/underscore.string/words');
+
+var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
+DataManager.isDatabaseLoaded = function () {
+  if (!olderDataManagerIsDataBaseLoadedMethod.call(this)) {
+    return false;
+  }
+
+  this.flareProcessEnemyNoteTags($dataEnemies);
+  return true;
+};
+
+DataManager.flareProcessEnemyNoteTags = function (enemies) {
+  var noteTag = /<(?:CURRENCY):[ ]*([\w\s]+(\s*,\s*)\d+(\s*\d+)*)>/i;
+
+  for (var i = 1; i < enemies.length; i++) {
+    var enemy = enemies[i];
+    var enemyNoteData = enemy.note.split(/[\r\n]+/);
+
+    enemy.enemyCurrencyRewardData = [];
+
+    for (var n = 0; n < enemyNoteData.length; n++) {
+      var line = enemyNoteData[n];
+
+      if (line.match(noteTag)) {
+        var lineMatched = line.match(noteTag);
+        var splitWords = UnderscoreWords(lineMatched[1], ',');
+
+        var currencyRewardObject = { name: splitWords[0], amount: parseInt(splitWords[1]) };
+        enemy.enemyCurrencyRewardData.push(currencyRewardObject);
+      }
+    }
+  }
+};
+
+},{"../../../node_modules/underscore.string/clean":1,"../../../node_modules/underscore.string/words":8}],16:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -608,7 +761,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":11,"../currencies/currency":3}],9:[function(require,module,exports){
+},{"../../flare_window_base":19,"../currencies/currency":9}],17:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -671,7 +824,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],10:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -722,7 +875,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],11:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -784,4 +937,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[5,4]);
+},{}]},{},[11,10,15,14]);
