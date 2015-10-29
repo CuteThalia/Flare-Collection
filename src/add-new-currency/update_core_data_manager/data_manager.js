@@ -1,5 +1,4 @@
-var UnderscoreClean = require('../../../node_modules/underscore.string/clean');
-var UnderscoreWords = require('../../../node_modules/underscore.string/words');
+var RewardCurrenciesCheck = require('./reward_currencies_check');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {
@@ -8,28 +7,67 @@ DataManager.isDatabaseLoaded = function() {
   }
 
   this.flareProcessEnemyNoteTags($dataEnemies);
+
+  var rewardCurrenciesCheck = new RewardCurrenciesCheck();
+  rewardCurrenciesCheck.createCheckObject();
+
   return true;
 }
 
+/**
+ * Process the enemy note tag looking for currency information.
+ *
+ * Currency tags can have name, how much and percentage of drop.
+ * percentage is optional. Default is 100.
+ *
+ * @param $dataEnemies enemies
+ */
 DataManager.flareProcessEnemyNoteTags = function(enemies) {
-  var noteTag = /<(?:CURRENCY):[ ]*([\w\s]+(\s*,\s*)\d+(\s*\d+)*)>/i;
+  var noteTag = /<currency:\s*([^,>]+),\s*([^,>]+)(,\s*([^,>]+))?>/i;
 
   for (var i = 1; i < enemies.length; i++) {
     var enemy         = enemies[i];
     var enemyNoteData = enemy.note.split(/[\r\n]+/);
 
     enemy.enemyCurrencyRewardData = [];
+    this._processEnemyNoteDataForCurrencyReward(enemy, enemyNoteData, noteTag);
+  }
+}
 
-    for (var n = 0; n < enemyNoteData.length; n++) {
-      var line = enemyNoteData[n];
+/**
+ * Private Method. Process Enemy Currency Note Data.
+ *
+ * Pushes the enemy currency reward data object to an array of the same type.
+ * enemies can have multiple currencies attached to them.
+ *
+ * @param Object enemy
+ * @param Array enemyNoteData
+ * @param regex noteTag
+ */
+DataManager._processEnemyNoteDataForCurrencyReward = function(enemy, enemyNoteData, noteTag) {
+  for (var n = 0; n < enemyNoteData.length; n++) {
+    var line = enemyNoteData[n];
 
-      if (line.match(noteTag)) {
-        var lineMatched = line.match(noteTag);
-        var splitWords = UnderscoreWords(lineMatched[1], ',');
+    if (line.match(noteTag)) {
+      var lineMatched = line.match(noteTag);
 
-        var currencyRewardObject = {name: splitWords[0], amount: parseInt(splitWords[1])}
-        enemy.enemyCurrencyRewardData.push(currencyRewardObject);
-      }
+      enemy.enemyCurrencyRewardData.push(this._createCurrencyRewardObject(lineMatched));
     }
+  }
+}
+
+/**
+ * Private Method. Creates the actual object.
+ *
+ * Creates a currency reward object that contains name, amount and percentage of either 100 or the
+ * third number that the user placed in the tag.
+ *
+ * @param Array lineMatched
+ */
+DataManager._createCurrencyRewardObject = function(lineMatched) {
+  if (lineMatched[4] !== undefined) {
+    return {name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: parseInt(lineMatched[4])}
+  } else {
+    return {name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: 100}
   }
 }

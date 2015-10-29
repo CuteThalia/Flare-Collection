@@ -1,30 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var trim = require('./trim');
-
-module.exports = function clean(str) {
-  return trim(str).replace(/\s\s+/g, ' ');
-};
-
-},{"./trim":7}],2:[function(require,module,exports){
-var escapeRegExp = require('./escapeRegExp');
-
-module.exports = function defaultToWhiteSpace(characters) {
-  if (characters == null)
-    return '\\s';
-  else if (characters.source)
-    return characters.source;
-  else
-    return '[' + escapeRegExp(characters) + ']';
-};
-
-},{"./escapeRegExp":3}],3:[function(require,module,exports){
-var makeString = require('./makeString');
-
-module.exports = function escapeRegExp(str) {
-  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
-};
-
-},{"./makeString":4}],4:[function(require,module,exports){
 /**
  * Ensure some object is a coerced to a string
  **/
@@ -33,7 +7,7 @@ module.exports = function makeString(object) {
   return '' + object;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 var makeString = require('./helper/makeString');
 
 module.exports = function include(str, needle) {
@@ -41,35 +15,7 @@ module.exports = function include(str, needle) {
   return makeString(str).indexOf(needle) !== -1;
 };
 
-},{"./helper/makeString":4}],6:[function(require,module,exports){
-var makeString = require('./helper/makeString');
-
-module.exports = function isBlank(str) {
-  return (/^\s*$/).test(makeString(str));
-};
-
-},{"./helper/makeString":4}],7:[function(require,module,exports){
-var makeString = require('./helper/makeString');
-var defaultToWhiteSpace = require('./helper/defaultToWhiteSpace');
-var nativeTrim = String.prototype.trim;
-
-module.exports = function trim(str, characters) {
-  str = makeString(str);
-  if (!characters && nativeTrim) return nativeTrim.call(str);
-  characters = defaultToWhiteSpace(characters);
-  return str.replace(new RegExp('^' + characters + '+|' + characters + '+$', 'g'), '');
-};
-
-},{"./helper/defaultToWhiteSpace":2,"./helper/makeString":4}],8:[function(require,module,exports){
-var isBlank = require('./isBlank');
-var trim = require('./trim');
-
-module.exports = function words(str, delimiter) {
-  if (isBlank(str)) return [];
-  return trim(str, delimiter).split(delimiter || /\s+/);
-};
-
-},{"./isBlank":6,"./trim":7}],9:[function(require,module,exports){
+},{"./helper/makeString":1}],3:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -153,7 +99,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":17}],10:[function(require,module,exports){
+},{"../../flare_error":12}],4:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -223,7 +169,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":17,"../menus/flare_currency_menu":12,"./currency":9}],11:[function(require,module,exports){
+},{"../../flare_error":12,"../menus/flare_currency_menu":6,"./currency":3}],5:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -387,7 +333,6 @@ var FlareCurrencies = (function () {
      * @param Int currencyAmount
      */
     value: function setAmount(currencyName, currencyAmount) {
-      console.log(currencyName, currencyAmount);
       var currencies = window.flareCurrency.getCurrencyStore();
 
       var self = this;
@@ -421,7 +366,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/underscore.string/include":5}],12:[function(require,module,exports){
+},{"../../node_modules/underscore.string/include":2}],6:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -498,7 +443,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":18,"../scenes/flare_currency_scene":13}],13:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":13,"../scenes/flare_currency_scene":7}],7:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -576,12 +521,20 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":16}],14:[function(require,module,exports){
+},{"../windows/flare_currency_window":11}],8:[function(require,module,exports){
 'use strict';
 
-var oldBattleManagerDisplayRewardsmethod = BattleManager.displayRewards;
+var FlareRandomNumber = require('../../flare_random_number.js');
+
+var oldBattleManagerInitMembersMethod = BattleManager.initMembers;
+BattleManager.initMembers = function () {
+  oldBattleManagerInitMembersMethod.call(this);
+  this._gainCurrenciesAfterBattle = null;
+};
+
+var oldBattleManagerDisplayRewardsMethod = BattleManager.displayRewards;
 BattleManager.displayRewards = function () {
-  oldBattleManagerDisplayRewardsmethod.call(this);
+  oldBattleManagerDisplayRewardsMethod.call(this);
   this.displayCurrencies();
 };
 
@@ -592,18 +545,29 @@ BattleManager.gainRewards = function () {
   for (var i = 0; i < $gameTroop.troop().members.length; i++) {
     if (typeof $gameTroop.troop().members[i] === 'object') {
       var enemy = this._searchForEnemy($dataEnemies, $gameTroop.troop().members[i].enemyId);
-      this._gainCurrencies(enemy);
+
+      for (var j = 0; j < this._gainCurrenciesAfterBattle.length; j++) {
+        if (this._gainCurrenciesAfterBattle[j].enemy_id === enemy.id && this._gainCurrenciesAfterBattle[j].gain_currency) {
+          this._gainCurrencies(enemy);
+        }
+      }
     }
   }
 };
 
 BattleManager.displayCurrencies = function () {
   var self = this;
+  this._gainCurrenciesAfterBattle = this._checkChance($gameTroop);
 
   for (var i = 0; i < $gameTroop.troop().members.length; i++) {
     if (typeof $gameTroop.troop().members[i] === 'object') {
       var enemy = this._searchForEnemy($dataEnemies, $gameTroop.troop().members[i].enemyId);
-      this._gatherCurrenciesForgameMessage(enemy);
+
+      for (var j = 0; j < this._gainCurrenciesAfterBattle.length; j++) {
+        if (this._gainCurrenciesAfterBattle[j].enemy_id === enemy.id && this._gainCurrenciesAfterBattle[j].gain_currency) {
+          this._gatherCurrenciesForgameMessage(enemy);
+        }
+      }
     }
   }
 };
@@ -628,11 +592,47 @@ BattleManager._searchForEnemy = function (enemies, id) {
   }
 };
 
-},{}],15:[function(require,module,exports){
+BattleManager._checkChance = function (gameTroop) {
+  var gainCurrencies = [];
+
+  for (var i = 0; i < gameTroop.troop().members.length; i++) {
+    if (typeof gameTroop.troop().members[i] === 'object') {
+      var enemy = this._searchForEnemy($dataEnemies, $gameTroop.troop().members[i].enemyId);
+
+      var self = this;
+      enemy.enemyCurrencyRewardData.map(function (currency) {
+        gainCurrencies.push(self._createGainCurrencyObject(currency, enemy));
+      });
+    }
+  }
+
+  return gainCurrencies;
+};
+
+BattleManager._createGainCurrencyObject = function (currency, enemy) {
+  if (currency.percentage !== 100) {
+    return { enemy_id: enemy.id, gain_currency: this._doWeGainCurrencies(currency) };
+  } else {
+    return { enemy_id: enemy.id, gain_currency: true };
+  }
+};
+
+BattleManager._doWeGainCurrencies = function (currency) {
+  var needTopGetAbove = 100 - currency.percentage;
+  var percentage = FlareRandomNumber.minMax(0, 100);
+  var gainCurrency = false;
+
+  if (percentage > needTopGetAbove) {
+    gainCurrency = true;
+  }
+
+  return gainCurrency;
+};
+
+},{"../../flare_random_number.js":14}],9:[function(require,module,exports){
 'use strict';
 
-var UnderscoreClean = require('../../../node_modules/underscore.string/clean');
-var UnderscoreWords = require('../../../node_modules/underscore.string/words');
+var RewardCurrenciesCheck = require('./reward_currencies_check');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function () {
@@ -641,33 +641,182 @@ DataManager.isDatabaseLoaded = function () {
   }
 
   this.flareProcessEnemyNoteTags($dataEnemies);
+
+  var rewardCurrenciesCheck = new RewardCurrenciesCheck();
+  rewardCurrenciesCheck.createCheckObject();
+
   return true;
 };
 
+/**
+ * Process the enemy note tag looking for currency information.
+ *
+ * Currency tags can have name, how much and percentage of drop.
+ * percentage is optional. Default is 100.
+ *
+ * @param $dataEnemies enemies
+ */
 DataManager.flareProcessEnemyNoteTags = function (enemies) {
-  var noteTag = /<(?:CURRENCY):[ ]*([\w\s]+(\s*,\s*)\d+(\s*\d+)*)>/i;
+  var noteTag = /<currency:\s*([^,>]+),\s*([^,>]+)(,\s*([^,>]+))?>/i;
 
   for (var i = 1; i < enemies.length; i++) {
     var enemy = enemies[i];
     var enemyNoteData = enemy.note.split(/[\r\n]+/);
 
     enemy.enemyCurrencyRewardData = [];
+    this._processEnemyNoteDataForCurrencyReward(enemy, enemyNoteData, noteTag);
+  }
+};
 
-    for (var n = 0; n < enemyNoteData.length; n++) {
-      var line = enemyNoteData[n];
+/**
+ * Private Method. Process Enemy Currency Note Data.
+ *
+ * Pushes the enemy currency reward data object to an array of the same type.
+ * enemies can have multiple currencies attached to them.
+ *
+ * @param Object enemy
+ * @param Array enemyNoteData
+ * @param regex noteTag
+ */
+DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteData, noteTag) {
+  for (var n = 0; n < enemyNoteData.length; n++) {
+    var line = enemyNoteData[n];
 
-      if (line.match(noteTag)) {
-        var lineMatched = line.match(noteTag);
-        var splitWords = UnderscoreWords(lineMatched[1], ',');
+    if (line.match(noteTag)) {
+      var lineMatched = line.match(noteTag);
 
-        var currencyRewardObject = { name: splitWords[0], amount: parseInt(splitWords[1]) };
-        enemy.enemyCurrencyRewardData.push(currencyRewardObject);
-      }
+      enemy.enemyCurrencyRewardData.push(this._createCurrencyRewardObject(lineMatched));
     }
   }
 };
 
-},{"../../../node_modules/underscore.string/clean":1,"../../../node_modules/underscore.string/words":8}],16:[function(require,module,exports){
+/**
+ * Private Method. Creates the actual object.
+ *
+ * Creates a currency reward object that contains name, amount and percentage of either 100 or the
+ * third number that the user placed in the tag.
+ *
+ * @param Array lineMatched
+ */
+DataManager._createCurrencyRewardObject = function (lineMatched) {
+  if (lineMatched[4] !== undefined) {
+    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: parseInt(lineMatched[4]) };
+  } else {
+    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: 100 };
+  }
+};
+
+},{"./reward_currencies_check":10}],10:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var FlareRandomNumber = require('../../flare_random_number');
+
+/**
+ * @namespace FlareCurrency
+ */
+
+/**
+ * Determine if the playr gets currencies.
+ *
+ * Currency tags can have a percentage attribute set. If it is set then
+ * we go ahead check if they will be successful to gain the currency AFTER
+ * a battle.
+ */
+
+var RewardCurrenciesCheck = (function () {
+  function RewardCurrenciesCheck() {
+    _classCallCheck(this, RewardCurrenciesCheck);
+  }
+
+  /**
+   * Creates Currency Ceck Object.
+   *
+   * Assigns a new array to a enemy object. This array contains
+   * x number of objects. Each object contains a currency name and
+   * do we gain currency check which is either true or false.
+   */
+
+  _createClass(RewardCurrenciesCheck, [{
+    key: 'createCheckObject',
+    value: function createCheckObject() {
+
+      for (var i = 0; i < $dataEnemies.length; i++) {
+        var enemy = $dataEnemies[i];
+
+        if (enemy !== null) {
+          enemy.gainCurrencyOnBattleWin = [];
+          this._processEnemyCurrencyReward(enemy, enemy.enemyCurrencyRewardData);
+        }
+      }
+    }
+
+    /**
+     * Private method. Create enemy check object.
+     *
+     * Assigns the gain currency check object to the array of objects
+     * this allows for an enemy to have multiple currencies with different
+     * percentages.
+     *
+     * @param Object enemy
+     * @param Array enemyCurrencyReward
+     */
+  }, {
+    key: '_processEnemyCurrencyReward',
+    value: function _processEnemyCurrencyReward(enemy, enemyCurrencyReward) {
+      var self = this;
+
+      enemyCurrencyReward.map(function (currencyObject) {
+        if (typeof currencyObject === 'object') {
+          enemy.gainCurrencyOnBattleWin.push({
+            currency_Name: currencyObject.name,
+            doWeGainCurrency: self._processPercentage(currencyObject)
+          });
+        }
+      });
+    }
+
+    /**
+     * Private method. check percentage.
+     *
+     * When no percentage is given it is set to 100, default truth.
+     * when percentage is given we subtract it from 100, then random a number
+     * between 0 an 100 and compare the result to the "toGetAbove" varaible.
+     *
+     * Example: 100 - 85 = 15, random number is 16, 16 > 15 = true.
+     *
+     * In the above example case the user would be rewarded the currency.
+     *
+     * @param Object CurrencyObject
+     * @return bool
+     */
+  }, {
+    key: '_processPercentage',
+    value: function _processPercentage(currencyObject) {
+      if (currencyObject.percentage !== 100) {
+        var toGetAbove = 100 - currencyObject.percentage;
+        var randomNumber = FlareRandomNumber.minMax(0, 100);
+
+        if (randomNumber > toGetAbove) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      return true;
+    }
+  }]);
+
+  return RewardCurrenciesCheck;
+})();
+
+module.exports = RewardCurrenciesCheck;
+
+},{"../../flare_random_number":14}],11:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -761,7 +910,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":19,"../currencies/currency":9}],17:[function(require,module,exports){
+},{"../../flare_window_base":15,"../currencies/currency":3}],12:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -824,7 +973,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],18:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -875,7 +1024,48 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],19:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Create a ranom number
+ *
+ * Methods here are useful for creating random numbers.
+ */
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FlareRandomNumber = (function () {
+  function FlareRandomNumber() {
+    _classCallCheck(this, FlareRandomNumber);
+  }
+
+  _createClass(FlareRandomNumber, null, [{
+    key: "minMax",
+
+    /**
+     * Create random number between nim and max.
+     *
+     * @param Int min
+     * @param Int max
+     * @return int
+     */
+    value: function minMax(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  }]);
+
+  return FlareRandomNumber;
+})();
+
+module.exports = FlareRandomNumber;
+
+},{}],15:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -937,4 +1127,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[11,10,15,14]);
+},{}]},{},[5,4,9,8]);
