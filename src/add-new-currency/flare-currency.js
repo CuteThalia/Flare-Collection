@@ -112,6 +112,28 @@ var lodashFind = require('../../node_modules/lodash/collection/find');
   *
   * Used to buy: x
   *
+  * === Note Tags ===
+  *
+  * For Enemies:
+  *
+  * The following tags can be applied to enemies:
+  *
+  * <currencies: "Name", amount, percentage>
+  *
+  * "Name"     - Currency Name, can have color short codes.
+  * amount     - Integer, how much does the enemy give?
+  * percentage - Optional integer. percentage of drop (see below).
+  *
+  * Percentage is optional, with out it, all currencies have a 100% drop rate. doing:
+  *
+  * <currencies: "Demon Teeth", 80, 15>
+  *
+  * Means you have a 15% chance to get 80 Demon Teeth, How ever:
+  *
+  * <currencies: "Demon Teeth", 80>
+  *
+  * Means you have a 100% chance of getting 80 Demon Teeth off the enemy.
+  *
   * === Public API ===
   *
   * There are two new objects that roam in the wile. flareCurrency and
