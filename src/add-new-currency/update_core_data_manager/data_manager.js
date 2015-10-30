@@ -14,6 +14,20 @@ DataManager.isDatabaseLoaded = function() {
   return true;
 }
 
+var oldDataManagerMakeSaveContentsMethod = DataManager.makeSaveContents;
+DataManager.makeSaveContents = function() {
+  var contents = oldDataManagerMakeSaveContentsMethod.call(this);
+  contents.currencies = window.flareCurrency.getCurrencyStore();
+
+  return contents;
+};
+
+var oldDataManagerExtractSaveContentMethod = DataManager.extractSaveContents;
+DataManager.extractSaveContents = function(contents) {
+    oldDataManagerExtractSaveContentMethod.call(this, contents);
+    window.flareCurrency.setStoreFromLoad(contents.currencies);
+};
+
 /**
  * Process the enemy note tag looking for currency information.
  *

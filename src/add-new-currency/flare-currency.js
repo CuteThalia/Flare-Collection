@@ -2,8 +2,6 @@
  * @namespace FlareCurrency
  */
 
- var UnderscoreInclude = require('../../node_modules/underscore.string/include');
-
  /*:
   * @plugindesc Allows you to add a new currency or set of currencies to the game
   * such currencies can include things like "clay pot" or "silver coin" they are then
@@ -150,7 +148,7 @@ class FlareCurrencies {
 
     var self = this;
     currencies.map(function(currency){
-      if (UnderscoreInclude(currency.name, currencyName)) {
+      if (currency.name.indexOf(currencyName) !== -1) {
         self._setAmount(currency, currencyAmount);
         return;
       }

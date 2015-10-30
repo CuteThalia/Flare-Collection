@@ -1684,23 +1684,6 @@ module.exports = property;
 
 },{"../internal/baseProperty":16,"../internal/basePropertyDeep":17,"../internal/isKey":32}],50:[function(require,module,exports){
 /**
- * Ensure some object is a coerced to a string
- **/
-module.exports = function makeString(object) {
-  if (object == null) return '';
-  return '' + object;
-};
-
-},{}],51:[function(require,module,exports){
-var makeString = require('./helper/makeString');
-
-module.exports = function include(str, needle) {
-  if (needle === '') return true;
-  return makeString(str).indexOf(needle) !== -1;
-};
-
-},{"./helper/makeString":50}],52:[function(require,module,exports){
-/**
  * @namespace FlareCurrency
  */
 
@@ -1765,6 +1748,21 @@ var Currency = (function () {
     }
 
     /**
+     * Sets the store from the saved game.
+     *
+     * Saved games will have a contents.currencies in them.
+     * Over ride what evers in this._store with the store from the
+     * contents.currencies.
+     *
+     * @param Array store
+     */
+  }, {
+    key: "setStoreFromLoad",
+    value: function setStoreFromLoad(store) {
+      this._currencyStore = store;
+    }
+
+    /**
      * Get the currency store.
      *
      * @return Array of Objects
@@ -1783,7 +1781,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":61}],53:[function(require,module,exports){
+},{"../../flare_error":59}],51:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -1826,6 +1824,21 @@ var FlareCurrency = (function () {
     value: function createCurrencies() {
       window.flareCurrency.store(FlareCurrencyPluginParamters);
     }
+
+    /**
+     * Sets the store from the saved game.
+     *
+     * Saved games will have a contents.currencies in them.
+     * Over ride what evers in this._store with the store from the
+     * contents.currencies.
+     *
+     * @param Array store
+     */
+  }, {
+    key: 'setStoreFromLoad',
+    value: function setStoreFromLoad(store) {
+      window.flareCurrency.setStoreFromLoad(store);
+    }
   }]);
 
   return FlareCurrency;
@@ -1853,18 +1866,10 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":61,"../menus/flare_currency_menu":55,"./currency":52}],54:[function(require,module,exports){
+},{"../../flare_error":59,"../menus/flare_currency_menu":53,"./currency":50}],52:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
-
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var UnderscoreInclude = require('../../node_modules/underscore.string/include');
 
 /*:
  * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -1996,6 +2001,11 @@ var UnderscoreInclude = require('../../node_modules/underscore.string/include');
  * It contains methods for setting, getting, opening currency shops
  * and so on.
  */
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FlareCurrencies = (function () {
   function FlareCurrencies() {
@@ -2005,7 +2015,7 @@ var FlareCurrencies = (function () {
   // Create public API.
 
   _createClass(FlareCurrencies, null, [{
-    key: 'setAmount',
+    key: "setAmount",
 
     /**
      * Set the amount for the specific currency.
@@ -2021,7 +2031,7 @@ var FlareCurrencies = (function () {
 
       var self = this;
       currencies.map(function (currency) {
-        if (UnderscoreInclude(currency.name, currencyName)) {
+        if (currency.name.indexOf(currencyName) !== -1) {
           self._setAmount(currency, currencyAmount);
           return;
         }
@@ -2035,7 +2045,7 @@ var FlareCurrencies = (function () {
      * @param Int CurrencyAmount
      */
   }, {
-    key: '_setAmount',
+    key: "_setAmount",
     value: function _setAmount(currency, currencyAmount) {
       currency.amount = currency.amount + currencyAmount;
 
@@ -2050,7 +2060,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/underscore.string/include":51}],55:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2059,7 +2069,7 @@ window.FlareCurrencies = FlareCurrencies;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -2127,7 +2137,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":62,"../scenes/flare_currency_scene":56}],56:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":60,"../scenes/flare_currency_scene":54}],54:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2136,7 +2146,7 @@ module.exports = FlareCurrencyMenu;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2205,7 +2215,7 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":60}],57:[function(require,module,exports){
+},{"../windows/flare_currency_window":58}],55:[function(require,module,exports){
 'use strict';
 
 var lodashFind = require('../../../node_modules/lodash/collection/find');
@@ -2226,7 +2236,6 @@ BattleManager.displayRewardForCurrencies = function () {
 BattleManager._parseEnemyMemberCurrencies = function (member) {
   var self = this;
   $dataEnemies.forEach(function (enemy) {
-    console.log(member);
     if (enemy !== null && enemy.id === member.enemyId && enemy.enemyCurrencyRewardData.length > 0) {
       self._gainCurrencyMessage(enemy);
     }
@@ -2235,7 +2244,9 @@ BattleManager._parseEnemyMemberCurrencies = function (member) {
 
 BattleManager._gainCurrencyMessage = function (enemy) {
   enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
+
     if (gainCurrency.doWeGainCurrency && Array.isArray(enemy.enemyCurrencyRewardData)) {
+
       var currencyTogain = lodashFind(enemy.enemyCurrencyRewardData, function (currencyObject) {
         return currencyObject.name === gainCurrency.currency_name;
       });
@@ -2245,7 +2256,42 @@ BattleManager._gainCurrencyMessage = function (enemy) {
   });
 };
 
-},{"../../../node_modules/lodash/collection/find":2}],58:[function(require,module,exports){
+var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
+BattleManager.gainRewards = function () {
+  oldBattleManagerGainRewardsMethod.call(this);
+  this.gainCurrencies();
+};
+
+BattleManager.gainCurrencies = function () {
+  var self = this;
+  $gameTroop.troop().members.forEach(function (enenemyObject) {
+    self._parseEnemyObject(enenemyObject);
+  });
+};
+
+BattleManager._parseEnemyObject = function (enemyObjectFromTroop) {
+  var self = this;
+  $dataEnemies.forEach(function (enemy) {
+    if (enemy !== null && enemy.id === enemyObjectFromTroop.enemyId && enemy.enemyCurrencyRewardData.length > 0) {
+      self._getCurrenciesAndRewardThem(enemy);
+    }
+  });
+};
+
+BattleManager._getCurrenciesAndRewardThem = function (enemy) {
+  enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
+    if (gainCurrency.doWeGainCurrency && Array.isArray(enemy.enemyCurrencyRewardData)) {
+
+      var currencyToGain = lodashFind(enemy.enemyCurrencyRewardData, function (currencyObject) {
+        return currencyObject.name === gainCurrency.currency_name;
+      });
+
+      window.FlareCurrencies.setAmount(currencyToGain.name, currencyToGain.amount);
+    }
+  });
+};
+
+},{"../../../node_modules/lodash/collection/find":2}],56:[function(require,module,exports){
 'use strict';
 
 var RewardCurrenciesCheck = require('./reward_currencies_check');
@@ -2262,6 +2308,20 @@ DataManager.isDatabaseLoaded = function () {
   rewardCurrenciesCheck.createCheckObject();
 
   return true;
+};
+
+var oldDataManagerMakeSaveContentsMethod = DataManager.makeSaveContents;
+DataManager.makeSaveContents = function () {
+  var contents = oldDataManagerMakeSaveContentsMethod.call(this);
+  contents.currencies = window.flareCurrency.getCurrencyStore();
+
+  return contents;
+};
+
+var oldDataManagerExtractSaveContentMethod = DataManager.extractSaveContents;
+DataManager.extractSaveContents = function (contents) {
+  oldDataManagerExtractSaveContentMethod.call(this, contents);
+  window.flareCurrency.setStoreFromLoad(contents.currencies);
 };
 
 /**
@@ -2322,7 +2382,7 @@ DataManager._createCurrencyRewardObject = function (lineMatched) {
   }
 };
 
-},{"./reward_currencies_check":59}],59:[function(require,module,exports){
+},{"./reward_currencies_check":57}],57:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2432,7 +2492,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":63}],60:[function(require,module,exports){
+},{"../../flare_random_number":61}],58:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2441,7 +2501,7 @@ module.exports = RewardCurrenciesCheck;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -2526,7 +2586,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":64,"../currencies/currency":52}],61:[function(require,module,exports){
+},{"../../flare_window_base":62,"../currencies/currency":50}],59:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2589,7 +2649,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],62:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2640,7 +2700,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],63:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2681,7 +2741,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],64:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2697,7 +2757,7 @@ module.exports = FlareRandomNumber;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2743,4 +2803,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[54,53,58,57]);
+},{}]},{},[52,51,56,55]);

@@ -29,6 +29,19 @@ class FlareCurrency {
   createCurrencies() {
     window.flareCurrency.store(FlareCurrencyPluginParamters);
   }
+
+  /**
+   * Sets the store from the saved game.
+   *
+   * Saved games will have a contents.currencies in them.
+   * Over ride what evers in this._store with the store from the
+   * contents.currencies.
+   *
+   * @param Array store
+   */
+  setStoreFromLoad(store) {
+    window.flareCurrency.setStoreFromLoad(store);
+  }
 };
 
 // Create the Currencies menu item.

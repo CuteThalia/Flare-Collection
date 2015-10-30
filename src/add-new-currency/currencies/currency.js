@@ -58,6 +58,19 @@ class Currency {
   }
 
   /**
+   * Sets the store from the saved game.
+   *
+   * Saved games will have a contents.currencies in them.
+   * Over ride what evers in this._store with the store from the
+   * contents.currencies.
+   *
+   * @param Array store
+   */
+  setStoreFromLoad(store) {
+    this._currencyStore = store;
+  }
+
+  /**
    * Get the currency store.
    *
    * @return Array of Objects
