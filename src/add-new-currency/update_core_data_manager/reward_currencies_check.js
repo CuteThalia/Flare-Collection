@@ -50,7 +50,7 @@ class RewardCurrenciesCheck {
      enemyCurrencyReward.map(function(currencyObject){
       if (typeof currencyObject === 'object') {
         enemy.gainCurrencyOnBattleWin.push({
-          currency_Name: currencyObject.name,
+          currency_name: currencyObject.name,
           doWeGainCurrency: self._processPercentage(currencyObject)
         });
       }
