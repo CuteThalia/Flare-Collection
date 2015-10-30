@@ -1999,7 +1999,8 @@ var lodashFind = require('../../node_modules/lodash/collection/find');
  * amount     - Integer, how much does the enemy give?
  * percentage - Optional integer. percentage of drop (see below).
  *
- * Percentage is optional, with out it, all currencies have a 100% drop rate. doing:
+ * Percentage is optional, with out it, all currencies
+ * have a 100% drop rate. doing:
  *
  * <currencies: "Demon Teeth", 80, 15>
  *
@@ -2026,7 +2027,8 @@ var lodashFind = require('../../node_modules/lodash/collection/find');
  *
  * window.FlareCurrencies.addAmount(currencyName, currencyAmount)
  *
- * Method to add or subtract a specific amount from a currency given the currency name.
+ * Method to add or subtract a specific amount from a
+ * currency given the currency name.
  *
  * Example: window.FlareCurrencies.addAmount("Demon Teeth", 76);
  *
@@ -2034,8 +2036,8 @@ var lodashFind = require('../../node_modules/lodash/collection/find');
  *
  * Second Example: window.FlareCurrencies.addAmount("Demon Teeth", -99999);
  *
- * Because we do not have a limit on currencies, assume the user has 10 Demon Teeth, this will
- * make the count 0;
+ * Because we do not have a limit on currencies, assume the user
+ * has 10 Demon Teeth, this will make the count 0;
  *
  */
 
