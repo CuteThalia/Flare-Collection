@@ -125,6 +125,21 @@ var lodashFind = require('../../node_modules/lodash/collection/find');
   *
   * All methods on FlareCurrencies is static.
   *
+  * === Methods ===
+  *
+  * window.FlareCurrencies.addAmount(currencyName, currencyAmount)
+  *
+  * Method to add or subtract a specific amount from a currency given the currency name.
+  *
+  * Example: window.FlareCurrencies.addAmount("Demon Teeth", 76);
+  *
+  * This will give you 76 Demon Teeth.
+  *
+  * Second Example: window.FlareCurrencies.addAmount("Demon Teeth", -99999);
+  *
+  * Because we do not have a limit on currencies, assume the user has 10 Demon Teeth, this will
+  * make the count 0;
+  *
   */
 
 /**
