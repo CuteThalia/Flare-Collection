@@ -1867,6 +1867,14 @@ Scene_Map.prototype.initialize = function () {
 };
 
 },{"../../flare_error":59,"../menus/flare_currency_menu":53,"./currency":50}],52:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var lodashFind = require('../../node_modules/lodash/collection/find');
+
 /**
  * @namespace FlareCurrency
  */
@@ -2001,11 +2009,6 @@ Scene_Map.prototype.initialize = function () {
  * It contains methods for setting, getting, opening currency shops
  * and so on.
  */
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FlareCurrencies = (function () {
   function FlareCurrencies() {
@@ -2015,7 +2018,7 @@ var FlareCurrencies = (function () {
   // Create public API.
 
   _createClass(FlareCurrencies, null, [{
-    key: "setAmount",
+    key: 'addAmount',
 
     /**
      * Set the amount for the specific currency.
@@ -2026,16 +2029,24 @@ var FlareCurrencies = (function () {
      * @param String currencyName
      * @param Int currencyAmount
      */
-    value: function setAmount(currencyName, currencyAmount) {
+    value: function addAmount(currencyName, currencyAmount) {
       var currencies = window.flareCurrency.getCurrencyStore();
 
       var self = this;
-      currencies.map(function (currency) {
+
+      var currencyObject = lodashFind(currencies, function (currency) {
         if (currency.name.indexOf(currencyName) !== -1) {
-          self._setAmount(currency, currencyAmount);
-          return;
+          return currency;
         }
       });
+
+      console.log(currencyObject);
+
+      if (currencyObject === undefined) {
+        throw new Error('Currency not found. Tried looking for: ' + currencyName + ' is the spelling right?');
+      }
+
+      this._addAmount(currencyObject, currencyAmount);
     }
 
     /**
@@ -2045,9 +2056,9 @@ var FlareCurrencies = (function () {
      * @param Int CurrencyAmount
      */
   }, {
-    key: "_setAmount",
-    value: function _setAmount(currency, currencyAmount) {
-      currency.amount = currency.amount + currencyAmount;
+    key: '_addAmount',
+    value: function _addAmount(currency, currencyAmount) {
+      currency.amount += currencyAmount;
 
       if (currency.amount < 0) {
         currency.amount = 0;
@@ -2060,7 +2071,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{}],53:[function(require,module,exports){
+},{"../../node_modules/lodash/collection/find":2}],53:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2286,7 +2297,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
         return currencyObject.name === gainCurrency.currency_name;
       });
 
-      window.FlareCurrencies.setAmount(currencyToGain.name, currencyToGain.amount);
+      window.FlareCurrencies.addAmount(currencyToGain.name, currencyToGain.amount);
     }
   });
 };

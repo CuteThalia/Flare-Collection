@@ -1,3 +1,5 @@
+var lodashFind = require('../../node_modules/lodash/collection/find');
+
 /**
  * @namespace FlareCurrency
  */
@@ -143,16 +145,24 @@ class FlareCurrencies {
    * @param String currencyName
    * @param Int currencyAmount
    */
-  static setAmount(currencyName, currencyAmount) {
+  static addAmount(currencyName, currencyAmount) {
     var currencies = window.flareCurrency.getCurrencyStore();
 
     var self = this;
-    currencies.map(function(currency){
+
+    var currencyObject = lodashFind(currencies, function(currency){
       if (currency.name.indexOf(currencyName) !== -1) {
-        self._setAmount(currency, currencyAmount);
-        return;
+        return currency;
       }
     });
+
+    console.log(currencyObject);
+
+    if (currencyObject === undefined) {
+      throw new Error('Currency not found. Tried looking for: ' + currencyName + ' is the spelling right?')
+    }
+
+    this._addAmount(currencyObject, currencyAmount)
   }
 
   /**
@@ -161,8 +171,8 @@ class FlareCurrencies {
    * @param Object Currency
    * @param Int CurrencyAmount
    */
-  static _setAmount(currency, currencyAmount) {
-    currency.amount = currency.amount + currencyAmount;
+  static _addAmount(currency, currencyAmount) {
+    currency.amount += currencyAmount;
 
     if (currency.amount < 0) {
       currency.amount = 0;

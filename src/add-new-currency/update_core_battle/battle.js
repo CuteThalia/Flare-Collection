@@ -69,7 +69,7 @@ BattleManager._getCurrenciesAndRewardThem = function(enemy) {
         return currencyObject.name === gainCurrency.currency_name;
       });
 
-      window.FlareCurrencies.setAmount(currencyToGain.name, currencyToGain.amount);
+      window.FlareCurrencies.addAmount(currencyToGain.name, currencyToGain.amount);
     }
   });
 }
