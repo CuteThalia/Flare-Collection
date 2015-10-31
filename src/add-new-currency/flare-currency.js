@@ -1,4 +1,5 @@
-var lodashFind = require('../../node_modules/lodash/collection/find');
+var lodashFind   = require('../../node_modules/lodash/collection/find');
+var CurrencyShop = require('./shop/currency_shop');
 
 /**
  * @namespace FlareCurrency
@@ -204,6 +205,11 @@ class FlareCurrencies {
     this._addAmount(currencyObject, currencyAmount)
   }
 
+  static openShop(currency) {
+    var currencyShop = new CurrencyShop();
+    currencyShop.openShopWindow(currency);
+  }
+
   /**
    * Private method: sets Currency.
    *
@@ -220,4 +226,4 @@ class FlareCurrencies {
 }
 
 // Create public API.
-window.FlareCurrencies = FlareCurrencies
+window.FlareCurrencies = FlareCurrencies;

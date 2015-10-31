@@ -1781,7 +1781,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":59}],51:[function(require,module,exports){
+},{"../../flare_error":60}],51:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -1866,7 +1866,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":59,"../menus/flare_currency_menu":53,"./currency":50}],52:[function(require,module,exports){
+},{"../../flare_error":60,"../menus/flare_currency_menu":53,"./currency":50}],52:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1874,6 +1874,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var lodashFind = require('../../node_modules/lodash/collection/find');
+var CurrencyShop = require('./shop/currency_shop');
 
 /**
  * @namespace FlareCurrency
@@ -2087,6 +2088,12 @@ var FlareCurrencies = (function () {
 
       this._addAmount(currencyObject, currencyAmount);
     }
+  }, {
+    key: 'openShop',
+    value: function openShop(currency) {
+      var currencyShop = new CurrencyShop();
+      currencyShop.openShopWindow(currency);
+    }
 
     /**
      * Private method: sets Currency.
@@ -2110,7 +2117,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/lodash/collection/find":2}],53:[function(require,module,exports){
+},{"../../node_modules/lodash/collection/find":2,"./shop/currency_shop":55}],53:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2187,7 +2194,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":60,"../scenes/flare_currency_scene":54}],54:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":61,"../scenes/flare_currency_scene":54}],54:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2265,7 +2272,33 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":58}],55:[function(require,module,exports){
+},{"../windows/flare_currency_window":59}],55:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CurrencyShop = (function () {
+  function CurrencyShop() {
+    _classCallCheck(this, CurrencyShop);
+  }
+
+  _createClass(CurrencyShop, [{
+    key: "openShopWindow",
+    value: function openShopWindow(currency) {
+      var sceneShop = new Scene_Shop();
+      sceneShop.prepare($dataItems);
+      SceneManager.goto(sceneShop);
+    }
+  }]);
+
+  return CurrencyShop;
+})();
+
+module.exports = CurrencyShop;
+
+},{}],56:[function(require,module,exports){
 'use strict';
 
 var lodashFind = require('../../../node_modules/lodash/collection/find');
@@ -2341,7 +2374,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../../../node_modules/lodash/collection/find":2}],56:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":2}],57:[function(require,module,exports){
 'use strict';
 
 var RewardCurrenciesCheck = require('./reward_currencies_check');
@@ -2432,7 +2465,7 @@ DataManager._createCurrencyRewardObject = function (lineMatched) {
   }
 };
 
-},{"./reward_currencies_check":57}],57:[function(require,module,exports){
+},{"./reward_currencies_check":58}],58:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2542,7 +2575,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":61}],58:[function(require,module,exports){
+},{"../../flare_random_number":62}],59:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2636,7 +2669,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":62,"../currencies/currency":50}],59:[function(require,module,exports){
+},{"../../flare_window_base":63,"../currencies/currency":50}],60:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2699,7 +2732,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2750,7 +2783,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2791,7 +2824,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -2853,4 +2886,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[52,51,56,55]);
+},{}]},{},[52,51,57,56]);

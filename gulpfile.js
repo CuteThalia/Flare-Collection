@@ -16,3 +16,14 @@ gulp.task('make:flare-currency', function() {
       .pipe(source('Flare-Currency.js'))
       .pipe(gulp.dest('dist/flare/currency/'));
 });
+
+gulp.task('make:flare-notification-window', function() {
+  return browserify({entries: [
+        'src/notification-system/notify.js',
+        'src/notification-system/scene_map_update/scene_map_update.js'
+      ]})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('Flare-NotificationWindow.js'))
+      .pipe(gulp.dest('dist/flare/notify/'));
+});
