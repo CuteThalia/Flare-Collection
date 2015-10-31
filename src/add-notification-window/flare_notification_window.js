@@ -1,23 +1,21 @@
-class FlareScene extends Scene_Base {
-  constructor() {
-    super();
-  }
-
-  create() {
-    super.create(this);
-    this.makeWindow()
-  }
-
-  makeWindow() {
-    this._flareNotificationWindow = new FlareNotificationWindow();
-    this.addChild(this._flareNotificationWindow);
-  }
-}
+var FlareNotificationWindow = require('./windows/flare_notification_window');
 
 class FlareNotification {
 
   static createNewScene() {
-    SceneManager.push(FlareScene);
+    this._windowOpen = true;
+  }
+
+  static _isWindowOpen() {
+    if (this._windowOpen === undefined) {
+      this._windowOpen = false;
+    }
+
+    return this._windowOpen;
+  }
+
+  static _windowIsNotOpen() {
+    this._windowOpen = false;
   }
 }
 

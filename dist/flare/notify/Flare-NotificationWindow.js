@@ -1,39 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FlareScene = (function (_Scene_Base) {
-  _inherits(FlareScene, _Scene_Base);
-
-  function FlareScene() {
-    _classCallCheck(this, FlareScene);
-
-    _get(Object.getPrototypeOf(FlareScene.prototype), "constructor", this).call(this);
-  }
-
-  _createClass(FlareScene, [{
-    key: "create",
-    value: function create() {
-      _get(Object.getPrototypeOf(FlareScene.prototype), "create", this).call(this, this);
-      this.makeWindow();
-    }
-  }, {
-    key: "makeWindow",
-    value: function makeWindow() {
-      this._flareNotificationWindow = new FlareNotificationWindow();
-      this.addChild(this._flareNotificationWindow);
-    }
-  }]);
-
-  return FlareScene;
-})(Scene_Base);
+var FlareNotificationWindow = require('./windows/flare_notification_window');
 
 var FlareNotification = (function () {
   function FlareNotification() {
@@ -41,9 +13,23 @@ var FlareNotification = (function () {
   }
 
   _createClass(FlareNotification, null, [{
-    key: "createNewScene",
+    key: 'createNewScene',
     value: function createNewScene() {
-      SceneManager.push(FlareScene);
+      this._windowOpen = true;
+    }
+  }, {
+    key: '_isWindowOpen',
+    value: function _isWindowOpen() {
+      if (this._windowOpen === undefined) {
+        this._windowOpen = false;
+      }
+
+      return this._windowOpen;
+    }
+  }, {
+    key: '_windowIsNotOpen',
+    value: function _windowIsNotOpen() {
+      this._windowOpen = false;
     }
   }]);
 
@@ -52,7 +38,7 @@ var FlareNotification = (function () {
 
 window.FlareNotification = FlareNotification;
 
-},{}],2:[function(require,module,exports){
+},{"./windows/flare_notification_window":3}],2:[function(require,module,exports){
 /**
  * Responsible for updating scene map.
  *
@@ -66,46 +52,58 @@ var FlareNotificationWindow = require('../windows/flare_notification_window');
 var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function () {
   oldSceneMapPrototypeInitializeMethod.call(this);
-  this._iswindowOpen = false;
-};
-
-var oldSceneMapPrototypeCreateDisplayObjects = Scene_Map.prototype.createDisplayObjects;
-Scene_Map.prototype.createDisplayObjects = function () {
-  oldSceneMapPrototypeCreateDisplayObjects.call(this);
-  this.createFlareNotificationWindow();
+  this._isWindowOpen = false;
+  this._waitForWindowToClose = 175;
+  this._flareNotificationWindow = null;
 };
 
 var oldSceneMapPrototypeUpdateMainMethod = Scene_Map.prototype.updateMain;
 Scene_Map.prototype.updateMain = function () {
   oldSceneMapPrototypeUpdateMainMethod.call(this);
 
-  if (!this._iswindowOpen) {
-    this._flareNotificationWindow.open();
-    this._iswindowOpen = true;
+  if (this._flareNotificationWindow === null) {
+    this._flareNotificationWindow = new FlareNotificationWindow();
   }
+
+  if (!this._iswindowOpen && FlareNotification._isWindowOpen()) {
+    this.addChild(this._flareNotificationWindow);
+    this._flareNotificationWindow.open();
+    this._isWindowOpen = true;
+  }
+
+  if (this._isWindowOpen) {
+    this._waitForWindowToClose--;
+    if (this._waitForWindowToClose === 0) {
+      console.log('Hello World');
+      this.allowAnotherWindowToBeOpened();
+    }
+  }
+};
+
+Scene_Map.prototype.allowAnotherWindowToBeOpened = function () {
+  FlareNotification._windowIsNotOpen();
+  this._isWindowOpen = false;
+  this.removeChild(this._flareNotificationWindow);
+  this._flareNotificationWindow = null;
+  this._waitForWindowToClose = 175;
 };
 
 var oldSceneMapPrototypeStopMethod = Scene_Map.prototype.stop;
 Scene_Map.prototype.stop = function () {
-  oldSceneMapPrototypeStopMethod.call(this);
   this._flareNotificationWindow.close();
+  oldSceneMapPrototypeStopMethod.call(this);
 };
 
 var oldSceneMapPrototypeCallMenuMethod = Scene_Map.prototype.callMenu;
 Scene_Map.prototype.callMenu = function () {
-  oldSceneMapPrototypeCallMenuMethod.call(this);
   this._flareNotificationWindow.hide();
+  oldSceneMapPrototypeCallMenuMethod.call(this);
 };
 
 var SceneMapPrototypeLaunchbattleMethod = Scene_Map.prototype.launchBattle;
 Scene_Map.prototype.launchBattle = function () {
   SceneMapPrototypeLaunchbattleMethod.call(this);
   this._flareNotificationWindow.hide();
-};
-
-Scene_Map.prototype.createFlareNotificationWindow = function () {
-  this._flareNotificationWindow = new FlareNotificationWindow();
-  this.addChild(this._flareNotificationWindow);
 };
 
 },{"../windows/flare_notification_window":3}],3:[function(require,module,exports){
