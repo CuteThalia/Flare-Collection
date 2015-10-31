@@ -1,4 +1,16 @@
-var FlareNotificationWindow = require ('../windows/notify_window');
+/**
+ * @namespace FlareNotify
+ *
+ */
+
+/**
+ * Make changes to the Scene Map.
+ *
+ * Changes here allow for the notification
+ * window to open.
+ */
+
+var FlareNotifyWindow = require ('../windows/notify_window');
 
 var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function() {
@@ -9,11 +21,11 @@ Scene_Map.prototype.initialize = function() {
 var sceneMapPrototypeCreateDisplayObjectsMethod = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
   sceneMapPrototypeCreateDisplayObjectsMethod.call(this);
-  this.addFlareNotificationWindow()
+  this.addFlareNotificationWindow();
 }
 
 Scene_Map.prototype.addFlareNotificationWindow = function() {
-    this._flareNotificationWindow = new FlareNotificationWindow();
+    this._flareNotificationWindow = new FlareNotifyWindow();
     this.addChild(this._flareNotificationWindow);
 }
 

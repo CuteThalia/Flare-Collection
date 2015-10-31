@@ -1,35 +1,51 @@
+/**
+ * @namespace FlareNotify
+ *
+ */
+
 var FlareWindowBase = require('../../flare_window_base');
 
-
-class NotifyWindow extends FlareWindowBase {
+/**
+ * Creates a notification Window.
+ *
+ * Cretes a simple notificiation window similar to the map
+ * name window.
+ */
+class FlareNotifyWindow extends FlareWindowBase {
 
   constructor() {
     super();
-    this.initialize()
+    this.initialize();
   }
 
   initialize() {
-    super.initialize(this, 0, 0, 360, this.fittingHeight(1));
+    super.initialize(this, 0, 0, this.windowWidth(), this.windowHeight());
 
     this.opacity         = 0;
     this.contentsOpacity = 0;
     this._showCount      = 0;
+  }
 
-    this.refresh();
+  windowWidth() {
+    return 360;
+  }
+
+  windowHeight() {
+    return this.fittingHeight(1);
   }
 
   update() {
     super.update(this);
 
     if (this._showCount > 0) {
-      this.updateFadeInAndMove();
+      this.updateFadeIn();
       this._showCount--;
     } else {
       this.updateFadeOut();
     }
   }
 
-  updateFadeInAndMove() {
+  updateFadeIn() {
     this.contentsOpacity += 16;
   }
 
@@ -50,8 +66,10 @@ class NotifyWindow extends FlareWindowBase {
     this.contents.clear();
 
     var width = this.contentsWidth();
-    this.drawBackground(0, 0, width, this.lineHeight())
-    this.drawText('asdasdas', 0, 0, width, 'center');
+    this.drawBackground(0, 0, 324, this.lineHeight());
+    this.drawText('Hello World', 0, 0, 324, 'center');
+
+    console.log(this.contents);
   }
 
   drawBackground(x, y, width, height) {
@@ -63,4 +81,4 @@ class NotifyWindow extends FlareWindowBase {
   }
 }
 
-module.exports = NotifyWindow;
+module.exports = FlareNotifyWindow;

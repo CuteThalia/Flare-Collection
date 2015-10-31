@@ -1,19 +1,28 @@
-var FlareNotificationWindow = require ('./windows/notify_window');
+/**
+ * @namespace FlareNotify
+ */
 
+/*:
+ * @plugindesc creates notification windows via events.
+ * @author Adam Balan (AKA: DarknessFalls)
+ *
+ *
+ * @help
+ *
+ */
+
+/**
+ * Public API Class. Flare Notifications.
+ *
+ * Class that contains public methods that can be called
+ * via the window.FlareNotifcations
+ */
 class FlareNotifications {
 
   static createNotificationWindow() {
-    var n = new FlareNotificationWindow();
-    n.open();
+    SceneManager.push(FlareNotificationScene);
   }
 
-  static shouldWeCreateWindow() {
-    if (this._createWindow === undefined) {
-      return false;
-    }
-
-    return this._createWindow;
-  }
 }
 
 window.FlareNotifications = FlareNotifications;
