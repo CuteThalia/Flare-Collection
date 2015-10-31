@@ -1,162 +1,88 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/**
- * @namespace FlareCollection
- */
-
-/**
- * All Flare based items use this window base.
- *
- * Flare Window Base extends the Window Base Class
- * and adds some additional generic helper methods
- * that are useful for creating windows and their contents.
- */
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FlareWindowBase = (function (_Window_Base) {
-  _inherits(FlareWindowBase, _Window_Base);
+var FlareScene = (function (_Scene_Base) {
+  _inherits(FlareScene, _Scene_Base);
 
-  function FlareWindowBase() {
-    _classCallCheck(this, FlareWindowBase);
+  function FlareScene() {
+    _classCallCheck(this, FlareScene);
 
-    _get(Object.getPrototypeOf(FlareWindowBase.prototype), "constructor", this).call(this);
+    _get(Object.getPrototypeOf(FlareScene.prototype), "constructor", this).call(this);
   }
 
-  /**
-   * Custom drawtextEx function.
-   *
-   * We do not reset font settings, which is what the default method does.
-   * I dont like giant text in my windows.
-   *
-   * It is usp to the implementor to call: this.resetFontSettings();
-   */
-
-  _createClass(FlareWindowBase, [{
-    key: "flareDrawTextEx",
-    value: function flareDrawTextEx(text, x, y) {
-      if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
-        textState.text = this.convertEscapeCharacters(text);
-        textState.height = this.calcTextHeight(textState, false);
-        while (textState.index < textState.text.length) {
-          this.processCharacter(textState);
-        }
-        return textState.x - x;
-      } else {
-        return 0;
-      }
+  _createClass(FlareScene, [{
+    key: "create",
+    value: function create() {
+      _get(Object.getPrototypeOf(FlareScene.prototype), "create", this).call(this, this);
+      this.makeWindow();
+    }
+  }, {
+    key: "makeWindow",
+    value: function makeWindow() {
+      this._flareNotificationWindow = new FlareNotificationWindow();
+      this.addChild(this._flareNotificationWindow);
     }
   }]);
 
-  return FlareWindowBase;
-})(Window_Base);
+  return FlareScene;
+})(Scene_Base);
 
-module.exports = FlareWindowBase;
+var FlareNotification = (function () {
+  function FlareNotification() {
+    _classCallCheck(this, FlareNotification);
+  }
+
+  _createClass(FlareNotification, null, [{
+    key: "createNewScene",
+    value: function createNewScene() {
+      SceneManager.push(FlareScene);
+    }
+  }]);
+
+  return FlareNotification;
+})();
+
+window.FlareNotification = FlareNotification;
 
 },{}],2:[function(require,module,exports){
 /**
- * @namespace FlareNotify
- */
-
-/*:
- * @plugindesc creates notification windows via events.
- * @author Adam Balan (AKA: DarknessFalls)
+ * Responsible for updating scene map.
  *
- *
- * @help
- *
- */
-
-/**
- * Public API Class. Flare Notifications.
- *
- * Class that contains public methods that can be called
- * via the window.FlareNotifcations
- */
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var FlareNotifications = (function () {
-  function FlareNotifications() {
-    _classCallCheck(this, FlareNotifications);
-  }
-
-  _createClass(FlareNotifications, null, [{
-    key: "createNotificationWindow",
-    value: function createNotificationWindow() {
-      SceneManager.push(FlareNotificationScene);
-    }
-  }]);
-
-  return FlareNotifications;
-})();
-
-window.FlareNotifications = FlareNotifications;
-
-},{}],3:[function(require,module,exports){
-/**
- * @namespace FlareNotify
- *
- */
-
-/**
- * Make changes to the Scene Map.
- *
- * Changes here allow for the notification
- * window to open.
+ * Allows us to show notifications on the map.
  */
 
 'use strict';
 
-var FlareNotifyWindow = require('../windows/notify_window');
+var FlareNotificationWindow = require('../windows/flare_notification_window');
 
 var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function () {
   oldSceneMapPrototypeInitializeMethod.call(this);
-  this._notificationWindowIsOpen = false;
+  this._iswindowOpen = false;
 };
 
-var sceneMapPrototypeCreateDisplayObjectsMethod = Scene_Map.prototype.createDisplayObjects;
+var oldSceneMapPrototypeCreateDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function () {
-  sceneMapPrototypeCreateDisplayObjectsMethod.call(this);
-  this.addFlareNotificationWindow();
-};
-
-Scene_Map.prototype.addFlareNotificationWindow = function () {
-  this._flareNotificationWindow = new FlareNotifyWindow();
-  this.addChild(this._flareNotificationWindow);
+  oldSceneMapPrototypeCreateDisplayObjects.call(this);
+  this.createFlareNotificationWindow();
 };
 
 var oldSceneMapPrototypeUpdateMainMethod = Scene_Map.prototype.updateMain;
 Scene_Map.prototype.updateMain = function () {
-  //oldSceneMapPrototypeUpdateMainMethod.call(this);
+  oldSceneMapPrototypeUpdateMainMethod.call(this);
 
-  if (!this._notificationWindowIsOpen) {
+  if (!this._iswindowOpen) {
     this._flareNotificationWindow.open();
-    this._notificationWindowIsOpen = true;
+    this._iswindowOpen = true;
   }
-};
-
-var oldSceneMapPrototypeCallMenuMethod = Scene_Map.prototype.callMenu;
-Scene_Map.prototype.callMenu = function () {
-  oldSceneMapPrototypeCallMenuMethod.call(this);
-  this._flareNotificationWindow.hide();
-};
-
-var oldSceneMapPrototypeLaunchBattleMethod = Scene_Map.prototype.launchBattle;
-Scene_Map.prototype.launchBattle = function () {
-  oldSceneMapPrototypeLaunchBattleMethod.call(this);
-  this._flareNotificationWindow.hide();
 };
 
 var oldSceneMapPrototypeStopMethod = Scene_Map.prototype.stop;
@@ -165,118 +91,128 @@ Scene_Map.prototype.stop = function () {
   this._flareNotificationWindow.close();
 };
 
-},{"../windows/notify_window":4}],4:[function(require,module,exports){
+var oldSceneMapPrototypeCallMenuMethod = Scene_Map.prototype.callMenu;
+Scene_Map.prototype.callMenu = function () {
+  oldSceneMapPrototypeCallMenuMethod.call(this);
+  this._flareNotificationWindow.hide();
+};
+
+var SceneMapPrototypeLaunchbattleMethod = Scene_Map.prototype.launchBattle;
+Scene_Map.prototype.launchBattle = function () {
+  SceneMapPrototypeLaunchbattleMethod.call(this);
+  this._flareNotificationWindow.hide();
+};
+
+Scene_Map.prototype.createFlareNotificationWindow = function () {
+  this._flareNotificationWindow = new FlareNotificationWindow();
+  this.addChild(this._flareNotificationWindow);
+};
+
+},{"../windows/flare_notification_window":3}],3:[function(require,module,exports){
 /**
- * @namespace FlareNotify
+ * Create a notiication window.
  *
+ * Responsible for creating a notification window that
+ * can show various type sof notifications.
  */
+"use strict";
 
-'use strict';
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var FlareNotificationWindow = (function (_Window_Base) {
+  _inherits(FlareNotificationWindow, _Window_Base);
 
-var FlareWindowBase = require('../../flare_window_base');
+  function FlareNotificationWindow() {
+    _classCallCheck(this, FlareNotificationWindow);
 
-/**
- * Creates a notification Window.
- *
- * Cretes a simple notificiation window similar to the map
- * name window.
- */
-
-var FlareNotifyWindow = (function (_FlareWindowBase) {
-  _inherits(FlareNotifyWindow, _FlareWindowBase);
-
-  function FlareNotifyWindow() {
-    _classCallCheck(this, FlareNotifyWindow);
-
-    _get(Object.getPrototypeOf(FlareNotifyWindow.prototype), 'constructor', this).call(this);
+    _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), "constructor", this).call(this);
     this.initialize();
   }
 
-  _createClass(FlareNotifyWindow, [{
-    key: 'initialize',
+  _createClass(FlareNotificationWindow, [{
+    key: "initialize",
     value: function initialize() {
-      _get(Object.getPrototypeOf(FlareNotifyWindow.prototype), 'initialize', this).call(this, this, 0, 0, this.windowWidth(), this.windowHeight());
+      var width = this.windowWidth();
+      var height = this.windowHeight();
 
-      this.opacity = 0;
+      _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), "initialize", this).call(this, 0, 0, width, height);
+
       this.contentsOpacity = 0;
+      this.opacity = 0;
       this._showCount = 0;
+
+      this.refresh();
     }
   }, {
-    key: 'windowWidth',
+    key: "windowWidth",
     value: function windowWidth() {
       return 360;
     }
   }, {
-    key: 'windowHeight',
+    key: "windowHeight",
     value: function windowHeight() {
       return this.fittingHeight(1);
     }
   }, {
-    key: 'update',
+    key: "update",
     value: function update() {
-      _get(Object.getPrototypeOf(FlareNotifyWindow.prototype), 'update', this).call(this, this);
+      _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), "update", this).call(this, this);
 
       if (this._showCount > 0) {
         this.updateFadeIn();
+        this.y += 3;
         this._showCount--;
       } else {
         this.updateFadeOut();
       }
     }
   }, {
-    key: 'updateFadeIn',
-    value: function updateFadeIn() {
-      this.contentsOpacity += 16;
-    }
-  }, {
-    key: 'updateFadeOut',
+    key: "updateFadeOut",
     value: function updateFadeOut() {
       this.contentsOpacity -= 16;
     }
   }, {
-    key: 'open',
+    key: "updateFadeIn",
+    value: function updateFadeIn() {
+      this.contentsOpacity += 16;
+    }
+  }, {
+    key: "open",
     value: function open() {
       this.refresh();
       this._showCount = 175;
     }
   }, {
-    key: 'close',
+    key: "close",
     value: function close() {
       this._showCount = 0;
     }
   }, {
-    key: 'refresh',
+    key: "refresh",
     value: function refresh() {
-      this.contents.clear();
-
       var width = this.contentsWidth();
-      this.drawBackground(0, 0, 324, this.lineHeight());
-      this.drawText('Hello World', 0, 0, 324, 'center');
-
-      console.log(this.contents);
+      this.drawBackground(0, 0, width, this.lineHeight());
+      this.drawText("Hello World", 0, 0, width, 'center');
     }
   }, {
-    key: 'drawBackground',
+    key: "drawBackground",
     value: function drawBackground(x, y, width, height) {
       var colorOne = this.dimColor1();
-      var colorTwo = this.dimColor2();
-
-      this.contents.gradientFillRect(x, y, width / 2, height, colorTwo, colorOne);
-      this.contents.gradientFillRect(x + width / 2, y, width / 2, height, colorOne, colorTwo);
+      var ColorTwo = this.dimColor2();
+      this.contents.gradientFillRect(x, y, width / 2, height, ColorTwo, colorOne);
+      this.contents.gradientFillRect(x + width / 2, y, width / 2, height, colorOne, ColorTwo);
     }
   }]);
 
-  return FlareNotifyWindow;
-})(FlareWindowBase);
+  return FlareNotificationWindow;
+})(Window_Base);
 
-module.exports = FlareNotifyWindow;
+module.exports = FlareNotificationWindow;
 
-},{"../../flare_window_base":1}]},{},[2,3]);
+},{}]},{},[1,2]);

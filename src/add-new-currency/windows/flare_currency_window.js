@@ -37,6 +37,8 @@ class FlareCurrencyWindow extends FlareWindowBase {
   }
 
   refresh() {
+    this.contents.clear();
+    
     this.drawText('Currencies', 10, 10, 100, 'center');
 
     var currencies = window.flareCurrency.getCurrencyStore();
