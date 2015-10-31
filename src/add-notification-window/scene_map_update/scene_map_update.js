@@ -31,7 +31,6 @@ Scene_Map.prototype.updateMain = function() {
   if (this._isWindowOpen) {
     this._waitForWindowToClose--;
     if (this._waitForWindowToClose === 0 ) {
-      console.log('Hello World');
       this.allowAnotherWindowToBeOpened();
     }
   }
