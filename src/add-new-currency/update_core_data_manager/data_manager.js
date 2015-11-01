@@ -1,4 +1,5 @@
 var RewardCurrenciesCheck = require('./reward_currencies_check');
+var GatherItemsForShop = require('./gather_items');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {
@@ -6,10 +7,15 @@ DataManager.isDatabaseLoaded = function() {
     return false;
   }
 
+  // process Note tags
   this.flareProcessEnemyNoteTags($dataEnemies);
 
+  // Set up rewards for enemies.
   var rewardCurrenciesCheck = new RewardCurrenciesCheck();
   rewardCurrenciesCheck.createCheckObject();
+
+  // Set up the currency shops
+  new GatherItemsForShop();
 
   return true;
 }
