@@ -7,8 +7,8 @@ class GatherItems {
   }
 
   processItems() {
-
     var self = this;
+    
     $dataItems.forEach(function(item){
       if (item !== null) {
         var itemCurrencyInfo = extractAllOfType(item.note, 'currencyShop');
