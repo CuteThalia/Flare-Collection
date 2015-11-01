@@ -8,25 +8,28 @@ class GatherItems {
 
   processItems() {
 
+    var self = this;
     $dataItems.forEach(function(item){
       if (item !== null) {
         var itemCurrencyInfo = extractAllOfType(item.note, 'currencyShop');
 
-        itemCurrencyInfo.forEach(function(info){
-          if (typeof info === 'object') {
-            if (itemCurrencyInfo.length > 0) {
-              _itemsForCurrencieShop.items.push({
-                 currency: info.belongsTo,
-                 item_id: item.id,
-                 item_cost: info.andCosts
-              });
-            }
-          }
-        })
+        itemCurrencyInfo.map(function(info){
+          self._createItemObject(info, item);
+        });
       }
     });
 
     console.log(_itemsForCurrencieShop);
+  }
+
+  _createItemObject(itemTagInfo, item) {
+    if (typeof itemTagInfo === 'object') {
+      _itemsForCurrencieShop.items.push({
+         currency: itemTagInfo.belongsTo,
+         item_id: item.id,
+         item_cost: itemTagInfo.andCosts
+      });
+    }
   }
 }
 
