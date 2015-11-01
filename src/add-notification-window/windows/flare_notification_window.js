@@ -1,10 +1,17 @@
 /**
+ * @namespace FlareNotification.
+ */
+
+var FlareWindowBase = require('../../flare_window_base');
+
+/**
  * Create a notiication window.
  *
  * Responsible for creating a notification window that
  * can show various type sof notifications.
  */
-class FlareNotificationWindow extends Window_Base {
+class FlareNotificationWindow extends FlareWindowBase {
+
   constructor() {
     super();
     this.initialize();
@@ -51,19 +58,28 @@ class FlareNotificationWindow extends Window_Base {
     this.contentsOpacity += 16
   }
 
-  open() {
-    this.refresh();
-    this._showCount = 175;
+  open(text) {
+
+    this.refresh(text);
+
+    var fadeOutTime = _NotificationOptions.getNotificationOptions().fade_out_time;
+
+    if (isNaN(parseInt(fadeOutTime))) {
+      throw new Error('Sorry but: ' + fadeOutTime + ' is not a number');
+    }
+
+    this._showCount = fadeOutTime;
   }
 
   close() {
     this._showCount = 0;
   }
 
-  refresh() {
+  refresh(text) {
     var width = this.contentsWidth();
     this.drawBackground(0, 0, width, this.lineHeight())
-    this.drawText("Hello World", 0, 0, width, 'center');
+    this.flareDrawTextEx(text, 0, 0, width, 'center');
+    this.resetFontSettings();
   }
 
   drawBackground(x, y, width, height) {
