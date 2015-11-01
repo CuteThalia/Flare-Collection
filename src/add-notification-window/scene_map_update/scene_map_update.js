@@ -22,7 +22,6 @@ Scene_Map.prototype.initialize = function() {
   }
 
   this._waitForWindowToClose = timeTillNextwindow;
-  this._flareNotificationWindow = null;
   this._flareWindow = null;
 }
 
@@ -56,29 +55,4 @@ Scene_Map.prototype.allowAnotherWindowToBeOpened = function(flareNotification) {
   this.removeChild(flareNotification);
   this._flareWindow = null;
   this._waitForWindowToClose = 75;
-}
-
-var oldSceneMapPrototypeStopMethod = Scene_Map.prototype.stop;
-Scene_Map.prototype.stop = function() {
-  if (this._flareWindow !== null) {
-    this._flareWindow.close();
-  }
-
-  oldSceneMapPrototypeStopMethod.call(this);
-}
-
-var oldSceneMapPrototypeCallMenuMethod = Scene_Map.prototype.callMenu;
-Scene_Map.prototype.callMenu = function() {
-  if (this._flareWindow !== null) {
-    this._flareWindow.hide();
-  }
-  oldSceneMapPrototypeCallMenuMethod.call(this);
-}
-
-var SceneMapPrototypeLaunchbattleMethod = Scene_Map.prototype.launchBattle;
-Scene_Map.prototype.launchBattle = function() {
-  SceneMapPrototypeLaunchbattleMethod.call(this);
-  if (this._flareWindow !== null) {
-    this._flareWindow.hide();
-  }
 }
