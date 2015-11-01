@@ -1,5 +1,9 @@
 # Flare currency
 
+![Image Of Currency Window](http://i.imgur.com/WbcjKhl.png)
+
+![Image Of Menu](http://i.imgur.com/0J3Yh99.png)
+
 Flare Currency allows you to add up to 5 currencies to your game via the options menu when setting up a script.
 
 When a currency is added you can add the following tags in enemy note tags, **not troops**.

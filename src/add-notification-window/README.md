@@ -1,6 +1,6 @@
 # Flare Notifications
 
-![Notification Window Scrolling](http://imgur.com/EfSN6tQ)
+![Notification Window Scrolling](http://i.imgur.com/EfSN6tQ.png)
 
 Flare Notifications allows you to create notification windows based on different
 events.
