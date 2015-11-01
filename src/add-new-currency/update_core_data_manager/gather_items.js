@@ -18,8 +18,6 @@ class GatherItems {
         });
       }
     });
-
-    console.log(_itemsForCurrencieShop);
   }
 
   _createItemObject(itemTagInfo, item) {
