@@ -7,7 +7,7 @@ alias in order to add additional contents to. These have been mostly separated o
 
 The current scripts are:
 
-- **Flare Currency**: Flare Currency allows you to have a max of 5 currencies.
+- **[Flare Currency](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/currency)**: Flare Currency allows you to have a max of 5 currencies.
   Enemies can drop currencies at a specific amount and percentage.
 
  **Currently Not Complete**.
@@ -16,7 +16,7 @@ The current scripts are:
     which items, armor or weapons require which currency and how
     much of which currency.
 
-- **Flare Notification**: Allows you to create notification windows that are added  to a queue an displayed over a set amount of time.
+- **[Flare Notification](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/notify)**: Allows you to create notification windows that are added  to a queue an displayed over a set amount of time.
 
 ## How to build the script?
 
