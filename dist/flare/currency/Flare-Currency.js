@@ -2930,7 +2930,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":76}],64:[function(require,module,exports){
+},{"../../flare_error":77}],64:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -3015,7 +3015,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":76,"../menus/flare_currency_menu":66,"./currency":63}],65:[function(require,module,exports){
+},{"../../flare_error":77,"../menus/flare_currency_menu":66,"./currency":63}],65:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3160,6 +3160,11 @@ var CurrencyShop = require('./shop/currency_shop');
  *
  * Means you have a 100% chance of getting 80 Demon Teeth off the enemy.
  *
+ * === Yanfly Vistory Aftermath ===
+ *
+ * To use this with Yanfly victory after math all you have to do is add:
+ * currency to the Victory Order. For example: exp custom drops currency
+ *
  * === Public API ===
  *
  * There are two new objects that roam in the wile. flareCurrency and
@@ -3265,7 +3270,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/lodash/collection/find":2,"./shop/currency_shop":69}],66:[function(require,module,exports){
+},{"../../node_modules/lodash/collection/find":2,"./shop/currency_shop":70}],66:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3342,7 +3347,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":77,"../scenes/flare_currency_scene":67}],67:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":78,"../scenes/flare_currency_scene":67}],67:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3420,7 +3425,137 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":74}],68:[function(require,module,exports){
+},{"../windows/flare_currency_window":75}],68:[function(require,module,exports){
+'use strict';
+
+var oldSceneShopPrototypeMoneyMethod = Scene_Shop.prototype.money;
+Scene_Shop.prototype.money = function () {
+  if (_currencyShopInfo.currencyName !== null) {
+    this._curencyValueWindow.value();
+  } else {
+    oldSceneShopPrototypeMoneyMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeCurrencyUnit = Scene_Shop.prototype.currencyUnit;
+Scene_Shop.prototype.currencyUnit = function () {
+  if (_currencyShopInfo.currency_name !== null) {
+    this._curencyValueWindow.currencyName();
+  } else {
+    oldSceneShopPrototypeCurrencyUnit.call(this);
+  }
+};
+
+var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
+Scene_Shop.prototype.create = function () {
+  if (_currencyShopInfo.currency_name !== null) {
+    Scene_MenuBase.prototype.create.call(this);
+    this.createHelpWindow();
+    this.createCurrencyWindow(_currencyShopInfo.currency_name);
+    this.createCommandWindow();
+    this.createDummyWindow();
+    this.createNumberWindow();
+    this.createStatusWindow();
+    this.createBuyWindow();
+    this.createCategoryWindow();
+    this.createSellWindow();
+    _currencyShopInfo.currency_name = null;
+  } else {
+    OldSceneShopPrototypeCreateMethod.call(this);
+  }
+};
+
+var oldSceneMapPrototypeCreateCommandWindowMethod = Scene_Shop.prototype.createCommandWindow;
+Scene_Shop.prototype.createCommandWindow = function () {
+  if (_currencyShopInfo.currency_name !== null) {
+    this._commandWindow = new Window_ShopCommand(this._curencyValueWindow.x, this._purchaseOnly);
+    this._commandWindow.y = this._helpWindow.height;
+    this._commandWindow.setHandler('buy', this.commandBuy.bind(this));
+    this._commandWindow.setHandler('sell', this.commandSell.bind(this));
+    this._commandWindow.setHandler('cancel', this.popScene.bind(this));
+    this.addWindow(this._commandWindow);
+  } else {
+    oldSceneMapPrototypeCreateCommandWindowMethod.call(this);
+  }
+};
+
+Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
+  this._curencyValueWindow = new CurrencyValueWindow(0, this._helpWindow.height, currencyName);
+  this._curencyValueWindow.x = Graphics.boxWidth - this._curencyValueWindow.width;
+  this.addWindow(this._curencyValueWindow);
+};
+
+// ----
+
+var lodashFind = require('../../../node_modules/lodash/collection/find');
+
+function CurrencyValueWindow() {
+  this.initialize.apply(this, arguments);
+}
+
+CurrencyValueWindow.prototype = Object.create(Window_Base.prototype);
+CurrencyValueWindow.prototype.constructor = CurrencyValueWindow;
+
+CurrencyValueWindow.prototype.initialize = function (x, y, currencyName) {
+  console.log(x, y, currencyName);
+  var width = this.windowWidth();
+  var height = this.windowHeight();
+  Window_Base.prototype.initialize.call(this, x, y, width, height);
+  this._currencyObject = this.getCurrencyObject(currencyName);
+  this.refresh();
+};
+
+CurrencyValueWindow.prototype.windowWidth = function () {
+  return 240;
+};
+
+CurrencyValueWindow.prototype.windowHeight = function () {
+  return this.fittingHeight(1);
+};
+
+CurrencyValueWindow.prototype.refresh = function () {
+  var x = this.textPadding();
+  var width = this.contents.width - this.textPadding() * 2;
+  this.contents.clear();
+  this.drawCurrencyInfo(this.value(), this.currencyName(), x, 0, width);
+};
+
+CurrencyValueWindow.prototype.value = function () {
+  return this._currencyObject.amount;
+};
+
+CurrencyValueWindow.prototype.currencyName = function () {
+  return this._currencyObject.name;
+};
+
+CurrencyValueWindow.prototype.open = function () {
+  this.refresh();
+  Window_Base.prototype.open.call(this);
+};
+
+CurrencyValueWindow.prototype.getCurrencyObject = function (currencyName) {
+  var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function (currencyObject) {
+    if (currencyObject.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currencyObject.name) !== -1) {
+      return currencyObject;
+    }
+  });
+
+  if (foundCurrency === undefined) {
+    throw new Error('We failed to find any currency by the name of: ' + currencyName);
+  }
+
+  return foundCurrency;
+};
+
+CurrencyValueWindow.prototype.drawCurrencyInfo = function (value, unit, x, y, width) {
+  var unitWidth = Math.min(80, this.textWidth(unit));
+  this.resetTextColor();
+  this.drawText(value, x, y, width - unitWidth - 6, 'left');
+  this.changeTextColor(this.systemColor());
+  this.drawText(unit, x + width - unitWidth, y, unitWidth, 'right');
+};
+
+},{"../../../node_modules/lodash/collection/find":2}],69:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyRewardWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -3461,7 +3596,7 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
   };
 }
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":75}],69:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":76}],70:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3478,6 +3613,7 @@ var CurrencyShop = (function () {
     value: function openShopWindow(currency) {
       SceneManager.push(Scene_Shop);
       SceneManager.prepareNextScene([$dataItems]);
+      _currencyShopInfo.currency_name = currency;
     }
   }]);
 
@@ -3485,8 +3621,9 @@ var CurrencyShop = (function () {
 })();
 
 module.exports = CurrencyShop;
+window._currencyShopInfo = { currency_name: null };
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 'use strict';
 
 var lodashClone = require('../../../node_modules/lodash/lang/clone');
@@ -3562,7 +3699,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../../../node_modules/lodash/lang/clone":49}],71:[function(require,module,exports){
+},{"../../../node_modules/lodash/lang/clone":49}],72:[function(require,module,exports){
 'use strict';
 
 var RewardCurrenciesCheck = require('./reward_currencies_check');
@@ -3659,7 +3796,7 @@ DataManager._createCurrencyRewardObject = function (lineMatched) {
   }
 };
 
-},{"./gather_items":72,"./reward_currencies_check":73}],72:[function(require,module,exports){
+},{"./gather_items":73,"./reward_currencies_check":74}],73:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3819,7 +3956,7 @@ window._itemsForCurrencieShop = {
   armors: []
 };
 
-},{"../../../node_modules/lodash/collection/find":2,"rmmv-mrp-core/lib/OptionParser":62}],73:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":2,"rmmv-mrp-core/lib/OptionParser":62}],74:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3928,7 +4065,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":78}],74:[function(require,module,exports){
+},{"../../flare_random_number":79}],75:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -4024,7 +4161,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":79,"../currencies/currency":63}],75:[function(require,module,exports){
+},{"../../flare_window_base":80,"../currencies/currency":63}],76:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4115,7 +4252,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"../../../../node_modules/lodash/lang/clone":49}],76:[function(require,module,exports){
+},{"../../../../node_modules/lodash/lang/clone":49}],77:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4178,7 +4315,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],77:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4229,7 +4366,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4270,7 +4407,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4332,4 +4469,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[65,64,71,70,68,75]);
+},{}]},{},[65,64,72,71,69,68,76]);
