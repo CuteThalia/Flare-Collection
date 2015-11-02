@@ -10,7 +10,8 @@ gulp.task('make:flare-currency', function() {
         'src/add-new-currency/currencies/set_up_currencies.js',
         'src/add-new-currency/update_core_data_manager/data_manager.js',
         'src/add-new-currency/update_core_battle/battle.js',
-        'src/add-new-currency/scenes/yanfly_aftermath_scene_battle_update.js'
+        'src/add-new-currency/scenes/yanfly_aftermath_scene_battle_update.js',
+        'src/add-new-currency/windows/yanfly_aftermath/flare_currency_reward_window.js'
       ]})
       .transform(babelify)
       .bundle()

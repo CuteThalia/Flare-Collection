@@ -1,4 +1,4 @@
-var lodashFind = require('../../../node_modules/lodash/collection/find');
+var lodashClone = require('../../../node_modules/lodash/lang/clone');
 
 var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
 BattleManager.displayRewards = function() {
@@ -25,15 +25,20 @@ BattleManager._parseEnemyMemberCurrencies = function(member) {
 }
 
 BattleManager._gainCurrencyMessage = function(enemy) {
+
+  var self   = this;
+  var baseY  = 0;
+  var data   = lodashClone(enemy.enemyCurrencyRewardData);
+
+
   enemy.gainCurrencyOnBattleWin.forEach(function(gainCurrency) {
-
-    if (gainCurrency.doWeGainCurrency && Array.isArray(enemy.enemyCurrencyRewardData)) {
-
-      var currencyTogain = lodashFind(enemy.enemyCurrencyRewardData, function(currencyObject) {
-        return currencyObject.name === gainCurrency.currency_name;
-      });
-
-      $gameMessage.add('\\c[8]You Gained: \\c[0]' + currencyTogain.amount + ' of: ' + currencyTogain.name);
+    if (gainCurrency.doWeGainCurrency &&
+        Array.isArray(data) &&
+        data.length > 0 &&
+        gainCurrency.currency_name === data[0].name)
+    {
+          $gameMessage.add('\\c[8]You Gained: \\c[0]' + data[0].amount + ' of: ' + data[0].name);
+          data.shift();
     }
   });
 }
@@ -58,18 +63,23 @@ BattleManager._parseEnemyObject = function(enemyObjectFromTroop) {
         enemy.enemyCurrencyRewardData.length > 0) {
           self._getCurrenciesAndRewardThem(enemy)
         }
-  })
+  });
 }
 
 BattleManager._getCurrenciesAndRewardThem = function(enemy) {
+  var self   = this;
+  var baseY  = 0;
+  var data   = lodashClone(enemy.enemyCurrencyRewardData);
+
+
   enemy.gainCurrencyOnBattleWin.forEach(function(gainCurrency) {
-    if (gainCurrency.doWeGainCurrency && Array.isArray(enemy.enemyCurrencyRewardData)) {
-
-      var currencyToGain = lodashFind(enemy.enemyCurrencyRewardData, function(currencyObject) {
-        return currencyObject.name === gainCurrency.currency_name;
-      });
-
-      window.FlareCurrencies.addAmount(currencyToGain.name, currencyToGain.amount);
+    if (gainCurrency.doWeGainCurrency &&
+        Array.isArray(data) &&
+        data.length > 0 &&
+        gainCurrency.currency_name === data[0].name)
+    {
+          window.FlareCurrencies.addAmount(data[0].name, data[0].amount);
+          data.shift()
     }
   });
 }
