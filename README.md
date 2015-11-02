@@ -22,6 +22,8 @@ The current scripts are:
 
  ![Image Of Menu](http://i.imgur.com/0J3Yh99.png)
 
+ ![Image of Yanfly Patch](http://i.imgur.com/5U5AenW.png)
+
 - **[Flare Notification](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/notify)**: Allows you to create notification windows that are added  to a queue an displayed over a set amount of time.
 
  ![Notification Window Scrolling](http://i.imgur.com/EfSN6tQ.png)
