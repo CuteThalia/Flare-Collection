@@ -3428,6 +3428,14 @@ module.exports = FlareCurrencyScene;
 },{"../windows/flare_currency_window":75}],68:[function(require,module,exports){
 'use strict';
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var oldSceneShopPrototypeMoneyMethod = Scene_Shop.prototype.money;
 Scene_Shop.prototype.money = function () {
   if (_currencyShopInfo.currencyName !== null) {
@@ -3480,7 +3488,7 @@ Scene_Shop.prototype.createCommandWindow = function () {
 };
 
 Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
-  this._curencyValueWindow = new CurrencyValueWindow(0, this._helpWindow.height, currencyName);
+  this._curencyValueWindow = new CurrencyVWindow(currencyName);
   this._curencyValueWindow.x = Graphics.boxWidth - this._curencyValueWindow.width;
   this.addWindow(this._curencyValueWindow);
 };
@@ -3489,71 +3497,70 @@ Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
 
 var lodashFind = require('../../../node_modules/lodash/collection/find');
 
-function CurrencyValueWindow() {
-  this.initialize.apply(this, arguments);
-}
+var CurrencyVWindow = (function (_Window_Base) {
+  _inherits(CurrencyVWindow, _Window_Base);
 
-CurrencyValueWindow.prototype = Object.create(Window_Base.prototype);
-CurrencyValueWindow.prototype.constructor = CurrencyValueWindow;
+  function CurrencyVWindow(currencyName) {
+    _classCallCheck(this, CurrencyVWindow);
 
-CurrencyValueWindow.prototype.initialize = function (x, y, currencyName) {
-  console.log(x, y, currencyName);
-  var width = this.windowWidth();
-  var height = this.windowHeight();
-  Window_Base.prototype.initialize.call(this, x, y, width, height);
-  this._currencyObject = this.getCurrencyObject(currencyName);
-  this.refresh();
-};
-
-CurrencyValueWindow.prototype.windowWidth = function () {
-  return 240;
-};
-
-CurrencyValueWindow.prototype.windowHeight = function () {
-  return this.fittingHeight(1);
-};
-
-CurrencyValueWindow.prototype.refresh = function () {
-  var x = this.textPadding();
-  var width = this.contents.width - this.textPadding() * 2;
-  this.contents.clear();
-  this.drawCurrencyInfo(this.value(), this.currencyName(), x, 0, width);
-};
-
-CurrencyValueWindow.prototype.value = function () {
-  return this._currencyObject.amount;
-};
-
-CurrencyValueWindow.prototype.currencyName = function () {
-  return this._currencyObject.name;
-};
-
-CurrencyValueWindow.prototype.open = function () {
-  this.refresh();
-  Window_Base.prototype.open.call(this);
-};
-
-CurrencyValueWindow.prototype.getCurrencyObject = function (currencyName) {
-  var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function (currencyObject) {
-    if (currencyObject.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currencyObject.name) !== -1) {
-      return currencyObject;
-    }
-  });
-
-  if (foundCurrency === undefined) {
-    throw new Error('We failed to find any currency by the name of: ' + currencyName);
+    _get(Object.getPrototypeOf(CurrencyVWindow.prototype), 'constructor', this).call(this, currencyName);
+    this.initialize(currencyName);
   }
 
-  return foundCurrency;
-};
+  _createClass(CurrencyVWindow, [{
+    key: 'initialize',
+    value: function initialize(currencyName) {
 
-CurrencyValueWindow.prototype.drawCurrencyInfo = function (value, unit, x, y, width) {
-  var unitWidth = Math.min(80, this.textWidth(unit));
-  this.resetTextColor();
-  this.drawText(value, x, y, width - unitWidth - 6, 'left');
-  this.changeTextColor(this.systemColor());
-  this.drawText(unit, x + width - unitWidth, y, unitWidth, 'right');
-};
+      _get(Object.getPrototypeOf(CurrencyVWindow.prototype), 'initialize', this).call(this, 0, 108, 204, 72);
+      this._currencyObject = this.setCurrencyObject(currencyName);
+      this.refresh();
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh() {
+      var x = this.textPadding();
+      var width = this.contents.width - this.textPadding() * 2;
+      this.contents.clear();
+      this.drawCurrencyInfo(this.value(), this.currencyName(), x, 0, width);
+    }
+  }, {
+    key: 'value',
+    value: function value() {
+      return this._currencyObject.amount;
+    }
+  }, {
+    key: 'currencyName',
+    value: function currencyName() {
+      return this._currencyObject.name;
+    }
+  }, {
+    key: 'setCurrencyObject',
+    value: function setCurrencyObject(currencyName) {
+      var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function (currencyObject) {
+        if (currencyObject.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currencyObject.name) !== -1) {
+          return currencyObject;
+        }
+      });
+
+      if (foundCurrency === undefined) {
+        throw new Error('We failed to find any currency by the name of: ' + currencyName);
+      }
+
+      return foundCurrency;
+    }
+  }, {
+    key: 'drawCurrencyInfo',
+    value: function drawCurrencyInfo(value, unit, x, y, width) {
+      var unitWidth = Math.min(80, this.textWidth(unit));
+      this.resetTextColor();
+      this.drawText(value, x, y, width - unitWidth - 6, 'left');
+      this.changeTextColor(this.systemColor());
+      this.drawText(unit, x + width - unitWidth, y, unitWidth, 'right');
+    }
+  }]);
+
+  return CurrencyVWindow;
+})(Window_Base);
 
 },{"../../../node_modules/lodash/collection/find":2}],69:[function(require,module,exports){
 'use strict';
