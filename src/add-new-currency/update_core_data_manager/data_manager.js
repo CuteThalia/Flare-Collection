@@ -67,7 +67,7 @@ DataManager.flareProcessEnemyNoteTags = function(enemies) {
 DataManager._processEnemyNoteDataForCurrencyReward = function(enemy, enemyNoteData, noteTag) {
   for (var n = 0; n < enemyNoteData.length; n++) {
     var line = enemyNoteData[n];
-
+    
     if (line.match(noteTag)) {
       var lineMatched = line.match(noteTag);
 

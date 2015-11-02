@@ -191,12 +191,12 @@ class FlareCurrencies {
     var self = this;
 
     var currencyObject = lodashFind(currencies, function(currency){
-      if (currency.name.indexOf(currencyName) !== -1) {
+      if (currency.name.indexOf(currencyName) !== -1 ||
+          currencyName.indexOf(currency.name) !== -1 ) {
+
         return currency;
       }
     });
-
-    console.log(currencyObject);
 
     if (currencyObject === undefined) {
       throw new Error('Currency not found. Tried looking for: ' + currencyName + ' is the spelling right?')

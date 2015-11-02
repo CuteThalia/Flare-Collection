@@ -2404,7 +2404,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":63}],53:[function(require,module,exports){
+},{"../../flare_error":65}],53:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -2489,7 +2489,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":63,"../menus/flare_currency_menu":55,"./currency":52}],54:[function(require,module,exports){
+},{"../../flare_error":65,"../menus/flare_currency_menu":55,"./currency":52}],54:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2698,12 +2698,11 @@ var FlareCurrencies = (function () {
       var self = this;
 
       var currencyObject = lodashFind(currencies, function (currency) {
-        if (currency.name.indexOf(currencyName) !== -1) {
+        if (currency.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currency.name) !== -1) {
+
           return currency;
         }
       });
-
-      console.log(currencyObject);
 
       if (currencyObject === undefined) {
         throw new Error('Currency not found. Tried looking for: ' + currencyName + ' is the spelling right?');
@@ -2740,7 +2739,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/lodash/collection/find":2,"./shop/currency_shop":57}],55:[function(require,module,exports){
+},{"../../node_modules/lodash/collection/find":2,"./shop/currency_shop":58}],55:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2817,7 +2816,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":64,"../scenes/flare_currency_scene":56}],56:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":66,"../scenes/flare_currency_scene":56}],56:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -2895,7 +2894,47 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":62}],57:[function(require,module,exports){
+},{"../windows/flare_currency_window":63}],57:[function(require,module,exports){
+'use strict';
+
+var FlareCurrencyWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
+
+// Make sure this actually exists.
+if (Scene_Battle.prototype.addCustomVictorySteps) {
+
+  var oldSceneBattleprototypeUpdateVictoryStepsMethod = Scene_Battle.prototype.updateVictorySteps;
+  Scene_Battle.prototype.updateVictorySteps = function () {
+    oldSceneBattleprototypeUpdateVictoryStepsMethod.call(this);
+    if (this.isVictoryStep('CURRENCY')) {
+      this.updateCurrencyStep();
+    }
+  };
+
+  Scene_Battle.prototype.addCustomCurrenciesGainWindow = function () {
+    this._victoryDropWindow.hide();
+    this._yanflyAfterMathCurrencyWindowReward = new FlareCurrencyWindow();
+    this.addWindow(this._yanflyAfterMathCurrencyWindowReward);
+    this._yanflyAfterMathCurrencyWindowReward.open();
+  };
+
+  Scene_Battle.prototype.updateCurrencyStep = function () {
+    if (!this._yanflyAfterMathCurrencyWindowReward) {
+      this.addCustomCurrenciesGainWindow();
+    } else if (this._yanflyAfterMathCurrencyWindowReward.isOpen()) {
+      if (this.victoryTriggerContinue()) {
+        this.finishVictoryCurrencies();
+      }
+    }
+  };
+
+  Scene_Battle.prototype.finishVictoryCurrencies = function () {
+    SoundManager.playOk();
+    this._yanflyAfterMathCurrencyWindowReward.close();
+    this.processNextVictoryStep();
+  };
+}
+
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":64}],58:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2920,7 +2959,7 @@ var CurrencyShop = (function () {
 
 module.exports = CurrencyShop;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var lodashFind = require('../../../node_modules/lodash/collection/find');
@@ -2996,7 +3035,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../../../node_modules/lodash/collection/find":2}],59:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":2}],60:[function(require,module,exports){
 'use strict';
 
 var RewardCurrenciesCheck = require('./reward_currencies_check');
@@ -3093,7 +3132,11 @@ DataManager._createCurrencyRewardObject = function (lineMatched) {
   }
 };
 
-},{"./gather_items":60,"./reward_currencies_check":61}],60:[function(require,module,exports){
+},{"./gather_items":61,"./reward_currencies_check":62}],61:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3103,16 +3146,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var extractAllOfType = require('rmmv-mrp-core/lib/OptionParser').extractAllOfType;
 var lodashFind = require('../../../node_modules/lodash/collection/find');
 
+/**
+ * Creates objects for the currency shop.
+ *
+ * Creates weapons, armor and items for the currency shop that match
+ * the tags in the note boxes.
+ */
+
 var GatherItems = (function () {
+
+  /**
+   * Calls each method that creates an object for said methods.
+   */
+
   function GatherItems() {
     _classCallCheck(this, GatherItems);
 
     this.processItems();
     this.processWeapons();
     this.processArmors();
-
-    console.log(_itemsForCurrencieShop);
   }
+
+  /**
+   * Pushes an item object on to the item array.
+   */
 
   _createClass(GatherItems, [{
     key: 'processItems',
@@ -3129,6 +3186,10 @@ var GatherItems = (function () {
         }
       });
     }
+
+    /**
+     * Pushes an weapon object on to the weapon array.
+     */
   }, {
     key: 'processWeapons',
     value: function processWeapons() {
@@ -3144,6 +3205,10 @@ var GatherItems = (function () {
         }
       });
     }
+
+    /**
+     * Pushes an armor object on to the armor array.
+     */
   }, {
     key: 'processArmors',
     value: function processArmors() {
@@ -3159,6 +3224,13 @@ var GatherItems = (function () {
         }
       });
     }
+
+    /**
+     * Actually pushes an item to the item array.
+     *
+     * @param Object itemTagInfo
+     * @param Object item
+     */
   }, {
     key: '_createItemObject',
     value: function _createItemObject(itemTagInfo, item) {
@@ -3170,6 +3242,13 @@ var GatherItems = (function () {
         });
       }
     }
+
+    /**
+     * Actually pushes an weapon to the weapon array.
+     *
+     * @param Object weaponTagInfo
+     * @param Object weapon
+     */
   }, {
     key: '_createWeaponObject',
     value: function _createWeaponObject(weaponTagInfo, weapon) {
@@ -3181,6 +3260,13 @@ var GatherItems = (function () {
         });
       }
     }
+
+    /**
+     * Actually pushes an armor to the armor array.
+     *
+     * @param Object armorTagInfo
+     * @param Object armor
+     */
   }, {
     key: '_createArmorObject',
     value: function _createArmorObject(armorTagInfo, armor) {
@@ -3206,7 +3292,10 @@ window._itemsForCurrencieShop = {
   armors: []
 };
 
-},{"../../../node_modules/lodash/collection/find":2,"rmmv-mrp-core/lib/OptionParser":51}],61:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":2,"rmmv-mrp-core/lib/OptionParser":51}],62:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3214,10 +3303,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var FlareRandomNumber = require('../../flare_random_number');
-
-/**
- * @namespace FlareCurrency
- */
 
 /**
  * Determine if the playr gets currencies.
@@ -3316,7 +3401,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":65}],62:[function(require,module,exports){
+},{"../../flare_random_number":67}],63:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3412,7 +3497,91 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":66,"../currencies/currency":52}],63:[function(require,module,exports){
+},{"../../flare_window_base":68,"../currencies/currency":52}],64:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowBase = require('../../../flare_window_base');
+var lodashFind = require('../../../../node_modules/lodash/collection/find');
+
+var FlareCurrencyWindow = (function (_FlareWindowBase) {
+  _inherits(FlareCurrencyWindow, _FlareWindowBase);
+
+  function FlareCurrencyWindow() {
+    _classCallCheck(this, FlareCurrencyWindow);
+
+    _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'constructor', this).call(this);
+    this.initialize();
+  }
+
+  _createClass(FlareCurrencyWindow, [{
+    key: 'initialize',
+    value: function initialize() {
+      _get(Object.getPrototypeOf(FlareCurrencyWindow.prototype), 'initialize', this).call(this, this, 0, 72, Graphics.boxWidth, this.windowHeight());
+      this.refresh();
+    }
+  }, {
+    key: 'windowHeight',
+    value: function windowHeight() {
+      return Graphics.boxHeight - 72;
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh() {
+      this.contents.clear();
+      this.drawRewardGain();
+      this.resetFontSettings();
+    }
+  }, {
+    key: 'drawRewardGain',
+    value: function drawRewardGain() {
+      var self = this;
+
+      $gameTroop.troop().members.forEach(function (member) {
+        self._processEnemies(member);
+      });
+    }
+  }, {
+    key: '_processEnemies',
+    value: function _processEnemies(member) {
+      var self = this;
+      $dataEnemies.forEach(function (enemy) {
+        if (enemy !== null && enemy.id === member.enemyId) {
+          self._drawRewardGain(enemy);
+        }
+      });
+    }
+  }, {
+    key: '_drawRewardGain',
+    value: function _drawRewardGain(enemy) {
+      var self = this;
+      enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
+
+        if (gainCurrency.doWeGainCurrency && Array.isArray(enemy.enemyCurrencyRewardData)) {
+
+          var currencyTogain = lodashFind(enemy.enemyCurrencyRewardData, function (currencyObject) {
+            return currencyObject.name === gainCurrency.currency_name;
+          });
+
+          self.flareDrawTextEx('\\c[8]You Gained: \\c[0]' + currencyTogain.amount + ' of: ' + currencyTogain.name);
+        }
+      });
+    }
+  }]);
+
+  return FlareCurrencyWindow;
+})(FlareWindowBase);
+
+module.exports = FlareCurrencyWindow;
+
+},{"../../../../node_modules/lodash/collection/find":2,"../../../flare_window_base":68}],65:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -3475,7 +3644,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],64:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -3526,7 +3695,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],65:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -3567,7 +3736,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],66:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -3629,4 +3798,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[54,53,59,58]);
+},{}]},{},[54,53,60,59,57]);
