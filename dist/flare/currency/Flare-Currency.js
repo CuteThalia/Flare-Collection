@@ -3108,13 +3108,17 @@ var GatherItems = (function () {
     _classCallCheck(this, GatherItems);
 
     this.processItems();
+    this.processWeapons();
+    this.processArmors();
+
+    console.log(_itemsForCurrencieShop);
   }
 
   _createClass(GatherItems, [{
     key: 'processItems',
     value: function processItems() {
-
       var self = this;
+
       $dataItems.forEach(function (item) {
         if (item !== null) {
           var itemCurrencyInfo = extractAllOfType(item.note, 'currencyShop');
@@ -3124,8 +3128,36 @@ var GatherItems = (function () {
           });
         }
       });
+    }
+  }, {
+    key: 'processWeapons',
+    value: function processWeapons() {
+      var self = this;
 
-      console.log(_itemsForCurrencieShop);
+      $dataWeapons.forEach(function (weapon) {
+        if (weapon !== null) {
+          var weaponCurrencyInfo = extractAllOfType(weapon.note, 'currencyShop');
+
+          weaponCurrencyInfo.map(function (info) {
+            self._createWeaponObject(info, weapon);
+          });
+        }
+      });
+    }
+  }, {
+    key: 'processArmors',
+    value: function processArmors() {
+      var self = this;
+
+      $dataArmors.forEach(function (armor) {
+        if (armor !== null) {
+          var armorCurrencyInfo = extractAllOfType(armor.note, 'currencyShop');
+
+          armorCurrencyInfo.map(function (info) {
+            self._createArmorObject(info, armor);
+          });
+        }
+      });
     }
   }, {
     key: '_createItemObject',
@@ -3135,6 +3167,28 @@ var GatherItems = (function () {
           currency: itemTagInfo.belongsTo,
           item_id: item.id,
           item_cost: itemTagInfo.andCosts
+        });
+      }
+    }
+  }, {
+    key: '_createWeaponObject',
+    value: function _createWeaponObject(weaponTagInfo, weapon) {
+      if (typeof weaponTagInfo === 'object') {
+        _itemsForCurrencieShop.weapons.push({
+          currency: weaponTagInfo.belongsTo,
+          item_id: weapon.id,
+          item_cost: weaponTagInfo.andCosts
+        });
+      }
+    }
+  }, {
+    key: '_createArmorObject',
+    value: function _createArmorObject(armorTagInfo, armor) {
+      if (typeof armorTagInfo === 'object') {
+        _itemsForCurrencieShop.armors.push({
+          currency: armorTagInfo.belongsTo,
+          item_id: armor.id,
+          item_cost: armorTagInfo.andCosts
         });
       }
     }
@@ -3149,7 +3203,7 @@ module.exports = GatherItems;
 window._itemsForCurrencieShop = {
   items: [],
   weapons: [],
-  armor: []
+  armors: []
 };
 
 },{"../../../node_modules/lodash/collection/find":2,"rmmv-mrp-core/lib/OptionParser":51}],61:[function(require,module,exports){
