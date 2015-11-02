@@ -43,6 +43,18 @@ FlareCurrencies.addAmount('Demon Teeth', 56);
 FlareCurrencies.addAmount('Demon Teeth', -56);
 ```
 
+## Yanfly Victory Aftermath Script
+
+To see currencies spit out as "battle spoils" add the following to the option, "victory order": `currency`.
+
+It can come in what ever order you want, how ever it must be present. For example:
+
+```javascript
+exp custom drops currency
+```
+
+Once added, battles will have an additional battle spoils window showing the currencies you gained.
+
 ## Whats to come?
 
 - **Currency Shop**: This will let you do something like: `<belongsTo: 'currencyName' costs: x>` which will state that the current

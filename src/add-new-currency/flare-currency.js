@@ -136,6 +136,11 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * Means you have a 100% chance of getting 80 Demon Teeth off the enemy.
   *
+  * === Yanfly Vistory Aftermath ===
+  *
+  * To use this with Yanfly victory after math all you have to do is add:
+  * currency to the Victory Order. For example: exp custom drops currency
+  *
   * === Public API ===
   *
   * There are two new objects that roam in the wile. flareCurrency and
