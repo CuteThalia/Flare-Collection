@@ -11,8 +11,8 @@
  */
 class FlareWindowBase extends Window_Base {
 
-  constructor() {
-    super();
+  constructor(args) {
+    super(args);
   }
 
   /**
