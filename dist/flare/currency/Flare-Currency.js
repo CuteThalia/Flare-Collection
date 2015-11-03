@@ -3431,8 +3431,8 @@ module.exports = FlareCurrencyScene;
 var CurrencyValueWindow = require("../windows/shop/currency_value_window");
 
 var oldSceneShopPrototypeMoneyMethod = Scene_Shop.prototype.money;
-Scene_Shop.prototype.money = function () {
-  if (_currencyShopInfo.currencyName !== null) {
+Scene_Shop.prototype.money = function (currencyName) {
+  if (currencyName !== undefined) {
     this._curencyValueWindow.value();
   } else {
     oldSceneShopPrototypeMoneyMethod.call(this);
@@ -3472,7 +3472,7 @@ Scene_Shop.prototype.createCommandWindow = function () {
   if (_currencyShopInfo.currency_name !== null) {
     this._commandWindow = new Window_ShopCommand(this._curencyValueWindow.x, this._purchaseOnly);
     this._commandWindow.y = this._helpWindow.height;
-    this._commandWindow.setHandler('buy', this.commandBuy.bind(this));
+    this._commandWindow.setHandler('buy', this.commandBuy.bind(this, _currencyShopInfo.currency_name));
     this._commandWindow.setHandler('sell', this.commandSell.bind(this));
     this._commandWindow.setHandler('cancel', this.popScene.bind(this));
     this.addWindow(this._commandWindow);
@@ -3481,10 +3481,86 @@ Scene_Shop.prototype.createCommandWindow = function () {
   }
 };
 
+var oldSceneShopPrototypePrepare = Scene_Shop.prototype.prepare;
+Scene_Shop.prototype.prepare = function (goods, purchaseOnly) {
+  if (_currencyShopInfo.currency_name !== null) {
+    this.prepareForCurrency(_currencyShopInfo.currency_name, purchaseOnly);
+  } else {
+    oldSceneShopPrototypePrepare.call(this, goods, purchaseOnly);
+  }
+};
+
+var oldSceneShopProtottypeActivateBuyWindowMethod = Scene_Shop.prototype.activateBuyWindow;
+Scene_Shop.prototype.activateBuyWindow = function () {
+  if (_currencyShopInfo.currency_name !== null) {
+    this._buyWindow.setMoney(this.money());
+    this._buyWindow.show();
+    this._buyWindow.activate();
+    this._statusWindow.show();
+  } else {
+    oldSceneShopProtottypeActivateBuyWindowMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeCommandBuy = Scene_Shop.prototype.commandBuy;
+Scene_Shop.prototype.commandBuy = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._dummyWindow.hide();
+    this.activateBuyWindow(currencyName);
+  } else {
+    oldSceneShopPrototypeCommandBuy.call(this);
+  }
+};
+
+var oldSceneShopPrototypeActivateBuyWindow = Scene_Shop.prototype.activateBuyWindow;
+Scene_Shop.prototype.activateBuyWindow = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._buyWindow.setMoney(this.money(currencyName));
+    this._buyWindow.show();
+    this._buyWindow.activate();
+    this._statusWindow.show();
+  } else {
+    oldSceneShopPrototypeActivateBuyWindow.call(this);
+  }
+};
+
 Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
   this._curencyValueWindow = new CurrencyValueWindow(currencyName);
   this._curencyValueWindow.x = Graphics.boxWidth - this._curencyValueWindow.width;
   this.addWindow(this._curencyValueWindow);
+};
+
+Scene_Shop.prototype.prepareForCurrency = function (currencyName, purchaseOnly) {
+  this._goods = [];
+
+  var itemsArray = [];
+  var weaponsArray = [];
+  var armorArray = [];
+
+  var items = _itemsForCurrencieShop.items.map(function (item) {
+    if (item.currency === currencyName) {
+      itemsArray.push(item.item_id);
+    }
+  });
+
+  var weapons = _itemsForCurrencieShop.weapons.map(function (weapon) {
+    if (weapon.currency === currencyName) {
+      weaponsArray.push(weapon.weapon_id);
+    }
+  });
+
+  var armors = _itemsForCurrencieShop.armors.map(function (armor) {
+    if (armor.currency === currencyName) {
+      armorArray.push(armor.armor_id);
+    }
+  });
+
+  this._goods.push(itemsArray);
+  this._goods.push(weaponsArray);
+  this._goods.push(armorArray);
+
+  this._purchaseOnly = purchaseOnly;
+  this._item = null;
 };
 
 },{"../windows/shop/currency_value_window":76}],69:[function(require,module,exports){
@@ -3543,9 +3619,9 @@ var CurrencyShop = (function () {
   _createClass(CurrencyShop, [{
     key: "openShopWindow",
     value: function openShopWindow(currency) {
+      _currencyShopInfo.currency_name = currency;
       SceneManager.push(Scene_Shop);
       SceneManager.prepareNextScene([$dataItems]);
-      _currencyShopInfo.currency_name = currency;
     }
   }]);
 
@@ -3851,7 +3927,7 @@ var GatherItems = (function () {
       if (typeof weaponTagInfo === 'object') {
         _itemsForCurrencieShop.weapons.push({
           currency: weaponTagInfo.belongsTo,
-          item_id: weapon.id,
+          weapon_id: weapon.id,
           item_cost: weaponTagInfo.andCosts
         });
       }
@@ -3869,7 +3945,7 @@ var GatherItems = (function () {
       if (typeof armorTagInfo === 'object') {
         _itemsForCurrencieShop.armors.push({
           currency: armorTagInfo.belongsTo,
-          item_id: armor.id,
+          armor_id: armor.id,
           item_cost: armorTagInfo.andCosts
         });
       }

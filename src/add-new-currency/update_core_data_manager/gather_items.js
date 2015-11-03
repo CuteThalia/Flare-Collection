@@ -99,7 +99,7 @@ class GatherItems {
     if (typeof weaponTagInfo === 'object') {
       _itemsForCurrencieShop.weapons.push({
          currency: weaponTagInfo.belongsTo,
-         item_id: weapon.id,
+         weapon_id: weapon.id,
          item_cost: weaponTagInfo.andCosts
       });
     }
@@ -115,7 +115,7 @@ class GatherItems {
     if (typeof armorTagInfo === 'object') {
       _itemsForCurrencieShop.armors.push({
          currency: armorTagInfo.belongsTo,
-         item_id: armor.id,
+         armor_id: armor.id,
          item_cost: armorTagInfo.andCosts
       });
     }
