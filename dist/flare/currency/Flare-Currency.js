@@ -3533,31 +3533,24 @@ Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
 Scene_Shop.prototype.prepareForCurrency = function (currencyName, purchaseOnly) {
   this._goods = [];
 
-  var itemsArray = [];
-  var weaponsArray = [];
-  var armorArray = [];
+  var itemsArray = _itemsForCurrencieShop.items;
+  var weaponsArray = _itemsForCurrencieShop.weapons;
+  var armorArray = _itemsForCurrencieShop.armors;
 
-  var items = _itemsForCurrencieShop.items.map(function (item) {
-    if (item.currency === currencyName) {
-      itemsArray.push(item.item_id);
-    }
-  });
+  for (var i = 0; i < itemsArray.length; i++) {
+    var item = [0, itemsArray[i].item_id];
+    this._goods.push(item);
+  }
 
-  var weapons = _itemsForCurrencieShop.weapons.map(function (weapon) {
-    if (weapon.currency === currencyName) {
-      weaponsArray.push(weapon.weapon_id);
-    }
-  });
+  for (var i = 0; i < weaponsArray.length; i++) {
+    var weapon = [1, weaponsArray[i].weapon_id];
+    this._goods.push(weapon);
+  }
 
-  var armors = _itemsForCurrencieShop.armors.map(function (armor) {
-    if (armor.currency === currencyName) {
-      armorArray.push(armor.armor_id);
-    }
-  });
-
-  this._goods.push(itemsArray);
-  this._goods.push(weaponsArray);
-  this._goods.push(armorArray);
+  for (var i = 0; i < armorArray.length; i++) {
+    var armor = [2, armorArray[i].armor_id];
+    this._goods.push(armor);
+  }
 
   this._purchaseOnly = purchaseOnly;
   this._item = null;
