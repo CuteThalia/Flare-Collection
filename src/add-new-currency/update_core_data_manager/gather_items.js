@@ -2,8 +2,9 @@
  * @namespace FlareCurrency
  */
 
-var extractAllOfType = require('rmmv-mrp-core/lib/OptionParser').extractAllOfType;
-var lodashFind = require('../../../node_modules/lodash/collection/find');
+var extractAllOfType  = require('rmmv-mrp-core/lib/OptionParser').extractAllOfType;
+var lodashFind        = require('../../../node_modules/lodash/collection/find');
+var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined')
 
 /**
  * Creates objects for the currency shop.
@@ -26,107 +27,68 @@ class GatherItems {
    * Pushes an item object on to the item array.
    */
   processItems() {
-    var self = this;
+    var items = $dataItems;
 
-    $dataItems.forEach(function(item){
-      if (item !== null) {
-        var itemCurrencyInfo = extractAllOfType(item.note, 'currencyShop');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i] !== null) {
+        items[i].currencyCost = 0;
+        items[i].belongsToCurrency = null;
 
-        itemCurrencyInfo.map(function(info){
-          self._createItemObject(info, item);
-        });
+        var itemNoteBoxInfo = extractAllOfType(items[i].note, 'currencyShop');
+        var noteBoxObjectInfo = itemNoteBoxInfo[0];
+
+        if (!lodashIsUndefined(noteBoxObjectInfo)) {
+          items[i].currencyCost       = noteBoxObjectInfo.andCosts;
+          items[i].belongsToCurrency  = noteBoxObjectInfo.belongsTo;
+        }
       }
-    });
+    }
   }
+
 
   /**
    * Pushes an weapon object on to the weapon array.
    */
   processWeapons() {
-    var self = this;
+    var weapons = $dataWeapons;
 
-    $dataWeapons.forEach(function(weapon){
-      if (weapon !== null) {
-        var weaponCurrencyInfo = extractAllOfType(weapon.note, 'currencyShop');
+    for (var i = 0; i < weapons.length; i++) {
+      if (weapons[i] !== null) {
+        weapons[i].currencyCost = 0;
+        weapons[i].belongsToCurrency = null;
 
-        weaponCurrencyInfo.map(function(info){
-          self._createWeaponObject(info, weapon);
-        });
+        var weaponNoteBoxInfo = extractAllOfType(weapons[i].note, 'currencyShop');
+        var noteBoxObjectInfo = weaponNoteBoxInfo[0];
+
+        if (!lodashIsUndefined(noteBoxObjectInfo)){
+          weapons[i].currencyCost       = noteBoxObjectInfo.andCosts;
+          weapons[i].belongsToCurrency  = noteBoxObjectInfo.belongsTo;
+        }
       }
-    });
+    }
   }
 
   /**
    * Pushes an armor object on to the armor array.
    */
   processArmors() {
-    var self = this;
+    var armors = $dataArmors;
 
-    $dataArmors.forEach(function(armor){
-      if (armor !== null) {
-        var armorCurrencyInfo = extractAllOfType(armor.note, 'currencyShop');
+    for (var i = 0; i < armors.length; i++) {
+      if (armors[i] !== null) {
+        armors[i].currencyCost = 0;
+        armors[i].belongsToCurrency = null;
 
-        armorCurrencyInfo.map(function(info){
-          self._createArmorObject(info, armor);
-        });
+        var armorsNoteBoxInfo = extractAllOfType(armors[i].note, 'currencyShop');
+        var noteBoxObjectInfo = armorsNoteBoxInfo[0];
+
+        if (!lodashIsUndefined(noteBoxObjectInfo)) {
+          armors[i].currencyCost       = noteBoxObjectInfo.andCosts;
+          armors[i].belongsToCurrency  = noteBoxObjectInfo.belongsTo;
+        }
       }
-    });
-  }
-
-  /**
-   * Actually pushes an item to the item array.
-   *
-   * @param Object itemTagInfo
-   * @param Object item
-   */
-  _createItemObject(itemTagInfo, item) {
-    if (typeof itemTagInfo === 'object') {
-      _itemsForCurrencieShop.items.push({
-         currency: itemTagInfo.belongsTo,
-         item_id: item.id,
-         item_cost: itemTagInfo.andCosts
-      });
-    }
-  }
-
-  /**
-   * Actually pushes an weapon to the weapon array.
-   *
-   * @param Object weaponTagInfo
-   * @param Object weapon
-   */
-  _createWeaponObject(weaponTagInfo, weapon) {
-    if (typeof weaponTagInfo === 'object') {
-      _itemsForCurrencieShop.weapons.push({
-         currency: weaponTagInfo.belongsTo,
-         weapon_id: weapon.id,
-         item_cost: weaponTagInfo.andCosts
-      });
-    }
-  }
-
-  /**
-   * Actually pushes an armor to the armor array.
-   *
-   * @param Object armorTagInfo
-   * @param Object armor
-   */
-  _createArmorObject(armorTagInfo, armor) {
-    if (typeof armorTagInfo === 'object') {
-      _itemsForCurrencieShop.armors.push({
-         currency: armorTagInfo.belongsTo,
-         armor_id: armor.id,
-         item_cost: armorTagInfo.andCosts
-      });
     }
   }
 }
 
 module.exports = GatherItems;
-
-// Do not touch or manipulate this.
-window._itemsForCurrencieShop = {
-  items:  [],
-  weapons:[],
-  armors:  []
-};

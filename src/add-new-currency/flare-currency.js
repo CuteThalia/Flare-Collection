@@ -210,9 +210,28 @@ class FlareCurrencies {
     this._addAmount(currencyObject, currencyAmount)
   }
 
-  static openShop(currency) {
+  static openShop(currency, purchaseOnly) {
+    if (purchaseOnly === undefined) {
+      purchaseOnly = false;
+    }
+
     var currencyShop = new CurrencyShop();
-    currencyShop.openShopWindow(currency);
+    currencyShop.openShopWindow(currency, purchaseOnly);
+  }
+
+  static getCurrentCurrencyAmount(currencyName) {
+    var currencies = window.flareCurrency.getCurrencyStore();
+    var self       = this;
+    
+    var currencyObject = lodashFind(currencies, function(currency){
+      if (currency.name.indexOf(currencyName) !== -1 ||
+          currencyName.indexOf(currency.name) !== -1 ) {
+
+        return currency;
+      }
+    });
+
+    return currencyObject.amount;
   }
 
   /**
