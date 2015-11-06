@@ -109,7 +109,7 @@ class CurrencyShop {
         }
 
         var found = lodashFindIndex(this._goods, function(goodsItem){
-          goodsItem.join(',') === armor.join(',');
+          return goodsItem.join(',') === armor.join(',');
         })
 
         if (found === -1) {

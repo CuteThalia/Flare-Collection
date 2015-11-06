@@ -3949,6 +3949,7 @@ var CurrencyShop = (function () {
     value: function openShopWindow(currency, purchaseOnly) {
       _currencyShopInfo.currency_name = currency;
       this._createShopGoods(currency);
+      console.log(this._goods);
       SceneManager.push(Scene_Shop);
       SceneManager.prepareNextScene(this._goods, purchaseOnly);
     }
@@ -4041,7 +4042,7 @@ var CurrencyShop = (function () {
           }
 
           var found = lodashFindIndex(this._goods, function (goodsItem) {
-            goodsItem.join(',') === armor.join(',');
+            return goodsItem.join(',') === armor.join(',');
           });
 
           if (found === -1) {
