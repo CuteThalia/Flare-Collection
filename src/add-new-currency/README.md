@@ -6,6 +6,10 @@
 
 ![Image of Yanfly Patch](http://i.imgur.com/5U5AenW.png)
 
+![Image of Currency Shop](http://i.imgur.com/fKhPqSD.png)
+
+![Image of Currency Shop Selling] (http://i.imgur.com/46XWlnk.png)
+
 Flare Currency allows you to add up to 5 currencies to your game via the options menu when setting up a script.
 
 When a currency is added you can add the following tags in enemy note tags, **not troops**.
@@ -20,7 +24,42 @@ When a currency is added you can add the following tags in enemy note tags, **no
 
 Currencies with out a percentage default to 100%. When you set the percentage you have to set 0-100 as an integer.
 
-**This script is not complete, you can only gain from enemies and add or subtract currencies**
+## Shops
+
+Shops are easy to build in Flare Currencies. It's quite amazing too.
+
+So how do we make a shop? The first thing to do is to set up some items with the following tag:
+
+```javascript
+<currencyShop belongsTo: "Sample Name" andCosts: 76>
+```
+
+That should real like english. We are saying this item belongs to a currency shop and a currency of: "Sample Name."
+
+We also state that the it costs x of that currency.
+
+So lets read it together: *For the currency shop this item belongs to sample name and costs 76 of sample name*.
+
+So now that you went through your weapons, armors and items and added tags to stipulate which items belong to what
+currencies and how much they cost, how do you open said shop?
+
+You create an event: `FlareCurrencies.openShop("Sample Name", boolean)`
+
+You have essentially opened a shop that is either purchase only (the boolean) or allows the user to sell items.
+
+Selling items only works for items that belong to that currency shop. Items may have multiple different Currencies
+but currency shops only take items that belong to the specific currency you specified.
+
+**You cannot have multi currency based shops**.
+
+> ## ATTN Developers
+>
+> This shop is designed to be completely backwards compatible with your shop scripts. How ever if there is an issue
+> Please file a bug report.
+
+> ## ATTN Users
+>
+> This shop will be blank if the currency doesn't exist or no items have that currency.
 
 ## Additional Information
 
@@ -45,6 +84,19 @@ FlareCurrencies.addAmount('Demon Teeth', 56);
 FlareCurrencies.addAmount('Demon Teeth', -56);
 ```
 
+- `FlareCurrenies.openShop(currencyName, boolean)`: Lets you open a shop specific to that currency.
+
+Example:
+
+```javascript
+FlareCurrencies.openShop('Demon Teeth');
+
+// Or:
+
+FlareCurrencies.openShop('Demon Teeth', true); // Purchase only
+```
+
+
 ## Yanfly Victory Aftermath Script
 
 To see currencies spit out as "battle spoils" add the following to the option, "victory order": `currency`.
@@ -57,12 +109,56 @@ exp custom drops currency
 
 Once added, battles will have an additional battle spoils window showing the currencies you gained.
 
-## Whats to come?
+## For Developers
 
-- **Currency Shop**: This will let you do something like: `<belongsTo: 'currencyName' costs: x>` which will state that the current
-item or weapon or armor will belong to a specific currency and cost a specific amount.
+I have a special treat for you.
 
-Currency Shops will be opened via a script call, something like: `FlareCurrencies.openShop('currencyName', 'itemType')` this will open a currency
-shop that only sells items, weapons or armor (depending on the type). It will gather ALL the items of that currency name.
+You can mess around with currencies in your own scripts via: `flareCurrency` which
+is a global object. You can do the following with it:
 
-If you do not pass in a item type as a parameter it will gather all items, armor and weapons of that type  and create a shop for that.
+- `flareCurrency.store(currencies)` - This takes an array of objects, an example from the script:
+
+```javascript
+[
+    {
+      name:         currency["Currency One Name"],
+      description:  currency["Currency One Description"],
+      icon:         currency["Currency One Icon Index"],
+      amount:       0
+    },
+    {
+      name:         currency["Currency Two Name"],
+      description:  currency["Currency Two Description"],
+      icon:         currency["Currency Two Icon Index"],
+      amount:       0
+    },
+    {
+      name:         currency["Currency Three Name"],
+      description:  currency["Currency Three Description"],
+      icon:         currency["Currency Three Icon Index"],
+      amount:       0
+    },
+    {
+      name:         currency["Currency Four Name"],
+      description:  currency["Currency Four Description"],
+      icon:         currency["Currency Four Icon Index"],
+      amount:       0
+    },
+    {
+      name:         currency["Currency Five Name"],
+      description:  currency["Currency Five Description"],
+      icon:         currency["Currency Five Icon Index"],
+      amount:       0
+    },
+];
+```
+
+- `flareCurrency.setStoreFromLoad(store)` - Takes an instance of the above example which is gathered from loading a Saved
+game.
+
+- `flareCurrency.getCurrencyStore()` - Gets the above store at its current state.
+
+>### Not Public.
+>
+> This class is not meant to be given to the end user as a public api. It is for developers.
+> End users have `FlareCurrencies` as a public class they can access for events.

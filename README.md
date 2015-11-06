@@ -14,15 +14,17 @@ The current scripts are:
 - **[Flare Currency](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/currency)**: Flare Currency allows you to have a max of 5 currencies.
   Enemies can drop currencies at a specific amount and percentage.
 
- **Currently Not Complete**.
-
- Missing features include a currency shop and ability to state which items, armor or weapons require which currency and how much of which currency.
+  You can gain currencies via battle, or events. You can set up a currency shop for specific items.
 
  ![Image Of Currency Window](http://i.imgur.com/WbcjKhl.png)
 
  ![Image Of Menu](http://i.imgur.com/0J3Yh99.png)
 
  ![Image of Yanfly Patch](http://i.imgur.com/5U5AenW.png)
+
+ ![Image of Currency Shop](http://i.imgur.com/fKhPqSD.png)
+
+ ![Image of Currency Shop Selling] (http://i.imgur.com/46XWlnk.png)
 
 - **[Flare Notification](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/notify)**: Allows you to create notification windows that are added  to a queue an displayed over a set amount of time.
 
