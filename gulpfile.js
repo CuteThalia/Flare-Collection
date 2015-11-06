@@ -12,6 +12,8 @@ gulp.task('make:flare-currency', function() {
         'src/add-new-currency/update_core_battle/battle.js',
         'src/add-new-currency/scenes/yanfly_aftermath_scene_battle_update.js',
         'src/add-new-currency/scenes/scene_shop_update.js',
+        'src/add-new-currency/windows/shop/window_shop_number.js',
+        'src/add-new-currency/windows/shop/window_shop_buy.js',
         'src/add-new-currency/windows/yanfly_aftermath/flare_currency_reward_window.js'
       ]})
       .transform(babelify)

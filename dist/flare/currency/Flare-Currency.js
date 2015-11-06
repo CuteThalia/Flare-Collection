@@ -3031,7 +3031,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":80}],67:[function(require,module,exports){
+},{"../../flare_error":83}],67:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -3116,7 +3116,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":80,"../menus/flare_currency_menu":69,"./currency":66}],68:[function(require,module,exports){
+},{"../../flare_error":83,"../menus/flare_currency_menu":69,"./currency":66}],68:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3467,7 +3467,7 @@ var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = FlareCurrencyMenu;
 
-},{"../../flare_menu_scene_interface":81,"../scenes/flare_currency_scene":70}],70:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":84,"../scenes/flare_currency_scene":70}],70:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3546,9 +3546,231 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 module.exports = FlareCurrencyScene;
 
 },{"../windows/flare_currency_window":78}],71:[function(require,module,exports){
-"use strict";
+'use strict';
 
-},{}],72:[function(require,module,exports){
+var CurrencyValueWindow = require("../windows/shop/currency_value_window");
+
+Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
+  this._curencyValueWindow = new CurrencyValueWindow(currencyName);
+  this._curencyValueWindow.x = Graphics.boxWidth - this._curencyValueWindow.width;
+  this.addWindow(this._curencyValueWindow);
+};
+
+var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
+Scene_Shop.prototype.create = function () {
+  if (_currencyShopInfo.currency_name !== null) {
+    Scene_MenuBase.prototype.create.call(this);
+    this.createHelpWindow();
+    this.createCurrencyWindow(_currencyShopInfo.currency_name);
+    this.createCommandWindow(_currencyShopInfo.currency_name);
+    this.createDummyWindow();
+    this.createNumberWindow(_currencyShopInfo.currency_name);
+    this.createStatusWindow();
+    this.createBuyWindow(_currencyShopInfo.currency_name);
+    this.createCategoryWindow();
+    this.createSellWindow();
+    _currencyShopInfo.currency_name = null;
+  } else {
+    OldSceneShopPrototypeCreateMethod.call(this);
+  }
+};
+
+var oldSceneMapPrototypeCreateCommandWindowMethod = Scene_Shop.prototype.createCommandWindow;
+Scene_Shop.prototype.createCommandWindow = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._commandWindow = new Window_ShopCommand(this._curencyValueWindow.x, this._purchaseOnly);
+    this._commandWindow.y = this._helpWindow.height;
+    this._commandWindow.setHandler('buy', this.commandBuy.bind(this, currencyName));
+    this._commandWindow.setHandler('sell', this.commandSell.bind(this));
+    this._commandWindow.setHandler('cancel', this.popScene.bind(this));
+    this.addWindow(this._commandWindow);
+  } else {
+    oldSceneMapPrototypeCreateCommandWindowMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeCommandBuy = Scene_Shop.prototype.commandBuy;
+Scene_Shop.prototype.commandBuy = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._dummyWindow.hide();
+    this.activateBuyWindow(currencyName);
+  } else {
+    oldSceneShopPrototypeCommandBuy.call(this);
+  }
+};
+
+var oldSceneShopProtottypeActivateBuyWindowMethod = Scene_Shop.prototype.activateBuyWindow;
+Scene_Shop.prototype.activateBuyWindow = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._buyWindow.setMoney(this.money(currencyName));
+    this._buyWindow.show();
+    this._buyWindow.activate();
+    this._statusWindow.show();
+  } else {
+    oldSceneShopProtottypeActivateBuyWindowMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeCreateBuyWindow = Scene_Shop.prototype.createBuyWindow;
+Scene_Shop.prototype.createBuyWindow = function (currencyName) {
+  if (currencyName !== undefined) {
+    var wy = this._dummyWindow.y;
+    var wh = this._dummyWindow.height;
+    this._buyWindow = new Window_ShopBuy(0, wy, wh, this._goods, currencyName);
+    this._buyWindow.setHelpWindow(this._helpWindow);
+    this._buyWindow.setStatusWindow(this._statusWindow);
+    this._buyWindow.hide();
+    this._buyWindow.setHandler('ok', this.onBuyOk.bind(this, currencyName));
+    this._buyWindow.setHandler('cancel', this.onBuyCancel.bind(this));
+    this.addWindow(this._buyWindow);
+  } else {
+    oldSceneShopPrototypeCreateBuyWindow.call(this);
+  }
+};
+
+var oldSceneShopPrototypeCreateNumberWindow = Scene_Shop.prototype.createNumberWindow;
+Scene_Shop.prototype.createNumberWindow = function (currencyName) {
+  if (currencyName !== undefined) {
+    var wy = this._dummyWindow.y;
+    var wh = this._dummyWindow.height;
+    this._numberWindow = new Window_ShopNumber(0, wy, wh);
+    this._numberWindow.hide();
+    this._numberWindow.setHandler('ok', this.onNumberOk.bind(this, currencyName));
+    this._numberWindow.setHandler('cancel', this.onNumberCancel.bind(this, currencyName));
+    this.addWindow(this._numberWindow);
+  } else {
+    oldSceneShopPrototypeCreateNumberWindow.call(this);
+  }
+};
+
+var oldSceneShopPrototypeOnBuyOkMethod = Scene_Shop.prototype.onBuyOk;
+Scene_Shop.prototype.onBuyOk = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._item = this._buyWindow.item();
+    this._buyWindow.hide();
+    this._numberWindow.setup(this._item, this.maxBuy(currencyName), this.buyingPrice(currencyName));
+    this._numberWindow.setCurrencyUnit(this.currencyUnit(currencyName), currencyName);
+    this._numberWindow.show();
+    this._numberWindow.activate();
+  } else {
+    oldSceneShopPrototypeOnBuyOkMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeOnNumberOkMethod = Scene_Shop.prototype.onNumberOk;
+Scene_Shop.prototype.onNumberOk = function (currencyName) {
+  if (currencyName !== null) {
+    SoundManager.playShop();
+    switch (this._commandWindow.currentSymbol()) {
+      case 'buy':
+        this.doBuy(this._numberWindow.number(), currencyName);
+        break;
+      case 'sell':
+        this.doSell(this._numberWindow.number(), currencyName);
+        break;
+    }
+    this.endNumberInput(currencyName);
+    this._curencyValueWindow.refresh();
+    this._statusWindow.refresh();
+  } else {
+    oldSceneShopPrototypeOnNumberOkMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeOnNumberCancel = Scene_Shop.prototype.onNumberCancel;
+Scene_Shop.prototype.onNumberCancel = function (currencyName) {
+  if (currencyName !== undefined) {
+    SoundManager.playCancel();
+    this.endNumberInput(currencyName);
+  } else {
+    oldSceneShopPrototypeOnNumberCancel.call(this);
+  }
+};
+
+var oldSceneShopPrototypeDobuyMethod = Scene_Shop.prototype.doBuy;
+Scene_Shop.prototype.doBuy = function (number, currencyName) {
+  if (currencyName !== undefined) {
+    var cost = number * this.buyingPrice();
+
+    FlareCurrencies.addAmount(currencyName, -cost);
+    $gameParty.gainItem(this._item, number);
+  } else {
+    oldSceneShopPrototypeDobuyMethod.call(this, number);
+  }
+};
+
+var oldSceneShopPrototypeDoSellMethod = Scene_Shop.prototype.doSell;
+Scene_Shop.prototype.doSell = function (number, currencyName) {
+  if (currencyName !== undefined) {
+    var cost = number * this.buyingPrice();
+
+    FlareCurrencies.addAmount(currencyName, cost);
+    $gameParty.loseItem(this._item, number);
+  } else {
+    oldSceneShopPrototypeDoSellMethod.call(this, currencyName);
+  }
+};
+
+var oldSceneShopPrototypeEndNumberInput = Scene_Shop.prototype.endNumberInput;
+Scene_Shop.prototype.endNumberInput = function (currencyName) {
+  if (currencyName !== undefined) {
+    this._numberWindow.hide();
+    switch (this._commandWindow.currentSymbol()) {
+      case 'buy':
+        this.activateBuyWindow(currencyName);
+        break;
+      case 'sell':
+        this.activateSellWindow(currencyName);
+        break;
+    }
+  } else {
+    oldSceneShopPrototypeEndNumberInput.call(this);
+  }
+};
+
+var oldSceneShopPrototypeMaxbuyMethod = Scene_Shop.prototype.maxBuy;
+Scene_Shop.prototype.maxBuy = function (currencyName) {
+  if (currencyName !== undefined) {
+    var max = $gameParty.maxItems(this._item) - $gameParty.numItems(this._item);
+    var price = this.buyingPrice(currencyName);
+    if (price > 0) {
+      return Math.min(max, Math.floor(this.money(currencyName) / price));
+    } else {
+      return max;
+    }
+  } else {
+    oldSceneShopPrototypeMaxbuyMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeMoneyMethod = Scene_Shop.prototype.money;
+Scene_Shop.prototype.money = function (currencyName) {
+  if (currencyName !== undefined) {
+    return this._curencyValueWindow.value();
+  } else {
+    return oldSceneShopPrototypeMoneyMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeCurrencyUnitMethod = Scene_Shop.prototype.currencyUnit;
+Scene_Shop.prototype.currencyUnit = function (currencyName) {
+  if (currencyName !== undefined) {
+    return this._curencyValueWindow.currencyIcon();
+  } else {
+    return oldSceneShopPrototypeCurrencyUnitMethod.call(this);
+  }
+};
+
+var oldSceneShopPrototypeBuyingPrice = Scene_Shop.prototype.buyingPrice;
+Scene_Shop.prototype.buyingPrice = function (currencyName) {
+  if (currencyName !== undefined) {
+    return this._buyWindow.price(this._item, currencyName);
+  } else {
+    return oldSceneShopPrototypeBuyingPrice.call(this);
+  }
+};
+
+},{"../windows/shop/currency_value_window":79}],72:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyRewardWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -3589,7 +3811,7 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
   };
 }
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":79}],73:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":82}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3598,6 +3820,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var lodashFindIndex = require('../../../node_modules/lodash/array/findIndex');
 
+/**
+ * Responsible for gathering all the items related to a currency.
+ *
+ * All items have a belongsToCurrency field on them, we check the currency
+ * that the user wants to create a shop for and gather all the items
+ * for that shop.
+ */
+
 var CurrencyShop = (function () {
   function CurrencyShop() {
     _classCallCheck(this, CurrencyShop);
@@ -3605,15 +3835,29 @@ var CurrencyShop = (function () {
     this._goods = [];
   }
 
+  /**
+   * Open the shop window.
+   *
+   * Populate with items based off currency name.
+   *
+   * @param string currency
+   * @param boolean purchaseOnly
+   */
+
   _createClass(CurrencyShop, [{
     key: 'openShopWindow',
     value: function openShopWindow(currency, purchaseOnly) {
       _currencyShopInfo.currency_name = currency;
       this._createShopGoods(currency);
-      console.log(this._goods);
       SceneManager.push(Scene_Shop);
       SceneManager.prepareNextScene(this._goods, purchaseOnly);
     }
+
+    /**
+     * Creates the actual goods for the shop based off curency name.
+     *
+     * @param string currency
+     */
   }, {
     key: '_createShopGoods',
     value: function _createShopGoods(currency) {
@@ -3625,6 +3869,13 @@ var CurrencyShop = (function () {
       this.processWeaponsArray(weaponsArray, currency);
       this.processArmorsArray(armorsArray, currency);
     }
+
+    /**
+     * Stores items in a goods array.
+     *
+     * @param array itemsArray
+     * @param string currency
+     */
   }, {
     key: 'processItemsArray',
     value: function processItemsArray(itemsArray, currency) {
@@ -3645,6 +3896,13 @@ var CurrencyShop = (function () {
         }
       }
     }
+
+    /**
+     * Stores weapons in a goods array.
+     *
+     * @param array weaponsArray
+     * @param string currency
+     */
   }, {
     key: 'processWeaponsArray',
     value: function processWeaponsArray(weaponsArray, currency) {
@@ -3665,6 +3923,13 @@ var CurrencyShop = (function () {
         }
       }
     }
+
+    /**
+     * Stores armos in a goods array.
+     *
+     * @param array armorsArray
+     * @param string currency
+     */
   }, {
     key: 'processArmorsArray',
     value: function processArmorsArray(armorArray, currency) {
@@ -3691,6 +3956,8 @@ var CurrencyShop = (function () {
 })();
 
 module.exports = CurrencyShop;
+
+// private global method for storing currency currency shop info
 window._currencyShopInfo = { currency_name: null };
 
 },{"../../../node_modules/lodash/array/findIndex":1}],74:[function(require,module,exports){
@@ -4090,7 +4357,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":82}],78:[function(require,module,exports){
+},{"../../flare_random_number":85}],78:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -4186,7 +4453,170 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":83,"../currencies/currency":66}],79:[function(require,module,exports){
+},{"../../flare_window_base":86,"../currencies/currency":66}],79:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var lodashFind = require('../../../../node_modules/lodash/collection/find');
+
+/**
+ * Creates a currency window for the currency shop
+ */
+
+var CurrencyValueWindow = (function (_Window_Base) {
+  _inherits(CurrencyValueWindow, _Window_Base);
+
+  function CurrencyValueWindow(currencyName) {
+    _classCallCheck(this, CurrencyValueWindow);
+
+    _get(Object.getPrototypeOf(CurrencyValueWindow.prototype), 'constructor', this).call(this, currencyName);
+    this.initialize(currencyName);
+  }
+
+  _createClass(CurrencyValueWindow, [{
+    key: 'initialize',
+    value: function initialize(currencyName) {
+
+      _get(Object.getPrototypeOf(CurrencyValueWindow.prototype), 'initialize', this).call(this, 0, 108, 204, 72);
+      this._currencyObject = this.setCurrencyObject(currencyName);
+      this.refresh();
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh() {
+      var x = this.textPadding();
+      var width = this.contents.width - this.textPadding() * 2;
+      this.contents.clear();
+      this.drawCurrencyInfo(this.value(), this.currencyIcon(), x, 0, width);
+    }
+  }, {
+    key: 'value',
+    value: function value() {
+      return this._currencyObject.amount;
+    }
+  }, {
+    key: 'currencyIcon',
+    value: function currencyIcon() {
+      return this._currencyObject.icon;
+    }
+  }, {
+    key: 'setCurrencyObject',
+    value: function setCurrencyObject(currencyName) {
+      var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function (currencyObject) {
+        if (currencyObject.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currencyObject.name) !== -1) {
+          return currencyObject;
+        }
+      });
+
+      if (foundCurrency === undefined) {
+        throw new Error('We failed to find any currency by the name of: ' + currencyName);
+      }
+
+      return foundCurrency;
+    }
+  }, {
+    key: 'drawCurrencyInfo',
+    value: function drawCurrencyInfo(value, unit, x, y, width) {
+      var unitWidth = Math.min(80, this.textWidth(unit));
+      this.resetTextColor();
+      this.drawText(value, x, y, width - unitWidth - 6, 'left');
+      this.changeTextColor(this.systemColor());
+      this.drawIcon(unit, x + width - unitWidth, y);
+    }
+  }]);
+
+  return CurrencyValueWindow;
+})(Window_Base);
+
+module.exports = CurrencyValueWindow;
+
+},{"../../../../node_modules/lodash/collection/find":3}],80:[function(require,module,exports){
+"use strict";
+
+Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currencyName) {
+    var width = this.windowWidth();
+    Window_Selectable.prototype.initialize.call(this, x, y, width, height);
+    this._shopGoods = shopGoods;
+    this._money = 0;
+    this._currencyName = currencyName || null;
+    this.refresh();
+    this.select(0);
+};
+
+var oldWindowShopBuyPrototypePrice = Window_ShopBuy.prototype.price;
+Window_ShopBuy.prototype.price = function (item, curencyName) {
+    if (curencyName !== null) {
+        console.log(this._price, this._data, item);
+        return this._price[this._data.indexOf(item)] || 0;
+    } else {
+        return oldWindowShopBuyPrototypePrice.call(this, item);
+    }
+};
+
+var oldWindowShopBuyPrototypeMakeItemList = Window_ShopBuy.prototype.makeItemList;
+Window_ShopBuy.prototype.makeItemList = function () {
+    if (this._currencyName !== null) {
+        this._data = [];
+        this._price = [];
+        this._shopGoods.forEach(function (goods) {
+            var item = null;
+            switch (goods[0]) {
+                case 0:
+                    item = $dataItems[goods[1]];
+                    break;
+                case 1:
+                    item = $dataWeapons[goods[1]];
+                    break;
+                case 2:
+                    item = $dataArmors[goods[1]];
+                    break;
+            }
+            if (item) {
+                this._data.push(item);
+                this._price.push(item.currencyCost);
+            }
+        }, this);
+    } else {
+        oldWindowShopBuyPrototypeMakeItemList.call(this);
+    }
+};
+
+},{}],81:[function(require,module,exports){
+'use strict';
+
+var oldWindowShopNumberPrototTypeSetCurrencyUnit = Window_ShopNumber.prototype.setCurrencyUnit;
+Window_ShopNumber.prototype.setCurrencyUnit = function (currencyUnit, currencyName) {
+    this._currencyName = currencyName;
+    oldWindowShopNumberPrototTypeSetCurrencyUnit.call(this, currencyUnit);
+};
+
+var oldWindowShopNumberPrototTypeDrawTotalPrice = Window_ShopNumber.prototype.drawTotalPrice;
+Window_ShopNumber.prototype.drawTotalPrice = function () {
+    if (this._currencyName !== undefined) {
+        var total = this._price * this._number;
+        var width = this.contentsWidth() - this.textPadding();
+        this.drawCurrencyInfo(total, this._currencyUnit, 0, this.priceY(), width);
+    } else {
+        oldWindowShopNumberPrototTypeDrawTotalPrice.call(this);
+    }
+};
+
+Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, width) {
+    var unitWidth = Math.min(80, this.textWidth(unit));
+    this.resetTextColor();
+    this.drawText(value, x, y, width - unitWidth - 6, 'right');
+    this.changeTextColor(this.systemColor());
+    this.drawIcon(unit, x + width - unitWidth, y);
+};
+
+},{}],82:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4277,7 +4707,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"../../../../node_modules/lodash/lang/clone":51}],80:[function(require,module,exports){
+},{"../../../../node_modules/lodash/lang/clone":51}],83:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4340,7 +4770,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],81:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4391,7 +4821,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],82:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4432,7 +4862,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],83:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4494,4 +4924,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[68,67,75,74,72,71,79]);
+},{}]},{},[68,67,75,74,72,71,81,80,82]);

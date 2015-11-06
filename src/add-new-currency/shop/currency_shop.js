@@ -1,19 +1,38 @@
 var lodashFindIndex = require('../../../node_modules/lodash/array/findIndex');
 
+/**
+ * Responsible for gathering all the items related to a currency.
+ *
+ * All items have a belongsToCurrency field on them, we check the currency
+ * that the user wants to create a shop for and gather all the items
+ * for that shop.
+ */
 class CurrencyShop {
 
   constructor() {
     this._goods = [];
   }
 
+  /**
+   * Open the shop window.
+   *
+   * Populate with items based off currency name.
+   *
+   * @param string currency
+   * @param boolean purchaseOnly
+   */
   openShopWindow(currency, purchaseOnly) {
     _currencyShopInfo.currency_name = currency;
     this._createShopGoods(currency);
-    console.log(this._goods);
     SceneManager.push(Scene_Shop);
     SceneManager.prepareNextScene(this._goods, purchaseOnly);
   }
 
+  /**
+   * Creates the actual goods for the shop based off curency name.
+   *
+   * @param string currency
+   */
   _createShopGoods(currency) {
     var itemsArray   = $dataItems;
     var weaponsArray = $dataWeapons;
@@ -24,6 +43,12 @@ class CurrencyShop {
     this.processArmorsArray(armorsArray, currency);
   }
 
+  /**
+   * Stores items in a goods array.
+   *
+   * @param array itemsArray
+   * @param string currency
+   */
   processItemsArray(itemsArray, currency) {
     for (var i = 0; i < itemsArray.length; i++) {
       if (itemsArray[i] !== null && itemsArray[i].belongsToCurrency === currency) {
@@ -43,6 +68,12 @@ class CurrencyShop {
     }
   }
 
+  /**
+   * Stores weapons in a goods array.
+   *
+   * @param array weaponsArray
+   * @param string currency
+   */
   processWeaponsArray(weaponsArray, currency) {
     for (var i = 0; i < weaponsArray.length; i++) {
       if (weaponsArray[i] !== null && weaponsArray[i].belongsToCurrency === currency) {
@@ -62,6 +93,12 @@ class CurrencyShop {
     }
   }
 
+  /**
+   * Stores armos in a goods array.
+   *
+   * @param array armorsArray
+   * @param string currency
+   */
   processArmorsArray(armorArray, currency) {
     for (var i = 0; i < armorArray.length; i++) {
       if (armorArray[i] !== null && armorArray[i].belongsToCurrency === currency) {
@@ -83,4 +120,6 @@ class CurrencyShop {
 }
 
 module.exports = CurrencyShop;
+
+// private global method for storing currency currency shop info
 window._currencyShopInfo = {currency_name: null};
