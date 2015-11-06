@@ -145,7 +145,7 @@ Scene_Shop.prototype.onSellOk = function(currencyName) {
 
 var oldSceneShopPrototypeOnNumberOkMethod = Scene_Shop.prototype.onNumberOk;
 Scene_Shop.prototype.onNumberOk = function(currencyName) {
-    if (currencyName !== null) {
+    if (currencyName !== undefined) {
       SoundManager.playShop();
       switch (this._commandWindow.currentSymbol()) {
       case 'buy':
@@ -176,7 +176,7 @@ Scene_Shop.prototype.onNumberCancel = function(currencyName) {
 var oldSceneShopPrototypeDobuyMethod = Scene_Shop.prototype.doBuy;
 Scene_Shop.prototype.doBuy = function(number, currencyName) {
   if (currencyName !== undefined) {
-    var cost = number * this.buyingPrice();
+    var cost = number * this.buyingPrice(currencyName, false);
 
     FlareCurrencies.addAmount(currencyName, -cost);
     $gameParty.gainItem(this._item, number);
@@ -188,12 +188,12 @@ Scene_Shop.prototype.doBuy = function(number, currencyName) {
 var oldSceneShopPrototypeDoSellMethod = Scene_Shop.prototype.doSell;
 Scene_Shop.prototype.doSell = function(number, currencyName) {
   if (currencyName !== undefined) {
-    var cost = number * this.buyingPrice();
+    var cost = number * this.buyingPrice(currencyName, true);
 
     FlareCurrencies.addAmount(currencyName, cost);
     $gameParty.loseItem(this._item, number);
   } else {
-    oldSceneShopPrototypeDoSellMethod.call(this, currencyName);
+    oldSceneShopPrototypeDoSellMethod.call(this, number);
   }
 };
 
@@ -248,9 +248,11 @@ Scene_Shop.prototype.currencyUnit = function(currencyName) {
 };
 
 var oldSceneShopPrototypeBuyingPrice = Scene_Shop.prototype.buyingPrice;
-Scene_Shop.prototype.buyingPrice = function(currencyName) {
-  if (currencyName !== undefined) {
+Scene_Shop.prototype.buyingPrice = function(currencyName, selling) {
+  if (currencyName !== undefined && !selling) {
     return this._buyWindow.price(this._item, currencyName);
+  } else if (currencyName !== undefined && selling) {
+    return this._buyWindow.price(this._item, currencyName, selling);
   } else {
     return oldSceneShopPrototypeBuyingPrice.call(this);
   }

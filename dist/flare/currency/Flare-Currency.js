@@ -3757,7 +3757,7 @@ Scene_Shop.prototype.onSellOk = function (currencyName) {
 
 var oldSceneShopPrototypeOnNumberOkMethod = Scene_Shop.prototype.onNumberOk;
 Scene_Shop.prototype.onNumberOk = function (currencyName) {
-  if (currencyName !== null) {
+  if (currencyName !== undefined) {
     SoundManager.playShop();
     switch (this._commandWindow.currentSymbol()) {
       case 'buy':
@@ -3788,7 +3788,7 @@ Scene_Shop.prototype.onNumberCancel = function (currencyName) {
 var oldSceneShopPrototypeDobuyMethod = Scene_Shop.prototype.doBuy;
 Scene_Shop.prototype.doBuy = function (number, currencyName) {
   if (currencyName !== undefined) {
-    var cost = number * this.buyingPrice();
+    var cost = number * this.buyingPrice(currencyName, false);
 
     FlareCurrencies.addAmount(currencyName, -cost);
     $gameParty.gainItem(this._item, number);
@@ -3800,12 +3800,12 @@ Scene_Shop.prototype.doBuy = function (number, currencyName) {
 var oldSceneShopPrototypeDoSellMethod = Scene_Shop.prototype.doSell;
 Scene_Shop.prototype.doSell = function (number, currencyName) {
   if (currencyName !== undefined) {
-    var cost = number * this.buyingPrice();
+    var cost = number * this.buyingPrice(currencyName, true);
 
     FlareCurrencies.addAmount(currencyName, cost);
     $gameParty.loseItem(this._item, number);
   } else {
-    oldSceneShopPrototypeDoSellMethod.call(this, currencyName);
+    oldSceneShopPrototypeDoSellMethod.call(this, number);
   }
 };
 
@@ -3860,9 +3860,11 @@ Scene_Shop.prototype.currencyUnit = function (currencyName) {
 };
 
 var oldSceneShopPrototypeBuyingPrice = Scene_Shop.prototype.buyingPrice;
-Scene_Shop.prototype.buyingPrice = function (currencyName) {
-  if (currencyName !== undefined) {
+Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
+  if (currencyName !== undefined && !selling) {
     return this._buyWindow.price(this._item, currencyName);
+  } else if (currencyName !== undefined && selling) {
+    return this._buyWindow.price(this._item, currencyName, selling);
   } else {
     return oldSceneShopPrototypeBuyingPrice.call(this);
   }
@@ -4639,51 +4641,52 @@ module.exports = CurrencyValueWindow;
 "use strict";
 
 Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currencyName) {
-    var width = this.windowWidth();
-    Window_Selectable.prototype.initialize.call(this, x, y, width, height);
-    this._shopGoods = shopGoods;
-    this._money = 0;
-    this._currencyName = currencyName || null;
-    this.refresh();
-    this.select(0);
+  var width = this.windowWidth();
+  Window_Selectable.prototype.initialize.call(this, x, y, width, height);
+  this._shopGoods = shopGoods;
+  this._money = 0;
+  this._currencyName = currencyName || null;
+  this.refresh();
+  this.select(0);
 };
 
 var oldWindowShopBuyPrototypePrice = Window_ShopBuy.prototype.price;
-Window_ShopBuy.prototype.price = function (item, curencyName) {
-    if (curencyName !== null) {
-        console.log(this._price, this._data, item);
-        return this._price[this._data.indexOf(item)] || 0;
-    } else {
-        return oldWindowShopBuyPrototypePrice.call(this, item);
-    }
+Window_ShopBuy.prototype.price = function (item, curencyName, selling) {
+  if (curencyName !== null && !selling) {
+    return this._price[this._data.indexOf(item)] || 0;
+  } else if (curencyName !== null && selling) {
+    return item.currencyCost || 0;
+  } else {
+    return oldWindowShopBuyPrototypePrice.call(this, item);
+  }
 };
 
 var oldWindowShopBuyPrototypeMakeItemList = Window_ShopBuy.prototype.makeItemList;
 Window_ShopBuy.prototype.makeItemList = function () {
-    if (this._currencyName !== null) {
-        this._data = [];
-        this._price = [];
-        this._shopGoods.forEach(function (goods) {
-            var item = null;
-            switch (goods[0]) {
-                case 0:
-                    item = $dataItems[goods[1]];
-                    break;
-                case 1:
-                    item = $dataWeapons[goods[1]];
-                    break;
-                case 2:
-                    item = $dataArmors[goods[1]];
-                    break;
-            }
-            if (item) {
-                this._data.push(item);
-                this._price.push(item.currencyCost);
-            }
-        }, this);
-    } else {
-        oldWindowShopBuyPrototypeMakeItemList.call(this);
-    }
+  if (this._currencyName !== null) {
+    this._data = [];
+    this._price = [];
+    this._shopGoods.forEach(function (goods) {
+      var item = null;
+      switch (goods[0]) {
+        case 0:
+          item = $dataItems[goods[1]];
+          break;
+        case 1:
+          item = $dataWeapons[goods[1]];
+          break;
+        case 2:
+          item = $dataArmors[goods[1]];
+          break;
+      }
+      if (item) {
+        this._data.push(item);
+        this._price.push(item.currencyCost);
+      }
+    }, this);
+  } else {
+    oldWindowShopBuyPrototypeMakeItemList.call(this);
+  }
 };
 
 },{}],81:[function(require,module,exports){

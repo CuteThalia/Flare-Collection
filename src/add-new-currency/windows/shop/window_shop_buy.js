@@ -9,10 +9,11 @@ Window_ShopBuy.prototype.initialize = function(x, y, height, shopGoods, currency
 };
 
 var oldWindowShopBuyPrototypePrice = Window_ShopBuy.prototype.price;
-Window_ShopBuy.prototype.price = function(item, curencyName) {
-  if (curencyName !== null) {
-    console.log(this._price, this._data, item);
+Window_ShopBuy.prototype.price = function(item, curencyName, selling) {
+  if (curencyName !== null && !selling) {
     return this._price[this._data.indexOf(item)] || 0;
+  } else if (curencyName !== null && selling) {
+    return item.currencyCost || 0;
   } else {
     return oldWindowShopBuyPrototypePrice.call(this, item);
   }
