@@ -19,7 +19,7 @@ Scene_Shop.prototype.create = function() {
       this.createStatusWindow();
       this.createBuyWindow(_currencyShopInfo.currency_name);
       this.createCategoryWindow();
-      this.createSellWindow();
+      this.createSellWindow(_currencyShopInfo.currency_name);
       _currencyShopInfo.currency_name = null;
     } else {
       OldSceneShopPrototypeCreateMethod.call(this);
@@ -80,6 +80,23 @@ Scene_Shop.prototype.createBuyWindow = function(currencyName) {
   }
 };
 
+var oldSceneShopPrototypeCreateSellWindow = Scene_Shop.prototype.createSellWindow;
+Scene_Shop.prototype.createSellWindow = function(currencyName) {
+  if (currencyName !== undefined) {
+    var wy = this._categoryWindow.y + this._categoryWindow.height;
+    var wh = Graphics.boxHeight - wy;
+    this._sellWindow = new Window_ShopSell(0, wy, Graphics.boxWidth, wh);
+    this._sellWindow.setHelpWindow(this._helpWindow);
+    this._sellWindow.hide();
+    this._sellWindow.setHandler('ok',     this.onSellOk.bind(this, currencyName));
+    this._sellWindow.setHandler('cancel', this.onSellCancel.bind(this));
+    this._categoryWindow.setItemWindow(this._sellWindow);
+    this.addWindow(this._sellWindow);
+  } else {
+    oldSceneShopPrototypeCreateSellWindow.call(this);
+  }
+};
+
 var oldSceneShopPrototypeCreateNumberWindow = Scene_Shop.prototype.createNumberWindow;
 Scene_Shop.prototype.createNumberWindow = function(currencyName) {
     if (currencyName !== undefined) {
@@ -107,6 +124,23 @@ Scene_Shop.prototype.onBuyOk = function(currencyName) {
     } else {
       oldSceneShopPrototypeOnBuyOkMethod.call(this);
     }
+};
+
+var oldSceneShopPrototypeOnSellOk = Scene_Shop.prototype.onSellOk;
+Scene_Shop.prototype.onSellOk = function(currencyName) {
+  if (currencyName !== undefined) {
+    this._item = this._sellWindow.item();
+    this._categoryWindow.hide();
+    this._sellWindow.hide();
+    this._numberWindow.setup(this._item, this.maxSell(currencyName), this.sellingPrice(), currencyName);
+    this._numberWindow.setCurrencyUnit(this.currencyUnit(currencyName), currencyName);
+    this._numberWindow.show();
+    this._numberWindow.activate();
+    this._statusWindow.setItem(this._item);
+    this._statusWindow.show();
+  } else {
+    oldSceneShopPrototypeOnSellOk.call(this);
+  }
 };
 
 var oldSceneShopPrototypeOnNumberOkMethod = Scene_Shop.prototype.onNumberOk;
