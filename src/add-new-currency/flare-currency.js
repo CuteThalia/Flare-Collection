@@ -113,7 +113,7 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * Used to buy: x
   *
-  * === Note Tags ===
+  * === Note Tags - Enemies ===
   *
   * For Enemies:
   *
@@ -136,10 +136,66 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * Means you have a 100% chance of getting 80 Demon Teeth off the enemy.
   *
+  * === Note Tags - Setting up a shop ===
+  *
+  * You have some currencies, via the battles or via the public API methods
+  * below that can be called via events. Now how do you set up items
+  * for the currency shop, which can be opened via the public api
+  * methods below.
+  *
+  * Items, weapons and armors can have the following tag:
+  *
+  * <currencyShop belongsTo: "Sample Name" andCosts: 76>
+  *
+  * This states that the item belongs to the currency of "Sammple Name" and
+  * it costs 76 of that currency.
+  *
+  * This same tag can be used on weapons and armor. When you call:
+  *
+  * FlareCurrencies.openShop("Sample Name")
+  *
+  * We will open a shop with ALL items, weapons and armors that
+  * match that currency name.
+  *
+  * This tag adds belongsToCurrency and currencyCost to an item object.
+  *
+  * The way the shop is designed is such that if we cannot find a item
+  * that matches your currency name you will get an empty shop.
+  *
+  * All items are fetched for you on game start up so that creating shops is
+  * done super super fast.
+  *
   * === Yanfly Vistory Aftermath ===
   *
   * To use this with Yanfly victory after math all you have to do is add:
   * currency to the Victory Order. For example: exp custom drops currency
+  *
+  * === Shop Compatability and Programming ===
+  *
+  * Shops are done such that they are backwards compatible and should work
+  * with othr shop scripts.
+  *
+  * For programmers there is two new keys added to items:
+  *
+  * belongsToCurrency: "string"
+  * currencyCost: int
+  *
+  * === For programmers: Currencies ===
+  *
+  * There is a base object you can access: flareCurrency
+  *
+  * This can be called and contains static methods. It is lower case because
+  * it is meant to be "private". It contains the following API:
+  *
+  * store(currency) - Takes an array of objects, each contains the following
+  * key/value: name, description, icon and amount. This store is read from
+  * and wrote too.
+  *
+  * setStoreFromLoad(currency) - Same as store. This over rides the store.
+  * this is sed for loading the game from a saved state.
+  *
+  * getCurrencyStore() - Returns an array of objects that is the store and
+  * the time its called.
   *
   * === Public API ===
   *
@@ -170,6 +226,14 @@ var CurrencyShop = require('./shop/currency_shop');
   * Because we do not have a limit on currencies, assume the user
   * has 10 Demon Teeth, this will make the count 0;
   *
+  * FlareCurrencies.openShop("Currency Name", purchaseOnly)
+  *
+  * Opens a currency shop based on the currency name. We will gather
+  * all the items that have the currencyShop tag attached to them, determine
+  * there price and so on.
+  *
+  * Purchase only can be true/false or not even passed in (default false).
+  * Purcahse only works the way you think it would, you cannot sell.
   */
 
 /**
@@ -222,7 +286,7 @@ class FlareCurrencies {
   static getCurrentCurrencyAmount(currencyName) {
     var currencies = window.flareCurrency.getCurrencyStore();
     var self       = this;
-    
+
     var currencyObject = lodashFind(currencies, function(currency){
       if (currency.name.indexOf(currencyName) !== -1 ||
           currencyName.indexOf(currency.name) !== -1 ) {
