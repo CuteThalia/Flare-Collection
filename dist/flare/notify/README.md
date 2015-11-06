@@ -37,7 +37,10 @@ This adds ten windows to an event that will then all be called.
 
 > ## ATTN!
 >
-> If you have 1 or more notifications and you open a menu, enter a battle.
+> If you have 1 or more notifications and you open a menu, enter a battle
 > we will play the next set of notifications. If you then open a battle or a menu
 > we will remove any notifications currently on the screen. This is similar behavior
 > to the map name.
+>
+> Notifications may play while you are in a battle, you wont see them being played
+> but they do continue.
