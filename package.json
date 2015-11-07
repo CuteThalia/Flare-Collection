@@ -9,8 +9,8 @@
     "babelify": "6.4.0"
   },
   "devDependencies": {
-    "rmmv-mrp-core": "markprzepiora/rmmv-mrp-core",
+    "filesaver.js": "0.2.0",
     "lodash": "3.10.1",
-    "filesaver.js": "0.2.0"
+    "rmmv-mrp-core": "0.0.3"
   }
 }

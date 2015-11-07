@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-var extractAllOfType  = require('rmmv-mrp-core/lib/OptionParser').extractAllOfType;
+var extractAllOfType  = require('rmmv-mrp-core/option-parser').extractAllOfType;
 var lodashFind        = require('../../../node_modules/lodash/collection/find');
 var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined')
 
