@@ -32,3 +32,13 @@ gulp.task('make:flare-notification-window', function() {
       .pipe(source('Flare-NotificationWindow.js'))
       .pipe(gulp.dest('dist/flare/notify/'));
 });
+
+gulp.task('make:flare-map-exporter', function() {
+  return browserify({entries: [
+        'src/map-exporter/map_exporter.js',
+      ]})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('Flare-MapExporter.js'))
+      .pipe(gulp.dest('dist/flare/map_exporter/'));
+});

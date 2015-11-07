@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "rmmv-mrp-core": "markprzepiora/rmmv-mrp-core",
-    "lodash": "3.10.1"
+    "lodash": "3.10.1",
+    "filesaver.js": "0.2.0"
   }
 }
