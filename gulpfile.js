@@ -25,10 +25,21 @@ gulp.task('make:flare-currency', function() {
 gulp.task('make:flare-notification-window', function() {
   return browserify({entries: [
         'src/add-notification-window/flare_notification_window.js',
-        'src/add-notification-window/scene_map_update/scene_map_update.js'
+        'src/add-notification-window/scene_map_updates/scene_map_update.js'
       ]})
       .transform(babelify)
       .bundle()
       .pipe(source('Flare-NotificationWindow.js'))
       .pipe(gulp.dest('dist/flare/notify/'));
+});
+
+gulp.task('make:flare-judgepoints', function() {
+  return browserify({entries: [
+        'src/add-judge-points/flare_judge_points.js',
+        'src/add-judge-points/scene_map_updates/scene_map_update.js',
+      ]})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('Flare-JudgePoints.js'))
+      .pipe(gulp.dest('dist/flare/judgepoints/'));
 });
