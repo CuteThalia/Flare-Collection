@@ -37,6 +37,7 @@ gulp.task('make:flare-judgepoints', function() {
   return browserify({entries: [
         'src/add-judge-points/flare_judge_points.js',
         'src/add-judge-points/scene_map_updates/scene_map_update.js',
+        'src/add-judge-points/game_action_updates/game_action_updates.js',
       ]})
       .transform(babelify)
       .bundle()

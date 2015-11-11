@@ -712,7 +712,7 @@ var JudgePoints = (function () {
 
 module.exports = JudgePoints;
 
-},{"./law_storage/laws_for_map":5,"./punishment_storage/punishments":7,"rmmv-mrp-core/option-parser":1}],4:[function(require,module,exports){
+},{"./law_storage/laws_for_map":7,"./punishment_storage/punishments":9,"rmmv-mrp-core/option-parser":1}],4:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -729,9 +729,8 @@ var FlareLawMenu = require('./menus/add_law_to_menu');
  *
  * @help
  *
- * You can have as many laws as you want, any less then 3 we will
- * show them, any more then three will randomly be picked
- * every time you enter the map.
+ * You can have as many laws as you want, any less then 3 we will show them, any more
+ * then three will randomly be picked every time you enter the map.
  *
  * How to set up a law:
  *
@@ -778,7 +777,74 @@ flareLawMenu.menuHandler();
 window.FlareJudgePoints = FlareJudgePoints;
 window._lawsForMap = [];
 
-},{"./law_storage/laws_for_map":5,"./menus/add_law_to_menu":6}],5:[function(require,module,exports){
+},{"./law_storage/laws_for_map":7,"./menus/add_law_to_menu":8}],5:[function(require,module,exports){
+'use strict';
+
+var ProcessBrokenLaw = require('../law_handler/process_broken_law');
+
+var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply;
+Game_Action.prototype.apply = function (target) {
+    if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+        var result = target.result();
+        this.subject().clearResult();
+        result.clear();
+        result.used = this.testApply(target);
+        result.missed = result.used && Math.random() >= this.itemHit(target);
+        result.evaded = !result.missed && Math.random() < this.itemEva(target);
+        result.physical = this.isPhysical();
+        result.drain = this.isDrain();
+
+        if (result.isHit()) {
+            if (this.item().damage.type > 0) {
+                result.critical = Math.random() < this.itemCri(target);
+                var value = this.makeDamageValue(target, result.critical);
+                this.executeDamage(target, value);
+            }
+
+            // Punish the user for breaking a law, assuming they have.
+            var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name);
+            processWhatShouldHappenOnHit.punishPlayer();
+
+            this.item().effects.forEach(function (effect) {
+                this.applyItemEffect(target, effect);
+            }, this);
+
+            this.applyItemUserEffect(target);
+        }
+    } else {
+        oldGameActionPrototypeApplyMethod.call(this, target);
+    }
+};
+
+},{"../law_handler/process_broken_law":6}],6:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var LawsForMap = require('../law_storage/laws_for_map');
+
+var ProcessBrokenLaw = (function () {
+  function ProcessBrokenLaw(nameOfAction) {
+    _classCallCheck(this, ProcessBrokenLaw);
+
+    this._nameOfAction = nameOfAction;
+  }
+
+  _createClass(ProcessBrokenLaw, [{
+    key: 'punishPlayer',
+    value: function punishPlayer() {
+      console.log(LawsForMap.getLawsForMap(), this._nameOfAction);
+    }
+  }]);
+
+  return ProcessBrokenLaw;
+})();
+
+module.exports = ProcessBrokenLaw;
+
+},{"../law_storage/laws_for_map":7}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -819,7 +885,7 @@ var LawsForMap = (function () {
 window._lawCannotUse = [];
 module.exports = LawsForMap;
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -874,7 +940,7 @@ var AddLawToMenuAsMenuItem = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = AddLawToMenuAsMenuItem;
 
-},{"../../flare_menu_scene_interface":11,"../scenes/flare_law_window_scene":9}],7:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":13,"../scenes/flare_law_window_scene":11}],9:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -909,7 +975,7 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 var JudgePoints = require('../add_judge_points');
@@ -921,7 +987,7 @@ Scene_Map.prototype.onMapLoaded = function () {
   flareJudgePoints.grabMapInformation();
 };
 
-},{"../add_judge_points":3}],9:[function(require,module,exports){
+},{"../add_judge_points":3}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -973,7 +1039,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":10}],10:[function(require,module,exports){
+},{"../windows/laws_window":12}],12:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1074,7 +1140,7 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":12}],11:[function(require,module,exports){
+},{"../../flare_window_base":14}],13:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -1125,7 +1191,7 @@ var FlareMenuSceneHandlerInterface = (function () {
 
 module.exports = FlareMenuSceneHandlerInterface;
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -1187,4 +1253,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[4,8]);
+},{}]},{},[4,10,5]);
