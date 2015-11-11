@@ -692,6 +692,7 @@ var JudgePoints = (function () {
 
       extractAllOfType(noteBoxData, 'law').map(function (lawObject) {
         if (typeof lawObject === 'object' && self.validatePunishment(lawObject.punishment)) {
+          console.log(lawObject);
           LawManagement.storeLaw(lawObject);
         }
       });
@@ -721,6 +722,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var LawManagement = require('./law_storage/laws_for_map');
 var FlareLawMenu = require('./menus/add_law_to_menu');
+
+/*:
+ * @plugindesc Allows you to have a set of laws for a map.
+ * @author Adam Balan (AKA: DarknessFalls)
+ *
+ *
+ * @help
+ *
+ */
 
 var FlareJudgePoints = (function () {
   function FlareJudgePoints() {
@@ -758,7 +768,7 @@ var LawsForMap = (function () {
   _createClass(LawsForMap, null, [{
     key: "storeLaw",
     value: function storeLaw(law) {
-      window._lawsForMap.push({ name: law.name, punishment: law.punishment, amount: law.amount });
+      window._lawsForMap.push({ name: law.name, punishment: law.punishment, amount: law.amount, icon: law.icon });
     }
   }, {
     key: "getLawsForMap",
@@ -953,7 +963,7 @@ var LawWindow = (function (_FlareWindowBase) {
   _createClass(LawWindow, [{
     key: 'initialize',
     value: function initialize() {
-      _get(Object.getPrototypeOf(LawWindow.prototype), 'initialize', this).call(this, this.tryAndCenter(), this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
+      _get(Object.getPrototypeOf(LawWindow.prototype), 'initialize', this).call(this, this.tryAndCenter() - 70, this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
       this._randomlyPickedLaws = [];
     }
   }, {
@@ -964,7 +974,7 @@ var LawWindow = (function (_FlareWindowBase) {
   }, {
     key: 'windowWidth',
     value: function windowWidth() {
-      return Graphics.boxWidth / 2;
+      return Graphics.boxWidth / 2 + 150;
     }
   }, {
     key: 'windowHeight',
@@ -1000,9 +1010,15 @@ var LawWindow = (function (_FlareWindowBase) {
       var self = this;
       laws.map(function (law) {
 
-        self.flareDrawTextEx("\\c[8]" + law.name + "\\c[0]", 60, baseYForText - 10);
-        self.flareDrawTextEx("\\c[14]" + law.punishment + "\\c[0]", 60, baseYForText + 15);
-        self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]");
+        self.drawIcon(law.icon, 20, baseYForText - 10);
+        self.drawText("Law:", 60, baseYForText - 10);
+        self.flareDrawTextEx("Type:", 20, baseYForText + 25);
+        self.flareDrawTextEx("\\c[8]" + law.name + "\\c[0]", 150, baseYForText + 25);
+        self.flareDrawTextEx("Punishment:", 20, baseYForText + 45);
+        self.flareDrawTextEx("\\c[14]" + law.punishment + "\\c[0]", 150, baseYForText + 45);
+        self.flareDrawTextEx("Amount:", 20, baseYForText + 70);
+        self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
+        self.flareDrawTextEx("\\c[20] ------------------- \\c[0]", 10, baseYForText + 90);
 
         baseYForText += 100;
       });

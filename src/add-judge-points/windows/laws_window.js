@@ -8,7 +8,7 @@ class LawWindow extends FlareWindowBase {
   }
 
   initialize() {
-    super.initialize(this.tryAndCenter(), this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
+    super.initialize(this.tryAndCenter() - 70, this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
     this._randomlyPickedLaws = [];
   }
 
@@ -17,7 +17,7 @@ class LawWindow extends FlareWindowBase {
   }
 
   windowWidth() {
-    return Graphics.boxWidth / 2;
+    return Graphics.boxWidth / 2 + 150;
   }
 
   windowHeight() {
@@ -50,9 +50,15 @@ class LawWindow extends FlareWindowBase {
     var self = this;
     laws.map(function(law){
 
-        self.flareDrawTextEx("\\c[8]"  + law.name  + "\\c[0]", 60, baseYForText - 10);
-        self.flareDrawTextEx("\\c[14]" + law.punishment + "\\c[0]", 60, baseYForText + 15);
-        self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]");
+        self.drawIcon(law.icon, 20, baseYForText - 10)
+        self.drawText("Law:", 60, baseYForText - 10)
+        self.flareDrawTextEx("Type:", 20, baseYForText + 25);
+        self.flareDrawTextEx("\\c[8]"  + law.name  + "\\c[0]", 150, baseYForText + 25);
+        self.flareDrawTextEx("Punishment:", 20, baseYForText + 45);
+        self.flareDrawTextEx("\\c[14]" + law.punishment + "\\c[0]", 150, baseYForText + 45);
+        self.flareDrawTextEx("Amount:", 20, baseYForText + 70);
+        self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
+        self.flareDrawTextEx("\\c[20] ------------------- \\c[0]", 10, baseYForText + 90);
 
         baseYForText += 100;
     });
