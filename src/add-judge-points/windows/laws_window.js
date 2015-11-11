@@ -8,7 +8,7 @@ class LawWindow extends FlareWindowBase {
   }
 
   initialize() {
-    super.initialize(this.tryAndCenter() - 70, this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
+    super.initialize(this.tryAndCenter() - 40, this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
     this._randomlyPickedLaws = [];
   }
 
@@ -17,7 +17,7 @@ class LawWindow extends FlareWindowBase {
   }
 
   windowWidth() {
-    return Graphics.boxWidth / 2 + 150;
+    return Graphics.boxWidth / 2 + 70;
   }
 
   windowHeight() {

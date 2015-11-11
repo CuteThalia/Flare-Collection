@@ -692,7 +692,6 @@ var JudgePoints = (function () {
 
       extractAllOfType(noteBoxData, 'law').map(function (lawObject) {
         if (typeof lawObject === 'object' && self.validatePunishment(lawObject.punishment)) {
-          console.log(lawObject);
           LawManagement.storeLaw(lawObject);
         }
       });
@@ -963,7 +962,7 @@ var LawWindow = (function (_FlareWindowBase) {
   _createClass(LawWindow, [{
     key: 'initialize',
     value: function initialize() {
-      _get(Object.getPrototypeOf(LawWindow.prototype), 'initialize', this).call(this, this.tryAndCenter() - 70, this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
+      _get(Object.getPrototypeOf(LawWindow.prototype), 'initialize', this).call(this, this.tryAndCenter() - 40, this.tryAndCenter() - 190, this.windowWidth(), this.windowHeight());
       this._randomlyPickedLaws = [];
     }
   }, {
@@ -974,7 +973,7 @@ var LawWindow = (function (_FlareWindowBase) {
   }, {
     key: 'windowWidth',
     value: function windowWidth() {
-      return Graphics.boxWidth / 2 + 150;
+      return Graphics.boxWidth / 2 + 70;
     }
   }, {
     key: 'windowHeight',
