@@ -729,6 +729,32 @@ var FlareLawMenu = require('./menus/add_law_to_menu');
  *
  * @help
  *
+ * You can have as many laws as you want, any less then 3 we will
+ * show them, any more then three will randomly be picked
+ * every time you enter the map.
+ *
+ * How to set up a law:
+ *
+ * <law
+ *    name:"something"
+ *    punishment:"gold"
+ *    amount: 700 icon: 26
+ *    cantUse: "potion, attack, Fire"
+ *  >
+ *
+ * ===============================================================
+ * The above should be all on one line, I did it like this because
+ * the help file only allows 60 characters pr line
+ * ===============================================================
+ *
+ * - Keep the names the law short. The can't use should also be short,
+ * any thing longer then the window doesn't wrap.
+ *
+ * - Items, weapons, skills must all match the name of the
+ * the thing you want to create a law against.
+ *
+ * - You can ONLY have three "can't use" in the law. Any more I
+ * cut it off.
  */
 
 var FlareJudgePoints = (function () {
@@ -753,11 +779,11 @@ window.FlareJudgePoints = FlareJudgePoints;
 window._lawsForMap = [];
 
 },{"./law_storage/laws_for_map":5,"./menus/add_law_to_menu":6}],5:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var LawsForMap = (function () {
   function LawsForMap() {
@@ -765,12 +791,23 @@ var LawsForMap = (function () {
   }
 
   _createClass(LawsForMap, null, [{
-    key: "storeLaw",
+    key: 'storeLaw',
     value: function storeLaw(law) {
-      window._lawsForMap.push({ name: law.name, punishment: law.punishment, amount: law.amount, icon: law.icon });
+
+      var lawCannotUse = law.cantUse.split(',');
+      lawCannotUse.length = 3;
+      window._lawCannotUse = lawCannotUse;
+
+      window._lawsForMap.push({
+        name: law.name,
+        punishment: law.punishment,
+        amount: law.amount,
+        icon: law.icon,
+        cantUse: law.cantUse
+      });
     }
   }, {
-    key: "getLawsForMap",
+    key: 'getLawsForMap',
     value: function getLawsForMap() {
       return window._lawsForMap;
     }
@@ -779,6 +816,7 @@ var LawsForMap = (function () {
   return LawsForMap;
 })();
 
+window._lawCannotUse = [];
 module.exports = LawsForMap;
 
 },{}],6:[function(require,module,exports){
@@ -1009,6 +1047,10 @@ var LawWindow = (function (_FlareWindowBase) {
       var self = this;
       laws.map(function (law) {
 
+        var lawCantUse = law.cantUse.split(',');
+        lawCantUse.length = 3;
+        lawCantUse = lawCantUse.join();
+
         self.drawIcon(law.icon, 20, baseYForText - 10);
         self.drawText("Law:", 60, baseYForText - 10);
         self.flareDrawTextEx("Type:", 20, baseYForText + 25);
@@ -1017,7 +1059,10 @@ var LawWindow = (function (_FlareWindowBase) {
         self.flareDrawTextEx("\\c[14]" + law.punishment + "\\c[0]", 150, baseYForText + 45);
         self.flareDrawTextEx("Amount:", 20, baseYForText + 70);
         self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
-        self.flareDrawTextEx("\\c[20] ------------------- \\c[0]", 10, baseYForText + 90);
+        self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
+        self.flareDrawTextEx("Cannot Use:", 20, baseYForText + 90);
+        self.flareDrawTextEx("\\c[18]" + lawCantUse + "\\c[0]", 150, baseYForText + 90);
+        self.flareDrawTextEx("\\c[20] -----------------------------------------  \\c[0]", 10, baseYForText + 110);
 
         baseYForText += 100;
       });

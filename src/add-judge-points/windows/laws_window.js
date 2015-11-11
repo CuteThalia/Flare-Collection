@@ -50,6 +50,10 @@ class LawWindow extends FlareWindowBase {
     var self = this;
     laws.map(function(law){
 
+        var lawCantUse = law.cantUse.split(',');
+        lawCantUse.length = 3;
+        lawCantUse = lawCantUse.join();
+
         self.drawIcon(law.icon, 20, baseYForText - 10)
         self.drawText("Law:", 60, baseYForText - 10)
         self.flareDrawTextEx("Type:", 20, baseYForText + 25);
@@ -58,7 +62,10 @@ class LawWindow extends FlareWindowBase {
         self.flareDrawTextEx("\\c[14]" + law.punishment + "\\c[0]", 150, baseYForText + 45);
         self.flareDrawTextEx("Amount:", 20, baseYForText + 70);
         self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
-        self.flareDrawTextEx("\\c[20] ------------------- \\c[0]", 10, baseYForText + 90);
+        self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
+        self.flareDrawTextEx("Cannot Use:", 20, baseYForText + 90);
+        self.flareDrawTextEx("\\c[18]" + lawCantUse + "\\c[0]", 150, baseYForText + 90);
+        self.flareDrawTextEx("\\c[20] -----------------------------------------  \\c[0]", 10, baseYForText + 110);
 
         baseYForText += 100;
     });
