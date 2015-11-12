@@ -35,6 +35,7 @@ gulp.task('make:flare-notification-window', function() {
 
 gulp.task('make:flare-laws-for-map', function() {
   return browserify({entries: [
+        'src/laws-for-map/window_updates/window_base_update.js',
         'src/laws-for-map/flare_laws_for_map.js',
         'src/laws-for-map/scene_map_updates/scene_map_update.js',
         'src/laws-for-map/game_action_updates/game_action_updates.js',

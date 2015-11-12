@@ -6,17 +6,23 @@ var lodashTrim        = require('../../../node_modules/lodash/string/trim');
 class LawsForMap {
 
   static storeLaw(law) {
+    var lawCannotUse = null;
 
-    var lawCannotUse     = law.cantUse.split(',');
-    lawCannotUse.length  = 3;
-    var upperCaseCannotUse   = [];
+    if (law.cantUse.indexOf(',') !== -1) {
+      lawCannotUse     = law.cantUse.split(',');
+      lawCannotUse.length  = 3;
+      var upperCaseCannotUse   = [];
 
-    lawCannotUse.forEach(function(cannotUse){
-      var trimmedCannotUse = lodashTrim((cannotUse));
-      upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
-    });
+      lawCannotUse.forEach(function(cannotUse){
+        var trimmedCannotUse = lodashTrim((cannotUse));
+        upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
+      });
 
-    lawCannotUse = upperCaseCannotUse.join();
+      lawCannotUse = upperCaseCannotUse.join();
+
+    } else {
+      lawCannotUse = lodashCapitalize(lawCannotUse);
+    }
 
     var lawForMap = {
       name: law.name,

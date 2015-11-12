@@ -2,7 +2,7 @@ class Punishments {
 
   constructor() {
     this._punishementStorage = [
-      "gold", "jail", "xp", "hp", "mp", "tp", "currencies"
+      "gold", "xp", "hp", "mp", "tp"
     ]
   }
 

@@ -2855,8 +2855,7 @@ Game_Action.prototype.apply = function (target) {
 
       // Punish the user for breaking a law, assuming they have.
       if (target instanceof Game_Enemy) {
-        var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name);
-
+        var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name, this.subject());
         if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
           processWhatShouldHappenOnHit.punishPlayer();
         }
@@ -2884,10 +2883,11 @@ var LawsForMap = require('../law_storage/laws_for_map');
 var lodashFindWhere = require('../../../node_modules/lodash/collection/findWhere');
 
 var ProcessBrokenLaw = (function () {
-  function ProcessBrokenLaw(nameOfAction) {
+  function ProcessBrokenLaw(nameOfAction, actorWhoBrokeLaw) {
     _classCallCheck(this, ProcessBrokenLaw);
 
     this._nameOfAction = nameOfAction;
+    this._actorWhobrokeLaw = actorWhoBrokeLaw;
   }
 
   _createClass(ProcessBrokenLaw, [{
@@ -2903,9 +2903,77 @@ var ProcessBrokenLaw = (function () {
       return false;
     }
   }, {
+    key: 'getBrokenLawObject',
+    value: function getBrokenLawObject() {
+      for (var i = 0; i < LawsForMap.getLawsForMap().length; i++) {
+        if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction)) {
+          window._brokenLawObject = LawsForMap.getLawsForMap()[i];
+          return LawsForMap.getLawsForMap()[i];
+        }
+      }
+    }
+  }, {
     key: 'punishPlayer',
     value: function punishPlayer() {
-      // Do something.
+      if (this.getBrokenLawObject().punishment === 'gold') {
+        if ($gameParty._gold > 0) {
+          $gameParty._gold -= this.getBrokenLawObject().amount;
+
+          if ($gameParty._gold < 0) {
+            $gameParty._gold = 0;
+          }
+        } else {
+          window._lawMessageForLawBattleWindow = 'Party has no more gold.';
+        }
+      } else {
+        this.handleOtherPunishments(this.getBrokenLawObject());
+      }
+    }
+
+    /**
+     * Handle various punishments for player.
+     */
+  }, {
+    key: 'handleOtherPunishments',
+    value: function handleOtherPunishments(lawObject) {
+      switch (lawObject.punishment) {
+        case 'hp':
+          var health = this._actorWhobrokeLaw._hp;
+          health -= lawObject.amount;
+
+          if (health <= 0) {
+            this._actorWhobrokeLaw._hp = 0;
+            this._actorWhobrokeLaw.die();
+            this._actorWhobrokeLaw.performCollapse();
+          } else {
+            this._actorWhobrokeLaw._hp = health;
+          }
+          break;
+        case 'mp':
+          var mp = this._actorWhobrokeLaw._mp;
+          mp -= lawObject.amount;
+
+          if (mp <= 0) {
+            this._actorWhobrokeLaw._mp = 0;
+          } else {
+            this._actorWhobrokeLaw._mp = mp;
+          }
+
+          break;
+        case 'tp':
+          var tp = this._actorWhobrokeLaw._tp;
+          tp -= lawObject.amount;
+
+          if (tp <= 0) {
+            this._actorWhobrokeLaw._tp = 0;
+          } else {
+            this._actorWhobrokeLaw._tp = tp;
+          }
+          break;
+        case 'xp':
+          this._actorWhobrokeLaw.changeExp(-lawObject.amount, true);
+          break;
+      }
     }
   }]);
 
@@ -2913,6 +2981,8 @@ var ProcessBrokenLaw = (function () {
 })();
 
 module.exports = ProcessBrokenLaw;
+window._lawMessageForLawBattleWindow = null;
+window._brokenLawObject = null;
 
 },{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":68}],68:[function(require,module,exports){
 'use strict';
@@ -2934,17 +3004,22 @@ var LawsForMap = (function () {
   _createClass(LawsForMap, null, [{
     key: 'storeLaw',
     value: function storeLaw(law) {
+      var lawCannotUse = null;
 
-      var lawCannotUse = law.cantUse.split(',');
-      lawCannotUse.length = 3;
-      var upperCaseCannotUse = [];
+      if (law.cantUse.indexOf(',') !== -1) {
+        lawCannotUse = law.cantUse.split(',');
+        lawCannotUse.length = 3;
+        var upperCaseCannotUse = [];
 
-      lawCannotUse.forEach(function (cannotUse) {
-        var trimmedCannotUse = lodashTrim(cannotUse);
-        upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
-      });
+        lawCannotUse.forEach(function (cannotUse) {
+          var trimmedCannotUse = lodashTrim(cannotUse);
+          upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
+        });
 
-      lawCannotUse = upperCaseCannotUse.join();
+        lawCannotUse = upperCaseCannotUse.join();
+      } else {
+        lawCannotUse = lodashCapitalize(lawCannotUse);
+      }
 
       var lawForMap = {
         name: law.name,
@@ -3040,7 +3115,7 @@ var Punishments = (function () {
   function Punishments() {
     _classCallCheck(this, Punishments);
 
-    this._punishementStorage = ["gold", "jail", "xp", "hp", "mp", "tp", "currencies"];
+    this._punishementStorage = ["gold", "xp", "hp", "mp", "tp"];
   }
 
   _createClass(Punishments, [{
@@ -3128,7 +3203,37 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":73}],73:[function(require,module,exports){
+},{"../windows/laws_window":74}],73:[function(require,module,exports){
+"use strict";
+
+var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge;
+Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
+  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+    var color3 = this.gaugeBackColor();
+    var fillW = Math.max(0, Math.floor(dw * rate));
+    var gaugeH = this.gaugeHeight();
+    var gaugeY = dy + this.lineHeight() - gaugeH - 2;
+
+    if (eval(Yanfly.Param.GaugeOutline)) {
+      this.contents.fillRect(dx, gaugeY - 1, dw + 2, gaugeH + 2, color3);
+      dx += 1;
+    } else {
+      var fillW = Math.max(0, Math.floor(dw * rate));
+      var gaugeY = dy + this.lineHeight() - gaugeH - 2;
+      this.contents.fillRect(dx, gaugeY, dw, gaugeH, color3);
+    }
+
+    if (isNaN(fillW)) {
+      this.contents.gradientFillRect(dx, gaugeY, 0, gaugeH, color1, color2);
+    } else {
+      this.contents.gradientFillRect(dx, gaugeY, fillW, gaugeH, color1, color2);
+    }
+  } else {
+    oldWindowBasePrototypeDrawGaugeMethod.call(this, dx, dy, dw, rate, color1, color2);
+  }
+};
+
+},{}],74:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3228,4 +3333,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":63}]},{},[65,71,66]);
+},{"../../flare_window_base":63}]},{},[73,65,71,66]);
