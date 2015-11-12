@@ -11,19 +11,19 @@ class LawsForMap {
     lawCannotUse.length  = 3;
     var upperCaseCannotUse   = [];
 
-
-
     lawCannotUse.forEach(function(cannotUse){
       var trimmedCannotUse = lodashTrim((cannotUse));
       upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
     });
+
+    lawCannotUse = upperCaseCannotUse.join();
 
     var lawForMap = {
       name: law.name,
       punishment: law.punishment,
       amount: law.amount,
       icon: law.icon,
-      cantUse: upperCaseCannotUse
+      cantUse: lawCannotUse
     }
 
     var foundItem = lodashFindWhere(window._lawsForMap, function(law) {

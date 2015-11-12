@@ -49,7 +49,6 @@ class LawWindow extends FlareWindowBase {
 
     var self = this;
     laws.map(function(law){
-
         var lawCantUse = law.cantUse.split(',');
         lawCantUse.length = 3;
         lawCantUse = lawCantUse.join();

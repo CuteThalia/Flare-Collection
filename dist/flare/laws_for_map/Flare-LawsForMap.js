@@ -2944,12 +2944,14 @@ var LawsForMap = (function () {
         upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
       });
 
+      lawCannotUse = upperCaseCannotUse.join();
+
       var lawForMap = {
         name: law.name,
         punishment: law.punishment,
         amount: law.amount,
         icon: law.icon,
-        cantUse: upperCaseCannotUse
+        cantUse: lawCannotUse
       };
 
       var foundItem = lodashFindWhere(window._lawsForMap, function (law) {
@@ -3199,7 +3201,6 @@ var LawWindow = (function (_FlareWindowBase) {
 
       var self = this;
       laws.map(function (law) {
-
         var lawCantUse = law.cantUse.split(',');
         lawCantUse.length = 3;
         lawCantUse = lawCantUse.join();
