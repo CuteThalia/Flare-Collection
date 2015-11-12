@@ -2720,7 +2720,7 @@ function TokenStream(buffer) {
 //     Token('WORD',  'a ',       8),
 //     Token('WORD',  'string ',  10)
 //   ]
-//  
+//
 function regex(type, regex) {
   var flags = arguments.length <= 2 || arguments[2] === undefined ? '' : arguments[2];
 
@@ -3926,7 +3926,6 @@ var CurrencyShop = (function () {
     value: function openShopWindow(currency, purchaseOnly) {
       _currencyShopInfo.currency_name = currency;
       this._createShopGoods(currency);
-      console.log(this._goods);
       SceneManager.push(Scene_Shop);
       SceneManager.prepareNextScene(this._goods, purchaseOnly);
     }

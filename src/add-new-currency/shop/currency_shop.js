@@ -24,7 +24,6 @@ class CurrencyShop {
   openShopWindow(currency, purchaseOnly) {
     _currencyShopInfo.currency_name = currency;
     this._createShopGoods(currency);
-    console.log(this._goods);
     SceneManager.push(Scene_Shop);
     SceneManager.prepareNextScene(this._goods, purchaseOnly);
   }

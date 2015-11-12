@@ -20,8 +20,13 @@ Game_Action.prototype.apply = function(target) {
           }
 
           // Punish the user for breaking a law, assuming they have.
-          var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name);
-          processWhatShouldHappenOnHit.punishPlayer();
+          if (target instanceof Game_Enemy) {
+            var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name);
+
+            if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+              processWhatShouldHappenOnHit.punishPlayer();
+            }
+          }
 
           this.item().effects.forEach(function(effect) {
               this.applyItemEffect(target, effect);
