@@ -33,14 +33,14 @@ gulp.task('make:flare-notification-window', function() {
       .pipe(gulp.dest('dist/flare/notify/'));
 });
 
-gulp.task('make:flare-judgepoints', function() {
+gulp.task('make:flare-laws-for-map', function() {
   return browserify({entries: [
-        'src/add-judge-points/flare_judge_points.js',
-        'src/add-judge-points/scene_map_updates/scene_map_update.js',
-        'src/add-judge-points/game_action_updates/game_action_updates.js',
+        'src/laws-for-map/flare_laws_for_map.js',
+        'src/laws-for-map/scene_map_updates/scene_map_update.js',
+        'src/laws-for-map/game_action_updates/game_action_updates.js',
       ]})
       .transform(babelify)
       .bundle()
-      .pipe(source('Flare-JudgePoints.js'))
-      .pipe(gulp.dest('dist/flare/judgepoints/'));
+      .pipe(source('Flare-LawsForMap.js'))
+      .pipe(gulp.dest('dist/flare/laws_for_map/'));
 });

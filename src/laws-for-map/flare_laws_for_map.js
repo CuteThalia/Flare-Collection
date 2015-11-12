@@ -34,7 +34,7 @@ var FlareLawMenu      = require('./menus/add_law_to_menu');
  * - You can ONLY have three "can't use" in the law. Any more I
  * cut it off.
  */
-class FlareJudgePoints {
+class FlareLawsForMap {
   static getLawsForMap() {
     return LawManagement.getLawsForMap();
   }
@@ -43,5 +43,5 @@ class FlareJudgePoints {
 var flareLawMenu = new FlareLawMenu
 flareLawMenu.menuHandler();
 
-window.FlareJudgePoints = FlareJudgePoints;
+window.FlareLawsForMap = FlareLawsForMap;
 window._lawsForMap = [];

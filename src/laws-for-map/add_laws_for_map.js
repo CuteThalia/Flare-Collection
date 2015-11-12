@@ -2,7 +2,7 @@ var extractAllOfType  = require('rmmv-mrp-core/option-parser').extractAllOfType;
 var Punishments       = require('./punishment_storage/punishments');
 var LawManagement     = require('./law_storage/laws_for_map');
 
-class JudgePoints {
+class AddLawsForMap {
 
   constructor() {
     this._punishments = new Punishments();
@@ -29,4 +29,4 @@ class JudgePoints {
   }
 }
 
-module.exports = JudgePoints;
+module.exports = AddLawsForMap;

@@ -2605,6 +2605,119 @@ function Lexer(_lexer) {
   };
 }
 },{}],62:[function(require,module,exports){
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Interace based class.
+ *
+ * Contains methods to be over ridden by sub classing.
+ * Contains methods to do with the core game scene.
+ *
+ * Flare Screen is to be subclassed and the methods to be implemented
+ * based on the API documentation provided below.
+ *
+ * @namespace FlareCollection
+ */
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FlareMenuSceneHandlerInterface = (function () {
+  function FlareMenuSceneHandlerInterface() {
+    _classCallCheck(this, FlareMenuSceneHandlerInterface);
+  }
+
+  /**
+   * This method allows you to create menu handlers.
+   *
+   * You can use this method to create your own menu items for the
+   * core game menu.
+   */
+
+  _createClass(FlareMenuSceneHandlerInterface, [{
+    key: "menuHandler",
+    value: function menuHandler() {}
+
+    /**
+     * Used to add a new window command to the menu.
+     */
+  }, {
+    key: "addCommandToGameMenu",
+    value: function addCommandToGameMenu() {}
+  }]);
+
+  return FlareMenuSceneHandlerInterface;
+})();
+
+module.exports = FlareMenuSceneHandlerInterface;
+
+},{}],63:[function(require,module,exports){
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * All Flare based items use this window base.
+ *
+ * Flare Window Base extends the Window Base Class
+ * and adds some additional generic helper methods
+ * that are useful for creating windows and their contents.
+ */
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowBase = (function (_Window_Base) {
+  _inherits(FlareWindowBase, _Window_Base);
+
+  function FlareWindowBase(args) {
+    _classCallCheck(this, FlareWindowBase);
+
+    _get(Object.getPrototypeOf(FlareWindowBase.prototype), "constructor", this).call(this, args);
+  }
+
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
+  _createClass(FlareWindowBase, [{
+    key: "flareDrawTextEx",
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.height = this.calcTextHeight(textState, false);
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+        return textState.x - x;
+      } else {
+        return 0;
+      }
+    }
+  }]);
+
+  return FlareWindowBase;
+})(Window_Base);
+
+module.exports = FlareWindowBase;
+
+},{}],64:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2615,14 +2728,14 @@ var extractAllOfType = require('rmmv-mrp-core/option-parser').extractAllOfType;
 var Punishments = require('./punishment_storage/punishments');
 var LawManagement = require('./law_storage/laws_for_map');
 
-var JudgePoints = (function () {
-  function JudgePoints() {
-    _classCallCheck(this, JudgePoints);
+var AddLawsForMap = (function () {
+  function AddLawsForMap() {
+    _classCallCheck(this, AddLawsForMap);
 
     this._punishments = new Punishments();
   }
 
-  _createClass(JudgePoints, [{
+  _createClass(AddLawsForMap, [{
     key: 'grabMapInformation',
     value: function grabMapInformation() {
       var noteBoxData = $dataMap.note;
@@ -2646,12 +2759,12 @@ var JudgePoints = (function () {
     }
   }]);
 
-  return JudgePoints;
+  return AddLawsForMap;
 })();
 
-module.exports = JudgePoints;
+module.exports = AddLawsForMap;
 
-},{"./law_storage/laws_for_map":66,"./punishment_storage/punishments":68,"rmmv-mrp-core/option-parser":60}],63:[function(require,module,exports){
+},{"./law_storage/laws_for_map":68,"./punishment_storage/punishments":70,"rmmv-mrp-core/option-parser":60}],65:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2695,69 +2808,72 @@ var FlareLawMenu = require('./menus/add_law_to_menu');
  * cut it off.
  */
 
-var FlareJudgePoints = (function () {
-  function FlareJudgePoints() {
-    _classCallCheck(this, FlareJudgePoints);
+var FlareLawsForMap = (function () {
+  function FlareLawsForMap() {
+    _classCallCheck(this, FlareLawsForMap);
   }
 
-  _createClass(FlareJudgePoints, null, [{
+  _createClass(FlareLawsForMap, null, [{
     key: 'getLawsForMap',
     value: function getLawsForMap() {
       return LawManagement.getLawsForMap();
     }
   }]);
 
-  return FlareJudgePoints;
+  return FlareLawsForMap;
 })();
 
 var flareLawMenu = new FlareLawMenu();
 flareLawMenu.menuHandler();
 
-window.FlareJudgePoints = FlareJudgePoints;
+window.FlareLawsForMap = FlareLawsForMap;
 window._lawsForMap = [];
 
-},{"./law_storage/laws_for_map":66,"./menus/add_law_to_menu":67}],64:[function(require,module,exports){
+},{"./law_storage/laws_for_map":68,"./menus/add_law_to_menu":69}],66:[function(require,module,exports){
 'use strict';
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
 
 var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply;
 Game_Action.prototype.apply = function (target) {
-    if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
-        var result = target.result();
-        this.subject().clearResult();
-        result.clear();
-        result.used = this.testApply(target);
-        result.missed = result.used && Math.random() >= this.itemHit(target);
-        result.evaded = !result.missed && Math.random() < this.itemEva(target);
-        result.physical = this.isPhysical();
-        result.drain = this.isDrain();
+  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+    var result = target.result();
+    this.subject().clearResult();
+    result.clear();
+    result.used = this.testApply(target);
+    result.missed = result.used && Math.random() >= this.itemHit(target);
+    result.evaded = !result.missed && Math.random() < this.itemEva(target);
+    result.physical = this.isPhysical();
+    result.drain = this.isDrain();
 
-        if (result.isHit()) {
-            if (this.item().damage.type > 0) {
-                result.critical = Math.random() < this.itemCri(target);
-                var value = this.makeDamageValue(target, result.critical);
-                this.executeDamage(target, value);
-            }
+    if (result.isHit()) {
+      if (this.item().damage.type > 0) {
+        result.critical = Math.random() < this.itemCri(target);
+        var value = this.makeDamageValue(target, result.critical);
+        this.executeDamage(target, value);
+      }
 
-            // Punish the user for breaking a law, assuming they have.
-            if (target instanceof Game_Enemy) {
-                var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name);
-                processWhatShouldHappenOnHit.punishPlayer();
-            }
+      // Punish the user for breaking a law, assuming they have.
+      if (target instanceof Game_Enemy) {
+        var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name);
 
-            this.item().effects.forEach(function (effect) {
-                this.applyItemEffect(target, effect);
-            }, this);
-
-            this.applyItemUserEffect(target);
+        if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+          processWhatShouldHappenOnHit.punishPlayer();
         }
-    } else {
-        oldGameActionPrototypeApplyMethod.call(this, target);
+      }
+
+      this.item().effects.forEach(function (effect) {
+        this.applyItemEffect(target, effect);
+      }, this);
+
+      this.applyItemUserEffect(target);
     }
+  } else {
+    oldGameActionPrototypeApplyMethod.call(this, target);
+  }
 };
 
-},{"../law_handler/process_broken_law":65}],65:[function(require,module,exports){
+},{"../law_handler/process_broken_law":67}],67:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2789,7 +2905,7 @@ var ProcessBrokenLaw = (function () {
   }, {
     key: 'punishPlayer',
     value: function punishPlayer() {
-      console.log(this.validatePlayerBrokeTheLaw());
+      // Do something.
     }
   }]);
 
@@ -2798,7 +2914,7 @@ var ProcessBrokenLaw = (function () {
 
 module.exports = ProcessBrokenLaw;
 
-},{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":66}],66:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":68}],68:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2856,7 +2972,7 @@ var LawsForMap = (function () {
 
 module.exports = LawsForMap;
 
-},{"../../../node_modules/lodash/collection/findWhere":3,"../../../node_modules/lodash/lang/isUndefined":52,"../../../node_modules/lodash/string/capitalize":56,"../../../node_modules/lodash/string/trim":57}],67:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":3,"../../../node_modules/lodash/lang/isUndefined":52,"../../../node_modules/lodash/string/capitalize":56,"../../../node_modules/lodash/string/trim":57}],69:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2911,7 +3027,7 @@ var AddLawToMenuAsMenuItem = (function (_FlareMenuSceneHandlerInterface) {
 
 module.exports = AddLawToMenuAsMenuItem;
 
-},{"../../flare_menu_scene_interface":72,"../scenes/flare_law_window_scene":70}],68:[function(require,module,exports){
+},{"../../flare_menu_scene_interface":62,"../scenes/flare_law_window_scene":72}],70:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2946,19 +3062,19 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{}],69:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 'use strict';
 
-var JudgePoints = require('../add_judge_points');
+var AddLawsForMap = require('../add_laws_for_map');
 
 var oldSceneMapPrototypeOnMapLoadedMethod = Scene_Map.prototype.onMapLoaded;
 Scene_Map.prototype.onMapLoaded = function () {
   oldSceneMapPrototypeOnMapLoadedMethod.call(this);
-  var flareJudgePoints = new JudgePoints();
-  flareJudgePoints.grabMapInformation();
+  var flarAddLawsForMap = new AddLawsForMap();
+  flarAddLawsForMap.grabMapInformation();
 };
 
-},{"../add_judge_points":62}],70:[function(require,module,exports){
+},{"../add_laws_for_map":64}],72:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3010,7 +3126,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":71}],71:[function(require,module,exports){
+},{"../windows/laws_window":73}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3111,117 +3227,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":73}],72:[function(require,module,exports){
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Interace based class.
- *
- * Contains methods to be over ridden by sub classing.
- * Contains methods to do with the core game scene.
- *
- * Flare Screen is to be subclassed and the methods to be implemented
- * based on the API documentation provided below.
- *
- * @namespace FlareCollection
- */
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var FlareMenuSceneHandlerInterface = (function () {
-  function FlareMenuSceneHandlerInterface() {
-    _classCallCheck(this, FlareMenuSceneHandlerInterface);
-  }
-
-  /**
-   * This method allows you to create menu handlers.
-   *
-   * You can use this method to create your own menu items for the
-   * core game menu.
-   */
-
-  _createClass(FlareMenuSceneHandlerInterface, [{
-    key: "menuHandler",
-    value: function menuHandler() {}
-
-    /**
-     * Used to add a new window command to the menu.
-     */
-  }, {
-    key: "addCommandToGameMenu",
-    value: function addCommandToGameMenu() {}
-  }]);
-
-  return FlareMenuSceneHandlerInterface;
-})();
-
-module.exports = FlareMenuSceneHandlerInterface;
-
-},{}],73:[function(require,module,exports){
-/**
- * @namespace FlareCollection
- */
-
-/**
- * All Flare based items use this window base.
- *
- * Flare Window Base extends the Window Base Class
- * and adds some additional generic helper methods
- * that are useful for creating windows and their contents.
- */
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FlareWindowBase = (function (_Window_Base) {
-  _inherits(FlareWindowBase, _Window_Base);
-
-  function FlareWindowBase(args) {
-    _classCallCheck(this, FlareWindowBase);
-
-    _get(Object.getPrototypeOf(FlareWindowBase.prototype), "constructor", this).call(this, args);
-  }
-
-  /**
-   * Custom drawtextEx function.
-   *
-   * We do not reset font settings, which is what the default method does.
-   * I dont like giant text in my windows.
-   *
-   * It is usp to the implementor to call: this.resetFontSettings();
-   */
-
-  _createClass(FlareWindowBase, [{
-    key: "flareDrawTextEx",
-    value: function flareDrawTextEx(text, x, y) {
-      if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
-        textState.text = this.convertEscapeCharacters(text);
-        textState.height = this.calcTextHeight(textState, false);
-        while (textState.index < textState.text.length) {
-          this.processCharacter(textState);
-        }
-        return textState.x - x;
-      } else {
-        return 0;
-      }
-    }
-  }]);
-
-  return FlareWindowBase;
-})(Window_Base);
-
-module.exports = FlareWindowBase;
-
-},{}]},{},[63,69,64]);
+},{"../../flare_window_base":63}]},{},[65,71,66]);
