@@ -4,6 +4,7 @@
 
 var FlareNotificationWindow = require('./windows/flare_notification_window');
 var NotificationOptions     = require('./notification_options/notification_options');
+var lodashIsUndefined       = require('../../node_modules/lodash/lang/isUndefined');
 
 /*:
  * @plugindesc Allows you to create notifications for player based events.
@@ -24,29 +25,37 @@ var NotificationOptions     = require('./notification_options/notification_optio
  * Default: false
  * @default false
  *
+ * @param Calulation For Fade out
+ * @desc calculate how soon after fade in we should fade out.
+ * Default: (175 / 2) + 50
+ * @default (175 / 2) + 50
+ *
+ * @param Show Window?
+ * @desc Do we want a window behind the text?
+ * Default: true
+ * @default true
+ *
  * @help
  *
  * Notifications can be created easily, on the fly. Its amazing how easily they
  * can  be created. lets create one together:
  *
- * FlareNotification.notify(name, text);
- *
- * - name: String, name is the name of the window. All windows are pushed to
- *         a queue that is then cycled through over time. Time being the option
- *         of: Till Next Notification?
+ * FlareNotification.notify(text, stickToTop, fadeOutNearBottom);
  *
  * - text: String, accepts short code like color and icon.
+ * - StickToTop: Boolean, default false. Sticks to the top of the screen if enabled.
+ * - fadeOutNearBottom: Boolean, default false. Fades out using plugin configured fade out time.
  *
  * Text with short codes must use double slash:
  *
- * FlareNotification.notify("window name", "\\i[8] \\c[10]Hello World\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
  *
  * The name of the window can be the same for all of your notifications if
  * you wish. We use, first in, first out concept:
  *
- * FlareNotification.notify("window name", "\\i[8] \\c[10]Hello World\\c[0]");
- * FlareNotification.notify("window name", "\\i[8] \\c[10]Hello\\c[0]");
- * FlareNotification.notify("window name", "\\i[8] \\c[10]World\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]Hello\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]World\\c[0]");
  *
  * Hello World is First out then Hello and finally World.
  */
@@ -58,15 +67,21 @@ class FlareNotification {
    *
    * Creates a window for the que.
    *
-   * @param name - name of the window for the queue.
    * @param text - text for the window
    */
-  static notify(name, text, width) {
+  static notify(text, stayAtTop, fadeoutTowardsBottom) {
     this._arrayOfNotifications.push({
-      name:         name,
       windowMethod: new FlareNotificationWindow(),
       text:         text
     });
+
+    var stayAtTop            = false ? lodashIsUndefined(stayAtTop) : stayAtTop;
+    var fadeoutTowardsBottom = false ? lodashIsUndefined(fadeoutTowardsBottom) : fadeoutTowardsBottom;
+
+    window._windowOptions = {
+      stayAtTop:            stayAtTop,
+      fadeoutTowardsBottom: fadeoutTowardsBottom
+    };
   }
 
   /**
@@ -103,3 +118,6 @@ _NotificationOptions.createNotificationOptions();
 
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
+
+// Do Not touch or manipulate this.
+window._windowOptions = {};

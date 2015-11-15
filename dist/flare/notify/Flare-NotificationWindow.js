@@ -1,5 +1,28 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
+ * Checks if `value` is `undefined`.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
+ * @example
+ *
+ * _.isUndefined(void 0);
+ * // => true
+ *
+ * _.isUndefined(null);
+ * // => false
+ */
+function isUndefined(value) {
+  return value === undefined;
+}
+
+module.exports = isUndefined;
+
+},{}],2:[function(require,module,exports){
+/**
  * @namespace FlareNotification.
  */
 
@@ -11,6 +34,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var FlareNotificationWindow = require('./windows/flare_notification_window');
 var NotificationOptions = require('./notification_options/notification_options');
+var lodashIsUndefined = require('../../node_modules/lodash/lang/isUndefined');
 
 /*:
  * @plugindesc Allows you to create notifications for player based events.
@@ -31,29 +55,37 @@ var NotificationOptions = require('./notification_options/notification_options')
  * Default: false
  * @default false
  *
+ * @param Calulation For Fade out
+ * @desc calculate how soon after fade in we should fade out.
+ * Default: (175 / 2) + 50
+ * @default (175 / 2) + 50
+ *
+ * @param Show Window?
+ * @desc Do we want a window behind the text?
+ * Default: true
+ * @default true
+ *
  * @help
  *
  * Notifications can be created easily, on the fly. Its amazing how easily they
  * can  be created. lets create one together:
  *
- * FlareNotification.notify(name, text);
- *
- * - name: String, name is the name of the window. All windows are pushed to
- *         a queue that is then cycled through over time. Time being the option
- *         of: Till Next Notification?
+ * FlareNotification.notify(text, stickToTop, fadeOutNearBottom);
  *
  * - text: String, accepts short code like color and icon.
+ * - StickToTop: Boolean, default false. Sticks to the top of the screen if enabled.
+ * - fadeOutNearBottom: Boolean, default false. Fades out using plugin configured fade out time.
  *
  * Text with short codes must use double slash:
  *
- * FlareNotification.notify("window name", "\\i[8] \\c[10]Hello World\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
  *
  * The name of the window can be the same for all of your notifications if
  * you wish. We use, first in, first out concept:
  *
- * FlareNotification.notify("window name", "\\i[8] \\c[10]Hello World\\c[0]");
- * FlareNotification.notify("window name", "\\i[8] \\c[10]Hello\\c[0]");
- * FlareNotification.notify("window name", "\\i[8] \\c[10]World\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]Hello\\c[0]");
+ * FlareNotification.notify("\\i[8] \\c[10]World\\c[0]");
  *
  * Hello World is First out then Hello and finally World.
  */
@@ -71,15 +103,21 @@ var FlareNotification = (function () {
      *
      * Creates a window for the que.
      *
-     * @param name - name of the window for the queue.
      * @param text - text for the window
      */
-    value: function notify(name, text, width) {
+    value: function notify(text, stayAtTop, fadeoutTowardsBottom) {
       this._arrayOfNotifications.push({
-        name: name,
         windowMethod: new FlareNotificationWindow(),
         text: text
       });
+
+      var stayAtTop = false ? lodashIsUndefined(stayAtTop) : stayAtTop;
+      var fadeoutTowardsBottom = false ? lodashIsUndefined(fadeoutTowardsBottom) : fadeoutTowardsBottom;
+
+      window._windowOptions = {
+        stayAtTop: stayAtTop,
+        fadeoutTowardsBottom: fadeoutTowardsBottom
+      };
     }
 
     /**
@@ -124,7 +162,10 @@ _NotificationOptions.createNotificationOptions();
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
 
-},{"./notification_options/notification_options":2,"./windows/flare_notification_window":4}],2:[function(require,module,exports){
+// Do Not touch or manipulate this.
+window._windowOptions = {};
+
+},{"../../node_modules/lodash/lang/isUndefined":1,"./notification_options/notification_options":3,"./windows/flare_notification_window":5}],3:[function(require,module,exports){
 /**
  * @namespace FlareNotification.
  */
@@ -158,7 +199,9 @@ var NotificationOptions = (function () {
       this._notificationOptions = {
         time_till_next_window: FlareNotificationWindow['Till Next Notification?'],
         fade_out_time: FlareNotificationWindow['How Long Till Notification Fade Out?'],
-        stickToTop: FlareNotificationWindow['Should I stay at the top?']
+        stick_to_top: FlareNotificationWindow['Should I stay at the top?'],
+        fade_out_calculation: FlareNotificationWindow['Calulation For Fade out'],
+        show_window: FlareNotificationWindow['Show Window?']
       };
     }
   }, {
@@ -176,7 +219,7 @@ _NotificationOptions._notificationOptions = null;
 
 module.exports = NotificationOptions;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /**
  * @namespace FlareNotification.
  */
@@ -238,7 +281,7 @@ Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) 
   this._waitForWindowToClose = 75;
 };
 
-},{"../windows/flare_notification_window":4}],4:[function(require,module,exports){
+},{"../windows/flare_notification_window":5}],5:[function(require,module,exports){
 /**
  * @namespace FlareNotification.
  */
@@ -283,6 +326,8 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
       this.contentsOpacity = 0;
       this.opacity = 0;
       this._showCount = 0;
+      this._storeShowCount = 0;
+      this._fadeInFinished = false;
 
       this.refresh();
     }
@@ -303,9 +348,11 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
       if (this._showCount > 0) {
         this.updateFadeIn();
-        if (!_NotificationOptions.getNotificationOptions().stickToTop) {
+
+        if (window._windowOptions.stayAtTop || !_NotificationOptions.getNotificationOptions().stick_to_top) {
           this.y += 3;
         }
+
         this._showCount--;
       } else {
         this.updateFadeOut();
@@ -319,7 +366,19 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
   }, {
     key: 'updateFadeIn',
     value: function updateFadeIn() {
-      this.contentsOpacity += 16;
+      if (this.contentsOpacity === 255) {
+        this._fadeInFinished = true;
+      }
+
+      if (this._fadeInFinished) {
+        console.log(this._storeShowCountHalf);
+        if (window._windowOptions.fadeoutTowardsBottom && this._showCount < this._storeShowCountHalf) {
+
+          this.contentsOpacity -= 16;
+        }
+      } else {
+        this.contentsOpacity += 16;
+      }
     }
   }, {
     key: 'open',
@@ -334,6 +393,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
       }
 
       this._showCount = fadeOutTime;
+      this._storeShowCountHalf = Math.round(eval(_NotificationOptions.getNotificationOptions().fade_out_calculation));
     }
   }, {
     key: 'close',
@@ -344,7 +404,11 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
     key: 'refresh',
     value: function refresh(text) {
       var width = this.contentsWidth();
-      this.drawBackground(0, 0, width, this.lineHeight());
+
+      if (_NotificationOptions.getNotificationOptions().show_window === true) {
+        this.drawBackground(0, 0, width, this.lineHeight());
+      }
+
       this.flareDrawTextEx(text, 0, 0, width, 'center');
       this.resetFontSettings();
     }
@@ -363,7 +427,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareNotificationWindow;
 
-},{"../../flare_window_base":5}],5:[function(require,module,exports){
+},{"../../flare_window_base":6}],6:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -425,4 +489,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[1,3]);
+},{}]},{},[2,4]);

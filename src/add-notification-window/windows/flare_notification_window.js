@@ -26,6 +26,8 @@ class FlareNotificationWindow extends FlareWindowBase {
     this.contentsOpacity = 0;
     this.opacity = 0;
     this._showCount = 0;
+    this._storeShowCount = 0;
+    this._fadeInFinished = false;
 
     this.refresh();
   }
@@ -43,9 +45,12 @@ class FlareNotificationWindow extends FlareWindowBase {
 
     if (this._showCount > 0) {
       this.updateFadeIn();
-      if (!_NotificationOptions.getNotificationOptions().stickToTop) {
+
+      if (window._windowOptions.stayAtTop ||
+          !_NotificationOptions.getNotificationOptions().stick_to_top) {
         this.y += 3;
       }
+
       this._showCount--;
     } else {
       this.updateFadeOut();
@@ -57,7 +62,20 @@ class FlareNotificationWindow extends FlareWindowBase {
   }
 
   updateFadeIn() {
-    this.contentsOpacity += 16
+    if (this.contentsOpacity === 255) {
+      this._fadeInFinished = true;
+    }
+
+    if (this._fadeInFinished) {
+      console.log(this._storeShowCountHalf);
+      if (window._windowOptions.fadeoutTowardsBottom &&
+          this._showCount < this._storeShowCountHalf) {
+
+        this.contentsOpacity -= 16;
+      }
+    } else {
+      this.contentsOpacity += 16
+    }
   }
 
   open(text) {
@@ -70,7 +88,8 @@ class FlareNotificationWindow extends FlareWindowBase {
       throw new Error('Sorry but: ' + fadeOutTime + ' is not a number');
     }
 
-    this._showCount = fadeOutTime;
+    this._showCount          = fadeOutTime;
+    this._storeShowCountHalf = Math.round(eval(_NotificationOptions.getNotificationOptions().fade_out_calculation));
   }
 
   close() {
@@ -79,7 +98,11 @@ class FlareNotificationWindow extends FlareWindowBase {
 
   refresh(text) {
     var width = this.contentsWidth();
-    this.drawBackground(0, 0, width, this.lineHeight())
+
+    if (_NotificationOptions.getNotificationOptions().show_window === true) {
+      this.drawBackground(0, 0, width, this.lineHeight())
+    }
+
     this.flareDrawTextEx(text, 0, 0, width, 'center');
     this.resetFontSettings();
   }
