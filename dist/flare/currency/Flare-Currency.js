@@ -3203,9 +3203,9 @@ var CurrencyShop = require('./shop/currency_shop');
  * Currencies can be used in game to buy items that require that specific
  * currency. For example maybe Demonic Armor needs 5 Demonic Runes. you
  * would create a currency called Demonic Runes, with a description of:
- * "Used to buy Demonic Armour" and then set an icon index.
+ * "Used to buy Demonic Armor" and then set an icon index.
  *
- * Descriptions must be kept SUPER SUPER short. yes we do allow short codes
+ * Descriptions must be kept SUPER SUPER short. Yes we do allow short codes
  * but no we do not do anything like word wrapping. Keep the concept of:
  *
  * Used to buy: x
@@ -3216,7 +3216,7 @@ var CurrencyShop = require('./shop/currency_shop');
  *
  * The following tags can be applied to enemies:
  *
- * <currencyName name:"Name", amount: 10, chnace: 90>
+ * <currencyName name:"Name", amount: 10, chance: 90>
  *
  * "Name"     - Currency Name, can have color short codes.
  * amount     - Can be either an interger or a string containing: "1 ~ x"
@@ -3227,13 +3227,13 @@ var CurrencyShop = require('./shop/currency_shop');
  * Percentage is optional, with out it, all currencies
  * have a 100% drop rate. doing:
  *
- * <currencies: "Demon Teeth", 80, 15>
+ * <currencyName name:"Demon Teeth", amount: "10 ~ 765", chance: 50>
  *
- * Means you have a 15% chance to get 80 Demon Teeth, How ever:
+ * Means you have a 50% chance to get betwen 10 and 765 Demon Teeth.
  *
- * <currencies: "Demon Teeth", 80>
+ * <currencyName name:"Demon Teeth", amount: 10>
  *
- * Means you have a 100% chance of getting 80 Demon Teeth off the enemy.
+ * Means you have a 100% chance to get 10 Demon Teeth
  *
  * === Note Tags - Setting up a shop ===
  *
@@ -3269,6 +3269,11 @@ var CurrencyShop = require('./shop/currency_shop');
  * To use this with Yanfly victory after math all you have to do is add:
  * currency to the Victory Order. For example: exp custom drops currency
  *
+ * === Yanfly Menu Manager ===
+ *
+ * This script automatically works with Yanfly Menu manger.
+ * You don't need to do anything sepcial.
+ *
  * === Shop Compatability and Programming ===
  *
  * Shops are done such that they are backwards compatible and should work
@@ -3295,6 +3300,16 @@ var CurrencyShop = require('./shop/currency_shop');
  *
  * getCurrencyStore() - Returns an array of objects that is the store and
  * the time its called.
+ *
+ * Regarding Enemies:
+ *
+ * We add two new keys on to enemy objects.
+ *
+ * enemyCurrencyRewardData, which is an array of objects that holds information about each
+ * currency associated with that enemy.
+ *
+ * gainCurrencyOnBattleWin, which is an array of objects containing name and a boolean value.
+ * this is calculated and assigned to an enemy when the battle begins.
  *
  * === Public API ===
  *
