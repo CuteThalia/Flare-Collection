@@ -25,8 +25,7 @@ All windows are added to a cue, first in first out.
 For example an event can have:
 
 ```javascript
-FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", true ,true);
-FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", true, false);
+FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", false, true);
 FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", true);
 
 FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
