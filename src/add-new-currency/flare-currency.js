@@ -113,6 +113,9 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * Used to buy: x
   *
+  * Currency Name must be present or we will not draw its information to
+  * the list of currencies.
+  *
   * === Note Tags - Enemies ===
   *
   * For Enemies:

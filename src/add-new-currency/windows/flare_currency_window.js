@@ -53,7 +53,7 @@ class FlareCurrencyWindow extends FlareWindowBase {
 
     var self = this;
     currencies.map(function(currency){
-      if (typeof currency === 'object') {
+      if (typeof currency === 'object' && currency.name !== '') {
 
         self.drawIcon(currency.icon, 10, baseYForText );
         self.flareDrawTextEx(currency.name, 60, baseYForText - 10);

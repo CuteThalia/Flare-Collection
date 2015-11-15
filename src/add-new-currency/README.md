@@ -30,6 +30,10 @@ Currencies with out a percentage default to 100%. When you set the percentage yo
 > and x can be what ever value you want. This allows you to have random currencies rewarded after
 > a battle is finished.
 
+> ### ATTN!
+>
+> Currency Name must be present or we will not draw the currency information to the screen.
+
 ## Shops
 
 Shops are easy to build in Flare Currencies. It's quite amazing too.
