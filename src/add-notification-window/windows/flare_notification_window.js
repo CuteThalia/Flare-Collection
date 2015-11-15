@@ -67,7 +67,6 @@ class FlareNotificationWindow extends FlareWindowBase {
     }
 
     if (this._fadeInFinished) {
-      console.log(this._storeShowCountHalf);
       if (window._windowOptions.fadeoutTowardsBottom &&
           this._showCount < this._storeShowCountHalf) {
 
