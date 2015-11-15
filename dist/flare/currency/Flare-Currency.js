@@ -3216,10 +3216,12 @@ var CurrencyShop = require('./shop/currency_shop');
  *
  * The following tags can be applied to enemies:
  *
- * <currencies: "Name", amount, percentage>
+ * <currencyName name:"Name", amount: 10, chnace: 90>
  *
  * "Name"     - Currency Name, can have color short codes.
- * amount     - Integer, how much does the enemy give?
+ * amount     - Can be either an interger or a string containing: "1 ~ x"
+ *              the string of: "1~x" means random number between 1 and x.
+ *              This value is determined on reward.
  * percentage - Optional integer. percentage of drop (see below).
  *
  * Percentage is optional, with out it, all currencies
@@ -3658,6 +3660,15 @@ window._currencyShopInfo = { currency_name: null };
 'use strict';
 
 var lodashClone = require('../../../node_modules/lodash/lang/clone');
+var RewardCurrencies = require('../update_core_data_manager/reward_currencies_check');
+
+var oldBattleManagerSetupMethod = BattleManager.setup;
+BattleManager.setup = function (troopId, canEscape, canLose) {
+  oldBattleManagerSetupMethod.call(this, troopId, canEscape, canLose);
+
+  var rewardCurrencies = new RewardCurrencies();
+  rewardCurrencies.createCheckObject();
+};
 
 var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
 BattleManager.displayRewards = function () {
@@ -3730,11 +3741,12 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../../../node_modules/lodash/lang/clone":51}],72:[function(require,module,exports){
+},{"../../../node_modules/lodash/lang/clone":51,"../update_core_data_manager/reward_currencies_check":74}],72:[function(require,module,exports){
 'use strict';
 
-var RewardCurrenciesCheck = require('./reward_currencies_check');
 var GatherItemsForShop = require('./gather_items');
+var extractAllOfType = require('rmmv-mrp-core/option-parser').extractAllOfType;
+var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function () {
@@ -3744,10 +3756,6 @@ DataManager.isDatabaseLoaded = function () {
 
   // process Note tags
   this.flareProcessEnemyNoteTags($dataEnemies);
-
-  // Set up rewards for enemies.
-  var rewardCurrenciesCheck = new RewardCurrenciesCheck();
-  rewardCurrenciesCheck.createCheckObject();
 
   // Set up the currency shops
   new GatherItemsForShop();
@@ -3778,14 +3786,12 @@ DataManager.extractSaveContents = function (contents) {
  * @param $dataEnemies enemies
  */
 DataManager.flareProcessEnemyNoteTags = function (enemies) {
-  var noteTag = /<currency:\s*([^,>]+),\s*([^,>]+)(,\s*([^,>]+))?>/i;
-
   for (var i = 1; i < enemies.length; i++) {
-    var enemy = enemies[i];
-    var enemyNoteData = enemy.note.split(/[\r\n]+/);
+    var enemyNoteData = extractAllOfType(enemies[i].note, 'currencyToGain');
+    console.log(enemies[i].note, enemyNoteData);
 
-    enemy.enemyCurrencyRewardData = [];
-    this._processEnemyNoteDataForCurrencyReward(enemy, enemyNoteData, noteTag);
+    enemies[i].enemyCurrencyRewardData = [];
+    this._processEnemyNoteDataForCurrencyReward(enemies[i], enemyNoteData);
   }
 };
 
@@ -3796,19 +3802,10 @@ DataManager.flareProcessEnemyNoteTags = function (enemies) {
  * enemies can have multiple currencies attached to them.
  *
  * @param Object enemy
- * @param Array enemyNoteData
- * @param regex noteTag
+ * @param json enemyNoteData
  */
-DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteData, noteTag) {
-  for (var n = 0; n < enemyNoteData.length; n++) {
-    var line = enemyNoteData[n];
-
-    if (line.match(noteTag)) {
-      var lineMatched = line.match(noteTag);
-
-      enemy.enemyCurrencyRewardData.push(this._createCurrencyRewardObject(lineMatched));
-    }
-  }
+DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteData) {
+  enemy.enemyCurrencyRewardData.push(this._createCurrencyRewardObject(enemyNoteData));
 };
 
 /**
@@ -3819,15 +3816,15 @@ DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteD
  *
  * @param Array lineMatched
  */
-DataManager._createCurrencyRewardObject = function (lineMatched) {
-  if (lineMatched[4] !== undefined) {
-    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: parseInt(lineMatched[4]) };
+DataManager._createCurrencyRewardObject = function (currencyData) {
+  if (!lodashIsUndefined(currencyData.chance)) {
+    return { name: currencyData.name, amount: currencyData.amount, percentage: parseInt(currencyData.chance) };
   } else {
-    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: 100 };
+    return { name: currencyData.name, amount: currencyData.amount, percentage: 100 };
   }
 };
 
-},{"./gather_items":73,"./reward_currencies_check":74}],73:[function(require,module,exports){
+},{"../../../node_modules/lodash/lang/isUndefined":58,"./gather_items":73,"rmmv-mrp-core/option-parser":64}],73:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */

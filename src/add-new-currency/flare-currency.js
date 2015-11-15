@@ -119,10 +119,12 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * The following tags can be applied to enemies:
   *
-  * <currencies: "Name", amount, percentage>
+  * <currencyName name:"Name", amount: 10, chnace: 90>
   *
   * "Name"     - Currency Name, can have color short codes.
-  * amount     - Integer, how much does the enemy give?
+  * amount     - Can be either an interger or a string containing: "1 ~ x"
+  *              the string of: "1~x" means random number between 1 and x.
+  *              This value is determined on reward.
   * percentage - Optional integer. percentage of drop (see below).
   *
   * Percentage is optional, with out it, all currencies

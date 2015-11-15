@@ -1,4 +1,13 @@
-var lodashClone = require('../../../node_modules/lodash/lang/clone');
+var lodashClone      = require('../../../node_modules/lodash/lang/clone');
+var RewardCurrencies = require('../update_core_data_manager/reward_currencies_check');
+
+var oldBattleManagerSetupMethod = BattleManager.setup;
+BattleManager.setup = function(troopId, canEscape, canLose) {
+    oldBattleManagerSetupMethod.call(this, troopId, canEscape, canLose)
+
+    var rewardCurrencies = new RewardCurrencies();
+    rewardCurrencies.createCheckObject();
+};
 
 var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
 BattleManager.displayRewards = function() {
@@ -29,7 +38,6 @@ BattleManager._gainCurrencyMessage = function(enemy) {
   var self   = this;
   var baseY  = 0;
   var data   = lodashClone(enemy.enemyCurrencyRewardData);
-
 
   enemy.gainCurrencyOnBattleWin.forEach(function(gainCurrency) {
     if (gainCurrency.doWeGainCurrency &&
