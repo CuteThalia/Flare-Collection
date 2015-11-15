@@ -112,9 +112,12 @@ BattleManager._getCurrenciesAndRewardThem = function(enemy) {
 
           if (!lodashIsUndefined(amountFound)) {
             window.FlareCurrencies.addAmount(data[0].name, amountFound.amount);
-            data.shift();
             self._gainCurrencies.shift();
+          } else if (data.length > 0) {
+            window.FlareCurrencies.addAmount(data[0].name, data[0].amount);
           }
+
+          data.shift();
         } else {
           var amountToGain = self.howMuchToGive(data);
           self._gainCurrencies.push({name: data[0].name, amount: amountToGain});

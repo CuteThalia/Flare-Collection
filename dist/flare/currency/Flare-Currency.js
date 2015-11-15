@@ -3378,7 +3378,7 @@ var FlareCurrencies = (function () {
         throw new Error('Currency not found. Tried looking for: ' + currencyName + ' is the spelling right?');
       }
 
-      this._addAmount(currencyObject, currencyAmount);
+      this._addAmount(currencyObject, parseInt(currencyAmount));
     }
   }, {
     key: 'openShop',
@@ -3428,8 +3428,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-// Private array, global.
-window._gainAmount = [];
+window._baseYForText = 0;
 
 },{"../../node_modules/lodash/collection/find":3,"./shop/currency_shop":70}],69:[function(require,module,exports){
 /**
@@ -3765,9 +3764,12 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
 
         if (!lodashIsUndefined(amountFound)) {
           window.FlareCurrencies.addAmount(data[0].name, amountFound.amount);
-          data.shift();
           self._gainCurrencies.shift();
+        } else if (data.length > 0) {
+          window.FlareCurrencies.addAmount(data[0].name, data[0].amount);
         }
+
+        data.shift();
       } else {
         var amountToGain = self.howMuchToGive(data);
         self._gainCurrencies.push({ name: data[0].name, amount: amountToGain });
@@ -4748,24 +4750,28 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
   }, {
     key: '_getCurrenciesAndRewardThem',
     value: function _getCurrenciesAndRewardThem(enemy) {
-      var self = this;
-      var baseY = 0;
       var data = lodashClone(enemy.enemyCurrencyRewardData);
 
-      enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
-        if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
+      for (var i = 0; i < enemy.gainCurrencyOnBattleWin.length; i++) {
+        var enemyRewardData = enemy.gainCurrencyOnBattleWin[i];
+
+        if (enemyRewardData instanceof Object && enemyRewardData.doWeGainCurrency && Array.isArray(data) && data.length > 0 && enemyRewardData.currency_name === data[0].name) {
+
           var amountToGain = lodashFind(BattleManager._gainCurrencies, function (amount) {
             return amount.name === data[0].name;
           });
-
+          console.log(window._baseYForText);
           if (!lodashIsUndefined(amountToGain)) {
-            self.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, baseY, 500, 'left');
-            data.shift();
+            this.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, window._baseYForText, 500, 'left');
             BattleManager._gainCurrencies.shift();
-            baseY += 45;
+          } else {
+            this.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, window._baseYForText, 500, 'left');
           }
+
+          window._baseYForText += 45;
+          data.shift();
         }
-      });
+      }
     }
   }]);
 

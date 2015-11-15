@@ -49,29 +49,33 @@ class FlareCurrencyRewardWindow extends Window_Base {
   }
 
   _getCurrenciesAndRewardThem(enemy) {
-    var self   = this;
-    var baseY  = 0;
     var data   = lodashClone(enemy.enemyCurrencyRewardData);
 
+    for (var i = 0; i < enemy.gainCurrencyOnBattleWin.length; i++) {
+      var enemyRewardData = enemy.gainCurrencyOnBattleWin[i];
 
-    enemy.gainCurrencyOnBattleWin.forEach(function(gainCurrency) {
-      if (gainCurrency.doWeGainCurrency &&
-          Array.isArray(data) &&
-          data.length > 0 &&
-          gainCurrency.currency_name === data[0].name)
-      {
-          var amountToGain = lodashFind(BattleManager._gainCurrencies, function(amount){
-            return amount.name === data[0].name;
-          });
+      if (enemyRewardData instanceof Object &&
+        enemyRewardData.doWeGainCurrency &&
+        Array.isArray(data) &&
+        data.length > 0 &&
+        enemyRewardData.currency_name === data[0].name) {
 
-          if (!lodashIsUndefined(amountToGain)) {
-            self.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, baseY, 500, 'left');
-            data.shift();
-            BattleManager._gainCurrencies.shift();
-            baseY += 45;
-          }
+        var amountToGain = lodashFind(BattleManager._gainCurrencies, function(amount){
+          return amount.name === data[0].name;
+        });
+        console.log(window._baseYForText);
+        if (!lodashIsUndefined(amountToGain)) {
+          this.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, window._baseYForText, 500, 'left');
+          BattleManager._gainCurrencies.shift();
+
+        } else {
+          this.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, window._baseYForText, 500, 'left');
+        }
+
+        window._baseYForText += 45;
+        data.shift();
       }
-    });
+    }
   }
 }
 

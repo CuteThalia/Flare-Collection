@@ -273,7 +273,7 @@ class FlareCurrencies {
       throw new Error('Currency not found. Tried looking for: ' + currencyName + ' is the spelling right?')
     }
 
-    this._addAmount(currencyObject, currencyAmount)
+    this._addAmount(currencyObject, parseInt(currencyAmount))
   }
 
   static openShop(currency, purchaseOnly) {
@@ -318,5 +318,4 @@ class FlareCurrencies {
 // Create public API.
 window.FlareCurrencies = FlareCurrencies;
 
-// Private array, global.
-window._gainAmount = [];
+window._baseYForText = 0;
