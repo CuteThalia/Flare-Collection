@@ -3428,6 +3428,9 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
+// Private array, global.
+window._gainAmount = [];
+
 },{"../../node_modules/lodash/collection/find":3,"./shop/currency_shop":70}],69:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
@@ -3660,6 +3663,8 @@ window._currencyShopInfo = { currency_name: null };
 'use strict';
 
 var lodashClone = require('../../../node_modules/lodash/lang/clone');
+var lodashFind = require('../../../node_modules/lodash/collection/find');
+var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
 var RewardCurrencies = require('../update_core_data_manager/reward_currencies_check');
 
 var oldBattleManagerSetupMethod = BattleManager.setup;
@@ -3668,10 +3673,13 @@ BattleManager.setup = function (troopId, canEscape, canLose) {
 
   var rewardCurrencies = new RewardCurrencies();
   rewardCurrencies.createCheckObject();
+
+  this._gainCurrencies = [];
 };
 
 var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
 BattleManager.displayRewards = function () {
+  console.log('displayed');
   oldBattleManagerDisplayRewards.call(this);
   this.displayRewardForCurrencies();
 };
@@ -3700,7 +3708,11 @@ BattleManager._gainCurrencyMessage = function (enemy) {
 
   enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
     if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
-      $gameMessage.add('\\c[8]You Gained: \\c[0]' + data[0].amount + ' of: ' + data[0].name);
+
+      var amountGained = BattleManager.howMuchToGive(data);
+      self._gainCurrencies.push({ name: data[0].name, amount: amountGained });
+
+      $gameMessage.add('\\c[8]You Gained: \\c[0]' + amountGained + ' of: ' + data[0].name);
       data.shift();
     }
   });
@@ -3708,8 +3720,20 @@ BattleManager._gainCurrencyMessage = function (enemy) {
 
 var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
 BattleManager.gainRewards = function () {
+  console.log('gained');
   oldBattleManagerGainRewardsMethod.call(this);
   this.gainCurrencies();
+};
+
+BattleManager.howMuchToGive = function (data) {
+  var amountToGive = 0;
+
+  if (data[0].amount.indexOf('~') !== -1) {
+    var minMax = data[0].amount.split('~');
+    return amountToGive = Math.round(Math.random() * (parseInt(minMax[1]) - parseInt(minMax[0])) + parseInt(minMax[0]));
+  } else {
+    return amountToGive = data[0].amount;
+  }
 };
 
 BattleManager.gainCurrencies = function () {
@@ -3735,13 +3759,23 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
 
   enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
     if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
-      window.FlareCurrencies.addAmount(data[0].name, data[0].amount);
-      data.shift();
+      if (lodashIsUndefined(Yanfly.VA)) {
+
+        var amountFound = lodashFind(self._gainCurrencies, function (amount) {
+          return amount.name === data[0].name;
+        });
+
+        if (!lodashIsUndefined(amountFound)) {
+          window.FlareCurrencies.addAmount(data[0].name, amountFound.amount);
+          data.shift();
+          self._gainCurrencies.shift();
+        }
+      }
     }
   });
 };
 
-},{"../../../node_modules/lodash/lang/clone":51,"../update_core_data_manager/reward_currencies_check":74}],72:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/clone":51,"../../../node_modules/lodash/lang/isUndefined":58,"../update_core_data_manager/reward_currencies_check":74}],72:[function(require,module,exports){
 'use strict';
 
 var GatherItemsForShop = require('./gather_items');
@@ -3788,10 +3822,12 @@ DataManager.extractSaveContents = function (contents) {
 DataManager.flareProcessEnemyNoteTags = function (enemies) {
   for (var i = 1; i < enemies.length; i++) {
     var enemyNoteData = extractAllOfType(enemies[i].note, 'currencyToGain');
-    console.log(enemies[i].note, enemyNoteData);
 
     enemies[i].enemyCurrencyRewardData = [];
-    this._processEnemyNoteDataForCurrencyReward(enemies[i], enemyNoteData);
+
+    if (!lodashIsUndefined(enemyNoteData[0])) {
+      this._processEnemyNoteDataForCurrencyReward(enemies[i], enemyNoteData[0]);
+    }
   }
 };
 
@@ -4635,17 +4671,18 @@ Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, widt
 };
 
 },{}],83:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var lodashClone = require('../../../../node_modules/lodash/lang/clone');
+var lodashIsUndefined = require('../../../../node_modules/lodash/lang/isUndefined');
 
 /**
  * Creates the Flare Currencie Reward window for Yanfly Aftermath.
@@ -4657,11 +4694,11 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
   function FlareCurrencyRewardWindow() {
     _classCallCheck(this, FlareCurrencyRewardWindow);
 
-    _get(Object.getPrototypeOf(FlareCurrencyRewardWindow.prototype), "constructor", this).call(this);
+    _get(Object.getPrototypeOf(FlareCurrencyRewardWindow.prototype), 'constructor', this).call(this);
   }
 
   _createClass(FlareCurrencyRewardWindow, [{
-    key: "initialize",
+    key: 'initialize',
     value: function initialize() {
       var width = this.windowWidth();
       var height = this.windowHeight();
@@ -4670,23 +4707,23 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
       this.openness = 0;
     }
   }, {
-    key: "windowWidth",
+    key: 'windowWidth',
     value: function windowWidth() {
       return Graphics.boxWidth;
     }
   }, {
-    key: "windowHeight",
+    key: 'windowHeight',
     value: function windowHeight() {
       return Graphics.boxHeight - 72;
     }
   }, {
-    key: "refresh",
+    key: 'refresh',
     value: function refresh() {
       this.contents.clear();
       this.drawCurrencyRewardData();
     }
   }, {
-    key: "drawCurrencyRewardData",
+    key: 'drawCurrencyRewardData',
     value: function drawCurrencyRewardData() {
       var self = this;
       $gameTroop.troop().members.forEach(function (enenemyObject) {
@@ -4694,7 +4731,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
       });
     }
   }, {
-    key: "_parseEnemyObject",
+    key: '_parseEnemyObject',
     value: function _parseEnemyObject(enemyObject) {
       var self = this;
       $dataEnemies.forEach(function (enemy) {
@@ -4704,17 +4741,25 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
       });
     }
   }, {
-    key: "_getCurrenciesAndRewardThem",
+    key: '_getCurrenciesAndRewardThem',
     value: function _getCurrenciesAndRewardThem(enemy) {
+      console.log('dsiplayed - yanfly');
       var self = this;
       var baseY = 0;
       var data = lodashClone(enemy.enemyCurrencyRewardData);
 
       enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
         if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
-          self.drawText("You gained: " + data[0].amount + ", of: " + data[0].name, 0, baseY, 500, 'left');
-          data.shift();
-          baseY += 45;
+          var amountToGain = lodashFind(window._gainAmount, function (amount) {
+            return amount.name === data[0].name;
+          });
+
+          if (!lodashIsUndefined(amountToGain)) {
+            self.drawText("You gained: " + amountToGain + ", of: " + data[0].name, 0, baseY, 500, 'left');
+            data.shift();
+            window._gainAmount.shift();
+            baseY += 45;
+          }
         }
       });
     }
@@ -4725,7 +4770,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"../../../../node_modules/lodash/lang/clone":51}],84:[function(require,module,exports){
+},{"../../../../node_modules/lodash/lang/clone":51,"../../../../node_modules/lodash/lang/isUndefined":58}],84:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */

@@ -42,10 +42,12 @@ DataManager.extractSaveContents = function(contents) {
 DataManager.flareProcessEnemyNoteTags = function(enemies) {
   for (var i = 1; i < enemies.length; i++) {
     var enemyNoteData = extractAllOfType(enemies[i].note, 'currencyToGain');
-    console.log(enemies[i].note, enemyNoteData);
 
     enemies[i].enemyCurrencyRewardData = [];
-    this._processEnemyNoteDataForCurrencyReward(enemies[i], enemyNoteData);
+    
+    if (!lodashIsUndefined(enemyNoteData[0])) {
+      this._processEnemyNoteDataForCurrencyReward(enemies[i], enemyNoteData[0]);
+    }
   }
 }
 

@@ -317,3 +317,6 @@ class FlareCurrencies {
 
 // Create public API.
 window.FlareCurrencies = FlareCurrencies;
+
+// Private array, global.
+window._gainAmount = [];
