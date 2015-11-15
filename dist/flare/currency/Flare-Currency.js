@@ -3679,7 +3679,6 @@ BattleManager.setup = function (troopId, canEscape, canLose) {
 
 var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
 BattleManager.displayRewards = function () {
-  console.log('displayed');
   oldBattleManagerDisplayRewards.call(this);
   this.displayRewardForCurrencies();
 };
@@ -3720,7 +3719,6 @@ BattleManager._gainCurrencyMessage = function (enemy) {
 
 var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
 BattleManager.gainRewards = function () {
-  console.log('gained');
   oldBattleManagerGainRewardsMethod.call(this);
   this.gainCurrencies();
 };
@@ -3770,6 +3768,12 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
           data.shift();
           self._gainCurrencies.shift();
         }
+      } else {
+        var amountToGain = self.howMuchToGive(data);
+        self._gainCurrencies.push({ name: data[0].name, amount: amountToGain });
+
+        window.FlareCurrencies.addAmount(data[0].name, amountToGain);
+        data.shift();
       }
     }
   });
@@ -4683,6 +4687,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 
 var lodashClone = require('../../../../node_modules/lodash/lang/clone');
 var lodashIsUndefined = require('../../../../node_modules/lodash/lang/isUndefined');
+var lodashFind = require('../../../../node_modules/lodash/collection/find');
 
 /**
  * Creates the Flare Currencie Reward window for Yanfly Aftermath.
@@ -4743,21 +4748,20 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
   }, {
     key: '_getCurrenciesAndRewardThem',
     value: function _getCurrenciesAndRewardThem(enemy) {
-      console.log('dsiplayed - yanfly');
       var self = this;
       var baseY = 0;
       var data = lodashClone(enemy.enemyCurrencyRewardData);
 
       enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
         if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
-          var amountToGain = lodashFind(window._gainAmount, function (amount) {
+          var amountToGain = lodashFind(BattleManager._gainCurrencies, function (amount) {
             return amount.name === data[0].name;
           });
 
           if (!lodashIsUndefined(amountToGain)) {
-            self.drawText("You gained: " + amountToGain + ", of: " + data[0].name, 0, baseY, 500, 'left');
+            self.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, baseY, 500, 'left');
             data.shift();
-            window._gainAmount.shift();
+            BattleManager._gainCurrencies.shift();
             baseY += 45;
           }
         }
@@ -4770,7 +4774,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"../../../../node_modules/lodash/lang/clone":51,"../../../../node_modules/lodash/lang/isUndefined":58}],84:[function(require,module,exports){
+},{"../../../../node_modules/lodash/collection/find":3,"../../../../node_modules/lodash/lang/clone":51,"../../../../node_modules/lodash/lang/isUndefined":58}],84:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */

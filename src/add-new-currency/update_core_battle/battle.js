@@ -15,7 +15,6 @@ BattleManager.setup = function(troopId, canEscape, canLose) {
 
 var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
 BattleManager.displayRewards = function() {
-  console.log('displayed');
   oldBattleManagerDisplayRewards.call(this);
   this.displayRewardForCurrencies();
 }
@@ -62,7 +61,6 @@ BattleManager._gainCurrencyMessage = function(enemy) {
 
 var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
 BattleManager.gainRewards = function() {
-  console.log('gained');
   oldBattleManagerGainRewardsMethod.call(this);
   this.gainCurrencies();
 }
@@ -117,6 +115,12 @@ BattleManager._getCurrenciesAndRewardThem = function(enemy) {
             data.shift();
             self._gainCurrencies.shift();
           }
+        } else {
+          var amountToGain = self.howMuchToGive(data);
+          self._gainCurrencies.push({name: data[0].name, amount: amountToGain});
+
+          window.FlareCurrencies.addAmount(data[0].name, amountToGain);
+          data.shift();
         }
     }
   });
