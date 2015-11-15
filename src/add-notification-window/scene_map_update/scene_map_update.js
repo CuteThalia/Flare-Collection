@@ -29,18 +29,16 @@ var oldSceneMapPrototypeUpdateMainMethod = Scene_Map.prototype.updateMain;
 Scene_Map.prototype.updateMain = function() {
   oldSceneMapPrototypeUpdateMainMethod.call(this);
 
-  if (FlareNotification._getQueue().length > 0 ) {
+  if (this._waitForWindowToClose > 0) {
+    this._waitForWindowToClose--;
+  } else if (FlareNotification._getQueue().length > 0) {
     this.handleQueue();
   }
 }
 
 Scene_Map.prototype.handleQueue = function() {
-  if (this._waitForWindowToClose > 0) {
-    this.openFlareNotificationWindow();
-    this._waitForWindowToClose--;
-  } else {
-    this.allowAnotherWindowToBeOpened(this._flareWindow);
-  }
+  this.openFlareNotificationWindow();
+  this.allowAnotherWindowToBeOpened(this._flareWindow);
 }
 
 Scene_Map.prototype.openFlareNotificationWindow = function() {
