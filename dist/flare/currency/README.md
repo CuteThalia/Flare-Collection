@@ -15,14 +15,24 @@ Flare Currency allows you to add up to 5 currencies to your game via the options
 When a currency is added you can add the following tags in enemy note tags, **not troops**.
 
 ```javascript
-<currencies: "name", amount, percentage>
+<currencyName name:"Name", amount: 10, chance: 90>
 ```
 
 - `name`: The name of the currency, must match that of the currency you set up in the script options.
 - `amount`: The amount of the currency to reward.
-- `percentage`: Optional. The percentage of which the enemy will drop the currency and its amount.
+- `chance`: Optional. The percentage of which the enemy will drop the currency and its amount.
 
 Currencies with out a percentage default to 100%. When you set the percentage you have to set 0-100 as an integer.
+
+> ### ATTN!
+>
+> `amount` can be a string in the form of: "1 ~ x" where the first value should always be a 1.
+> and x can be what ever value you want. This allows you to have random currencies rewarded after
+> a battle is finished.
+
+> ### ATTN!
+>
+> Currency Name must be present or we will not draw the currency information to the screen.
 
 ## Shops
 
@@ -109,6 +119,10 @@ exp custom drops currency
 
 Once added, battles will have an additional battle spoils window showing the currencies you gained.
 
+## Yanfly Menu Manger
+
+You don't need to do anything, currencies just work as expected.
+
 ## For Developers
 
 I have a special treat for you.
@@ -157,6 +171,16 @@ is a global object. You can do the following with it:
 game.
 
 - `flareCurrency.getCurrencyStore()` - Gets the above store at its current state.
+
+### Regarding Enemies
+
+We add two new keys on to enemy objects.
+
+- `enemyCurrencyRewardData`, which is an array of objects that holds information about each
+currency associated with that enemy.
+
+- `gainCurrencyOnBattleWin`, which is an array of objects containing name and a boolean value.
+this is calculated and assigned to an enemy when the battle begins.
 
 >### Not Public.
 >
