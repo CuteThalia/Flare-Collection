@@ -2610,57 +2610,6 @@ function Lexer(_lexer) {
  */
 
 /**
- * Interace based class.
- *
- * Contains methods to be over ridden by sub classing.
- * Contains methods to do with the core game scene.
- *
- * Flare Screen is to be subclassed and the methods to be implemented
- * based on the API documentation provided below.
- *
- * @namespace FlareCollection
- */
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var FlareMenuSceneHandlerInterface = (function () {
-  function FlareMenuSceneHandlerInterface() {
-    _classCallCheck(this, FlareMenuSceneHandlerInterface);
-  }
-
-  /**
-   * This method allows you to create menu handlers.
-   *
-   * You can use this method to create your own menu items for the
-   * core game menu.
-   */
-
-  _createClass(FlareMenuSceneHandlerInterface, [{
-    key: "menuHandler",
-    value: function menuHandler() {}
-
-    /**
-     * Used to add a new window command to the menu.
-     */
-  }, {
-    key: "addCommandToGameMenu",
-    value: function addCommandToGameMenu() {}
-  }]);
-
-  return FlareMenuSceneHandlerInterface;
-})();
-
-module.exports = FlareMenuSceneHandlerInterface;
-
-},{}],63:[function(require,module,exports){
-/**
- * @namespace FlareCollection
- */
-
-/**
  * All Flare based items use this window base.
  *
  * Flare Window Base extends the Window Base Class
@@ -2717,7 +2666,7 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}],64:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2764,7 +2713,7 @@ var AddLawsForMap = (function () {
 
 module.exports = AddLawsForMap;
 
-},{"./law_storage/laws_for_map":68,"./punishment_storage/punishments":70,"rmmv-mrp-core/option-parser":60}],65:[function(require,module,exports){
+},{"./law_storage/laws_for_map":66,"./punishment_storage/punishments":67,"rmmv-mrp-core/option-parser":60}],64:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2772,7 +2721,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var LawManagement = require('./law_storage/laws_for_map');
-var FlareLawMenu = require('./menus/add_law_to_menu');
 
 /*:
  * @plugindesc Allows you to have a set of laws for a map.
@@ -2794,8 +2742,8 @@ var FlareLawMenu = require('./menus/add_law_to_menu');
  *  >
  *
  * ===============================================================
- * The above should be all on one line, I did it like this because
- * the help file only allows 60 characters pr line
+ * The above will be parsed by the parser if placed into the
+ * the note box as such.
  * ===============================================================
  *
  * - Keep the names the law short. The can't use should also be short,
@@ -2823,56 +2771,10 @@ var FlareLawsForMap = (function () {
   return FlareLawsForMap;
 })();
 
-var flareLawMenu = new FlareLawMenu();
-flareLawMenu.menuHandler();
-
 window.FlareLawsForMap = FlareLawsForMap;
 window._lawsForMap = [];
 
-},{"./law_storage/laws_for_map":68,"./menus/add_law_to_menu":69}],66:[function(require,module,exports){
-'use strict';
-
-var ProcessBrokenLaw = require('../law_handler/process_broken_law');
-
-var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply;
-Game_Action.prototype.apply = function (target) {
-  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
-    var result = target.result();
-    this.subject().clearResult();
-    result.clear();
-    result.used = this.testApply(target);
-    result.missed = result.used && Math.random() >= this.itemHit(target);
-    result.evaded = !result.missed && Math.random() < this.itemEva(target);
-    result.physical = this.isPhysical();
-    result.drain = this.isDrain();
-
-    if (result.isHit()) {
-      if (this.item().damage.type > 0) {
-        result.critical = Math.random() < this.itemCri(target);
-        var value = this.makeDamageValue(target, result.critical);
-        this.executeDamage(target, value);
-      }
-
-      // Punish the user for breaking a law, assuming they have.
-      if (target instanceof Game_Enemy) {
-        var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name, this.subject());
-        if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
-          processWhatShouldHappenOnHit.punishPlayer();
-        }
-      }
-
-      this.item().effects.forEach(function (effect) {
-        this.applyItemEffect(target, effect);
-      }, this);
-
-      this.applyItemUserEffect(target);
-    }
-  } else {
-    oldGameActionPrototypeApplyMethod.call(this, target);
-  }
-};
-
-},{"../law_handler/process_broken_law":67}],67:[function(require,module,exports){
+},{"./law_storage/laws_for_map":66}],65:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2895,7 +2797,7 @@ var ProcessBrokenLaw = (function () {
     value: function validatePlayerBrokeTheLaw() {
 
       for (var i = 0; i < LawsForMap.getLawsForMap().length; i++) {
-        if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction)) {
+        if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
           return true;
         }
       }
@@ -2906,7 +2808,7 @@ var ProcessBrokenLaw = (function () {
     key: 'getBrokenLawObject',
     value: function getBrokenLawObject() {
       for (var i = 0; i < LawsForMap.getLawsForMap().length; i++) {
-        if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction)) {
+        if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
           window._brokenLawObject = LawsForMap.getLawsForMap()[i];
           return LawsForMap.getLawsForMap()[i];
         }
@@ -2984,7 +2886,7 @@ module.exports = ProcessBrokenLaw;
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
 
-},{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":68}],68:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":66}],66:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3018,7 +2920,7 @@ var LawsForMap = (function () {
 
         lawCannotUse = upperCaseCannotUse.join();
       } else {
-        lawCannotUse = lodashCapitalize(lawCannotUse);
+        lawCannotUse = lodashCapitalize(law.cantUse);
       }
 
       var lawForMap = {
@@ -3049,62 +2951,7 @@ var LawsForMap = (function () {
 
 module.exports = LawsForMap;
 
-},{"../../../node_modules/lodash/collection/findWhere":3,"../../../node_modules/lodash/lang/isUndefined":52,"../../../node_modules/lodash/string/capitalize":56,"../../../node_modules/lodash/string/trim":57}],69:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FlareMenuSceneHandlerInterface = require('../../flare_menu_scene_interface');
-var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
-
-var AddLawToMenuAsMenuItem = (function (_FlareMenuSceneHandlerInterface) {
-  _inherits(AddLawToMenuAsMenuItem, _FlareMenuSceneHandlerInterface);
-
-  function AddLawToMenuAsMenuItem() {
-    _classCallCheck(this, AddLawToMenuAsMenuItem);
-
-    _get(Object.getPrototypeOf(AddLawToMenuAsMenuItem.prototype), 'constructor', this).call(this);
-  }
-
-  _createClass(AddLawToMenuAsMenuItem, [{
-    key: 'menuHandler',
-    value: function menuHandler() {
-      var oldSceneMenu = Scene_Menu.prototype.createCommandWindow;
-
-      Scene_Menu.prototype.createCommandWindow = function () {
-        oldSceneMenu.call(this);
-        this._commandWindow.setHandler('Laws', this.lawCommand.bind(this));
-      };
-
-      Scene_Menu.prototype.lawCommand = function () {
-        SceneManager.push(FlareLawWindowScene);
-      };
-
-      this.addCommandToGameMenu();
-    }
-  }, {
-    key: 'addCommandToGameMenu',
-    value: function addCommandToGameMenu() {
-      var oldWindowMenuCommandPrototypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
-      Window_MenuCommand.prototype.addOriginalCommands = function () {
-        oldWindowMenuCommandPrototypeAddOriginalCommandsMethod.call(this);
-        this.addCommand('Laws', 'Laws');
-      };
-    }
-  }]);
-
-  return AddLawToMenuAsMenuItem;
-})(FlareMenuSceneHandlerInterface);
-
-module.exports = AddLawToMenuAsMenuItem;
-
-},{"../../flare_menu_scene_interface":62,"../scenes/flare_law_window_scene":72}],70:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":3,"../../../node_modules/lodash/lang/isUndefined":52,"../../../node_modules/lodash/string/capitalize":56,"../../../node_modules/lodash/string/trim":57}],67:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3139,19 +2986,7 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{}],71:[function(require,module,exports){
-'use strict';
-
-var AddLawsForMap = require('../add_laws_for_map');
-
-var oldSceneMapPrototypeOnMapLoadedMethod = Scene_Map.prototype.onMapLoaded;
-Scene_Map.prototype.onMapLoaded = function () {
-  oldSceneMapPrototypeOnMapLoadedMethod.call(this);
-  var flarAddLawsForMap = new AddLawsForMap();
-  flarAddLawsForMap.grabMapInformation();
-};
-
-},{"../add_laws_for_map":64}],72:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3203,7 +3038,83 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":74}],73:[function(require,module,exports){
+},{"../windows/laws_window":74}],69:[function(require,module,exports){
+'use strict';
+
+var ProcessBrokenLaw = require('../law_handler/process_broken_law');
+
+var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply;
+Game_Action.prototype.apply = function (target) {
+  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+    var result = target.result();
+    this.subject().clearResult();
+    result.clear();
+    result.used = this.testApply(target);
+    result.missed = result.used && Math.random() >= this.itemHit(target);
+    result.evaded = !result.missed && Math.random() < this.itemEva(target);
+    result.physical = this.isPhysical();
+    result.drain = this.isDrain();
+
+    if (result.isHit()) {
+      if (this.item().damage.type > 0) {
+        result.critical = Math.random() < this.itemCri(target);
+        var value = this.makeDamageValue(target, result.critical);
+        this.executeDamage(target, value);
+      }
+
+      // Punish the user for breaking a law, assuming they have.
+      if (this.subject() instanceof Game_Actor && target instanceof Game_Actor) {
+        this.applyPunishment(this.item().name, this.subject());
+      } else if (target instanceof Game_Enemy) {
+        this.applyPunishment(this.item().name, this.subject());
+      }
+
+      this.item().effects.forEach(function (effect) {
+        this.applyItemEffect(target, effect);
+      }, this);
+
+      this.applyItemUserEffect(target);
+    }
+  } else {
+    oldGameActionPrototypeApplyMethod.call(this, target);
+  }
+};
+
+Game_Action.prototype.applyPunishment = function (itemName, subject) {
+  var processWhatShouldHappenOnHit = new ProcessBrokenLaw(itemName, subject);
+  if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    processWhatShouldHappenOnHit.punishPlayer();
+  }
+};
+
+},{"../law_handler/process_broken_law":65}],70:[function(require,module,exports){
+'use strict';
+
+var AddLawsForMap = require('../add_laws_for_map');
+
+var oldSceneMapPrototypeOnMapLoadedMethod = Scene_Map.prototype.onMapLoaded;
+Scene_Map.prototype.onMapLoaded = function () {
+  oldSceneMapPrototypeOnMapLoadedMethod.call(this);
+  var flarAddLawsForMap = new AddLawsForMap();
+  flarAddLawsForMap.grabMapInformation();
+};
+
+},{"../add_laws_for_map":63}],71:[function(require,module,exports){
+'use strict';
+
+var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
+
+var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow;
+Scene_Menu.prototype.createCommandWindow = function () {
+  oldSceneMenuPrototypeCreateCommandWindiow.call(this);
+  this._commandWindow.setHandler('Laws', this.lawsCommand.bind(this));
+};
+
+Scene_Menu.prototype.lawsCommand = function () {
+  SceneManager.push(FlareLawWindowScene);
+};
+
+},{"../scenes/flare_law_window_scene":68}],72:[function(require,module,exports){
 "use strict";
 
 var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge;
@@ -3231,6 +3142,15 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   } else {
     oldWindowBasePrototypeDrawGaugeMethod.call(this, dx, dy, dw, rate, color1, color2);
   }
+};
+
+},{}],73:[function(require,module,exports){
+'use strict';
+
+var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
+Window_MenuCommand.prototype.addOriginalCommands = function () {
+  oldWindowMenuCommandProtottypeAddOriginalCommandsMethod.call(this);
+  this.addCommand('Laws', 'Laws');
 };
 
 },{}],74:[function(require,module,exports){
@@ -3291,11 +3211,14 @@ var LawWindow = (function (_FlareWindowBase) {
         if (laws.length > 3) {
           // randomize
         } else {
+            this.contents.fontSize = 18;
             this.drawLaws(laws);
             this.resetFontSettings();
           }
       } else {
-        this.drawText('No Current Laws For Region', 10, 30, 450, 'left');
+        this.contents.fontSize = 18;
+        this.flareDrawTextEx('\\c[14]No Current Laws For Region\\c[0]', 14, 60, 450, 'left');
+        this.resetFontSettings();
       }
     }
   }, {
@@ -3306,9 +3229,9 @@ var LawWindow = (function (_FlareWindowBase) {
 
       var self = this;
       laws.map(function (law) {
-        var lawCantUse = law.cantUse.split(',');
-        lawCantUse.length = 3;
-        lawCantUse = lawCantUse.join();
+        if (Array.isArray(law.cantUse)) {
+          law.cantUse.toString();
+        }
 
         self.drawIcon(law.icon, 20, baseYForText - 10);
         self.drawText("Law:", 60, baseYForText - 10);
@@ -3320,7 +3243,7 @@ var LawWindow = (function (_FlareWindowBase) {
         self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
         self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
         self.flareDrawTextEx("Cannot Use:", 20, baseYForText + 90);
-        self.flareDrawTextEx("\\c[18]" + lawCantUse + "\\c[0]", 150, baseYForText + 90);
+        self.flareDrawTextEx("\\c[18]" + law.cantUse + "\\c[0]", 150, baseYForText + 90);
         self.flareDrawTextEx("\\c[20] -----------------------------------------  \\c[0]", 10, baseYForText + 110);
 
         baseYForText += 100;
@@ -3333,4 +3256,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":63}]},{},[73,65,71,66]);
+},{"../../flare_window_base":62}]},{},[72,64,71,73,70,69]);

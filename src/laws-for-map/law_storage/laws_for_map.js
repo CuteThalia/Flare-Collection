@@ -9,8 +9,8 @@ class LawsForMap {
     var lawCannotUse = null;
 
     if (law.cantUse.indexOf(',') !== -1) {
-      lawCannotUse     = law.cantUse.split(',');
-      lawCannotUse.length  = 3;
+      lawCannotUse             = law.cantUse.split(',');
+      lawCannotUse.length      = 3;
       var upperCaseCannotUse   = [];
 
       lawCannotUse.forEach(function(cannotUse){
@@ -21,7 +21,7 @@ class LawsForMap {
       lawCannotUse = upperCaseCannotUse.join();
 
     } else {
-      lawCannotUse = lodashCapitalize(lawCannotUse);
+      lawCannotUse = lodashCapitalize(law.cantUse);
     }
 
     var lawForMap = {

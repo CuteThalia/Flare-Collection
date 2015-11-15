@@ -35,11 +35,14 @@ class LawWindow extends FlareWindowBase {
       if (laws.length > 3) {
         // randomize
       } else {
+        this.contents.fontSize = 18;
         this.drawLaws(laws);
         this.resetFontSettings();
       }
     } else {
-      this.drawText('No Current Laws For Region', 10, 30, 450, 'left');
+      this.contents.fontSize = 18;
+      this.flareDrawTextEx('\\c[14]No Current Laws For Region\\c[0]', 14, 60, 450, 'left');
+      this.resetFontSettings();
     }
   }
 
@@ -49,9 +52,9 @@ class LawWindow extends FlareWindowBase {
 
     var self = this;
     laws.map(function(law){
-        var lawCantUse = law.cantUse.split(',');
-        lawCantUse.length = 3;
-        lawCantUse = lawCantUse.join();
+        if (Array.isArray(law.cantUse)) {
+          law.cantUse.toString();
+        }
 
         self.drawIcon(law.icon, 20, baseYForText - 10)
         self.drawText("Law:", 60, baseYForText - 10)
@@ -63,7 +66,7 @@ class LawWindow extends FlareWindowBase {
         self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
         self.flareDrawTextEx("\\c[16]" + law.amount + "\\c[0]", 150, baseYForText + 70);
         self.flareDrawTextEx("Cannot Use:", 20, baseYForText + 90);
-        self.flareDrawTextEx("\\c[18]" + lawCantUse + "\\c[0]", 150, baseYForText + 90);
+        self.flareDrawTextEx("\\c[18]" + law.cantUse + "\\c[0]", 150, baseYForText + 90);
         self.flareDrawTextEx("\\c[20] -----------------------------------------  \\c[0]", 10, baseYForText + 110);
 
         baseYForText += 100;

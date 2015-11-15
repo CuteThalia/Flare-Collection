@@ -19,6 +19,10 @@ var NotificationOptions     = require('./notification_options/notification_optio
  * Default: 175
  * @default 175
  *
+ * @param Should I stay at the top?
+ * @desc Should the notification stay at the top?
+ * Default: false
+ * @default false
  *
  * @help
  *
@@ -57,7 +61,7 @@ class FlareNotification {
    * @param name - name of the window for the queue.
    * @param text - text for the window
    */
-  static notify(name, text) {
+  static notify(name, text, width) {
     this._arrayOfNotifications.push({
       name:         name,
       windowMethod: new FlareNotificationWindow(),

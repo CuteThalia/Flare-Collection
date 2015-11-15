@@ -1,5 +1,4 @@
 var LawManagement     = require('./law_storage/laws_for_map');
-var FlareLawMenu      = require('./menus/add_law_to_menu');
 
 /*:
  * @plugindesc Allows you to have a set of laws for a map.
@@ -21,8 +20,8 @@ var FlareLawMenu      = require('./menus/add_law_to_menu');
  *  >
  *
  * ===============================================================
- * The above should be all on one line, I did it like this because
- * the help file only allows 60 characters pr line
+ * The above will be parsed by the parser if placed into the
+ * the note box as such.
  * ===============================================================
  *
  * - Keep the names the law short. The can't use should also be short,
@@ -39,9 +38,6 @@ class FlareLawsForMap {
     return LawManagement.getLawsForMap();
   }
 }
-
-var flareLawMenu = new FlareLawMenu
-flareLawMenu.menuHandler();
 
 window.FlareLawsForMap = FlareLawsForMap;
 window._lawsForMap = [];

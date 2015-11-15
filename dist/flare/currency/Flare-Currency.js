@@ -2720,7 +2720,7 @@ function TokenStream(buffer) {
 //     Token('WORD',  'a ',       8),
 //     Token('WORD',  'string ',  10)
 //   ]
-//
+//  
 function regex(type, regex) {
   var flags = arguments.length <= 2 || arguments[2] === undefined ? '' : arguments[2];
 
@@ -3008,7 +3008,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":83}],67:[function(require,module,exports){
+},{"../../flare_error":84}],67:[function(require,module,exports){
 /**
  * @namespace FlareCurrencies
  */
@@ -3020,7 +3020,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var Currency = require('./currency');
-var FlareCurrencyMenu = require('../menus/flare_currency_menu');
 var FlareError = require('../../flare_error');
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
@@ -3073,10 +3072,6 @@ var FlareCurrency = (function () {
 
 ;
 
-// Create the Currencies menu item.
-var flareCurrencyMenu = new FlareCurrencyMenu();
-flareCurrencyMenu.menuHandler();
-
 // Creates the Currencies.
 var flareCurrency = new FlareCurrency();
 flareCurrency.createCurrencies();
@@ -3093,7 +3088,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":83,"../menus/flare_currency_menu":69,"./currency":66}],68:[function(require,module,exports){
+},{"../../flare_error":84,"./currency":66}],68:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3431,84 +3426,7 @@ var FlareCurrencies = (function () {
 
 window.FlareCurrencies = FlareCurrencies;
 
-},{"../../node_modules/lodash/collection/find":3,"./shop/currency_shop":73}],69:[function(require,module,exports){
-/**
- * @namespace FlareCurrency
- */
-
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FlareMenuSceneHandlerInterface = require('../../flare_menu_scene_interface');
-var FlareCurrencyScene = require('../scenes/flare_currency_scene');
-
-/**
- * Allows you to view the currencies that you hold.
- *
- * Overrides the main scene menu to add a new option: Currencies.
- * This class does not handle the scene window.
- *
- */
-
-var FlareCurrencyMenu = (function (_FlareMenuSceneHandlerInterface) {
-  _inherits(FlareCurrencyMenu, _FlareMenuSceneHandlerInterface);
-
-  function FlareCurrencyMenu() {
-    _classCallCheck(this, FlareCurrencyMenu);
-
-    _get(Object.getPrototypeOf(FlareCurrencyMenu.prototype), 'constructor', this).call(this);
-  }
-
-  /**
-   * Create a new menu item for the currency window.
-   */
-
-  _createClass(FlareCurrencyMenu, [{
-    key: 'menuHandler',
-    value: function menuHandler() {
-      var oldSceneMenu = Scene_Menu.prototype.createCommandWindow;
-
-      Scene_Menu.prototype.createCommandWindow = function () {
-        oldSceneMenu.call(this);
-        this._commandWindow.setHandler('Currencies', this.currencyCommand.bind(this));
-      };
-
-      Scene_Menu.prototype.currencyCommand = function () {
-        SceneManager.push(FlareCurrencyScene);
-      };
-
-      this.addCommandToGameMenu();
-    }
-
-    /**
-     * Add a new command to the window menu command.
-     */
-  }, {
-    key: 'addCommandToGameMenu',
-    value: function addCommandToGameMenu() {
-      var addNewMenuContent = Window_MenuCommand.prototype.addOriginalCommands;
-      Window_MenuCommand.prototype.addOriginalCommands = function () {
-        addNewMenuContent.call(this);
-        this.addCommand('Currencies', 'Currencies');
-      };
-    }
-  }]);
-
-  return FlareCurrencyMenu;
-})(FlareMenuSceneHandlerInterface);
-
-;
-
-module.exports = FlareCurrencyMenu;
-
-},{"../../flare_menu_scene_interface":84,"../scenes/flare_currency_scene":70}],70:[function(require,module,exports){
+},{"../../node_modules/lodash/collection/find":3,"./shop/currency_shop":70}],69:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -3585,8 +3503,570 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 ;
 
 module.exports = FlareCurrencyScene;
+window.FlareCurrencyScene = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":78}],71:[function(require,module,exports){
+},{"../windows/flare_currency_window":79}],70:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var lodashFindIndex = require('../../../node_modules/lodash/array/findIndex');
+
+/**
+ * Responsible for gathering all the items related to a currency.
+ *
+ * All items have a belongsToCurrency field on them, we check the currency
+ * that the user wants to create a shop for and gather all the items
+ * for that shop.
+ */
+
+var CurrencyShop = (function () {
+  function CurrencyShop() {
+    _classCallCheck(this, CurrencyShop);
+
+    this._goods = [];
+  }
+
+  /**
+   * Open the shop window.
+   *
+   * Populate with items based off currency name.
+   *
+   * @param string currency
+   * @param boolean purchaseOnly
+   */
+
+  _createClass(CurrencyShop, [{
+    key: 'openShopWindow',
+    value: function openShopWindow(currency, purchaseOnly) {
+      _currencyShopInfo.currency_name = currency;
+      this._createShopGoods(currency);
+      SceneManager.push(Scene_Shop);
+      SceneManager.prepareNextScene(this._goods, purchaseOnly);
+    }
+
+    /**
+     * Creates the actual goods for the shop based off curency name.
+     *
+     * @param string currency
+     */
+  }, {
+    key: '_createShopGoods',
+    value: function _createShopGoods(currency) {
+      var itemsArray = $dataItems;
+      var weaponsArray = $dataWeapons;
+      var armorsArray = $dataArmors;
+
+      this.processItemsArray(itemsArray, currency);
+      this.processWeaponsArray(weaponsArray, currency);
+      this.processArmorsArray(armorsArray, currency);
+    }
+
+    /**
+     * Stores items in a goods array.
+     *
+     * @param array itemsArray
+     * @param string currency
+     */
+  }, {
+    key: 'processItemsArray',
+    value: function processItemsArray(itemsArray, currency) {
+      for (var i = 0; i < itemsArray.length; i++) {
+        if (itemsArray[i] !== null && itemsArray[i].belongsToCurrency === currency) {
+
+          if (i <= 2000) {
+            var item = [0, itemsArray[i].id];
+          }
+
+          var found = lodashFindIndex(this._goods, function (goodsItem) {
+            goodsItem.join(',') === item.join(',');
+          });
+
+          if (found === -1) {
+            this._goods.push(item);
+          }
+        }
+      }
+    }
+
+    /**
+     * Stores weapons in a goods array.
+     *
+     * @param array weaponsArray
+     * @param string currency
+     */
+  }, {
+    key: 'processWeaponsArray',
+    value: function processWeaponsArray(weaponsArray, currency) {
+      for (var i = 0; i < weaponsArray.length; i++) {
+        if (weaponsArray[i] !== null && weaponsArray[i].belongsToCurrency === currency) {
+
+          if (i <= 2000) {
+            var weapon = [1, weaponsArray[i].id];
+
+            var found = lodashFindIndex(this._goods, function (goodsItem) {
+              return goodsItem.join(',') === weapon.join(',');
+            });
+
+            if (found === -1) {
+              this._goods.push(weapon);
+            }
+          }
+        }
+      }
+    }
+
+    /**
+     * Stores armos in a goods array.
+     *
+     * @param array armorsArray
+     * @param string currency
+     */
+  }, {
+    key: 'processArmorsArray',
+    value: function processArmorsArray(armorArray, currency) {
+      for (var i = 0; i < armorArray.length; i++) {
+        if (armorArray[i] !== null && armorArray[i].belongsToCurrency === currency) {
+
+          if (i <= 2000) {
+            var armor = [2, armorArray[i].id];
+          }
+
+          var found = lodashFindIndex(this._goods, function (goodsItem) {
+            return goodsItem.join(',') === armor.join(',');
+          });
+
+          if (found === -1) {
+            this._goods.push(armor);
+          }
+        }
+      }
+    }
+  }]);
+
+  return CurrencyShop;
+})();
+
+module.exports = CurrencyShop;
+
+// private global method for storing currency currency shop info
+window._currencyShopInfo = { currency_name: null };
+
+},{"../../../node_modules/lodash/array/findIndex":1}],71:[function(require,module,exports){
+'use strict';
+
+var lodashClone = require('../../../node_modules/lodash/lang/clone');
+
+var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
+BattleManager.displayRewards = function () {
+  oldBattleManagerDisplayRewards.call(this);
+  this.displayRewardForCurrencies();
+};
+
+BattleManager.displayRewardForCurrencies = function () {
+  var self = this;
+  $gameTroop.troop().members.forEach(function (member) {
+    self._parseEnemyMemberCurrencies(member);
+  });
+};
+
+BattleManager._parseEnemyMemberCurrencies = function (member) {
+  var self = this;
+  $dataEnemies.forEach(function (enemy) {
+    if (enemy !== null && enemy.id === member.enemyId && enemy.enemyCurrencyRewardData.length > 0) {
+      self._gainCurrencyMessage(enemy);
+    }
+  });
+};
+
+BattleManager._gainCurrencyMessage = function (enemy) {
+
+  var self = this;
+  var baseY = 0;
+  var data = lodashClone(enemy.enemyCurrencyRewardData);
+
+  enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
+    if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
+      $gameMessage.add('\\c[8]You Gained: \\c[0]' + data[0].amount + ' of: ' + data[0].name);
+      data.shift();
+    }
+  });
+};
+
+var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
+BattleManager.gainRewards = function () {
+  oldBattleManagerGainRewardsMethod.call(this);
+  this.gainCurrencies();
+};
+
+BattleManager.gainCurrencies = function () {
+  var self = this;
+  $gameTroop.troop().members.forEach(function (enenemyObject) {
+    self._parseEnemyObject(enenemyObject);
+  });
+};
+
+BattleManager._parseEnemyObject = function (enemyObjectFromTroop) {
+  var self = this;
+  $dataEnemies.forEach(function (enemy) {
+    if (enemy !== null && enemy.id === enemyObjectFromTroop.enemyId && enemy.enemyCurrencyRewardData.length > 0) {
+      self._getCurrenciesAndRewardThem(enemy);
+    }
+  });
+};
+
+BattleManager._getCurrenciesAndRewardThem = function (enemy) {
+  var self = this;
+  var baseY = 0;
+  var data = lodashClone(enemy.enemyCurrencyRewardData);
+
+  enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
+    if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
+      window.FlareCurrencies.addAmount(data[0].name, data[0].amount);
+      data.shift();
+    }
+  });
+};
+
+},{"../../../node_modules/lodash/lang/clone":51}],72:[function(require,module,exports){
+'use strict';
+
+var RewardCurrenciesCheck = require('./reward_currencies_check');
+var GatherItemsForShop = require('./gather_items');
+
+var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
+DataManager.isDatabaseLoaded = function () {
+  if (!olderDataManagerIsDataBaseLoadedMethod.call(this)) {
+    return false;
+  }
+
+  // process Note tags
+  this.flareProcessEnemyNoteTags($dataEnemies);
+
+  // Set up rewards for enemies.
+  var rewardCurrenciesCheck = new RewardCurrenciesCheck();
+  rewardCurrenciesCheck.createCheckObject();
+
+  // Set up the currency shops
+  new GatherItemsForShop();
+
+  return true;
+};
+
+var oldDataManagerMakeSaveContentsMethod = DataManager.makeSaveContents;
+DataManager.makeSaveContents = function () {
+  var contents = oldDataManagerMakeSaveContentsMethod.call(this);
+  contents.currencies = window.flareCurrency.getCurrencyStore();
+
+  return contents;
+};
+
+var oldDataManagerExtractSaveContentMethod = DataManager.extractSaveContents;
+DataManager.extractSaveContents = function (contents) {
+  oldDataManagerExtractSaveContentMethod.call(this, contents);
+  window.flareCurrency.setStoreFromLoad(contents.currencies);
+};
+
+/**
+ * Process the enemy note tag looking for currency information.
+ *
+ * Currency tags can have name, how much and percentage of drop.
+ * percentage is optional. Default is 100.
+ *
+ * @param $dataEnemies enemies
+ */
+DataManager.flareProcessEnemyNoteTags = function (enemies) {
+  var noteTag = /<currency:\s*([^,>]+),\s*([^,>]+)(,\s*([^,>]+))?>/i;
+
+  for (var i = 1; i < enemies.length; i++) {
+    var enemy = enemies[i];
+    var enemyNoteData = enemy.note.split(/[\r\n]+/);
+
+    enemy.enemyCurrencyRewardData = [];
+    this._processEnemyNoteDataForCurrencyReward(enemy, enemyNoteData, noteTag);
+  }
+};
+
+/**
+ * Private Method. Process Enemy Currency Note Data.
+ *
+ * Pushes the enemy currency reward data object to an array of the same type.
+ * enemies can have multiple currencies attached to them.
+ *
+ * @param Object enemy
+ * @param Array enemyNoteData
+ * @param regex noteTag
+ */
+DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteData, noteTag) {
+  for (var n = 0; n < enemyNoteData.length; n++) {
+    var line = enemyNoteData[n];
+
+    if (line.match(noteTag)) {
+      var lineMatched = line.match(noteTag);
+
+      enemy.enemyCurrencyRewardData.push(this._createCurrencyRewardObject(lineMatched));
+    }
+  }
+};
+
+/**
+ * Private Method. Creates the actual object.
+ *
+ * Creates a currency reward object that contains name, amount and percentage of either 100 or the
+ * third number that the user placed in the tag.
+ *
+ * @param Array lineMatched
+ */
+DataManager._createCurrencyRewardObject = function (lineMatched) {
+  if (lineMatched[4] !== undefined) {
+    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: parseInt(lineMatched[4]) };
+  } else {
+    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: 100 };
+  }
+};
+
+},{"./gather_items":73,"./reward_currencies_check":74}],73:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var extractAllOfType = require('rmmv-mrp-core/option-parser').extractAllOfType;
+var lodashFind = require('../../../node_modules/lodash/collection/find');
+var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
+
+/**
+ * Creates objects for the currency shop.
+ *
+ * Creates weapons, armor and items for the currency shop that match
+ * the tags in the note boxes.
+ */
+
+var GatherItems = (function () {
+
+  /**
+   * Calls each method that creates an object for said methods.
+   */
+
+  function GatherItems() {
+    _classCallCheck(this, GatherItems);
+
+    this.processItems();
+    this.processWeapons();
+    this.processArmors();
+  }
+
+  /**
+   * Pushes an item object on to the item array.
+   */
+
+  _createClass(GatherItems, [{
+    key: 'processItems',
+    value: function processItems() {
+      var items = $dataItems;
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i] !== null) {
+          items[i].currencyCost = 0;
+          items[i].belongsToCurrency = null;
+
+          var itemNoteBoxInfo = extractAllOfType(items[i].note, 'currencyShop');
+          var noteBoxObjectInfo = itemNoteBoxInfo[0];
+
+          if (!lodashIsUndefined(noteBoxObjectInfo)) {
+            items[i].currencyCost = noteBoxObjectInfo.andCosts;
+            items[i].belongsToCurrency = noteBoxObjectInfo.belongsTo;
+          }
+        }
+      }
+    }
+
+    /**
+     * Pushes an weapon object on to the weapon array.
+     */
+  }, {
+    key: 'processWeapons',
+    value: function processWeapons() {
+      var weapons = $dataWeapons;
+
+      for (var i = 0; i < weapons.length; i++) {
+        if (weapons[i] !== null) {
+          weapons[i].currencyCost = 0;
+          weapons[i].belongsToCurrency = null;
+
+          var weaponNoteBoxInfo = extractAllOfType(weapons[i].note, 'currencyShop');
+          var noteBoxObjectInfo = weaponNoteBoxInfo[0];
+
+          if (!lodashIsUndefined(noteBoxObjectInfo)) {
+            weapons[i].currencyCost = noteBoxObjectInfo.andCosts;
+            weapons[i].belongsToCurrency = noteBoxObjectInfo.belongsTo;
+          }
+        }
+      }
+    }
+
+    /**
+     * Pushes an armor object on to the armor array.
+     */
+  }, {
+    key: 'processArmors',
+    value: function processArmors() {
+      var armors = $dataArmors;
+
+      for (var i = 0; i < armors.length; i++) {
+        if (armors[i] !== null) {
+          armors[i].currencyCost = 0;
+          armors[i].belongsToCurrency = null;
+
+          var armorsNoteBoxInfo = extractAllOfType(armors[i].note, 'currencyShop');
+          var noteBoxObjectInfo = armorsNoteBoxInfo[0];
+
+          if (!lodashIsUndefined(noteBoxObjectInfo)) {
+            armors[i].currencyCost = noteBoxObjectInfo.andCosts;
+            armors[i].belongsToCurrency = noteBoxObjectInfo.belongsTo;
+          }
+        }
+      }
+    }
+  }]);
+
+  return GatherItems;
+})();
+
+module.exports = GatherItems;
+
+},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/isUndefined":58,"rmmv-mrp-core/option-parser":64}],74:[function(require,module,exports){
+/**
+ * @namespace FlareCurrency
+ */
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var FlareRandomNumber = require('../../flare_random_number');
+
+/**
+ * Determine if the playr gets currencies.
+ *
+ * Currency tags can have a percentage attribute set. If it is set then
+ * we go ahead check if they will be successful to gain the currency AFTER
+ * a battle.
+ */
+
+var RewardCurrenciesCheck = (function () {
+  function RewardCurrenciesCheck() {
+    _classCallCheck(this, RewardCurrenciesCheck);
+  }
+
+  /**
+   * Creates Currency Ceck Object.
+   *
+   * Assigns a new array to a enemy object. This array contains
+   * x number of objects. Each object contains a currency name and
+   * do we gain currency check which is either true or false.
+   */
+
+  _createClass(RewardCurrenciesCheck, [{
+    key: 'createCheckObject',
+    value: function createCheckObject() {
+
+      for (var i = 0; i < $dataEnemies.length; i++) {
+        var enemy = $dataEnemies[i];
+
+        if (enemy !== null) {
+          enemy.gainCurrencyOnBattleWin = [];
+          this._processEnemyCurrencyReward(enemy, enemy.enemyCurrencyRewardData);
+        }
+      }
+    }
+
+    /**
+     * Private method. Create enemy check object.
+     *
+     * Assigns the gain currency check object to the array of objects
+     * this allows for an enemy to have multiple currencies with different
+     * percentages.
+     *
+     * @param Object enemy
+     * @param Array enemyCurrencyReward
+     */
+  }, {
+    key: '_processEnemyCurrencyReward',
+    value: function _processEnemyCurrencyReward(enemy, enemyCurrencyReward) {
+      var self = this;
+
+      enemyCurrencyReward.map(function (currencyObject) {
+        if (typeof currencyObject === 'object') {
+          enemy.gainCurrencyOnBattleWin.push({
+            currency_name: currencyObject.name,
+            doWeGainCurrency: self._processPercentage(currencyObject)
+          });
+        }
+      });
+    }
+
+    /**
+     * Private method. check percentage.
+     *
+     * When no percentage is given it is set to 100, default truth.
+     * when percentage is given we subtract it from 100, then random a number
+     * between 0 an 100 and compare the result to the "toGetAbove" varaible.
+     *
+     * Example: 100 - 85 = 15, random number is 16, 16 > 15 = true.
+     *
+     * In the above example case the user would be rewarded the currency.
+     *
+     * @param Object CurrencyObject
+     * @return bool
+     */
+  }, {
+    key: '_processPercentage',
+    value: function _processPercentage(currencyObject) {
+      if (currencyObject.percentage !== 100) {
+        var toGetAbove = 100 - currencyObject.percentage;
+        var randomNumber = FlareRandomNumber.minMax(0, 100);
+
+        if (randomNumber > toGetAbove) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      return true;
+    }
+  }]);
+
+  return RewardCurrenciesCheck;
+})();
+
+module.exports = RewardCurrenciesCheck;
+
+},{"../../flare_random_number":85}],75:[function(require,module,exports){
+'use strict';
+
+var FlareCurrencyScene = require('../scenes/flare_currency_scene');
+
+var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow;
+Scene_Menu.prototype.createCommandWindow = function () {
+  oldSceneMenuPrototypeCreateCommandWindiow.call(this);
+  this._commandWindow.setHandler('Currencies', this.currencyCommand.bind(this));
+};
+
+Scene_Menu.prototype.currencyCommand = function () {
+  SceneManager.push(FlareCurrencyScene);
+};
+
+},{"../scenes/flare_currency_scene":69}],76:[function(require,module,exports){
 'use strict';
 
 var CurrencyValueWindow = require("../windows/shop/currency_value_window");
@@ -3847,7 +4327,7 @@ Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
   }
 };
 
-},{"../windows/shop/currency_value_window":79}],72:[function(require,module,exports){
+},{"../windows/shop/currency_value_window":80}],77:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyRewardWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -3888,553 +4368,16 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
   };
 }
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":82}],73:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":83}],78:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var lodashFindIndex = require('../../../node_modules/lodash/array/findIndex');
-
-/**
- * Responsible for gathering all the items related to a currency.
- *
- * All items have a belongsToCurrency field on them, we check the currency
- * that the user wants to create a shop for and gather all the items
- * for that shop.
- */
-
-var CurrencyShop = (function () {
-  function CurrencyShop() {
-    _classCallCheck(this, CurrencyShop);
-
-    this._goods = [];
-  }
-
-  /**
-   * Open the shop window.
-   *
-   * Populate with items based off currency name.
-   *
-   * @param string currency
-   * @param boolean purchaseOnly
-   */
-
-  _createClass(CurrencyShop, [{
-    key: 'openShopWindow',
-    value: function openShopWindow(currency, purchaseOnly) {
-      _currencyShopInfo.currency_name = currency;
-      this._createShopGoods(currency);
-      SceneManager.push(Scene_Shop);
-      SceneManager.prepareNextScene(this._goods, purchaseOnly);
-    }
-
-    /**
-     * Creates the actual goods for the shop based off curency name.
-     *
-     * @param string currency
-     */
-  }, {
-    key: '_createShopGoods',
-    value: function _createShopGoods(currency) {
-      var itemsArray = $dataItems;
-      var weaponsArray = $dataWeapons;
-      var armorsArray = $dataArmors;
-
-      this.processItemsArray(itemsArray, currency);
-      this.processWeaponsArray(weaponsArray, currency);
-      this.processArmorsArray(armorsArray, currency);
-    }
-
-    /**
-     * Stores items in a goods array.
-     *
-     * @param array itemsArray
-     * @param string currency
-     */
-  }, {
-    key: 'processItemsArray',
-    value: function processItemsArray(itemsArray, currency) {
-      for (var i = 0; i < itemsArray.length; i++) {
-        if (itemsArray[i] !== null && itemsArray[i].belongsToCurrency === currency) {
-
-          if (i <= 2000) {
-            var item = [0, itemsArray[i].id];
-          }
-
-          var found = lodashFindIndex(this._goods, function (goodsItem) {
-            goodsItem.join(',') === item.join(',');
-          });
-
-          if (found === -1) {
-            this._goods.push(item);
-          }
-        }
-      }
-    }
-
-    /**
-     * Stores weapons in a goods array.
-     *
-     * @param array weaponsArray
-     * @param string currency
-     */
-  }, {
-    key: 'processWeaponsArray',
-    value: function processWeaponsArray(weaponsArray, currency) {
-      for (var i = 0; i < weaponsArray.length; i++) {
-        if (weaponsArray[i] !== null && weaponsArray[i].belongsToCurrency === currency) {
-
-          if (i <= 2000) {
-            var weapon = [1, weaponsArray[i].id];
-
-            var found = lodashFindIndex(this._goods, function (goodsItem) {
-              return goodsItem.join(',') === weapon.join(',');
-            });
-
-            if (found === -1) {
-              this._goods.push(weapon);
-            }
-          }
-        }
-      }
-    }
-
-    /**
-     * Stores armos in a goods array.
-     *
-     * @param array armorsArray
-     * @param string currency
-     */
-  }, {
-    key: 'processArmorsArray',
-    value: function processArmorsArray(armorArray, currency) {
-      for (var i = 0; i < armorArray.length; i++) {
-        if (armorArray[i] !== null && armorArray[i].belongsToCurrency === currency) {
-
-          if (i <= 2000) {
-            var armor = [2, armorArray[i].id];
-          }
-
-          var found = lodashFindIndex(this._goods, function (goodsItem) {
-            return goodsItem.join(',') === armor.join(',');
-          });
-
-          if (found === -1) {
-            this._goods.push(armor);
-          }
-        }
-      }
-    }
-  }]);
-
-  return CurrencyShop;
-})();
-
-module.exports = CurrencyShop;
-
-// private global method for storing currency currency shop info
-window._currencyShopInfo = { currency_name: null };
-
-},{"../../../node_modules/lodash/array/findIndex":1}],74:[function(require,module,exports){
-'use strict';
-
-var lodashClone = require('../../../node_modules/lodash/lang/clone');
-
-var oldBattleManagerDisplayRewards = BattleManager.displayRewards;
-BattleManager.displayRewards = function () {
-  oldBattleManagerDisplayRewards.call(this);
-  this.displayRewardForCurrencies();
+var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
+Window_MenuCommand.prototype.addOriginalCommands = function () {
+  oldWindowMenuCommandProtottypeAddOriginalCommandsMethod.call(this);
+  this.addCommand('Currencies', 'Currencies');
 };
 
-BattleManager.displayRewardForCurrencies = function () {
-  var self = this;
-  $gameTroop.troop().members.forEach(function (member) {
-    self._parseEnemyMemberCurrencies(member);
-  });
-};
-
-BattleManager._parseEnemyMemberCurrencies = function (member) {
-  var self = this;
-  $dataEnemies.forEach(function (enemy) {
-    if (enemy !== null && enemy.id === member.enemyId && enemy.enemyCurrencyRewardData.length > 0) {
-      self._gainCurrencyMessage(enemy);
-    }
-  });
-};
-
-BattleManager._gainCurrencyMessage = function (enemy) {
-
-  var self = this;
-  var baseY = 0;
-  var data = lodashClone(enemy.enemyCurrencyRewardData);
-
-  enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
-    if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
-      $gameMessage.add('\\c[8]You Gained: \\c[0]' + data[0].amount + ' of: ' + data[0].name);
-      data.shift();
-    }
-  });
-};
-
-var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
-BattleManager.gainRewards = function () {
-  oldBattleManagerGainRewardsMethod.call(this);
-  this.gainCurrencies();
-};
-
-BattleManager.gainCurrencies = function () {
-  var self = this;
-  $gameTroop.troop().members.forEach(function (enenemyObject) {
-    self._parseEnemyObject(enenemyObject);
-  });
-};
-
-BattleManager._parseEnemyObject = function (enemyObjectFromTroop) {
-  var self = this;
-  $dataEnemies.forEach(function (enemy) {
-    if (enemy !== null && enemy.id === enemyObjectFromTroop.enemyId && enemy.enemyCurrencyRewardData.length > 0) {
-      self._getCurrenciesAndRewardThem(enemy);
-    }
-  });
-};
-
-BattleManager._getCurrenciesAndRewardThem = function (enemy) {
-  var self = this;
-  var baseY = 0;
-  var data = lodashClone(enemy.enemyCurrencyRewardData);
-
-  enemy.gainCurrencyOnBattleWin.forEach(function (gainCurrency) {
-    if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
-      window.FlareCurrencies.addAmount(data[0].name, data[0].amount);
-      data.shift();
-    }
-  });
-};
-
-},{"../../../node_modules/lodash/lang/clone":51}],75:[function(require,module,exports){
-'use strict';
-
-var RewardCurrenciesCheck = require('./reward_currencies_check');
-var GatherItemsForShop = require('./gather_items');
-
-var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
-DataManager.isDatabaseLoaded = function () {
-  if (!olderDataManagerIsDataBaseLoadedMethod.call(this)) {
-    return false;
-  }
-
-  // process Note tags
-  this.flareProcessEnemyNoteTags($dataEnemies);
-
-  // Set up rewards for enemies.
-  var rewardCurrenciesCheck = new RewardCurrenciesCheck();
-  rewardCurrenciesCheck.createCheckObject();
-
-  // Set up the currency shops
-  new GatherItemsForShop();
-
-  return true;
-};
-
-var oldDataManagerMakeSaveContentsMethod = DataManager.makeSaveContents;
-DataManager.makeSaveContents = function () {
-  var contents = oldDataManagerMakeSaveContentsMethod.call(this);
-  contents.currencies = window.flareCurrency.getCurrencyStore();
-
-  return contents;
-};
-
-var oldDataManagerExtractSaveContentMethod = DataManager.extractSaveContents;
-DataManager.extractSaveContents = function (contents) {
-  oldDataManagerExtractSaveContentMethod.call(this, contents);
-  window.flareCurrency.setStoreFromLoad(contents.currencies);
-};
-
-/**
- * Process the enemy note tag looking for currency information.
- *
- * Currency tags can have name, how much and percentage of drop.
- * percentage is optional. Default is 100.
- *
- * @param $dataEnemies enemies
- */
-DataManager.flareProcessEnemyNoteTags = function (enemies) {
-  var noteTag = /<currency:\s*([^,>]+),\s*([^,>]+)(,\s*([^,>]+))?>/i;
-
-  for (var i = 1; i < enemies.length; i++) {
-    var enemy = enemies[i];
-    var enemyNoteData = enemy.note.split(/[\r\n]+/);
-
-    enemy.enemyCurrencyRewardData = [];
-    this._processEnemyNoteDataForCurrencyReward(enemy, enemyNoteData, noteTag);
-  }
-};
-
-/**
- * Private Method. Process Enemy Currency Note Data.
- *
- * Pushes the enemy currency reward data object to an array of the same type.
- * enemies can have multiple currencies attached to them.
- *
- * @param Object enemy
- * @param Array enemyNoteData
- * @param regex noteTag
- */
-DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteData, noteTag) {
-  for (var n = 0; n < enemyNoteData.length; n++) {
-    var line = enemyNoteData[n];
-
-    if (line.match(noteTag)) {
-      var lineMatched = line.match(noteTag);
-
-      enemy.enemyCurrencyRewardData.push(this._createCurrencyRewardObject(lineMatched));
-    }
-  }
-};
-
-/**
- * Private Method. Creates the actual object.
- *
- * Creates a currency reward object that contains name, amount and percentage of either 100 or the
- * third number that the user placed in the tag.
- *
- * @param Array lineMatched
- */
-DataManager._createCurrencyRewardObject = function (lineMatched) {
-  if (lineMatched[4] !== undefined) {
-    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: parseInt(lineMatched[4]) };
-  } else {
-    return { name: lineMatched[1], amount: parseInt(lineMatched[2]), percentage: 100 };
-  }
-};
-
-},{"./gather_items":76,"./reward_currencies_check":77}],76:[function(require,module,exports){
-/**
- * @namespace FlareCurrency
- */
-
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var extractAllOfType = require('rmmv-mrp-core/option-parser').extractAllOfType;
-var lodashFind = require('../../../node_modules/lodash/collection/find');
-var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
-
-/**
- * Creates objects for the currency shop.
- *
- * Creates weapons, armor and items for the currency shop that match
- * the tags in the note boxes.
- */
-
-var GatherItems = (function () {
-
-  /**
-   * Calls each method that creates an object for said methods.
-   */
-
-  function GatherItems() {
-    _classCallCheck(this, GatherItems);
-
-    this.processItems();
-    this.processWeapons();
-    this.processArmors();
-  }
-
-  /**
-   * Pushes an item object on to the item array.
-   */
-
-  _createClass(GatherItems, [{
-    key: 'processItems',
-    value: function processItems() {
-      var items = $dataItems;
-
-      for (var i = 0; i < items.length; i++) {
-        if (items[i] !== null) {
-          items[i].currencyCost = 0;
-          items[i].belongsToCurrency = null;
-
-          var itemNoteBoxInfo = extractAllOfType(items[i].note, 'currencyShop');
-          var noteBoxObjectInfo = itemNoteBoxInfo[0];
-
-          if (!lodashIsUndefined(noteBoxObjectInfo)) {
-            items[i].currencyCost = noteBoxObjectInfo.andCosts;
-            items[i].belongsToCurrency = noteBoxObjectInfo.belongsTo;
-          }
-        }
-      }
-    }
-
-    /**
-     * Pushes an weapon object on to the weapon array.
-     */
-  }, {
-    key: 'processWeapons',
-    value: function processWeapons() {
-      var weapons = $dataWeapons;
-
-      for (var i = 0; i < weapons.length; i++) {
-        if (weapons[i] !== null) {
-          weapons[i].currencyCost = 0;
-          weapons[i].belongsToCurrency = null;
-
-          var weaponNoteBoxInfo = extractAllOfType(weapons[i].note, 'currencyShop');
-          var noteBoxObjectInfo = weaponNoteBoxInfo[0];
-
-          if (!lodashIsUndefined(noteBoxObjectInfo)) {
-            weapons[i].currencyCost = noteBoxObjectInfo.andCosts;
-            weapons[i].belongsToCurrency = noteBoxObjectInfo.belongsTo;
-          }
-        }
-      }
-    }
-
-    /**
-     * Pushes an armor object on to the armor array.
-     */
-  }, {
-    key: 'processArmors',
-    value: function processArmors() {
-      var armors = $dataArmors;
-
-      for (var i = 0; i < armors.length; i++) {
-        if (armors[i] !== null) {
-          armors[i].currencyCost = 0;
-          armors[i].belongsToCurrency = null;
-
-          var armorsNoteBoxInfo = extractAllOfType(armors[i].note, 'currencyShop');
-          var noteBoxObjectInfo = armorsNoteBoxInfo[0];
-
-          if (!lodashIsUndefined(noteBoxObjectInfo)) {
-            armors[i].currencyCost = noteBoxObjectInfo.andCosts;
-            armors[i].belongsToCurrency = noteBoxObjectInfo.belongsTo;
-          }
-        }
-      }
-    }
-  }]);
-
-  return GatherItems;
-})();
-
-module.exports = GatherItems;
-
-},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/isUndefined":58,"rmmv-mrp-core/option-parser":64}],77:[function(require,module,exports){
-/**
- * @namespace FlareCurrency
- */
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var FlareRandomNumber = require('../../flare_random_number');
-
-/**
- * Determine if the playr gets currencies.
- *
- * Currency tags can have a percentage attribute set. If it is set then
- * we go ahead check if they will be successful to gain the currency AFTER
- * a battle.
- */
-
-var RewardCurrenciesCheck = (function () {
-  function RewardCurrenciesCheck() {
-    _classCallCheck(this, RewardCurrenciesCheck);
-  }
-
-  /**
-   * Creates Currency Ceck Object.
-   *
-   * Assigns a new array to a enemy object. This array contains
-   * x number of objects. Each object contains a currency name and
-   * do we gain currency check which is either true or false.
-   */
-
-  _createClass(RewardCurrenciesCheck, [{
-    key: 'createCheckObject',
-    value: function createCheckObject() {
-
-      for (var i = 0; i < $dataEnemies.length; i++) {
-        var enemy = $dataEnemies[i];
-
-        if (enemy !== null) {
-          enemy.gainCurrencyOnBattleWin = [];
-          this._processEnemyCurrencyReward(enemy, enemy.enemyCurrencyRewardData);
-        }
-      }
-    }
-
-    /**
-     * Private method. Create enemy check object.
-     *
-     * Assigns the gain currency check object to the array of objects
-     * this allows for an enemy to have multiple currencies with different
-     * percentages.
-     *
-     * @param Object enemy
-     * @param Array enemyCurrencyReward
-     */
-  }, {
-    key: '_processEnemyCurrencyReward',
-    value: function _processEnemyCurrencyReward(enemy, enemyCurrencyReward) {
-      var self = this;
-
-      enemyCurrencyReward.map(function (currencyObject) {
-        if (typeof currencyObject === 'object') {
-          enemy.gainCurrencyOnBattleWin.push({
-            currency_name: currencyObject.name,
-            doWeGainCurrency: self._processPercentage(currencyObject)
-          });
-        }
-      });
-    }
-
-    /**
-     * Private method. check percentage.
-     *
-     * When no percentage is given it is set to 100, default truth.
-     * when percentage is given we subtract it from 100, then random a number
-     * between 0 an 100 and compare the result to the "toGetAbove" varaible.
-     *
-     * Example: 100 - 85 = 15, random number is 16, 16 > 15 = true.
-     *
-     * In the above example case the user would be rewarded the currency.
-     *
-     * @param Object CurrencyObject
-     * @return bool
-     */
-  }, {
-    key: '_processPercentage',
-    value: function _processPercentage(currencyObject) {
-      if (currencyObject.percentage !== 100) {
-        var toGetAbove = 100 - currencyObject.percentage;
-        var randomNumber = FlareRandomNumber.minMax(0, 100);
-
-        if (randomNumber > toGetAbove) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-
-      return true;
-    }
-  }]);
-
-  return RewardCurrenciesCheck;
-})();
-
-module.exports = RewardCurrenciesCheck;
-
-},{"../../flare_random_number":85}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /**
  * @namespace FlareCurrency
  */
@@ -4530,7 +4473,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":86,"../currencies/currency":66}],79:[function(require,module,exports){
+},{"../../flare_window_base":86,"../currencies/currency":66}],80:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4614,7 +4557,7 @@ var CurrencyValueWindow = (function (_Window_Base) {
 
 module.exports = CurrencyValueWindow;
 
-},{"../../../../node_modules/lodash/collection/find":3}],80:[function(require,module,exports){
+},{"../../../../node_modules/lodash/collection/find":3}],81:[function(require,module,exports){
 "use strict";
 
 Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currencyName) {
@@ -4666,7 +4609,7 @@ Window_ShopBuy.prototype.makeItemList = function () {
   }
 };
 
-},{}],81:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 'use strict';
 
 var oldWindowShopNumberPrototTypeSetCurrencyUnit = Window_ShopNumber.prototype.setCurrencyUnit;
@@ -4694,7 +4637,7 @@ Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, widt
     this.drawIcon(unit, x + width - unitWidth, y);
 };
 
-},{}],82:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4785,7 +4728,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"../../../../node_modules/lodash/lang/clone":51}],83:[function(require,module,exports){
+},{"../../../../node_modules/lodash/lang/clone":51}],84:[function(require,module,exports){
 /**
  * @namespace FlareCollection
  */
@@ -4847,57 +4790,6 @@ var FlareError = (function () {
 })();
 
 module.exports = FlareError;
-
-},{}],84:[function(require,module,exports){
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Interace based class.
- *
- * Contains methods to be over ridden by sub classing.
- * Contains methods to do with the core game scene.
- *
- * Flare Screen is to be subclassed and the methods to be implemented
- * based on the API documentation provided below.
- *
- * @namespace FlareCollection
- */
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var FlareMenuSceneHandlerInterface = (function () {
-  function FlareMenuSceneHandlerInterface() {
-    _classCallCheck(this, FlareMenuSceneHandlerInterface);
-  }
-
-  /**
-   * This method allows you to create menu handlers.
-   *
-   * You can use this method to create your own menu items for the
-   * core game menu.
-   */
-
-  _createClass(FlareMenuSceneHandlerInterface, [{
-    key: "menuHandler",
-    value: function menuHandler() {}
-
-    /**
-     * Used to add a new window command to the menu.
-     */
-  }, {
-    key: "addCommandToGameMenu",
-    value: function addCommandToGameMenu() {}
-  }]);
-
-  return FlareMenuSceneHandlerInterface;
-})();
-
-module.exports = FlareMenuSceneHandlerInterface;
 
 },{}],85:[function(require,module,exports){
 /**
@@ -5002,4 +4894,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[68,67,75,74,72,71,81,80,82]);
+},{}]},{},[68,75,78,67,72,71,77,76,82,81,83]);

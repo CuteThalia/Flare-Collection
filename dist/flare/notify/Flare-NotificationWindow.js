@@ -26,6 +26,10 @@ var NotificationOptions = require('./notification_options/notification_options')
  * Default: 175
  * @default 175
  *
+ * @param Should I stay at the top?
+ * @desc Should the notification stay at the top?
+ * Default: false
+ * @default false
  *
  * @help
  *
@@ -70,7 +74,7 @@ var FlareNotification = (function () {
      * @param name - name of the window for the queue.
      * @param text - text for the window
      */
-    value: function notify(name, text) {
+    value: function notify(name, text, width) {
       this._arrayOfNotifications.push({
         name: name,
         windowMethod: new FlareNotificationWindow(),
@@ -153,7 +157,8 @@ var NotificationOptions = (function () {
     value: function createNotificationOptions() {
       this._notificationOptions = {
         time_till_next_window: FlareNotificationWindow['Till Next Notification?'],
-        fade_out_time: FlareNotificationWindow['How Long Till Notification Fade Out?']
+        fade_out_time: FlareNotificationWindow['How Long Till Notification Fade Out?'],
+        stickToTop: FlareNotificationWindow['Should I stay at the top?']
       };
     }
   }, {
@@ -284,7 +289,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
   }, {
     key: 'windowWidth',
     value: function windowWidth() {
-      return 360;
+      return 560;
     }
   }, {
     key: 'windowHeight',
@@ -298,7 +303,9 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
       if (this._showCount > 0) {
         this.updateFadeIn();
-        this.y += 3;
+        if (!_NotificationOptions.getNotificationOptions().stickToTop) {
+          this.y += 3;
+        }
         this._showCount--;
       } else {
         this.updateFadeOut();

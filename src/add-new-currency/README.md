@@ -109,6 +109,10 @@ exp custom drops currency
 
 Once added, battles will have an additional battle spoils window showing the currencies you gained.
 
+## Yanfly Menu Manger
+
+You don't need to do anything, currencies just work as expected.
+
 ## For Developers
 
 I have a special treat for you.

@@ -47,3 +47,4 @@ class FlareCurrencyScene extends Scene_MenuBase {
 };
 
 module.exports = FlareCurrencyScene;
+window.FlareCurrencyScene = FlareCurrencyScene;

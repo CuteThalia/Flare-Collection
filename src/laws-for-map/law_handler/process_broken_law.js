@@ -11,7 +11,7 @@ class ProcessBrokenLaw {
   validatePlayerBrokeTheLaw() {
 
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
-      if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction)) {
+      if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
         return true;
       }
     }
@@ -21,7 +21,7 @@ class ProcessBrokenLaw {
 
   getBrokenLawObject() {
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
-      if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction)) {
+      if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
         window._brokenLawObject = LawsForMap.getLawsForMap()[i];
         return LawsForMap.getLawsForMap()[i];
       }

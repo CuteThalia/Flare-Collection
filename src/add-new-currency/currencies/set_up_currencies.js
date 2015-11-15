@@ -3,7 +3,6 @@
  */
 
  var Currency          = require('./currency');
- var FlareCurrencyMenu = require('../menus/flare_currency_menu');
  var FlareError        = require('../../flare_error');
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
@@ -43,10 +42,6 @@ class FlareCurrency {
     window.flareCurrency.setStoreFromLoad(store);
   }
 };
-
-// Create the Currencies menu item.
-var flareCurrencyMenu = new FlareCurrencyMenu();
-flareCurrencyMenu.menuHandler();
 
 // Creates the Currencies.
 var flareCurrency = new FlareCurrency();
