@@ -16,7 +16,8 @@ class NotificationOptions {
   static createNotificationOptions() {
     this._notificationOptions = {
       time_till_next_window: FlareNotificationWindow['Till Next Notification?'],
-      fade_out_time: FlareNotificationWindow['How Long Till Notification Fade Out?']
+      fade_out_time: FlareNotificationWindow['How Long Till Notification Fade Out?'],
+      stickToTop: FlareNotificationWindow['Should I stay at the top?']
     };
   }
 

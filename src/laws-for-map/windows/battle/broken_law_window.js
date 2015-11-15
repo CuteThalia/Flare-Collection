@@ -32,9 +32,9 @@ class BrokenLawWindow extends FlareWindowSelectable {
   }
 
   drawBrokenLawText() {
-    drawText(lawObject.name + 'has been broken.', 0 , 20, 250);
-    drawText('A fine of: ' + law.amount + 'has been issued for your: ' + law.punishment, 0, 40, 500);
-    
+    this.drawText(lawObject.name + 'has been broken.', 0 , 20, 250, 50);
+    this.drawText('A fine of: ' + law.amount + 'has been issued for your: ' + law.punishment, 0, 40, 500, 50);
+
     if (window._lawMessageForLawBattleWindow !== null) {
       drawText(window._lawMessageForLawBattleWindow, 0, 60, 500);
     }

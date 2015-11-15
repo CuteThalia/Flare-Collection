@@ -20,11 +20,10 @@ Game_Action.prototype.apply = function(target) {
           }
 
           // Punish the user for breaking a law, assuming they have.
-          if (target instanceof Game_Enemy) {
-            var processWhatShouldHappenOnHit = new ProcessBrokenLaw(this.item().name, this.subject());
-            if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
-              processWhatShouldHappenOnHit.punishPlayer();
-            }
+          if (this.subject() instanceof Game_Actor && target instanceof Game_Actor) {
+            this.applyPunishment(this.item().name, this.subject())
+          } else if (target instanceof Game_Enemy ) {
+            this.applyPunishment(this.item().name, this.subject())
           }
 
           this.item().effects.forEach(function(effect) {
@@ -36,4 +35,11 @@ Game_Action.prototype.apply = function(target) {
     } else {
       oldGameActionPrototypeApplyMethod.call(this, target);
     }
-};
+}
+
+Game_Action.prototype.applyPunishment = function(itemName, subject) {
+  var processWhatShouldHappenOnHit = new ProcessBrokenLaw(itemName, subject);
+  if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    processWhatShouldHappenOnHit.punishPlayer();
+  }
+}

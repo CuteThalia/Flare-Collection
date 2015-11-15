@@ -31,7 +31,7 @@ class FlareNotificationWindow extends FlareWindowBase {
   }
 
   windowWidth() {
-    return 360;
+    return 560;
   }
 
   windowHeight() {
@@ -43,7 +43,9 @@ class FlareNotificationWindow extends FlareWindowBase {
 
     if (this._showCount > 0) {
       this.updateFadeIn();
-      this.y += 3;
+      if (!_NotificationOptions.getNotificationOptions().stickToTop) {
+        this.y += 3;
+      }
       this._showCount--;
     } else {
       this.updateFadeOut();
