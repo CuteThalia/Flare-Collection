@@ -16,90 +16,90 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * @param Currency One Name
   * @desc Name of the Currency
-  * Default: Example Name
-  * @default Example Name
+  * Default: ''
+  * @default ''
   *
   * @param Currency One Description
   * @desc Keep it short. Currency description
-  * Default: Used to buy: something.
-  * @default Used to buy: something.
+  * Default: ''
+  * @default ''
   *
   * @param Currency One Icon Index
   * @desc icon index.
-  * Default: 25
-  * @default 25
+  * Default: ''
+  * @default ''
   *
   * @param ---Currency Two---
   * @desc
   *
   * @param Currency Two Name
   * @desc Name of the Currency
-  * Default: Example Name
-  * @default Example Name
+  * Default: ''
+  * @default ''
   *
   * @param Currency Two Description
   * @desc Keep it short. Currency description
-  * Default: Used to buy: something.
-  * @default Used to buy: something.
+  * Default: ''
+  * @default ''
   *
   * @param Currency Two Icon Index
   * @desc icon index.
-  * Default: 25
-  * @default 25
+  * Default: ''
+  * @default ''
   *
   * @param ---Currency Three---
   * @desc
   *
   * @param Currency Three Name
   * @desc Name of the Currency
-  * Default: Example Name
-  * @default Example Name
+  * Default: ''
+  * @default ''
   *
   * @param Currency Three Description
   * @desc Keep it short. Currency description
-  * Default: Used to buy: something.
-  * @default Used to buy: something.
+  * Default: ''
+  * @default ''
   *
   * @param Currency Three Icon Index
   * @desc icon index.
-  * Default: 25
-  * @default 25
+  * Default: ''
+  * @default ''
   *
   * @param ---Currency Four---
   * @desc
   *
   * @param Currency Four Name
   * @desc Name of the Currency
-  * Default: Example Name
-  * @default Example Name
+  * Default: ''
+  * @default ''
   *
   * @param Currency Four Description
   * @desc Keep it short. Currency description
-  * Default: Used to buy: something.
-  * @default Used to buy: something.
+  * Default: ''
+  * @default ''
   *
   * @param Currency Four Icon Index
   * @desc icon index.
-  * Default: 25
-  * @default 25
+  * Default: ''
+  * @default ''
   *
   * @param ---Currency Five---
   * @desc
   *
   * @param Currency Five Name
   * @desc Name of the Currency
-  * Default: Example Name
-  * @default Example Name
+  * Default: ''
+  * @default ''
   *
   * @param Currency Five Description
   * @desc Keep it short. Currency description
-  * Default: Used to buy: something.
-  * @default Used to buy: something.
+  * Default: ''
+  * @default ''
   *
   * @param Currency Five Icon Index
   * @desc icon index.
-  * Default: 25
-  * @default 25
+  * Default: ''
+  * @default ''
   *
   * @help
   *
