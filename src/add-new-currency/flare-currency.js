@@ -122,7 +122,7 @@ var CurrencyShop = require('./shop/currency_shop');
   *
   * The following tags can be applied to enemies:
   *
-  * <currencyName name:"Name", amount: 10, chance: 90>
+  * <currencyToGain name:"Name", amount: 10, chance: 90>
   *
   * "Name"     - Currency Name, can have color short codes.
   * amount     - Can be either an interger or a string containing: "1 ~ x"
@@ -133,11 +133,11 @@ var CurrencyShop = require('./shop/currency_shop');
   * Percentage is optional, with out it, all currencies
   * have a 100% drop rate. doing:
   *
-  * <currencyName name:"Demon Teeth", amount: "10 ~ 765", chance: 50>
+  * <currencyToGain name:"Demon Teeth", amount: "10 ~ 765", chance: 50>
   *
   * Means you have a 50% chance to get betwen 10 and 765 Demon Teeth.
   *
-  * <currencyName name:"Demon Teeth", amount: 10>
+  * <currencyToGain name:"Demon Teeth", amount: 10>
   *
   * Means you have a 100% chance to get 10 Demon Teeth
   *
