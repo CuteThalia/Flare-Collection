@@ -55,8 +55,6 @@ class ProcessBrokenLaw {
 
         if (health <= 0) {
           this._actorWhobrokeLaw._hp = 0;
-          this._actorWhobrokeLaw.die();
-          this._actorWhobrokeLaw.performCollapse();
         } else {
           this._actorWhobrokeLaw._hp = health;
         }

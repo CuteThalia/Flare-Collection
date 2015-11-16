@@ -2845,8 +2845,6 @@ var ProcessBrokenLaw = (function () {
 
           if (health <= 0) {
             this._actorWhobrokeLaw._hp = 0;
-            this._actorWhobrokeLaw.die();
-            this._actorWhobrokeLaw.performCollapse();
           } else {
             this._actorWhobrokeLaw._hp = health;
           }
@@ -3039,7 +3037,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 module.exports = FlareLawWindowScene;
 
 },{"../windows/laws_window":74}],69:[function(require,module,exports){
-'use strict';
+"use strict";
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
 
@@ -3062,28 +3060,31 @@ Game_Action.prototype.apply = function (target) {
         this.executeDamage(target, value);
       }
 
-      // Punish the user for breaking a law, assuming they have.
-      if (this.subject() instanceof Game_Actor && target instanceof Game_Actor) {
-        this.applyPunishment(this.item().name, this.subject());
-      } else if (target instanceof Game_Enemy) {
-        this.applyPunishment(this.item().name, this.subject());
-      }
-
-      this.item().effects.forEach(function (effect) {
-        this.applyItemEffect(target, effect);
-      }, this);
-
-      this.applyItemUserEffect(target);
+      this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
     }
   } else {
     oldGameActionPrototypeApplyMethod.call(this, target);
   }
 };
 
-Game_Action.prototype.applyPunishment = function (itemName, subject) {
-  var processWhatShouldHappenOnHit = new ProcessBrokenLaw(itemName, subject);
-  if (processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, target) {
+
+  var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
+  console.log(subject);
+
+  // Punish the user for breaking a law, assuming they have.
+  if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + item.name + 's');
     processWhatShouldHappenOnHit.punishPlayer();
+  } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+
+    processWhatShouldHappenOnHit.punishPlayer();
+  } else {
+    item.effects.forEach(function (effect) {
+      this.applyItemEffect(target, effect);
+    }, this);
+
+    this.applyItemUserEffect(target);
   }
 };
 
