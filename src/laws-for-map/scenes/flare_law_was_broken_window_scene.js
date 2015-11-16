@@ -18,10 +18,10 @@ class FlareLawWasBrokenWindowScene extends Scene_MenuBase {
       this._flareBrokenLawWindow.close();
       this.popScene();
 
-       if (window._isDeadFromBreakingLaw) {
-        window._subjectWhoBrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
+      // Should every one be dead when this is closed end the game.
+      if ($gameParty.isAllDead()) {
         SceneManager.goto(Scene_Gameover);
-       }
+      }
     }
   }
 

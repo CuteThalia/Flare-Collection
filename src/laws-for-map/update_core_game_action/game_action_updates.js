@@ -28,7 +28,6 @@ Game_Action.prototype.apply = function(target) {
 
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, target) {
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
-  console.log(subject);
 
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor &&
@@ -37,12 +36,14 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     // Punish for items, spells and others that target the player or players.
     processWhatShouldHappenOnHit.punishPlayer();
     processWhatShouldHappenOnHit.openMessageWindow();
-    
+
   } else if (target instanceof Game_Enemy &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
     // Punish the player for those that effect the enemy.
-    $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + item.name + 's');
+    $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + "\\c[18]" + item.name + 's\\c[0]');
+    $gameMessage.add("\\c[14] Punishment is: \\c[0]" +  "\\c[20]" + brokenLawObject.punishment + "\\c[0] in the amount of: " + "\\c[20]" + brokenLawObject.amount + "\\c[0]");
     processWhatShouldHappenOnHit.punishPlayer();
   } else {
     item.effects.forEach(function(effect) {

@@ -21,7 +21,7 @@ class BrokenLawWindow extends FlareWindowBase {
   }
 
   windowHeight() {
-    return 250;
+    return 325;
   }
 
   refresh() {
@@ -35,6 +35,10 @@ class BrokenLawWindow extends FlareWindowBase {
     this.flareDrawTextEx('Law Prohibs the use of: ' + '\\c[18]' + this._law.cantUse + ' \\c[0]', 20, 110);
     this.flareDrawTextEx('\\c[9]' + this._law.subject + '\\c[0]' + ' used: ' + '\\c[10]' + this._law.actionUsed + '\\c[0]', 20, 140);
     this.flareDrawTextEx('The punishment is: ' + '\\c[20]' + this._law.punishment + '\\c[0]' + ' at a cost of: ' + '\\c[20]' +  this._law.amount + '\\c[0]', 10, 180);
+
+    if ($gameParty.isAllDead()) {
+      this.flareDrawTextEx('\\c[15] Every one is dead. Game over ... \\c[0]', 10, 250);
+    }
     this.resetFontSettings();
 
   }

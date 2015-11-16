@@ -68,13 +68,7 @@ class ProcessBrokenLaw {
 
         if (health <= 0) {
           this._actorWhobrokeLaw.die();
-
-          if ($gameParty._actors.length === 1) {
-            window._isDeadFromBreakingLaw = true;
-            window._subjectWhoBrokeLaw = this._actorWhobrokeLaw;
-          } else {
-            this._actorWhobrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
-          }
+          this._actorWhobrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
         } else {
           this._actorWhobrokeLaw._hp = health;
         }
@@ -111,5 +105,3 @@ module.exports = ProcessBrokenLaw;
 
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
-window._subjectWhoBrokeLaw = null;
-window._isDeadFromBreakingLaw = false;

@@ -2872,13 +2872,7 @@ var ProcessBrokenLaw = (function () {
 
           if (health <= 0) {
             this._actorWhobrokeLaw.die();
-
-            if ($gameParty._actors.length === 1) {
-              window._isDeadFromBreakingLaw = true;
-              window._subjectWhoBrokeLaw = this._actorWhobrokeLaw;
-            } else {
-              this._actorWhobrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
-            }
+            this._actorWhobrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
           } else {
             this._actorWhobrokeLaw._hp = health;
           }
@@ -2918,8 +2912,6 @@ module.exports = ProcessBrokenLaw;
 
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
-window._subjectWhoBrokeLaw = null;
-window._isDeadFromBreakingLaw = false;
 
 },{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":66,"../scenes/flare_law_was_broken_window_scene":69}],66:[function(require,module,exports){
 'use strict';
@@ -3111,8 +3103,8 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
         this._flareBrokenLawWindow.close();
         this.popScene();
 
-        if (window._isDeadFromBreakingLaw) {
-          window._subjectWhoBrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
+        // Should every one be dead when this is closed end the game.
+        if ($gameParty.isAllDead()) {
           SceneManager.goto(Scene_Gameover);
         }
       }
@@ -3130,7 +3122,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":76}],70:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":77}],70:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3184,7 +3176,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":77}],71:[function(require,module,exports){
+},{"../windows/laws_window":78}],71:[function(require,module,exports){
 "use strict";
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
@@ -3217,7 +3209,6 @@ Game_Action.prototype.apply = function (target) {
 
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, target) {
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
-  console.log(subject);
 
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
@@ -3226,9 +3217,11 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
     processWhatShouldHappenOnHit.punishPlayer();
     processWhatShouldHappenOnHit.openMessageWindow();
   } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
     // Punish the player for those that effect the enemy.
-    $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + item.name + 's');
+    $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + "\\c[18]" + item.name + 's\\c[0]');
+    $gameMessage.add("\\c[14] Punishment is: \\c[0]" + "\\c[20]" + brokenLawObject.punishment + "\\c[0] in the amount of: " + "\\c[20]" + brokenLawObject.amount + "\\c[0]");
     processWhatShouldHappenOnHit.punishPlayer();
   } else {
     item.effects.forEach(function (effect) {
@@ -3242,6 +3235,23 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
 },{"../law_handler/process_broken_law":65}],72:[function(require,module,exports){
 'use strict';
 
+var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
+var oldSceneBasePrototypeCheckGameOverMethod = Scene_Base.prototype.checkGameover;
+Scene_Base.prototype.checkGameover = function () {
+  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+    if ($gameParty.isAllDead()) {
+      SceneManager.push(FlareLawWasBrokenWindowScene);
+    }
+  } else {
+    if ($gameParty.isAllDead()) {
+      SceneManager.goto(Scene_Gameover);
+    }
+  }
+};
+
+},{"../scenes/flare_law_was_broken_window_scene":69}],73:[function(require,module,exports){
+'use strict';
+
 var AddLawsForMap = require('../add_laws_for_map');
 
 var oldSceneMapPrototypeOnMapLoadedMethod = Scene_Map.prototype.onMapLoaded;
@@ -3251,7 +3261,7 @@ Scene_Map.prototype.onMapLoaded = function () {
   flarAddLawsForMap.grabMapInformation();
 };
 
-},{"../add_laws_for_map":63}],73:[function(require,module,exports){
+},{"../add_laws_for_map":63}],74:[function(require,module,exports){
 'use strict';
 
 var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
@@ -3266,7 +3276,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(FlareLawWindowScene);
 };
 
-},{"../scenes/flare_law_window_scene":70}],74:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":70}],75:[function(require,module,exports){
 "use strict";
 
 var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge;
@@ -3296,7 +3306,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 'use strict';
 
 var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
@@ -3305,7 +3315,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3352,7 +3362,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
   }, {
     key: 'windowHeight',
     value: function windowHeight() {
-      return 250;
+      return 325;
     }
   }, {
     key: 'refresh',
@@ -3367,6 +3377,10 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
       this.flareDrawTextEx('Law Prohibs the use of: ' + '\\c[18]' + this._law.cantUse + ' \\c[0]', 20, 110);
       this.flareDrawTextEx('\\c[9]' + this._law.subject + '\\c[0]' + ' used: ' + '\\c[10]' + this._law.actionUsed + '\\c[0]', 20, 140);
       this.flareDrawTextEx('The punishment is: ' + '\\c[20]' + this._law.punishment + '\\c[0]' + ' at a cost of: ' + '\\c[20]' + this._law.amount + '\\c[0]', 10, 180);
+
+      if ($gameParty.isAllDead()) {
+        this.flareDrawTextEx('\\c[15] Every one is dead. Game over ... \\c[0]', 10, 250);
+      }
       this.resetFontSettings();
     }
   }]);
@@ -3376,7 +3390,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":62}],77:[function(require,module,exports){
+},{"../../../flare_window_base":62}],78:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3483,4 +3497,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":62}]},{},[74,64,73,75,72,71]);
+},{"../../flare_window_base":62}]},{},[75,64,74,76,73,72,71]);
