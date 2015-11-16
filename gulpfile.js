@@ -42,7 +42,7 @@ gulp.task('make:flare-laws-for-map', function() {
         'src/laws-for-map/update_scene/scene_menu_updates.js',
         'src/laws-for-map/update_window/window_menu_base.js',
         'src/laws-for-map/update_scene/scene_map_update.js',
-        'src/laws-for-map/update_core_game_action/game_action_updates.js',
+        'src/laws-for-map/update_core_game_action/game_action_updates.js'
       ]})
       .transform(babelify)
       .bundle()

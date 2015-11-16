@@ -52,6 +52,8 @@ class ProcessBrokenLaw {
   openMessageWindow() {
     if (SceneManager._scene instanceof Scene_Item) {
       SceneManager.push(FlareLawWasBrokenWindowScene);
+    } else if (SceneManager._scene instanceof Scene_Skill) {
+      SceneManager.push(FlareLawWasBrokenWindowScene);
     }
   }
 
@@ -65,7 +67,9 @@ class ProcessBrokenLaw {
         health -= lawObject.amount
 
         if (health <= 0) {
-          this._actorWhobrokeLaw._hp = 0;
+          this._actorWhobrokeLaw.die();
+          window._isDeadFromBreakingLaw = true;
+          window._subjectWhoBrokeLaw = this._actorWhobrokeLaw;
         } else {
           this._actorWhobrokeLaw._hp = health;
         }
@@ -99,5 +103,8 @@ class ProcessBrokenLaw {
 }
 
 module.exports = ProcessBrokenLaw;
+
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
+window._subjectWhoBrokeLaw = null;
+window._isDeadFromBreakingLaw = false;

@@ -1,9 +1,14 @@
 var LawManagement     = require('./law_storage/laws_for_map');
+var LawOptions        = require('./options/option_handler');
 
 /*:
  * @plugindesc Allows you to have a set of laws for a map.
  * @author Adam Balan (AKA: DarknessFalls)
  *
+ * @param Death State ID
+ * @desc typically one, but you might have changed it ...
+ * Default: 1
+ * @default 1
  *
  * @help
  *
@@ -38,6 +43,9 @@ class FlareLawsForMap {
     return LawManagement.getLawsForMap();
   }
 }
+
+// Set up the options.
+_OptionHandler.createOptionsStorage();
 
 window.FlareLawsForMap = FlareLawsForMap;
 window._lawsForMap = [];

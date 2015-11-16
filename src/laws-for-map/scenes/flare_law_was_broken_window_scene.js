@@ -17,6 +17,11 @@ class FlareLawWasBrokenWindowScene extends Scene_MenuBase {
     if (Input.isTriggered("cancel")) {
       this._flareBrokenLawWindow.close();
       this.popScene();
+
+       if (window._isDeadFromBreakingLaw) {
+        window._subjectWhoBrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
+        SceneManager.goto(Scene_Gameover);
+       }
     }
   }
 

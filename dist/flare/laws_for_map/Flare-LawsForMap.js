@@ -2716,7 +2716,7 @@ var AddLawsForMap = (function () {
 
 module.exports = AddLawsForMap;
 
-},{"./law_storage/laws_for_map":66,"./punishment_storage/punishments":67,"rmmv-mrp-core/option-parser":60}],64:[function(require,module,exports){
+},{"./law_storage/laws_for_map":66,"./punishment_storage/punishments":68,"rmmv-mrp-core/option-parser":60}],64:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2724,11 +2724,16 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var LawManagement = require('./law_storage/laws_for_map');
+var LawOptions = require('./options/option_handler');
 
 /*:
  * @plugindesc Allows you to have a set of laws for a map.
  * @author Adam Balan (AKA: DarknessFalls)
  *
+ * @param Death State ID
+ * @desc typically one, but you might have changed it ...
+ * Default: 1
+ * @default 1
  *
  * @help
  *
@@ -2774,10 +2779,14 @@ var FlareLawsForMap = (function () {
   return FlareLawsForMap;
 })();
 
+// Set up the options.
+
+_OptionHandler.createOptionsStorage();
+
 window.FlareLawsForMap = FlareLawsForMap;
 window._lawsForMap = [];
 
-},{"./law_storage/laws_for_map":66}],65:[function(require,module,exports){
+},{"./law_storage/laws_for_map":66,"./options/option_handler":67}],65:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2844,6 +2853,8 @@ var ProcessBrokenLaw = (function () {
     value: function openMessageWindow() {
       if (SceneManager._scene instanceof Scene_Item) {
         SceneManager.push(FlareLawWasBrokenWindowScene);
+      } else if (SceneManager._scene instanceof Scene_Skill) {
+        SceneManager.push(FlareLawWasBrokenWindowScene);
       }
     }
 
@@ -2860,7 +2871,9 @@ var ProcessBrokenLaw = (function () {
           health -= lawObject.amount;
 
           if (health <= 0) {
-            this._actorWhobrokeLaw._hp = 0;
+            this._actorWhobrokeLaw.die();
+            window._isDeadFromBreakingLaw = true;
+            window._subjectWhoBrokeLaw = this._actorWhobrokeLaw;
           } else {
             this._actorWhobrokeLaw._hp = health;
           }
@@ -2897,10 +2910,13 @@ var ProcessBrokenLaw = (function () {
 })();
 
 module.exports = ProcessBrokenLaw;
+
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
+window._subjectWhoBrokeLaw = null;
+window._isDeadFromBreakingLaw = false;
 
-},{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":66,"../scenes/flare_law_was_broken_window_scene":68}],66:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":3,"../law_storage/laws_for_map":66,"../scenes/flare_law_was_broken_window_scene":69}],66:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2966,6 +2982,56 @@ var LawsForMap = (function () {
 module.exports = LawsForMap;
 
 },{"../../../node_modules/lodash/collection/findWhere":3,"../../../node_modules/lodash/lang/isUndefined":52,"../../../node_modules/lodash/string/capitalize":56,"../../../node_modules/lodash/string/trim":57}],67:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareNotification.
+ */
+
+// Plugin Options.
+var FlareLasForMap = PluginManager.parameters('Flare-LawsForMap');
+
+/**
+ * Notifiation Options.
+ *
+ * Set options such as how long till the next window and how long till
+ * a window fades out after it fades in.
+ */
+
+var OptionHandler = (function () {
+  function OptionHandler() {
+    _classCallCheck(this, OptionHandler);
+  }
+
+  _createClass(OptionHandler, null, [{
+    key: 'createOptionsStorage',
+    value: function createOptionsStorage() {
+      this._lawOptions = {
+        death_state_id: FlareLasForMap['Death State ID']
+      };
+    }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this._lawOptions;
+    }
+  }]);
+
+  return OptionHandler;
+})();
+
+// Private global object.
+
+window._OptionHandler = OptionHandler;
+_OptionHandler.lawOptions = null;
+
+module.exports = OptionHandler;
+
+},{}],68:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3000,7 +3066,7 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3039,6 +3105,11 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
       if (Input.isTriggered("cancel")) {
         this._flareBrokenLawWindow.close();
         this.popScene();
+
+        if (window._isDeadFromBreakingLaw) {
+          window._subjectWhoBrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
+          SceneManager.goto(Scene_Gameover);
+        }
       }
     }
   }, {
@@ -3054,7 +3125,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":75}],69:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":76}],70:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3108,7 +3179,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":76}],70:[function(require,module,exports){
+},{"../windows/laws_window":77}],71:[function(require,module,exports){
 "use strict";
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
@@ -3146,13 +3217,9 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
 
-    // Show the player before we punish them.
-    processWhatShouldHappenOnHit.getBrokenLawObject();
-    processWhatShouldHappenOnHit.openMessageWindow();
-
     // Punish for items, spells and others that target the player or players.
-    $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + item.name + 's');
     processWhatShouldHappenOnHit.punishPlayer();
+    processWhatShouldHappenOnHit.openMessageWindow();
   } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
 
     // Punish the player for those that effect the enemy.
@@ -3167,7 +3234,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   }
 };
 
-},{"../law_handler/process_broken_law":65}],71:[function(require,module,exports){
+},{"../law_handler/process_broken_law":65}],72:[function(require,module,exports){
 'use strict';
 
 var AddLawsForMap = require('../add_laws_for_map');
@@ -3179,7 +3246,7 @@ Scene_Map.prototype.onMapLoaded = function () {
   flarAddLawsForMap.grabMapInformation();
 };
 
-},{"../add_laws_for_map":63}],72:[function(require,module,exports){
+},{"../add_laws_for_map":63}],73:[function(require,module,exports){
 'use strict';
 
 var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
@@ -3194,7 +3261,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(FlareLawWindowScene);
 };
 
-},{"../scenes/flare_law_window_scene":69}],73:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":70}],74:[function(require,module,exports){
 "use strict";
 
 var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge;
@@ -3224,7 +3291,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{}],74:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 'use strict';
 
 var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
@@ -3233,7 +3300,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3304,7 +3371,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":62}],76:[function(require,module,exports){
+},{"../../../flare_window_base":62}],77:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3411,4 +3478,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":62}]},{},[73,64,72,74,71,70]);
+},{"../../flare_window_base":62}]},{},[74,64,73,75,72,71]);
