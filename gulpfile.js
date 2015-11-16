@@ -18,7 +18,7 @@ gulp.task('make:flare-currency', function() {
         'src/add-new-currency/windows/shop/window_shop_buy.js',
         'src/add-new-currency/windows/yanfly_aftermath/flare_currency_reward_window.js'
       ]})
-      .transform(babelify)
+      .transform("babelify")
       .bundle()
       .pipe(source('Flare-Currency.js'))
       .pipe(gulp.dest('dist/flare/currency/'));
