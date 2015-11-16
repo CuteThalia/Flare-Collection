@@ -34,6 +34,10 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
   if (subject instanceof Game_Actor && target instanceof Game_Actor &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
 
+    // Show the player before we punish them.
+    processWhatShouldHappenOnHit.getBrokenLawObject();
+    processWhatShouldHappenOnHit.openMessageWindow();
+
     // Punish for items, spells and others that target the player or players.
     $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + item.name + 's');
     processWhatShouldHappenOnHit.punishPlayer();

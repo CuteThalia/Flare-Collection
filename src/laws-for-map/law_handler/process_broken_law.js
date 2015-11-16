@@ -1,5 +1,6 @@
-var LawsForMap      = require('../law_storage/laws_for_map');
-var lodashFindWhere = require('../../../node_modules/lodash/collection/findWhere');
+var LawsForMap                   = require('../law_storage/laws_for_map');
+var lodashFindWhere              = require('../../../node_modules/lodash/collection/findWhere');
+var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
 
 class ProcessBrokenLaw {
 
@@ -22,7 +23,11 @@ class ProcessBrokenLaw {
   getBrokenLawObject() {
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
       if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
+
         window._brokenLawObject = LawsForMap.getLawsForMap()[i];
+        window._brokenLawObject.subject    = this._actorWhobrokeLaw._name;
+        window._brokenLawObject.actionUsed = this._nameOfAction;
+
         return LawsForMap.getLawsForMap()[i];
       }
     }
@@ -41,6 +46,12 @@ class ProcessBrokenLaw {
       }
     } else {
       this.handleOtherPunishments(this.getBrokenLawObject());
+    }
+  }
+
+  openMessageWindow() {
+    if (SceneManager._scene instanceof Scene_Item) {
+      SceneManager.push(FlareLawWasBrokenWindowScene);
     }
   }
 
