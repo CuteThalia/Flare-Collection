@@ -409,7 +409,6 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
       var width = this.contentsWidth();
 
       if (_NotificationOptions.getNotificationOptions().show_window === "true") {
-        console.log('addasdads');
         this.drawBackground(0, 0, width, this.lineHeight());
       }
 

@@ -3432,6 +3432,8 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
         // Should every one be dead when this is closed end the game.
         if ($gameParty.isAllDead()) {
           SceneManager.goto(Scene_Gameover);
+        } else {
+          window._brokenLawObject = null;
         }
       }
     }
@@ -3509,28 +3511,8 @@ var ProcessBrokenLaw = require('../law_handler/process_broken_law');
 
 var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply;
 Game_Action.prototype.apply = function (target) {
-  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
-    var result = target.result();
-    this.subject().clearResult();
-    result.clear();
-    result.used = this.testApply(target);
-    result.missed = result.used && Math.random() >= this.itemHit(target);
-    result.evaded = !result.missed && Math.random() < this.itemEva(target);
-    result.physical = this.isPhysical();
-    result.drain = this.isDrain();
-
-    if (result.isHit()) {
-      if (this.item().damage.type > 0) {
-        result.critical = Math.random() < this.itemCri(target);
-        var value = this.makeDamageValue(target, result.critical);
-        this.executeDamage(target, value);
-      }
-
-      this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
-    }
-  } else {
-    oldGameActionPrototypeApplyMethod.call(this, target);
-  }
+  oldGameActionPrototypeApplyMethod.call(this, target);
+  this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
 };
 
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, target) {
@@ -3565,14 +3547,12 @@ var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_windo
 
 var oldSceneBasePrototypeCheckGameOverMethod = Scene_Base.prototype.checkGameover;
 Scene_Base.prototype.checkGameover = function () {
-  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0 && window._brokenLawObject !== null) {
     if ($gameParty.isAllDead()) {
       SceneManager.push(FlareLawWasBrokenWindowScene);
     }
   } else {
-    if ($gameParty.isAllDead()) {
-      SceneManager.goto(Scene_Gameover);
-    }
+    oldSceneBasePrototypeCheckGameOverMethod.call(this);
   }
 };
 
@@ -3705,9 +3685,14 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
       this.flareDrawTextEx('\\c[9]' + this._law.subject + '\\c[0]' + ' used: ' + '\\c[10]' + this._law.actionUsed + '\\c[0]', 20, 140);
       this.flareDrawTextEx('The punishment is: ' + '\\c[20]' + this._law.punishment + '\\c[0]' + ' at a cost of: ' + '\\c[20]' + this._law.amount + '\\c[0]', 10, 180);
 
+      if (window._lawMessageForLawBattleWindow !== null) {
+        this.flareDrawTextEx('\\c[20]' + window._lawMessageForLawBattleWindow + '\\c[0]', 10, 210);
+      }
+
       if ($gameParty.isAllDead()) {
         this.flareDrawTextEx('\\c[20] Every one is dead. Game over ... \\c[20]', 10, 250);
       }
+
       this.resetFontSettings();
     }
   }]);

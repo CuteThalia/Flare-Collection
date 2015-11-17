@@ -21,6 +21,8 @@ class FlareLawWasBrokenWindowScene extends Scene_MenuBase {
       // Should every one be dead when this is closed end the game.
       if ($gameParty.isAllDead()) {
         SceneManager.goto(Scene_Gameover);
+      } else {
+        window._brokenLawObject = null;
       }
     }
   }
