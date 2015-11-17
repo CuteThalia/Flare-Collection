@@ -84,7 +84,7 @@ class LawWindow extends FlareWindowBase {
           self.flareDrawTextEx("\\c[18]" + law.cantUse + "\\c[0]", 150, baseYForText + 90);
           self.flareDrawTextEx("\\c[20] -----------------------------------------  \\c[0]", 10, baseYForText + 110)
         }
-        
+
         baseYForText += 100;
         count += 1;
     });

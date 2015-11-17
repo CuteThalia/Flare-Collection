@@ -3475,8 +3475,6 @@ var AddLawsForMap = (function () {
         arrayOfRandomLaws = noteData;
       }
 
-      console.log(arrayOfRandomLaws);
-
       for (var i = 0; i < arrayOfRandomLaws.length; i++) {
         if (arrayOfRandomLaws[i] instanceof Object && this.validatePunishment(arrayOfRandomLaws[i].punishment)) {
           LawManagement.storeLaw(arrayOfRandomLaws[i]);
@@ -3711,7 +3709,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var lodashFindWhere = require('../../../node_modules/lodash/collection/findWhere');
 var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
 var lodashCapitalize = require('../../../node_modules/lodash/string/capitalize');
-var lodashArrayUnique = require('../../../node_modules/lodash/array/uniq');
 var lodashTrim = require('../../../node_modules/lodash/string/trim');
 
 var LawsForMap = (function () {
@@ -3747,13 +3744,11 @@ var LawsForMap = (function () {
         cantUse: lawCannotUse
       };
 
+      if (window._lawsForMap.length === 3) {
+        window._lawsForMap = [];
+      }
+
       window._lawsForMap.push(lawForMap);
-
-      var newArrayOfLawsForMap = lodashArrayUnique(window._lawsForMap, function (law) {
-        return law.name;
-      });
-
-      window._lawsForMap = newArrayOfLawsForMap;
     }
   }, {
     key: 'getLawsForMap',
@@ -3767,7 +3762,7 @@ var LawsForMap = (function () {
 
 module.exports = LawsForMap;
 
-},{"../../../node_modules/lodash/array/uniq":2,"../../../node_modules/lodash/collection/findWhere":4,"../../../node_modules/lodash/lang/isUndefined":71,"../../../node_modules/lodash/string/capitalize":75,"../../../node_modules/lodash/string/trim":76}],86:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":4,"../../../node_modules/lodash/lang/isUndefined":71,"../../../node_modules/lodash/string/capitalize":75,"../../../node_modules/lodash/string/trim":76}],86:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
