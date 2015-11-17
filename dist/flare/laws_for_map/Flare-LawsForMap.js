@@ -4259,7 +4259,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
     // Punish for items, spells and others that target the player or players.
     processWhatShouldHappenOnHit.punishPlayer();
     processWhatShouldHappenOnHit.openMessageWindow();
-  } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+  } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() || subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
     var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
     // Punish the player for those that effect the enemy.

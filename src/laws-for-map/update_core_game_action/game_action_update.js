@@ -33,8 +33,10 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     processWhatShouldHappenOnHit.punishPlayer();
     processWhatShouldHappenOnHit.openMessageWindow();
 
-  } else if (target instanceof Game_Enemy &&
-    processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+  } else if ((target instanceof Game_Enemy &&
+    processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) ||
+    (subject instanceof Game_Actor && target instanceof Game_Actor &&
+      processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw())) {
     var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
     // Punish the player for those that effect the enemy.
