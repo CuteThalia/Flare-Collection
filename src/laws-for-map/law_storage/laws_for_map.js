@@ -1,6 +1,7 @@
 var lodashFindWhere   = require('../../../node_modules/lodash/collection/findWhere');
 var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
 var lodashCapitalize  = require('../../../node_modules/lodash/string/capitalize');
+var lodashArrayUnique = require('../../../node_modules/lodash/array/uniq');
 var lodashTrim        = require('../../../node_modules/lodash/string/trim');
 
 class LawsForMap {
@@ -32,13 +33,13 @@ class LawsForMap {
       cantUse: lawCannotUse
     }
 
-    var foundItem = lodashFindWhere(window._lawsForMap, function(law) {
-      return law.name === lawForMap.name
+    window._lawsForMap.push(lawForMap);
+
+    var newArrayOfLawsForMap = lodashArrayUnique(window._lawsForMap, function(law){
+      return law.name;
     });
 
-    if (lodashIsUndefined(foundItem)) {
-      window._lawsForMap.push(lawForMap);
-    }
+    window._lawsForMap = newArrayOfLawsForMap;
   }
 
   static getLawsForMap() {

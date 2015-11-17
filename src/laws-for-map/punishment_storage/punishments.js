@@ -1,3 +1,5 @@
+var lodashFind = require('../../../node_modules/lodash/collection/find');
+
 class Punishments {
 
   constructor() {
@@ -11,8 +13,10 @@ class Punishments {
   }
 
   hasPunishment(name) {
-    if (this.getPunishmentStorage().indexOf(name) !== -1) {
-      return true;
+    for(var i = 0; i < this.getPunishmentStorage().length; i++) {
+      if (this.getPunishmentStorage()[i] === name) {
+        return true;
+      }
     }
 
     return false;

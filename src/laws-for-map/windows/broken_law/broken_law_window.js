@@ -37,10 +37,10 @@ class BrokenLawWindow extends FlareWindowBase {
     this.flareDrawTextEx('The punishment is: ' + '\\c[20]' + this._law.punishment + '\\c[0]' + ' at a cost of: ' + '\\c[20]' +  this._law.amount + '\\c[0]', 10, 180);
 
     if ($gameParty.isAllDead()) {
-      this.flareDrawTextEx('\\c[15] Every one is dead. Game over ... \\c[0]', 10, 250);
+      this.flareDrawTextEx('\\c[20] Every one is dead. Game over ... \\c[20]', 10, 250);
     }
-    this.resetFontSettings();
 
+    this.resetFontSettings();
   }
 }
 

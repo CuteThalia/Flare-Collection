@@ -13,11 +13,13 @@ class AddLawsForMap {
     var lawData     = extractAllOfType(noteBoxData, 'law');
     var self        = this;
 
-    extractAllOfType(noteBoxData, 'law').map(function(lawObject) {
-      if (typeof lawObject === 'object' && self.validatePunishment(lawObject.punishment)) {
-        LawManagement.storeLaw(lawObject);
+    var noteData = extractAllOfType(noteBoxData, 'law');
+
+    for (var i = 0; i < noteData.length; i++) {
+      if (noteData[i] instanceof Object && this.validatePunishment(noteData[i].punishment)) {
+        LawManagement.storeLaw(noteData[i]);
       }
-    });
+    }
   }
 
   validatePunishment(punishment) {
