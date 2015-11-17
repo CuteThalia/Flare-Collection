@@ -1,11 +1,27 @@
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply
 Game_Action.prototype.apply = function(target) {
     oldGameActionPrototypeApplyMethod.call(this, target);
     this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
 }
 
+/**
+ * If the user broke a law then apply the punishment.
+ *
+ * Its simple really. If the user targets self or another game actor
+ * and breaks a law, punish.
+ *
+ * If the user targets the enemy and the law is broken, punish.
+ *
+ * In game battles we show game messages.
+ *
+ * On the map we show a window.
+ */
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, target) {
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
 

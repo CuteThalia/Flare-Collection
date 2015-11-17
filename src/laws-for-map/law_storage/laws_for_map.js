@@ -3,8 +3,24 @@ var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined')
 var lodashCapitalize  = require('../../../node_modules/lodash/string/capitalize');
 var lodashTrim        = require('../../../node_modules/lodash/string/trim');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Stores the various laws for a specific map.
+ */
 class LawsForMap {
 
+  /**
+   * Store the actual law.
+   *
+   * Remove any additional cantUse beyond the three.
+   *
+   * Create a lawForMap object and store it.
+   *
+   * @param Object law
+   */
   static storeLaw(law) {
     var lawCannotUse = null;
 
@@ -32,15 +48,29 @@ class LawsForMap {
       cantUse: lawCannotUse
     }
 
-    if (window._lawsForMap.length === 3) {
-      window._lawsForMap = []
+    if (this._lawsForMap.length === 3) {
+      this.setLawsForMap([]);
     }
 
-    window._lawsForMap.push(lawForMap);
+    this._lawsForMap.push(lawForMap);
   }
 
+  /**
+   * Get all the laws for this map.
+   *
+   * @return array of 3 objects.
+   */
   static getLawsForMap() {
-    return window._lawsForMap;
+    return this._lawsForMap;
+  }
+
+  /**
+   * Set laws for map.
+   *
+   * Needs to be an array. Also over rides current laws.
+   */
+  static setLawsForMap(laws) {
+    this._lawsForMap = laws;
   }
 }
 

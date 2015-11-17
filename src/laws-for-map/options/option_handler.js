@@ -1,31 +1,34 @@
 /**
- * @namespace FlareNotification.
+ * @namespace FlareLawsForMap.
  */
 
 // Plugin Options.
 var FlareLasForMap = PluginManager.parameters('Flare-LawsForMap');
 
 /**
- * Notifiation Options.
- *
- * Set options such as how long till the next window and how long till
- * a window fades out after it fades in.
+ * Laws for Map plugin options
  */
 class OptionHandler {
 
+  /**
+   * Stores the options passed in via the plugin options.
+   */
   static createOptionsStorage() {
     this._lawOptions = {
       death_state_id:  FlareLasForMap['Death State ID'],
     };
   }
 
+  /**
+   * Gets the options back
+   *
+   * Known options: death_state_id
+   *
+   * @return object with key values.
+   */
   static getOptions() {
     return this._lawOptions;
   }
 }
-
-// Private global object.
-window._OptionHandler = OptionHandler;
-_OptionHandler.lawOptions = null;
 
 module.exports = OptionHandler

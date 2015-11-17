@@ -1,5 +1,12 @@
 var FlareLawWindow = require('../windows/laws_window');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a scene for a window that shows all the laws.
+ */
 class FlareLawWindowScene extends Scene_MenuBase {
   constructor() {
     super();

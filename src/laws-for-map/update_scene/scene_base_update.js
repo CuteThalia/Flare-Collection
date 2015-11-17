@@ -1,8 +1,13 @@
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
+var LawsForMap                   = require('../law_storage/laws_for_map');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
 
 var oldSceneBasePrototypeCheckGameOverMethod = Scene_Base.prototype.checkGameover;
 Scene_Base.prototype.checkGameover = function() {
-    if (window._lawsForMap !== undefined && window._lawsForMap.length > 0 && window._brokenLawObject !== null) {
+    if (LawsForMap.getLawsForMap() !== undefined && LawsForMap.getLawsForMap().length > 0 && window._brokenLawObject !== null) {
       if ($gameParty.isAllDead()) {
         SceneManager.push(FlareLawWasBrokenWindowScene);
       }

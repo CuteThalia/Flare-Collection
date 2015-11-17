@@ -1,14 +1,33 @@
 var LawsForMap                   = require('../law_storage/laws_for_map');
 var lodashFindWhere              = require('../../../node_modules/lodash/collection/findWhere');
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
+var OptionHandler                = require('../options/option_handler');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * When a player breaks a law, we need to punish the actor.
+ */
 class ProcessBrokenLaw {
 
+  /**
+   * Set up the name of the action and the actor who broke the law
+   *
+   * @param string nameOfAction
+   * @param Game_Actor actorWhoBrokeTheLaw
+   */
   constructor(nameOfAction, actorWhoBrokeLaw) {
     this._nameOfAction     = nameOfAction;
     this._actorWhobrokeLaw = actorWhoBrokeLaw
   }
 
+  /**
+   * Validate that the player actually broke a law.
+   *
+   * @return boolean
+   */
   validatePlayerBrokeTheLaw() {
 
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
@@ -20,6 +39,11 @@ class ProcessBrokenLaw {
     return false;
   }
 
+  /**
+   * Get the actual broken law object.
+   *
+   * @return object lawObject
+   */
   getBrokenLawObject() {
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
       if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
@@ -33,7 +57,11 @@ class ProcessBrokenLaw {
     }
   }
 
+  /**
+   * Punish the player based on the laws punishment and amount.
+   */
   punishPlayer() {
+    // If gold, take away gold.
     if (this.getBrokenLawObject().punishment === 'gold') {
       if ($gameParty._gold > 0) {
         $gameParty._gold -= this.getBrokenLawObject().amount;
@@ -42,13 +70,20 @@ class ProcessBrokenLaw {
           $gameParty._gold = 0;
         }
       } else {
+        // We have no more gold.
         window._lawMessageForLawBattleWindow = 'Party has no more gold.';
       }
     } else {
+      // Handle non gold related punishments.
       this.handleOtherPunishments(this.getBrokenLawObject());
     }
   }
 
+  /**
+   * Open a window displaying the broken law.
+   *
+   * Useful for menu related tasks.
+   */
   openMessageWindow() {
     if (SceneManager._scene instanceof Scene_Item) {
       SceneManager.push(FlareLawWasBrokenWindowScene);
@@ -59,6 +94,14 @@ class ProcessBrokenLaw {
 
   /**
    * Handle various punishments for player.
+   *
+   * Determine which punishment we need and then punish by the laws
+   * amount.
+   *
+   * In the case of HP we show the broken law window BEFORE game over if done through
+   * the menu.
+   *
+   * @param Object lawObject
    */
   handleOtherPunishments(lawObject) {
     switch(lawObject.punishment) {
@@ -68,7 +111,7 @@ class ProcessBrokenLaw {
 
         if (health <= 0) {
           this._actorWhobrokeLaw.die();
-          this._actorWhobrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
+          this._actorWhobrokeLaw.addState(OptionHandler.getOptions().death_state_id);
         } else {
           this._actorWhobrokeLaw._hp = health;
         }
@@ -103,5 +146,6 @@ class ProcessBrokenLaw {
 
 module.exports = ProcessBrokenLaw;
 
+// Don't touch.
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;

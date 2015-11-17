@@ -3431,12 +3431,39 @@ var ladashArrayUnique = require('../../node_modules/lodash/array/uniq');
 var lodashClone = require('../../node_modules/lodash/lang/clone');
 var lodashIsUndefined = require('../../node_modules/lodash/lang/isUndefined');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Add a law to a global private name space.
+ *
+ * We take all the laws for the map and then remove all the duplicate laws.
+ * After that we have to push the law up for the global private object that
+ * is then used all over the place.
+ */
+
 var AddLawsForMap = (function () {
+
+  /**
+   * Seup the Punishment class
+   */
+
   function AddLawsForMap() {
     _classCallCheck(this, AddLawsForMap);
 
     this._punishments = new Punishments();
   }
+
+  /**
+   * Send the laws for storage.
+   *
+   * First remove duplicate laws.
+   *
+   * If we have more then three unique laws, grab only three random laws.
+   *
+   * Push those laws to a Law Management class.
+   */
 
   _createClass(AddLawsForMap, [{
     key: 'grabMapInformation',
@@ -3475,12 +3502,23 @@ var AddLawsForMap = (function () {
         arrayOfRandomLaws = noteData;
       }
 
+      if (lodashIsUndefined(LawManagement._lawsForMap)) {
+        LawManagement.setLawsForMap([]);
+      }
+
       for (var i = 0; i < arrayOfRandomLaws.length; i++) {
         if (arrayOfRandomLaws[i] instanceof Object && this.validatePunishment(arrayOfRandomLaws[i].punishment)) {
           LawManagement.storeLaw(arrayOfRandomLaws[i]);
         }
       }
     }
+
+    /**
+     * Validate that the punishment exists.
+     *
+     * @return boolean
+     */
+
   }, {
     key: 'validatePunishment',
     value: function validatePunishment(punishment) {
@@ -3490,6 +3528,13 @@ var AddLawsForMap = (function () {
 
       return false;
     }
+
+    /**
+     * Private method, generate a random number between min and max.
+     *
+     * @return int.
+     */
+
   }, {
     key: '_generateRandomNumber',
     value: function _generateRandomNumber(min, max) {
@@ -3512,6 +3557,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var LawManagement = require('./law_storage/laws_for_map');
 var LawOptions = require('./options/option_handler');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 /*:
  * @plugindesc Allows you to have a set of laws for a map.
  * @author Adam Balan (AKA: DarknessFalls)
@@ -3531,13 +3580,14 @@ var LawOptions = require('./options/option_handler');
  * <law
  *    name:"something"
  *    punishment:"gold"
- *    amount: 700 icon: 26
+ *    amount: 700
+ *    icon: 26
  *    cantUse: "potion, attack, Fire"
  *  >
  *
  * ===============================================================
  * The above will be parsed by the parser if placed into the
- * the note box as such.
+ * the note box as it looks here.
  * ===============================================================
  *
  * - Keep the names the law short. The can't use should also be short,
@@ -3548,6 +3598,74 @@ var LawOptions = require('./options/option_handler');
  *
  * - You can ONLY have three "can't use" in the law. Any more I
  * cut it off.
+ *
+ * You can set up any number of laws for a map, how ever when the user
+ * leaves around re-enters that map if you have more then three laws for
+ * a map, I will randomize what laws are on that map and display only three.
+ *
+ * So if you set 50 laws for a map, you will only see three at any given time.
+ *
+ * ==  What can a player not use? ==
+ *
+ * For battles: Attak, Item Name, Skill Name, Special Name
+ * For out of battles: Item Name, Skill Name, Special Name
+ *
+ * Gaurd and Flee and other actions that are not listed above are not done
+ * ON hit. that is the player is not casting a spell, attacking or using an item
+ * that ON hit would do x.
+ *
+ * Enemies cannot break laws. Only players can.
+ *
+ * === Available Punishments ===
+ *
+ * You can punish on ONE of the following:
+ *
+ * gold, hp, mp, tp, xp
+ *
+ * You cannot punish th player multiple times for a single crime.
+ *
+ * You cannot remove weapons or armor or items from a player when
+ * punishing them.
+ *
+ * === Cant Use ===
+ *
+ * How does this work? Well lets say you have an item that the player cannot
+ * use on the map, or in battle.
+ *
+ * You would add it to the list of cantUse in the law and then when ever a player
+ * uses said item either in battle or on the map they will be told they have broken
+ * a law.
+ *
+ * -- Laws Can Kill! --
+ *
+ * If you tell a law that it will do x amount of damage to a player and the players
+ * hp falls below 0 or to 0, we will kill the player. if every one in the party
+ * is dead and you are on a map, you get the law  window saying hat the final
+ * law was that you broke, who broke it and that the game is over.
+ *
+ * -- Laws can level you down --
+ *
+ * We allow you to punish on hp, mp, tp, gold and xp. when you state to punish
+ * a player on xp, we will level that actor down based on if there xp falls
+ * too low.
+ *
+ * -- Out of gold --
+ *
+ * If you punish on gold and tha party runs out, well then we tell you that
+ * you have been fined x gold, but that the party is out of gold.
+ *
+ * === Regarding Battles ===
+ *
+ * When you are in battle and you use something like attack or gaurd and you
+ * have it set as a can't use, then we will, ON HIT tell the player that
+ * person x broke a law and they are being punished x by amount y.
+ *
+ * Again remember that laws can kill.
+ *
+ */
+
+/**
+ * Contains public faceing data about laws on said map.
  */
 
 var FlareLawsForMap = (function () {
@@ -3557,6 +3675,12 @@ var FlareLawsForMap = (function () {
 
   _createClass(FlareLawsForMap, null, [{
     key: 'getLawsForMap',
+
+    /**
+     * Get the laws for the map.
+     *
+     * @return array of objects.
+     */
     value: function getLawsForMap() {
       return LawManagement.getLawsForMap();
     }
@@ -3569,8 +3693,8 @@ var FlareLawsForMap = (function () {
 
 _OptionHandler.createOptionsStorage();
 
+// Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;
-window._lawsForMap = [];
 
 },{"./law_storage/laws_for_map":85,"./options/option_handler":86}],84:[function(require,module,exports){
 'use strict';
@@ -3582,14 +3706,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var LawsForMap = require('../law_storage/laws_for_map');
 var lodashFindWhere = require('../../../node_modules/lodash/collection/findWhere');
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
+var OptionHandler = require('../options/option_handler');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * When a player breaks a law, we need to punish the actor.
+ */
 
 var ProcessBrokenLaw = (function () {
+
+  /**
+   * Set up the name of the action and the actor who broke the law
+   *
+   * @param string nameOfAction
+   * @param Game_Actor actorWhoBrokeTheLaw
+   */
+
   function ProcessBrokenLaw(nameOfAction, actorWhoBrokeLaw) {
     _classCallCheck(this, ProcessBrokenLaw);
 
     this._nameOfAction = nameOfAction;
     this._actorWhobrokeLaw = actorWhoBrokeLaw;
   }
+
+  /**
+   * Validate that the player actually broke a law.
+   *
+   * @return boolean
+   */
 
   _createClass(ProcessBrokenLaw, [{
     key: 'validatePlayerBrokeTheLaw',
@@ -3603,6 +3750,13 @@ var ProcessBrokenLaw = (function () {
 
       return false;
     }
+
+    /**
+     * Get the actual broken law object.
+     *
+     * @return object lawObject
+     */
+
   }, {
     key: 'getBrokenLawObject',
     value: function getBrokenLawObject() {
@@ -3617,9 +3771,15 @@ var ProcessBrokenLaw = (function () {
         }
       }
     }
+
+    /**
+     * Punish the player based on the laws punishment and amount.
+     */
+
   }, {
     key: 'punishPlayer',
     value: function punishPlayer() {
+      // If gold, take away gold.
       if (this.getBrokenLawObject().punishment === 'gold') {
         if ($gameParty._gold > 0) {
           $gameParty._gold -= this.getBrokenLawObject().amount;
@@ -3628,12 +3788,21 @@ var ProcessBrokenLaw = (function () {
             $gameParty._gold = 0;
           }
         } else {
+          // We have no more gold.
           window._lawMessageForLawBattleWindow = 'Party has no more gold.';
         }
       } else {
+        // Handle non gold related punishments.
         this.handleOtherPunishments(this.getBrokenLawObject());
       }
     }
+
+    /**
+     * Open a window displaying the broken law.
+     *
+     * Useful for menu related tasks.
+     */
+
   }, {
     key: 'openMessageWindow',
     value: function openMessageWindow() {
@@ -3646,6 +3815,14 @@ var ProcessBrokenLaw = (function () {
 
     /**
      * Handle various punishments for player.
+     *
+     * Determine which punishment we need and then punish by the laws
+     * amount.
+     *
+     * In the case of HP we show the broken law window BEFORE game over if done through
+     * the menu.
+     *
+     * @param Object lawObject
      */
 
   }, {
@@ -3658,7 +3835,7 @@ var ProcessBrokenLaw = (function () {
 
           if (health <= 0) {
             this._actorWhobrokeLaw.die();
-            this._actorWhobrokeLaw.addState(_OptionHandler.getOptions().death_state_id);
+            this._actorWhobrokeLaw.addState(OptionHandler.getOptions().death_state_id);
           } else {
             this._actorWhobrokeLaw._hp = health;
           }
@@ -3696,10 +3873,11 @@ var ProcessBrokenLaw = (function () {
 
 module.exports = ProcessBrokenLaw;
 
+// Don't touch.
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
 
-},{"../../../node_modules/lodash/collection/findWhere":4,"../law_storage/laws_for_map":85,"../scenes/flare_law_was_broken_window_scene":88}],85:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":4,"../law_storage/laws_for_map":85,"../options/option_handler":86,"../scenes/flare_law_was_broken_window_scene":88}],85:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3711,6 +3889,14 @@ var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined')
 var lodashCapitalize = require('../../../node_modules/lodash/string/capitalize');
 var lodashTrim = require('../../../node_modules/lodash/string/trim');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Stores the various laws for a specific map.
+ */
+
 var LawsForMap = (function () {
   function LawsForMap() {
     _classCallCheck(this, LawsForMap);
@@ -3718,6 +3904,16 @@ var LawsForMap = (function () {
 
   _createClass(LawsForMap, null, [{
     key: 'storeLaw',
+
+    /**
+     * Store the actual law.
+     *
+     * Remove any additional cantUse beyond the three.
+     *
+     * Create a lawForMap object and store it.
+     *
+     * @param Object law
+     */
     value: function storeLaw(law) {
       var lawCannotUse = null;
 
@@ -3744,16 +3940,35 @@ var LawsForMap = (function () {
         cantUse: lawCannotUse
       };
 
-      if (window._lawsForMap.length === 3) {
-        window._lawsForMap = [];
+      if (this._lawsForMap.length === 3) {
+        this.setLawsForMap([]);
       }
 
-      window._lawsForMap.push(lawForMap);
+      this._lawsForMap.push(lawForMap);
     }
+
+    /**
+     * Get all the laws for this map.
+     *
+     * @return array of 3 objects.
+     */
+
   }, {
     key: 'getLawsForMap',
     value: function getLawsForMap() {
-      return window._lawsForMap;
+      return this._lawsForMap;
+    }
+
+    /**
+     * Set laws for map.
+     *
+     * Needs to be an array. Also over rides current laws.
+     */
+
+  }, {
+    key: 'setLawsForMap',
+    value: function setLawsForMap(laws) {
+      this._lawsForMap = laws;
     }
   }]);
 
@@ -3770,17 +3985,14 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @namespace FlareNotification.
+ * @namespace FlareLawsForMap.
  */
 
 // Plugin Options.
 var FlareLasForMap = PluginManager.parameters('Flare-LawsForMap');
 
 /**
- * Notifiation Options.
- *
- * Set options such as how long till the next window and how long till
- * a window fades out after it fades in.
+ * Laws for Map plugin options
  */
 
 var OptionHandler = (function () {
@@ -3790,11 +4002,24 @@ var OptionHandler = (function () {
 
   _createClass(OptionHandler, null, [{
     key: 'createOptionsStorage',
+
+    /**
+     * Stores the options passed in via the plugin options.
+     */
     value: function createOptionsStorage() {
       this._lawOptions = {
         death_state_id: FlareLasForMap['Death State ID']
       };
     }
+
+    /**
+     * Gets the options back
+     *
+     * Known options: death_state_id
+     *
+     * @return object with key values.
+     */
+
   }, {
     key: 'getOptions',
     value: function getOptions() {
@@ -3804,11 +4029,6 @@ var OptionHandler = (function () {
 
   return OptionHandler;
 })();
-
-// Private global object.
-
-window._OptionHandler = OptionHandler;
-_OptionHandler.lawOptions = null;
 
 module.exports = OptionHandler;
 
@@ -3821,6 +4041,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var lodashFind = require('../../../node_modules/lodash/collection/find');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Stores the types of punishments.
+ */
+
 var Punishments = (function () {
   function Punishments() {
     _classCallCheck(this, Punishments);
@@ -3828,11 +4056,24 @@ var Punishments = (function () {
     this._punishementStorage = ["gold", "xp", "hp", "mp", "tp"];
   }
 
+  /**
+   * Get the punishment storage.
+   *
+   * @return array of strings.
+   */
+
   _createClass(Punishments, [{
     key: "getPunishmentStorage",
     value: function getPunishmentStorage() {
       return this._punishementStorage;
     }
+
+    /**
+     * Do we have said punishement?
+     *
+     * @return boolean
+     */
+
   }, {
     key: "hasPunishment",
     value: function hasPunishment(name) {
@@ -3865,6 +4106,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var BrokenLawWindow = require('../windows/broken_law/broken_law_window');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a scene for showing when a law was broken on the map.
+ */
 
 var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
   _inherits(FlareLawWasBrokenWindowScene, _Scene_MenuBase);
@@ -3927,6 +4176,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var FlareLawWindow = require('../windows/laws_window');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a scene for a window that shows all the laws.
+ */
+
 var FlareLawWindowScene = (function (_Scene_MenuBase) {
   _inherits(FlareLawWindowScene, _Scene_MenuBase);
 
@@ -3971,12 +4228,28 @@ module.exports = FlareLawWindowScene;
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply;
 Game_Action.prototype.apply = function (target) {
   oldGameActionPrototypeApplyMethod.call(this, target);
   this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
 };
 
+/**
+ * If the user broke a law then apply the punishment.
+ *
+ * Its simple really. If the user targets self or another game actor
+ * and breaks a law, punish.
+ *
+ * If the user targets the enemy and the law is broken, punish.
+ *
+ * In game battles we show game messages.
+ *
+ * On the map we show a window.
+ */
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, target) {
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
 
@@ -4007,6 +4280,10 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
 
 var AddLawsForMap = require('../add_laws_for_map.js');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 var oldGameMapPrototypeSetupMethod = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function (mapId) {
   oldGameMapPrototypeSetupMethod.call(this, mapId);
@@ -4020,10 +4297,15 @@ Game_Map.prototype.setup = function (mapId) {
 'use strict';
 
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
+var LawsForMap = require('../law_storage/laws_for_map');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
 
 var oldSceneBasePrototypeCheckGameOverMethod = Scene_Base.prototype.checkGameover;
 Scene_Base.prototype.checkGameover = function () {
-  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0 && window._brokenLawObject !== null) {
+  if (LawsForMap.getLawsForMap() !== undefined && LawsForMap.getLawsForMap().length > 0 && window._brokenLawObject !== null) {
     if ($gameParty.isAllDead()) {
       SceneManager.push(FlareLawWasBrokenWindowScene);
     }
@@ -4032,10 +4314,14 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../scenes/flare_law_was_broken_window_scene":88}],93:[function(require,module,exports){
+},{"../law_storage/laws_for_map":85,"../scenes/flare_law_was_broken_window_scene":88}],93:[function(require,module,exports){
 'use strict';
 
 var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
 
 var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow;
 Scene_Menu.prototype.createCommandWindow = function () {
@@ -4048,11 +4334,17 @@ Scene_Menu.prototype.lawsCommand = function () {
 };
 
 },{"../scenes/flare_law_window_scene":89}],94:[function(require,module,exports){
-"use strict";
+'use strict';
+
+var LawsForMap = require('../law_storage/laws_for_map');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
 
 var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge;
 Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
-  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+  if (LawsForMap.getLawsForMap() !== undefined && LawsForMap.getLawsForMap().length > 0) {
     var color3 = this.gaugeBackColor();
     var fillW = Math.max(0, Math.floor(dw * rate));
     var gaugeH = this.gaugeHeight();
@@ -4077,8 +4369,12 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{}],95:[function(require,module,exports){
+},{"../law_storage/laws_for_map":85}],95:[function(require,module,exports){
 'use strict';
+
+/**
+ * @namespace FlareLawsForMap.
+ */
 
 var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
 Window_MenuCommand.prototype.addOriginalCommands = function () {
@@ -4100,6 +4396,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var FlareWindowBase = require('../../../flare_window_base');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a window for displaying broken laws on map.
+ */
 
 var BrokenLawWindow = (function (_FlareWindowBase) {
   _inherits(BrokenLawWindow, _FlareWindowBase);
@@ -4180,6 +4484,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var FlareWindowBase = require('../../flare_window_base');
+var LawsForMap = require('../law_storage/laws_for_map');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a window displaying the laws for said map.
+ */
 
 var LawWindow = (function (_FlareWindowBase) {
   _inherits(LawWindow, _FlareWindowBase);
@@ -4222,7 +4535,7 @@ var LawWindow = (function (_FlareWindowBase) {
 
       this.drawText('Laws For Region', 10, 10, 250, 'left');
 
-      var laws = window._lawsForMap;
+      var laws = LawsForMap.getLawsForMap();
 
       if (laws.length > 0) {
         if (laws.length > 3) {
@@ -4315,4 +4628,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":81}]},{},[94,83,93,95,92,90,91]);
+},{"../../flare_window_base":81,"../law_storage/laws_for_map":85}]},{},[94,83,93,95,92,90,91]);

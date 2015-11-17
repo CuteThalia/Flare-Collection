@@ -1,5 +1,12 @@
 var FlareWindowBase = require('../../../flare_window_base');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a window for displaying broken laws on map.
+ */
 class BrokenLawWindow extends FlareWindowBase {
   constructor() {
     super();

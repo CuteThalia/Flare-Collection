@@ -1,5 +1,12 @@
 var BrokenLawWindow = require('../windows/broken_law/broken_law_window');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a scene for showing when a law was broken on the map.
+ */
 class FlareLawWasBrokenWindowScene extends Scene_MenuBase {
   constructor() {
     super();

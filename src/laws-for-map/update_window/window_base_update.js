@@ -1,6 +1,12 @@
+var LawsForMap = require('../law_storage/laws_for_map');
+
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge
 Window_Base.prototype.drawGauge = function(dx, dy, dw, rate, color1, color2) {
-  if (window._lawsForMap !== undefined && window._lawsForMap.length > 0) {
+  if (LawsForMap.getLawsForMap() !== undefined && LawsForMap.getLawsForMap().length > 0) {
     var color3 = this.gaugeBackColor();
     var fillW = Math.max(0, Math.floor(dw * rate));
     var gaugeH = this.gaugeHeight();

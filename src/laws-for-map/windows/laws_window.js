@@ -1,5 +1,13 @@
 var FlareWindowBase = require('../../flare_window_base');
+var LawsForMap      = require('../law_storage/laws_for_map');
 
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
+ * Creates a window displaying the laws for said map.
+ */
 class LawWindow extends FlareWindowBase {
   constructor() {
     super();
@@ -29,7 +37,7 @@ class LawWindow extends FlareWindowBase {
 
     this.drawText('Laws For Region', 10, 10, 250, 'left');
 
-    var laws = window._lawsForMap;
+    var laws = LawsForMap.getLawsForMap();
 
     if (laws.length > 0) {
       if (laws.length > 3) {
