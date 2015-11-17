@@ -39,11 +39,11 @@ gulp.task('make:flare-laws-for-map', function() {
   return browserify({entries: [
         'src/laws-for-map/update_window/window_base_update.js',
         'src/laws-for-map/flare_laws_for_map.js',
-        'src/laws-for-map/update_scene/scene_menu_updates.js',
+        'src/laws-for-map/update_scene/scene_menu_update.js',
         'src/laws-for-map/update_window/window_menu_base.js',
-        'src/laws-for-map/update_scene/scene_map_update.js',
         'src/laws-for-map/update_scene/scene_base_update.js',
-        'src/laws-for-map/update_core_game_action/game_action_updates.js'
+        'src/laws-for-map/update_core_game_action/game_action_update.js',
+        'src/laws-for-map/update_core_game_map/game_map_update.js'
       ]})
       .transform(babelify)
       .bundle()

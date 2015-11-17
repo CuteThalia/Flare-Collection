@@ -4005,6 +4005,20 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
 },{"../law_handler/process_broken_law":84}],91:[function(require,module,exports){
 'use strict';
 
+var AddLawsForMap = require('../add_laws_for_map.js');
+
+var oldGameMapPrototypeSetupMethod = Game_Map.prototype.setup;
+Game_Map.prototype.setup = function (mapId) {
+  oldGameMapPrototypeSetupMethod.call(this, mapId);
+
+  // Process laws for map.
+  var flarAddLawsForMap = new AddLawsForMap();
+  flarAddLawsForMap.grabMapInformation();
+};
+
+},{"../add_laws_for_map.js":82}],92:[function(require,module,exports){
+'use strict';
+
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
 
 var oldSceneBasePrototypeCheckGameOverMethod = Scene_Base.prototype.checkGameover;
@@ -4018,19 +4032,7 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../scenes/flare_law_was_broken_window_scene":88}],92:[function(require,module,exports){
-'use strict';
-
-var AddLawsForMap = require('../add_laws_for_map');
-
-var oldSceneMapPrototypeOnMapLoadedMethod = Scene_Map.prototype.onMapLoaded;
-Scene_Map.prototype.onMapLoaded = function () {
-  oldSceneMapPrototypeOnMapLoadedMethod.call(this);
-  var flarAddLawsForMap = new AddLawsForMap();
-  flarAddLawsForMap.grabMapInformation();
-};
-
-},{"../add_laws_for_map":82}],93:[function(require,module,exports){
+},{"../scenes/flare_law_was_broken_window_scene":88}],93:[function(require,module,exports){
 'use strict';
 
 var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
@@ -4313,4 +4315,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":81}]},{},[94,83,93,95,92,91,90]);
+},{"../../flare_window_base":81}]},{},[94,83,93,95,92,90,91]);
