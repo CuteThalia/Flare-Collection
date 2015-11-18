@@ -1,6 +1,7 @@
 var GatherItemsForShop    = require('./gather_items');
 var extractAllOfType      = require('rmmv-mrp-core/option-parser').extractAllOfType;
 var lodashIsUndefined     = require('../../../node_modules/lodash/lang/isUndefined');
+var lodashFind            = require('../../../node_modules/lodash/collection/find');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {
@@ -44,7 +45,7 @@ DataManager.flareProcessEnemyNoteTags = function(enemies) {
     var enemyNoteData = extractAllOfType(enemies[i].note, 'currencyToGain');
 
     enemies[i].enemyCurrencyRewardData = [];
-    
+
     if (!lodashIsUndefined(enemyNoteData[0])) {
       this._processEnemyNoteDataForCurrencyReward(enemies[i], enemyNoteData[0]);
     }
@@ -74,8 +75,29 @@ DataManager._processEnemyNoteDataForCurrencyReward = function(enemy, enemyNoteDa
  */
 DataManager._createCurrencyRewardObject = function(currencyData) {
   if (!lodashIsUndefined(currencyData.chance)) {
-    return {name: currencyData.name, amount: currencyData.amount, percentage: parseInt(currencyData.chance)};
+    return {name: currencyData.name, amount: currencyData.amount, percentage: parseInt(currencyData.chance), icon: this._returnIconFromName(currencyData.name)};
   } else {
-    return {name: currencyData.name, amount: currencyData.amount, percentage: 100};
+    return {name: currencyData.name, amount: currencyData.amount, percentage: 100, icon: this._returnIconFromName(currencyData.name)};
   }
+}
+
+/**
+ * Return the icon for the currency.
+ *
+ * @param String currencyName
+ * @return Int icon id
+ */
+DataManager._returnIconFromName = function(currencyName) {
+  var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function(currencyObject) {
+    if (currencyObject.name.indexOf(currencyName) !== -1 ||
+        currencyName.indexOf(currencyObject.name) !== -1 ) {
+          return currencyObject;
+    }
+  });
+
+  if (foundCurrency === undefined) {
+    throw new Error('We failed to find any currency by the name of: ' + currencyName);
+  }
+
+  return parseInt(foundCurrency.icon);
 }

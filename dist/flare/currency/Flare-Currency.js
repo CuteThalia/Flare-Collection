@@ -3738,9 +3738,9 @@ BattleManager._gainCurrencyMessage = function (enemy) {
     if (gainCurrency.doWeGainCurrency && Array.isArray(data) && data.length > 0 && gainCurrency.currency_name === data[0].name) {
 
       var amountGained = BattleManager.howMuchToGive(data);
-      self._gainCurrencies.push({ name: data[0].name, amount: amountGained });
+      self._gainCurrencies.push({ name: data[0].name, amount: amountGained, icon: data[0].icon });
 
-      $gameMessage.add('\\c[8]You Gained: \\c[0]' + amountGained + ' of: ' + data[0].name);
+      $gameMessage.add('\\c[8]You Gained: \\c[0]' + amountGained + ' of: ' + ' \\i[' + data[0].icon + '] ' + data[0].name);
       data.shift();
     }
   });
@@ -3802,7 +3802,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
         data.shift();
       } else {
         var amountToGain = self.howMuchToGive(data);
-        self._gainCurrencies.push({ name: data[0].name, amount: amountToGain });
+        self._gainCurrencies.push({ name: data[0].name, amount: amountToGain, icon: data[0].icon });
 
         window.FlareCurrencies.addAmount(data[0].name, amountToGain);
         data.shift();
@@ -3817,6 +3817,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
 var GatherItemsForShop = require('./gather_items');
 var extractAllOfType = require('rmmv-mrp-core/option-parser').extractAllOfType;
 var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
+var lodashFind = require('../../../node_modules/lodash/collection/find');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function () {
@@ -3890,13 +3891,33 @@ DataManager._processEnemyNoteDataForCurrencyReward = function (enemy, enemyNoteD
  */
 DataManager._createCurrencyRewardObject = function (currencyData) {
   if (!lodashIsUndefined(currencyData.chance)) {
-    return { name: currencyData.name, amount: currencyData.amount, percentage: parseInt(currencyData.chance) };
+    return { name: currencyData.name, amount: currencyData.amount, percentage: parseInt(currencyData.chance), icon: this._returnIconFromName(currencyData.name) };
   } else {
-    return { name: currencyData.name, amount: currencyData.amount, percentage: 100 };
+    return { name: currencyData.name, amount: currencyData.amount, percentage: 100, icon: this._returnIconFromName(currencyData.name) };
   }
 };
 
-},{"../../../node_modules/lodash/lang/isUndefined":58,"./gather_items":73,"rmmv-mrp-core/option-parser":64}],73:[function(require,module,exports){
+/**
+ * Return the icon for the currency.
+ *
+ * @param String currencyName
+ * @return Int icon id
+ */
+DataManager._returnIconFromName = function (currencyName) {
+  var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function (currencyObject) {
+    if (currencyObject.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currencyObject.name) !== -1) {
+      return currencyObject;
+    }
+  });
+
+  if (foundCurrency === undefined) {
+    throw new Error('We failed to find any currency by the name of: ' + currencyName);
+  }
+
+  return parseInt(foundCurrency.icon);
+};
+
+},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/isUndefined":58,"./gather_items":73,"rmmv-mrp-core/option-parser":64}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4806,11 +4827,14 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
           var amountToGain = lodashFind(BattleManager._gainCurrencies, function (amount) {
             return amount.name === data[0].name;
           });
+
+          console.log(amountToGain);
+
           if (!lodashIsUndefined(amountToGain)) {
-            this.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, window._baseYForText, 500, 'left');
+            this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i[' + amountToGain.icon + '] ' + data[0].name, 0, window._baseYForText, 500, 'left');
             BattleManager._gainCurrencies.shift();
           } else {
-            this.drawText("You gained: " + amountToGain.amount + ", of: " + data[0].name, 0, window._baseYForText, 500, 'left');
+            this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i[' + amountToGain.icon + '] ' + data[0].name, 0, window._baseYForText, 500, 'left');
           }
 
           window._baseYForText += 45;
