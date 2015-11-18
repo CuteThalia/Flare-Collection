@@ -3,7 +3,6 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var babelify = require("babelify");
 
-
 gulp.task('make:flare-currency', function() {
   return browserify({entries: [
         'src/add-new-currency/flare-currency.js',
@@ -43,7 +42,8 @@ gulp.task('make:flare-laws-for-map', function() {
         'src/laws-for-map/update_window/window_menu_base.js',
         'src/laws-for-map/update_scene/scene_base_update.js',
         'src/laws-for-map/update_core_game_action/game_action_update.js',
-        'src/laws-for-map/update_core_game_map/game_map_update.js'
+        'src/laws-for-map/update_core_game_map/game_map_update.js',
+        'src/laws-for-map/update_core_battle_manager/battle_manager_update.js'
       ]})
       .transform(babelify)
       .bundle()

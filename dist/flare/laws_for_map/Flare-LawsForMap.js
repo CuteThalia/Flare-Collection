@@ -4161,7 +4161,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":96}],89:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":97}],89:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4223,7 +4223,25 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":97}],90:[function(require,module,exports){
+},{"../windows/laws_window":98}],90:[function(require,module,exports){
+'use strict';
+
+BattleManager.processDefeat = function () {
+    this.customDisplayMessage();
+    this.playDefeatMe();
+    if (this._canLose) {
+        this.replayBgmAndBgs();
+    } else {
+        AudioManager.stopBgm();
+    }
+    this.endBattle(2);
+};
+
+BattleManager.customDisplayMessage = function () {
+    $gameMessage.add('The whole party was defeated ...');
+};
+
+},{}],91:[function(require,module,exports){
 "use strict";
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
@@ -4254,12 +4272,12 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
 
   // Punish the user for breaking a law, assuming they have.
-  if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+  if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {
 
     // Punish for items, spells and others that target the player or players.
-    processWhatShouldHappenOnHit.punishPlayer();
     processWhatShouldHappenOnHit.openMessageWindow();
-  } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() || subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    processWhatShouldHappenOnHit.punishPlayer();
+  } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() || subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && $gameParty.inBattle()) {
     var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
     // Punish the player for those that effect the enemy.
@@ -4275,7 +4293,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   }
 };
 
-},{"../law_handler/process_broken_law":84}],91:[function(require,module,exports){
+},{"../law_handler/process_broken_law":84}],92:[function(require,module,exports){
 'use strict';
 
 var AddLawsForMap = require('../add_laws_for_map.js');
@@ -4293,7 +4311,7 @@ Game_Map.prototype.setup = function (mapId) {
   flarAddLawsForMap.grabMapInformation();
 };
 
-},{"../add_laws_for_map.js":82}],92:[function(require,module,exports){
+},{"../add_laws_for_map.js":82}],93:[function(require,module,exports){
 'use strict';
 
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
@@ -4314,7 +4332,7 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../law_storage/laws_for_map":85,"../scenes/flare_law_was_broken_window_scene":88}],93:[function(require,module,exports){
+},{"../law_storage/laws_for_map":85,"../scenes/flare_law_was_broken_window_scene":88}],94:[function(require,module,exports){
 'use strict';
 
 var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
@@ -4333,7 +4351,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(FlareLawWindowScene);
 };
 
-},{"../scenes/flare_law_window_scene":89}],94:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":89}],95:[function(require,module,exports){
 'use strict';
 
 var LawsForMap = require('../law_storage/laws_for_map');
@@ -4369,7 +4387,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{"../law_storage/laws_for_map":85}],95:[function(require,module,exports){
+},{"../law_storage/laws_for_map":85}],96:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4382,7 +4400,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],96:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4470,7 +4488,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":81}],97:[function(require,module,exports){
+},{"../../../flare_window_base":81}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4628,4 +4646,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":81,"../law_storage/laws_for_map":85}]},{},[94,83,93,95,92,90,91]);
+},{"../../flare_window_base":81,"../law_storage/laws_for_map":85}]},{},[95,83,94,96,93,91,92,90]);

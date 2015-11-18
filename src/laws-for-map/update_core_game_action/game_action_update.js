@@ -27,7 +27,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
 
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor &&
-    processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
+    processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {
 
     // Punish for items, spells and others that target the player or players.
     processWhatShouldHappenOnHit.openMessageWindow();
@@ -36,7 +36,8 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
   } else if ((target instanceof Game_Enemy &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) ||
     (subject instanceof Game_Actor && target instanceof Game_Actor &&
-      processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw())) {
+      processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) &&
+    $gameParty.inBattle()) {
     var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
     // Punish the player for those that effect the enemy.

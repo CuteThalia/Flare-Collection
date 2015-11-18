@@ -38,6 +38,34 @@ So lets set up a law:
 >
 > The parser I use will read the tag as is, if you copy and paste it into the map
 > detail window.
+>
+>
+> ### Duplicate cantUse
+>
+> Consider the following example:
+>
+> ```
+>    <law
+>       name:"Attacking Causes Death"
+>       punishment:"hp"
+>       amount: 1000
+>       icon: 26
+>       cantUse: "attack, potion, heal"
+>    >
+>    <law
+>       name:"Minor Health Loss"
+>       punishment:"hp"
+>       amount: 10
+>       icon: 26
+>       cantUse: "attack, potion, heal"
+>    >
+>```
+>
+> The issue here is that when we process which law you broke, we take the first one we find in
+> the array of laws for the map is the first one we take. In this case `Minor Health Loss` would
+> never get used because we found `Attacking causes death` first.
+>
+> Your can't use has to be unique like the name of the law.
 
 - `name`: The name of the law.
 - `punishment`: The thing to punish on the actor object. (see below)
@@ -61,10 +89,9 @@ When we take away xp, we can level down the actor.
 > If you are on a map and you kill the whole party, the last law window will tell You
 > that every one is dead and its game over before actually going to the game over.
 >
->
 > ####We tell you before we punish you, battles.
 >
-> In battles when you do an action that hits and the law is broken, if that law would kill You
+> In battles when you do an action and the law is broken, if that law would kill You
 > we will tell you before we actually punish you.
 >
 > ####We Punish before we tell you, map.
@@ -92,6 +119,11 @@ When a player uses attack in battle or spark in battle they have broken a law. W
 that player has broken a law.
 
 The same goes for out of battle. If a player uses a potion out of battle they will be punished.
+
+## Regarding Breaking Laws in Battle.
+
+In a battle its the sole act of doing an action thats against the law that breaks the law. For example if the law states you
+cannot attack and you attack, but it misses, you still broke the law and will be punished according to that law.
 
 ## Regarding Yanfly Scripts.
 

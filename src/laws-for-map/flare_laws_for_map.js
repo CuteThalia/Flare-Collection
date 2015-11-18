@@ -49,14 +49,17 @@ var OptionsHandler        = require('./options/option_handler');
  *
  * So if you set 50 laws for a map, you will only see three at any given time.
  *
+ * All laws "cantUse" must be unique, that is if you have two laws with the same cantUse
+ * but the first deals 1000 hp damage and the second takes 4000 gold, then we will take the first one,
+ * because its find and return on first found.
+ *
  * ==  What can a player not use? ==
  *
  * For battles: Attak, Item Name, Skill Name, Special Name
  * For out of battles: Item Name, Skill Name, Special Name
  *
- * Gaurd and Flee and other actions that are not listed above are not done
- * ON hit. that is the player is not casting a spell, attacking or using an item
- * that ON hit would do x.
+ * Any skill name that targets a player or enemy can be used as a "cantUse" any thing like wait or a skill
+ * that targets no one cannot be used.
  *
  * Enemies cannot break laws. Only players can.
  *
@@ -83,7 +86,7 @@ var OptionsHandler        = require('./options/option_handler');
  * -- Laws Can Kill! --
  *
  * If you tell a law that it will do x amount of damage to a player and the players
- * hp falls below 0 or to 0, we will kill the player. if every one in the party
+ * hp falls below 0 or to 0, we will kill the player. If every one in the party
  * is dead and you are on a map, you get the law  window saying hat the final
  * law was that you broke, who broke it and that the game is over.
  *
@@ -101,11 +104,13 @@ var OptionsHandler        = require('./options/option_handler');
  * === Regarding Battles ===
  *
  * When you are in battle and you use something like attack or gaurd and you
- * have it set as a can't use, then we will, ON HIT tell the player that
+ * have it set as a can't use, then we will tell the player that
  * person x broke a law and they are being punished x by amount y.
  *
  * Again remember that laws can kill.
  *
+ * Also note, it doesn't matter if you hit or not, as long as you have done
+ * the action then you are as good as guilty.
  */
 
 /**
