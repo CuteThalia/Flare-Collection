@@ -1,4 +1,6 @@
-var FlareWindowBase = require('../../../flare_window_base');
+var FlareWindowBase     = require('../../../flare_window_base');
+var StoreNoGoldMessage  = require('../../law_storage/store_no_gold_message');
+var lodashIsUndefined   = require('../../../../node_modules/lodash/lang/isUndefined');
 
 /**
  * @namespace FlareLawsForMap.
@@ -43,8 +45,8 @@ class BrokenLawWindow extends FlareWindowBase {
     this.flareDrawTextEx('\\c[9]' + this._law.subject + '\\c[0]' + ' used: ' + '\\c[10]' + this._law.actionUsed + '\\c[0]', 20, 140);
     this.flareDrawTextEx('The punishment is: ' + '\\c[20]' + this._law.punishment + '\\c[0]' + ' at a cost of: ' + '\\c[20]' +  this._law.amount + '\\c[0]', 10, 180);
 
-    if (window._lawMessageForLawBattleWindow !== null) {
-      this.flareDrawTextEx('\\c[20]' + window._lawMessageForLawBattleWindow + '\\c[0]', 10, 210);
+    if (!lodashIsUndefined(StoreNoGoldMessage.getMessage)) {
+      this.flareDrawTextEx('\\c[20]' + StoreNoGoldMessage.getMessage() + '\\c[0]', 10, 210);
     }
 
     if ($gameParty.isAllDead()) {

@@ -30,6 +30,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {
 
     // Punish for items, spells and others that target the player or players.
+    processWhatShouldHappenOnHit.checkForGoldBeforePunish(true);
     processWhatShouldHappenOnHit.openMessageWindow();
     processWhatShouldHappenOnHit.punishPlayer();
 
@@ -43,6 +44,12 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     // Punish the player for those that effect the enemy.
     $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + "\\c[18]" + item.name + 's\\c[0]');
     $gameMessage.add("\\c[14] Punishment is: \\c[0]" +  "\\c[20]" + brokenLawObject.punishment + "\\c[0] in the amount of: " + "\\c[20]" + brokenLawObject.amount + "\\c[0]");
+    processWhatShouldHappenOnHit.checkForGoldBeforePunish(false);
+
+    if (window._lawMessageForLawBattleWindow !== null) {
+      $gameMessage.add(window._lawMessageForLawBattleWindow);
+    }
+
     processWhatShouldHappenOnHit.punishPlayer();
   } else {
     item.effects.forEach(function(effect) {

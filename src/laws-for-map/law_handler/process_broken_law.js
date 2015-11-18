@@ -2,6 +2,7 @@ var LawsForMap                   = require('../law_storage/laws_for_map');
 var lodashFindWhere              = require('../../../node_modules/lodash/collection/findWhere');
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
 var OptionHandler                = require('../options/option_handler');
+var StoreNoGoldMessage           = require('../law_storage/store_no_gold_message');
 
 /**
  * @namespace FlareLawsForMap.
@@ -63,7 +64,7 @@ class ProcessBrokenLaw {
   punishPlayer() {
     // If gold, take away gold.
     if (this.getBrokenLawObject().punishment === 'gold') {
-      if ($gameParty._gold > 0) {
+      if ($gameParty._gold !== 0) {
         $gameParty._gold -= this.getBrokenLawObject().amount;
 
         if ($gameParty._gold < 0) {
@@ -71,12 +72,42 @@ class ProcessBrokenLaw {
         }
       } else {
         // We have no more gold.
-        window._lawMessageForLawBattleWindow = 'Party has no more gold.';
+        window._lawMessageForLawBattleWindow = 'Party has no gold to take.';
       }
     } else {
       // Handle non gold related punishments.
       this.handleOtherPunishments(this.getBrokenLawObject());
     }
+  }
+
+  /**
+   * Check if the party has gold.
+   *
+   * When a law is broken and punishment is gold. We want to check if
+   * the party has gold before we display a message.
+   *
+   * You can store the message for use later on. Use the
+   *  static class to fetch.
+   *
+   * @param true/false
+   * @return false if no gold.
+   */
+  checkForGoldBeforePunish(storeMessage) {
+    console.log('hello');
+    if (this.getBrokenLawObject().punishment === 'gold') {
+          console.log('hello');
+      if ($gameParty._gold === 0) {
+        if (!storeMessage) {
+          $gameMessage.add('Party has no gold to take.');
+        } else {
+          console.log('hello');
+          StoreNoGoldMessage.createStorage();
+          StoreNoGoldMessage.setMessage('Party has no gold to take.');
+        }
+      }
+    }
+
+    return false;
   }
 
   /**

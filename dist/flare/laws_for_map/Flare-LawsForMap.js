@@ -3547,7 +3547,7 @@ var AddLawsForMap = (function () {
 
 module.exports = AddLawsForMap;
 
-},{"../../node_modules/lodash/array/uniq":2,"../../node_modules/lodash/lang/clone":64,"../../node_modules/lodash/lang/isUndefined":71,"./law_storage/laws_for_map":85,"./punishment_storage/punishments":87,"rmmv-mrp-core/option-parser":79}],83:[function(require,module,exports){
+},{"../../node_modules/lodash/array/uniq":2,"../../node_modules/lodash/lang/clone":64,"../../node_modules/lodash/lang/isUndefined":71,"./law_storage/laws_for_map":85,"./punishment_storage/punishments":88,"rmmv-mrp-core/option-parser":79}],83:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3605,14 +3605,17 @@ var OptionsHandler = require('./options/option_handler');
  *
  * So if you set 50 laws for a map, you will only see three at any given time.
  *
+ * All laws "cantUse" must be unique, that is if you have two laws with the same cantUse
+ * but the first deals 1000 hp damage and the second takes 4000 gold, then we will take the first one,
+ * because its find and return on first found.
+ *
  * ==  What can a player not use? ==
  *
  * For battles: Attak, Item Name, Skill Name, Special Name
  * For out of battles: Item Name, Skill Name, Special Name
  *
- * Gaurd and Flee and other actions that are not listed above are not done
- * ON hit. that is the player is not casting a spell, attacking or using an item
- * that ON hit would do x.
+ * Any skill name that targets a player or enemy can be used as a "cantUse" any thing like wait or a skill
+ * that targets no one cannot be used.
  *
  * Enemies cannot break laws. Only players can.
  *
@@ -3639,7 +3642,7 @@ var OptionsHandler = require('./options/option_handler');
  * -- Laws Can Kill! --
  *
  * If you tell a law that it will do x amount of damage to a player and the players
- * hp falls below 0 or to 0, we will kill the player. if every one in the party
+ * hp falls below 0 or to 0, we will kill the player. If every one in the party
  * is dead and you are on a map, you get the law  window saying hat the final
  * law was that you broke, who broke it and that the game is over.
  *
@@ -3657,11 +3660,13 @@ var OptionsHandler = require('./options/option_handler');
  * === Regarding Battles ===
  *
  * When you are in battle and you use something like attack or gaurd and you
- * have it set as a can't use, then we will, ON HIT tell the player that
+ * have it set as a can't use, then we will tell the player that
  * person x broke a law and they are being punished x by amount y.
  *
  * Again remember that laws can kill.
  *
+ * Also note, it doesn't matter if you hit or not, as long as you have done
+ * the action then you are as good as guilty.
  */
 
 /**
@@ -3696,7 +3701,7 @@ OptionsHandler.createOptionsStorage();
 // Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;
 
-},{"./law_storage/laws_for_map":85,"./options/option_handler":86}],84:[function(require,module,exports){
+},{"./law_storage/laws_for_map":85,"./options/option_handler":87}],84:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3707,6 +3712,7 @@ var LawsForMap = require('../law_storage/laws_for_map');
 var lodashFindWhere = require('../../../node_modules/lodash/collection/findWhere');
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
 var OptionHandler = require('../options/option_handler');
+var StoreNoGoldMessage = require('../law_storage/store_no_gold_message');
 
 /**
  * @namespace FlareLawsForMap.
@@ -3781,7 +3787,7 @@ var ProcessBrokenLaw = (function () {
     value: function punishPlayer() {
       // If gold, take away gold.
       if (this.getBrokenLawObject().punishment === 'gold') {
-        if ($gameParty._gold > 0) {
+        if ($gameParty._gold !== 0) {
           $gameParty._gold -= this.getBrokenLawObject().amount;
 
           if ($gameParty._gold < 0) {
@@ -3789,12 +3795,45 @@ var ProcessBrokenLaw = (function () {
           }
         } else {
           // We have no more gold.
-          window._lawMessageForLawBattleWindow = 'Party has no more gold.';
+          window._lawMessageForLawBattleWindow = 'Party has no gold to take.';
         }
       } else {
         // Handle non gold related punishments.
         this.handleOtherPunishments(this.getBrokenLawObject());
       }
+    }
+
+    /**
+     * Check if the party has gold.
+     *
+     * When a law is broken and punishment is gold. We want to check if
+     * the party has gold before we display a message.
+     *
+     * You can store the message for use later on. Use the
+     *  static class to fetch.
+     *
+     * @param true/false
+     * @return false if no gold.
+     */
+
+  }, {
+    key: 'checkForGoldBeforePunish',
+    value: function checkForGoldBeforePunish(storeMessage) {
+      console.log('hello');
+      if (this.getBrokenLawObject().punishment === 'gold') {
+        console.log('hello');
+        if ($gameParty._gold === 0) {
+          if (!storeMessage) {
+            $gameMessage.add('Party has no gold to take.');
+          } else {
+            console.log('hello');
+            StoreNoGoldMessage.createStorage();
+            StoreNoGoldMessage.setMessage('Party has no gold to take.');
+          }
+        }
+      }
+
+      return false;
     }
 
     /**
@@ -3877,7 +3916,7 @@ module.exports = ProcessBrokenLaw;
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
 
-},{"../../../node_modules/lodash/collection/findWhere":4,"../law_storage/laws_for_map":85,"../options/option_handler":86,"../scenes/flare_law_was_broken_window_scene":88}],85:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/findWhere":4,"../law_storage/laws_for_map":85,"../law_storage/store_no_gold_message":86,"../options/option_handler":87,"../scenes/flare_law_was_broken_window_scene":89}],85:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3978,6 +4017,62 @@ var LawsForMap = (function () {
 module.exports = LawsForMap;
 
 },{"../../../node_modules/lodash/collection/findWhere":4,"../../../node_modules/lodash/lang/isUndefined":71,"../../../node_modules/lodash/string/capitalize":75,"../../../node_modules/lodash/string/trim":76}],86:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Static class to store the "no gold" message
+ */
+
+var StoreNoGoldMessage = (function () {
+  function StoreNoGoldMessage() {
+    _classCallCheck(this, StoreNoGoldMessage);
+  }
+
+  _createClass(StoreNoGoldMessage, null, [{
+    key: "createStorage",
+
+    /**
+     * Create an empty store.
+     */
+    value: function createStorage() {
+      this._noGoldMessage = null;
+    }
+
+    /**
+     * Set the actual message
+     *
+     * @param string message
+     */
+
+  }, {
+    key: "setMessage",
+    value: function setMessage(message) {
+      this._noGoldMessage = message;
+    }
+
+    /**
+     * Get the actual message.
+     *
+     * @return undefined or string
+     */
+
+  }, {
+    key: "getMessage",
+    value: function getMessage() {
+      return this._noGoldMessage;
+    }
+  }]);
+
+  return StoreNoGoldMessage;
+})();
+
+module.exports = StoreNoGoldMessage;
+
+},{}],87:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4032,7 +4127,7 @@ var OptionHandler = (function () {
 
 module.exports = OptionHandler;
 
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4092,7 +4187,7 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{"../../../node_modules/lodash/collection/find":3}],88:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":3}],89:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4161,7 +4256,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":97}],89:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":98}],90:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4223,7 +4318,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../windows/laws_window":98}],90:[function(require,module,exports){
+},{"../windows/laws_window":99}],91:[function(require,module,exports){
 'use strict';
 
 BattleManager.processDefeat = function () {
@@ -4241,7 +4336,7 @@ BattleManager.customDisplayMessage = function () {
     $gameMessage.add('The whole party was defeated ...');
 };
 
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 "use strict";
 
 var ProcessBrokenLaw = require('../law_handler/process_broken_law');
@@ -4275,6 +4370,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {
 
     // Punish for items, spells and others that target the player or players.
+    processWhatShouldHappenOnHit.checkForGoldBeforePunish(true);
     processWhatShouldHappenOnHit.openMessageWindow();
     processWhatShouldHappenOnHit.punishPlayer();
   } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() || subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && $gameParty.inBattle()) {
@@ -4283,6 +4379,12 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
     // Punish the player for those that effect the enemy.
     $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + "\\c[18]" + item.name + 's\\c[0]');
     $gameMessage.add("\\c[14] Punishment is: \\c[0]" + "\\c[20]" + brokenLawObject.punishment + "\\c[0] in the amount of: " + "\\c[20]" + brokenLawObject.amount + "\\c[0]");
+    processWhatShouldHappenOnHit.checkForGoldBeforePunish(false);
+
+    if (window._lawMessageForLawBattleWindow !== null) {
+      $gameMessage.add(window._lawMessageForLawBattleWindow);
+    }
+
     processWhatShouldHappenOnHit.punishPlayer();
   } else {
     item.effects.forEach(function (effect) {
@@ -4293,7 +4395,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   }
 };
 
-},{"../law_handler/process_broken_law":84}],92:[function(require,module,exports){
+},{"../law_handler/process_broken_law":84}],93:[function(require,module,exports){
 'use strict';
 
 var AddLawsForMap = require('../add_laws_for_map.js');
@@ -4311,7 +4413,7 @@ Game_Map.prototype.setup = function (mapId) {
   flarAddLawsForMap.grabMapInformation();
 };
 
-},{"../add_laws_for_map.js":82}],93:[function(require,module,exports){
+},{"../add_laws_for_map.js":82}],94:[function(require,module,exports){
 'use strict';
 
 var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
@@ -4332,7 +4434,7 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../law_storage/laws_for_map":85,"../scenes/flare_law_was_broken_window_scene":88}],94:[function(require,module,exports){
+},{"../law_storage/laws_for_map":85,"../scenes/flare_law_was_broken_window_scene":89}],95:[function(require,module,exports){
 'use strict';
 
 var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
@@ -4351,7 +4453,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(FlareLawWindowScene);
 };
 
-},{"../scenes/flare_law_window_scene":89}],95:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":90}],96:[function(require,module,exports){
 'use strict';
 
 var LawsForMap = require('../law_storage/laws_for_map');
@@ -4387,7 +4489,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{"../law_storage/laws_for_map":85}],96:[function(require,module,exports){
+},{"../law_storage/laws_for_map":85}],97:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4400,7 +4502,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4414,6 +4516,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var FlareWindowBase = require('../../../flare_window_base');
+var StoreNoGoldMessage = require('../../law_storage/store_no_gold_message');
+var lodashIsUndefined = require('../../../../node_modules/lodash/lang/isUndefined');
 
 /**
  * @namespace FlareLawsForMap.
@@ -4471,8 +4575,8 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
       this.flareDrawTextEx('\\c[9]' + this._law.subject + '\\c[0]' + ' used: ' + '\\c[10]' + this._law.actionUsed + '\\c[0]', 20, 140);
       this.flareDrawTextEx('The punishment is: ' + '\\c[20]' + this._law.punishment + '\\c[0]' + ' at a cost of: ' + '\\c[20]' + this._law.amount + '\\c[0]', 10, 180);
 
-      if (window._lawMessageForLawBattleWindow !== null) {
-        this.flareDrawTextEx('\\c[20]' + window._lawMessageForLawBattleWindow + '\\c[0]', 10, 210);
+      if (!lodashIsUndefined(StoreNoGoldMessage.getMessage)) {
+        this.flareDrawTextEx('\\c[20]' + StoreNoGoldMessage.getMessage() + '\\c[0]', 10, 210);
       }
 
       if ($gameParty.isAllDead()) {
@@ -4488,7 +4592,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":81}],98:[function(require,module,exports){
+},{"../../../../node_modules/lodash/lang/isUndefined":71,"../../../flare_window_base":81,"../../law_storage/store_no_gold_message":86}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4646,4 +4750,4 @@ var LawWindow = (function (_FlareWindowBase) {
 
 module.exports = LawWindow;
 
-},{"../../flare_window_base":81,"../law_storage/laws_for_map":85}]},{},[95,83,94,96,93,91,92,90]);
+},{"../../flare_window_base":81,"../law_storage/laws_for_map":85}]},{},[96,83,95,97,94,92,93,91]);
