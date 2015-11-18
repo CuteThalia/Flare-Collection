@@ -3555,7 +3555,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var LawManagement = require('./law_storage/laws_for_map');
-var LawOptions = require('./options/option_handler');
+var OptionsHandler = require('./options/option_handler');
 
 /**
  * @namespace FlareLawsForMap.
@@ -3691,7 +3691,7 @@ var FlareLawsForMap = (function () {
 
 // Set up the options.
 
-_OptionHandler.createOptionsStorage();
+OptionsHandler.createOptionsStorage();
 
 // Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;

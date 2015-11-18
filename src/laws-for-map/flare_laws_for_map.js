@@ -1,5 +1,5 @@
 var LawManagement     = require('./law_storage/laws_for_map');
-var LawOptions        = require('./options/option_handler');
+var OptionsHandler        = require('./options/option_handler');
 
 /**
  * @namespace FlareLawsForMap.
@@ -124,7 +124,7 @@ class FlareLawsForMap {
 }
 
 // Set up the options.
-_OptionHandler.createOptionsStorage();
+OptionsHandler.createOptionsStorage();
 
 // Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;

@@ -30,8 +30,8 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) {
 
     // Punish for items, spells and others that target the player or players.
-    processWhatShouldHappenOnHit.punishPlayer();
     processWhatShouldHappenOnHit.openMessageWindow();
+    processWhatShouldHappenOnHit.punishPlayer();
 
   } else if ((target instanceof Game_Enemy &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) ||
