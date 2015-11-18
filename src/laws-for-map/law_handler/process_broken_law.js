@@ -70,10 +70,7 @@ class ProcessBrokenLaw {
         if ($gameParty._gold < 0) {
           $gameParty._gold = 0;
         }
-      } else {
-        // We have no more gold.
-        window._lawMessageForLawBattleWindow = 'Party has no gold to take.';
-      }
+      } 
     } else {
       // Handle non gold related punishments.
       this.handleOtherPunishments(this.getBrokenLawObject());
