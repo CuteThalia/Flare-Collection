@@ -3346,6 +3346,12 @@ var CurrencyShop = require('./shop/currency_shop');
  * Because we do not have a limit on currencies, assume the user
  * has 10 Demon Teeth, this will make the count 0;
  *
+ * FlareCurrencies.setAmountBasedOnVariableId("Currency Name", variableId)
+ *
+ * The idea here is that you would set a variable to have a set amount
+ * then you would later on call this script that sets the specvified
+ * currency to have the amount in the variable.
+ *
  * FlareCurrencies.openShop("Currency Name", purchaseOnly)
  *
  * Opens a currency shop based on the currency name. We will gather
@@ -3399,6 +3405,27 @@ var FlareCurrencies = (function () {
 
       this._addAmount(currencyObject, parseInt(currencyAmount));
     }
+
+    /**
+     * Set currency amount based off variable id.
+     *
+     * @param String currencyName
+     * @param int variableId
+     */
+
+  }, {
+    key: 'setAmountBasedOnVariableId',
+    value: function setAmountBasedOnVariableId(currencyName, variableId) {
+      this.addAmount(currencyName, $gameVariables.value(parseInt(variableId)));
+    }
+
+    /**
+     * Opens a currency shop.
+     *
+     * @param string currency
+     * @param boolean purchaseOnly
+     */
+
   }, {
     key: 'openShop',
     value: function openShop(currency, purchaseOnly) {

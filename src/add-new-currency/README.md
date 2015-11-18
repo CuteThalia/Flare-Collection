@@ -106,6 +106,16 @@ FlareCurrencies.openShop('Demon Teeth');
 FlareCurrencies.openShop('Demon Teeth', true); // Purchase only
 ```
 
+- `FlareCurrencies.setAmountBasedOnVariableId(currencyName, variableId)`: Lets you set a positive or negative amount from the variable id.
+
+example:
+
+```javascript
+// variable id 5 has an amount of 650
+FlareCurrencies.setAmountBasedOnVariableId('Demon Teeth', 5);
+
+// Demon Teeth currency now has a value of 650
+```
 
 ## Yanfly Victory Aftermath Script
 
