@@ -30,6 +30,13 @@ The current scripts are:
 
  ![Notification Window Scrolling](http://i.imgur.com/EfSN6tQ.png)
 
+ - **[Flare Laws for Map](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/laws_for_map)**: Allows for you to specify specific laws for a map.
+
+ ![Broken Law on Map](http://i.imgur.com/ozElbqY.png)
+ ![List Of Laws](http://i.imgur.com/9jpa8Px.png)
+ ![Laws in Menu](http://i.imgur.com/IPlCqXn.png)
+ ![broke law in battle](http://i.imgur.com/ZYdBEz9.png)
+
 ## How to build the script?
 
 Building the scripts is easy:
