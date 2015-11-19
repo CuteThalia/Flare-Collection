@@ -4,10 +4,20 @@ var ProcessBrokenLaw = require('../law_handler/process_broken_law');
  * @namespace FlareLawsForMap.
  */
 
+var oldGameActionPrototypeInitializeMethod = Game_Action.prototype.initialize;
+Game_Action.prototype.initialize = function(subject, forcing) {
+  oldGameActionPrototypeInitializeMethod.call(this, subject, forcing);
+  this._calledOnce = false;
+}
+
 var oldGameActionPrototypeApplyMethod = Game_Action.prototype.apply
 Game_Action.prototype.apply = function(target) {
     oldGameActionPrototypeApplyMethod.call(this, target);
-    this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
+
+    if (this._calledOnce === false) {
+      this.applyPunishmentIfLawIsBroken(this.item(), this.subject(), target);
+      this._calledOnce = true;
+    }
 }
 
 /**

@@ -70,7 +70,7 @@ class ProcessBrokenLaw {
         if ($gameParty._gold < 0) {
           $gameParty._gold = 0;
         }
-      } 
+      }
     } else {
       // Handle non gold related punishments.
       this.handleOtherPunishments(this.getBrokenLawObject());
@@ -90,7 +90,6 @@ class ProcessBrokenLaw {
    * @return false if no gold.
    */
   checkForGoldBeforePunish(storeMessage) {
-    console.log('hello');
     if (this.getBrokenLawObject().punishment === 'gold') {
           console.log('hello');
       if ($gameParty._gold === 0) {
