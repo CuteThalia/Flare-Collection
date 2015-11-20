@@ -1,6 +1,7 @@
 var FlareWindowSelectable    = require('../../../../flare_window_selectable');
 var StoreCurrencyItemInfo    = require('../helper/store_currency_item_info');
-var wordWrap                 = require('../../../../../node_modules/underscore.string/wrap')
+var wordWrap                 = require('../../../../../node_modules/underscore.string/wrap');
+var MapHasCureencyShop       = require('../helper/map_has_currency_shop');
 
 class ItemInformation extends FlareWindowSelectable {
 
@@ -31,18 +32,31 @@ class ItemInformation extends FlareWindowSelectable {
     this.drawItemInformation(index)
   }
 
+  getCountOfShopsSellingThisCurrency() {
+    var mapEvents     = $dataMap.events;
+
+    var doesMapHaveCurrencyShop = new MapHasCureencyShop(mapEvents);
+    return doesMapHaveCurrencyShop.doesMapHaveCurrencyShop();
+  }
+
   drawItemInformation(index) {
     this.contents.fontSize = 18;
     var itemInformation = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
     var content = wordWrap(itemInformation.description, {width: 48});
+    var IsMapSelling = this.getCountOfShopsSellingThisCurrency();
 
     var helpText = '\\\c[18]Hit Enter to see what regions in the world sell this item.\\\c[0]';
     helpText = wordWrap(helpText, {width: 48});
 
     this.drawIcon(itemInformation.itemIcon, 10, 20);
     this.flareDrawTextEx(itemInformation.itemName, 60, 20);
-    this.flareDrawTextEx('Shops are selling for: ' + itemInformation.currencyCost, 10, 60);
-    this.flareDrawTextEx(content, 10, 110);
+    this.flareDrawTextEx('- Shops are selling for: ' + itemInformation.currencyCost, 10, 80);
+
+    if (IsMapSelling) {
+      this.flareDrawTextEx('- There is a \\c[14]currency shop\\c[0] selling this item.', 10, 100);
+    }
+
+    this.flareDrawTextEx(content, 10, 140);
 
     this.flareDrawTextEx('\\c[2]---------------------------------\\c[0]', 0, Graphics.boxHeight - 150);
     this.flareDrawTextEx(helpText, 0, Graphics.boxHeight - 100);
