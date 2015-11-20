@@ -53,7 +53,7 @@ var findIndex = createFindIndex();
 
 module.exports = findIndex;
 
-},{"../internal/createFindIndex":31}],2:[function(require,module,exports){
+},{"../internal/createFindIndex":38}],2:[function(require,module,exports){
 /**
  * Gets the last element of `array`.
  *
@@ -75,6 +75,79 @@ function last(array) {
 module.exports = last;
 
 },{}],3:[function(require,module,exports){
+var baseCallback = require('../internal/baseCallback'),
+    baseUniq = require('../internal/baseUniq'),
+    isIterateeCall = require('../internal/isIterateeCall'),
+    sortedUniq = require('../internal/sortedUniq');
+
+/**
+ * Creates a duplicate-free version of an array, using
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+ * for equality comparisons, in which only the first occurence of each element
+ * is kept. Providing `true` for `isSorted` performs a faster search algorithm
+ * for sorted arrays. If an iteratee function is provided it's invoked for
+ * each element in the array to generate the criterion by which uniqueness
+ * is computed. The `iteratee` is bound to `thisArg` and invoked with three
+ * arguments: (value, index, array).
+ *
+ * If a property name is provided for `iteratee` the created `_.property`
+ * style callback returns the property value of the given element.
+ *
+ * If a value is also provided for `thisArg` the created `_.matchesProperty`
+ * style callback returns `true` for elements that have a matching property
+ * value, else `false`.
+ *
+ * If an object is provided for `iteratee` the created `_.matches` style
+ * callback returns `true` for elements that have the properties of the given
+ * object, else `false`.
+ *
+ * @static
+ * @memberOf _
+ * @alias unique
+ * @category Array
+ * @param {Array} array The array to inspect.
+ * @param {boolean} [isSorted] Specify the array is sorted.
+ * @param {Function|Object|string} [iteratee] The function invoked per iteration.
+ * @param {*} [thisArg] The `this` binding of `iteratee`.
+ * @returns {Array} Returns the new duplicate-value-free array.
+ * @example
+ *
+ * _.uniq([2, 1, 2]);
+ * // => [2, 1]
+ *
+ * // using `isSorted`
+ * _.uniq([1, 1, 2], true);
+ * // => [1, 2]
+ *
+ * // using an iteratee function
+ * _.uniq([1, 2.5, 1.5, 2], function(n) {
+ *   return this.floor(n);
+ * }, Math);
+ * // => [1, 2.5]
+ *
+ * // using the `_.property` callback shorthand
+ * _.uniq([{ 'x': 1 }, { 'x': 2 }, { 'x': 1 }], 'x');
+ * // => [{ 'x': 1 }, { 'x': 2 }]
+ */
+function uniq(array, isSorted, iteratee, thisArg) {
+  var length = array ? array.length : 0;
+  if (!length) {
+    return [];
+  }
+  if (isSorted != null && typeof isSorted != 'boolean') {
+    thisArg = iteratee;
+    iteratee = isIterateeCall(array, isSorted, thisArg) ? undefined : isSorted;
+    isSorted = false;
+  }
+  iteratee = iteratee == null ? iteratee : baseCallback(iteratee, thisArg, 3);
+  return (isSorted)
+    ? sortedUniq(array, iteratee)
+    : baseUniq(array, iteratee);
+}
+
+module.exports = uniq;
+
+},{"../internal/baseCallback":10,"../internal/baseUniq":29,"../internal/isIterateeCall":51,"../internal/sortedUniq":57}],4:[function(require,module,exports){
 var baseEach = require('../internal/baseEach'),
     createFind = require('../internal/createFind');
 
@@ -132,7 +205,40 @@ var find = createFind(baseEach);
 
 module.exports = find;
 
-},{"../internal/baseEach":11,"../internal/createFind":30}],4:[function(require,module,exports){
+},{"../internal/baseEach":13,"../internal/createFind":37}],5:[function(require,module,exports){
+(function (global){
+var cachePush = require('./cachePush'),
+    getNative = require('./getNative');
+
+/** Native method references. */
+var Set = getNative(global, 'Set');
+
+/* Native method references for those with the same name as other `lodash` methods. */
+var nativeCreate = getNative(Object, 'create');
+
+/**
+ *
+ * Creates a cache object to store unique values.
+ *
+ * @private
+ * @param {Array} [values] The values to cache.
+ */
+function SetCache(values) {
+  var length = values ? values.length : 0;
+
+  this.data = { 'hash': nativeCreate(null), 'set': new Set };
+  while (length--) {
+    this.push(values[length]);
+  }
+}
+
+// Add functions to the `Set` cache.
+SetCache.prototype.push = cachePush;
+
+module.exports = SetCache;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./cachePush":33,"./getNative":44}],6:[function(require,module,exports){
 /**
  * Copies the values of `source` to `array`.
  *
@@ -154,7 +260,7 @@ function arrayCopy(source, array) {
 
 module.exports = arrayCopy;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /**
  * A specialized version of `_.forEach` for arrays without support for callback
  * shorthands and `this` binding.
@@ -178,7 +284,7 @@ function arrayEach(array, iteratee) {
 
 module.exports = arrayEach;
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /**
  * A specialized version of `_.some` for arrays without support for callback
  * shorthands and `this` binding.
@@ -203,7 +309,7 @@ function arraySome(array, predicate) {
 
 module.exports = arraySome;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var baseCopy = require('./baseCopy'),
     keys = require('../object/keys');
 
@@ -224,7 +330,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":59,"./baseCopy":10}],8:[function(require,module,exports){
+},{"../object/keys":68,"./baseCopy":12}],10:[function(require,module,exports){
 var baseMatches = require('./baseMatches'),
     baseMatchesProperty = require('./baseMatchesProperty'),
     bindCallback = require('./bindCallback'),
@@ -261,7 +367,7 @@ function baseCallback(func, thisArg, argCount) {
 
 module.exports = baseCallback;
 
-},{"../utility/identity":62,"../utility/property":63,"./baseMatches":20,"./baseMatchesProperty":21,"./bindCallback":26}],9:[function(require,module,exports){
+},{"../utility/identity":71,"../utility/property":72,"./baseMatches":23,"./baseMatchesProperty":24,"./bindCallback":30}],11:[function(require,module,exports){
 var arrayCopy = require('./arrayCopy'),
     arrayEach = require('./arrayEach'),
     baseAssign = require('./baseAssign'),
@@ -391,7 +497,7 @@ function baseClone(value, isDeep, customizer, key, object, stackA, stackB) {
 
 module.exports = baseClone;
 
-},{"../lang/isArray":53,"../lang/isObject":56,"./arrayCopy":4,"./arrayEach":5,"./baseAssign":7,"./baseForOwn":15,"./initCloneArray":38,"./initCloneByTag":39,"./initCloneObject":40}],10:[function(require,module,exports){
+},{"../lang/isArray":62,"../lang/isObject":65,"./arrayCopy":6,"./arrayEach":7,"./baseAssign":9,"./baseForOwn":17,"./initCloneArray":46,"./initCloneByTag":47,"./initCloneObject":48}],12:[function(require,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -416,7 +522,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var baseForOwn = require('./baseForOwn'),
     createBaseEach = require('./createBaseEach');
 
@@ -433,7 +539,7 @@ var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
 
-},{"./baseForOwn":15,"./createBaseEach":28}],12:[function(require,module,exports){
+},{"./baseForOwn":17,"./createBaseEach":34}],14:[function(require,module,exports){
 /**
  * The base implementation of `_.find`, `_.findLast`, `_.findKey`, and `_.findLastKey`,
  * without support for callback shorthands and `this` binding, which iterates
@@ -460,7 +566,7 @@ function baseFind(collection, predicate, eachFunc, retKey) {
 
 module.exports = baseFind;
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * The base implementation of `_.findIndex` and `_.findLastIndex` without
  * support for callback shorthands and `this` binding.
@@ -485,7 +591,7 @@ function baseFindIndex(array, predicate, fromRight) {
 
 module.exports = baseFindIndex;
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var createBaseFor = require('./createBaseFor');
 
 /**
@@ -504,7 +610,7 @@ var baseFor = createBaseFor();
 
 module.exports = baseFor;
 
-},{"./createBaseFor":29}],15:[function(require,module,exports){
+},{"./createBaseFor":35}],17:[function(require,module,exports){
 var baseFor = require('./baseFor'),
     keys = require('../object/keys');
 
@@ -523,7 +629,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"../object/keys":59,"./baseFor":14}],16:[function(require,module,exports){
+},{"../object/keys":68,"./baseFor":16}],18:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -554,7 +660,36 @@ function baseGet(object, path, pathKey) {
 
 module.exports = baseGet;
 
-},{"./toObject":49}],17:[function(require,module,exports){
+},{"./toObject":58}],19:[function(require,module,exports){
+var indexOfNaN = require('./indexOfNaN');
+
+/**
+ * The base implementation of `_.indexOf` without support for binary searches.
+ *
+ * @private
+ * @param {Array} array The array to search.
+ * @param {*} value The value to search for.
+ * @param {number} fromIndex The index to search from.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function baseIndexOf(array, value, fromIndex) {
+  if (value !== value) {
+    return indexOfNaN(array, fromIndex);
+  }
+  var index = fromIndex - 1,
+      length = array.length;
+
+  while (++index < length) {
+    if (array[index] === value) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+module.exports = baseIndexOf;
+
+},{"./indexOfNaN":45}],20:[function(require,module,exports){
 var baseIsEqualDeep = require('./baseIsEqualDeep'),
     isObject = require('../lang/isObject'),
     isObjectLike = require('./isObjectLike');
@@ -584,7 +719,7 @@ function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
 
 module.exports = baseIsEqual;
 
-},{"../lang/isObject":56,"./baseIsEqualDeep":18,"./isObjectLike":46}],18:[function(require,module,exports){
+},{"../lang/isObject":65,"./baseIsEqualDeep":21,"./isObjectLike":54}],21:[function(require,module,exports){
 var equalArrays = require('./equalArrays'),
     equalByTag = require('./equalByTag'),
     equalObjects = require('./equalObjects'),
@@ -688,7 +823,7 @@ function baseIsEqualDeep(object, other, equalFunc, customizer, isLoose, stackA, 
 
 module.exports = baseIsEqualDeep;
 
-},{"../lang/isArray":53,"../lang/isTypedArray":57,"./equalArrays":32,"./equalByTag":33,"./equalObjects":34}],19:[function(require,module,exports){
+},{"../lang/isArray":62,"../lang/isTypedArray":66,"./equalArrays":39,"./equalByTag":40,"./equalObjects":41}],22:[function(require,module,exports){
 var baseIsEqual = require('./baseIsEqual'),
     toObject = require('./toObject');
 
@@ -742,7 +877,7 @@ function baseIsMatch(object, matchData, customizer) {
 
 module.exports = baseIsMatch;
 
-},{"./baseIsEqual":17,"./toObject":49}],20:[function(require,module,exports){
+},{"./baseIsEqual":20,"./toObject":58}],23:[function(require,module,exports){
 var baseIsMatch = require('./baseIsMatch'),
     getMatchData = require('./getMatchData'),
     toObject = require('./toObject');
@@ -774,7 +909,7 @@ function baseMatches(source) {
 
 module.exports = baseMatches;
 
-},{"./baseIsMatch":19,"./getMatchData":36,"./toObject":49}],21:[function(require,module,exports){
+},{"./baseIsMatch":22,"./getMatchData":43,"./toObject":58}],24:[function(require,module,exports){
 var baseGet = require('./baseGet'),
     baseIsEqual = require('./baseIsEqual'),
     baseSlice = require('./baseSlice'),
@@ -821,7 +956,7 @@ function baseMatchesProperty(path, srcValue) {
 
 module.exports = baseMatchesProperty;
 
-},{"../array/last":2,"../lang/isArray":53,"./baseGet":16,"./baseIsEqual":17,"./baseSlice":24,"./isKey":44,"./isStrictComparable":47,"./toObject":49,"./toPath":50}],22:[function(require,module,exports){
+},{"../array/last":2,"../lang/isArray":62,"./baseGet":18,"./baseIsEqual":20,"./baseSlice":27,"./isKey":52,"./isStrictComparable":55,"./toObject":58,"./toPath":59}],25:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -837,7 +972,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var baseGet = require('./baseGet'),
     toPath = require('./toPath');
 
@@ -858,7 +993,7 @@ function basePropertyDeep(path) {
 
 module.exports = basePropertyDeep;
 
-},{"./baseGet":16,"./toPath":50}],24:[function(require,module,exports){
+},{"./baseGet":18,"./toPath":59}],27:[function(require,module,exports){
 /**
  * The base implementation of `_.slice` without an iteratee call guard.
  *
@@ -892,7 +1027,7 @@ function baseSlice(array, start, end) {
 
 module.exports = baseSlice;
 
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 /**
  * Converts `value` to a string if it's not one. An empty string is returned
  * for `null` or `undefined` values.
@@ -907,7 +1042,69 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
+var baseIndexOf = require('./baseIndexOf'),
+    cacheIndexOf = require('./cacheIndexOf'),
+    createCache = require('./createCache');
+
+/** Used as the size to enable large array optimizations. */
+var LARGE_ARRAY_SIZE = 200;
+
+/**
+ * The base implementation of `_.uniq` without support for callback shorthands
+ * and `this` binding.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {Function} [iteratee] The function invoked per iteration.
+ * @returns {Array} Returns the new duplicate free array.
+ */
+function baseUniq(array, iteratee) {
+  var index = -1,
+      indexOf = baseIndexOf,
+      length = array.length,
+      isCommon = true,
+      isLarge = isCommon && length >= LARGE_ARRAY_SIZE,
+      seen = isLarge ? createCache() : null,
+      result = [];
+
+  if (seen) {
+    indexOf = cacheIndexOf;
+    isCommon = false;
+  } else {
+    isLarge = false;
+    seen = iteratee ? [] : result;
+  }
+  outer:
+  while (++index < length) {
+    var value = array[index],
+        computed = iteratee ? iteratee(value, index, array) : value;
+
+    if (isCommon && value === value) {
+      var seenIndex = seen.length;
+      while (seenIndex--) {
+        if (seen[seenIndex] === computed) {
+          continue outer;
+        }
+      }
+      if (iteratee) {
+        seen.push(computed);
+      }
+      result.push(value);
+    }
+    else if (indexOf(seen, computed, 0) < 0) {
+      if (iteratee || isLarge) {
+        seen.push(computed);
+      }
+      result.push(value);
+    }
+  }
+  return result;
+}
+
+module.exports = baseUniq;
+
+},{"./baseIndexOf":19,"./cacheIndexOf":32,"./createCache":36}],30:[function(require,module,exports){
 var identity = require('../utility/identity');
 
 /**
@@ -948,7 +1145,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":62}],27:[function(require,module,exports){
+},{"../utility/identity":71}],31:[function(require,module,exports){
 (function (global){
 /** Native method references. */
 var ArrayBuffer = global.ArrayBuffer,
@@ -972,7 +1169,50 @@ function bufferClone(buffer) {
 module.exports = bufferClone;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],28:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
+var isObject = require('../lang/isObject');
+
+/**
+ * Checks if `value` is in `cache` mimicking the return signature of
+ * `_.indexOf` by returning `0` if the value is found, else `-1`.
+ *
+ * @private
+ * @param {Object} cache The cache to search.
+ * @param {*} value The value to search for.
+ * @returns {number} Returns `0` if `value` is found, else `-1`.
+ */
+function cacheIndexOf(cache, value) {
+  var data = cache.data,
+      result = (typeof value == 'string' || isObject(value)) ? data.set.has(value) : data.hash[value];
+
+  return result ? 0 : -1;
+}
+
+module.exports = cacheIndexOf;
+
+},{"../lang/isObject":65}],33:[function(require,module,exports){
+var isObject = require('../lang/isObject');
+
+/**
+ * Adds `value` to the cache.
+ *
+ * @private
+ * @name push
+ * @memberOf SetCache
+ * @param {*} value The value to cache.
+ */
+function cachePush(value) {
+  var data = this.data;
+  if (typeof value == 'string' || isObject(value)) {
+    data.set.add(value);
+  } else {
+    data.hash[value] = true;
+  }
+}
+
+module.exports = cachePush;
+
+},{"../lang/isObject":65}],34:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength'),
     toObject = require('./toObject');
@@ -1005,7 +1245,7 @@ function createBaseEach(eachFunc, fromRight) {
 
 module.exports = createBaseEach;
 
-},{"./getLength":35,"./isLength":45,"./toObject":49}],29:[function(require,module,exports){
+},{"./getLength":42,"./isLength":53,"./toObject":58}],35:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -1034,7 +1274,32 @@ function createBaseFor(fromRight) {
 
 module.exports = createBaseFor;
 
-},{"./toObject":49}],30:[function(require,module,exports){
+},{"./toObject":58}],36:[function(require,module,exports){
+(function (global){
+var SetCache = require('./SetCache'),
+    getNative = require('./getNative');
+
+/** Native method references. */
+var Set = getNative(global, 'Set');
+
+/* Native method references for those with the same name as other `lodash` methods. */
+var nativeCreate = getNative(Object, 'create');
+
+/**
+ * Creates a `Set` cache object to optimize linear searches of large arrays.
+ *
+ * @private
+ * @param {Array} [values] The values to cache.
+ * @returns {null|Object} Returns the new cache object if `Set` is supported, else `null`.
+ */
+function createCache(values) {
+  return (nativeCreate && Set) ? new SetCache(values) : null;
+}
+
+module.exports = createCache;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./SetCache":5,"./getNative":44}],37:[function(require,module,exports){
 var baseCallback = require('./baseCallback'),
     baseFind = require('./baseFind'),
     baseFindIndex = require('./baseFindIndex'),
@@ -1061,7 +1326,7 @@ function createFind(eachFunc, fromRight) {
 
 module.exports = createFind;
 
-},{"../lang/isArray":53,"./baseCallback":8,"./baseFind":12,"./baseFindIndex":13}],31:[function(require,module,exports){
+},{"../lang/isArray":62,"./baseCallback":10,"./baseFind":14,"./baseFindIndex":15}],38:[function(require,module,exports){
 var baseCallback = require('./baseCallback'),
     baseFindIndex = require('./baseFindIndex');
 
@@ -1084,7 +1349,7 @@ function createFindIndex(fromRight) {
 
 module.exports = createFindIndex;
 
-},{"./baseCallback":8,"./baseFindIndex":13}],32:[function(require,module,exports){
+},{"./baseCallback":10,"./baseFindIndex":15}],39:[function(require,module,exports){
 var arraySome = require('./arraySome');
 
 /**
@@ -1137,7 +1402,7 @@ function equalArrays(array, other, equalFunc, customizer, isLoose, stackA, stack
 
 module.exports = equalArrays;
 
-},{"./arraySome":6}],33:[function(require,module,exports){
+},{"./arraySome":8}],40:[function(require,module,exports){
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]',
     dateTag = '[object Date]',
@@ -1187,7 +1452,7 @@ function equalByTag(object, other, tag) {
 
 module.exports = equalByTag;
 
-},{}],34:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var keys = require('../object/keys');
 
 /** Used for native method references. */
@@ -1256,7 +1521,7 @@ function equalObjects(object, other, equalFunc, customizer, isLoose, stackA, sta
 
 module.exports = equalObjects;
 
-},{"../object/keys":59}],35:[function(require,module,exports){
+},{"../object/keys":68}],42:[function(require,module,exports){
 var baseProperty = require('./baseProperty');
 
 /**
@@ -1273,7 +1538,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":22}],36:[function(require,module,exports){
+},{"./baseProperty":25}],43:[function(require,module,exports){
 var isStrictComparable = require('./isStrictComparable'),
     pairs = require('../object/pairs');
 
@@ -1296,7 +1561,7 @@ function getMatchData(object) {
 
 module.exports = getMatchData;
 
-},{"../object/pairs":61,"./isStrictComparable":47}],37:[function(require,module,exports){
+},{"../object/pairs":70,"./isStrictComparable":55}],44:[function(require,module,exports){
 var isNative = require('../lang/isNative');
 
 /**
@@ -1314,7 +1579,32 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":55}],38:[function(require,module,exports){
+},{"../lang/isNative":64}],45:[function(require,module,exports){
+/**
+ * Gets the index at which the first occurrence of `NaN` is found in `array`.
+ *
+ * @private
+ * @param {Array} array The array to search.
+ * @param {number} fromIndex The index to search from.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {number} Returns the index of the matched `NaN`, else `-1`.
+ */
+function indexOfNaN(array, fromIndex, fromRight) {
+  var length = array.length,
+      index = fromIndex + (fromRight ? 0 : -1);
+
+  while ((fromRight ? index-- : ++index < length)) {
+    var other = array[index];
+    if (other !== other) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+module.exports = indexOfNaN;
+
+},{}],46:[function(require,module,exports){
 /** Used for native method references. */
 var objectProto = Object.prototype;
 
@@ -1342,7 +1632,7 @@ function initCloneArray(array) {
 
 module.exports = initCloneArray;
 
-},{}],39:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var bufferClone = require('./bufferClone');
 
 /** `Object#toString` result references. */
@@ -1407,7 +1697,7 @@ function initCloneByTag(object, tag, isDeep) {
 
 module.exports = initCloneByTag;
 
-},{"./bufferClone":27}],40:[function(require,module,exports){
+},{"./bufferClone":31}],48:[function(require,module,exports){
 /**
  * Initializes an object clone.
  *
@@ -1425,7 +1715,7 @@ function initCloneObject(object) {
 
 module.exports = initCloneObject;
 
-},{}],41:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength');
 
@@ -1442,7 +1732,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":35,"./isLength":45}],42:[function(require,module,exports){
+},{"./getLength":42,"./isLength":53}],50:[function(require,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -1468,7 +1758,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],43:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isIndex = require('./isIndex'),
     isObject = require('../lang/isObject');
@@ -1498,7 +1788,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":56,"./isArrayLike":41,"./isIndex":42}],44:[function(require,module,exports){
+},{"../lang/isObject":65,"./isArrayLike":49,"./isIndex":50}],52:[function(require,module,exports){
 var isArray = require('../lang/isArray'),
     toObject = require('./toObject');
 
@@ -1528,7 +1818,7 @@ function isKey(value, object) {
 
 module.exports = isKey;
 
-},{"../lang/isArray":53,"./toObject":49}],45:[function(require,module,exports){
+},{"../lang/isArray":62,"./toObject":58}],53:[function(require,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -1550,7 +1840,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],46:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -1564,7 +1854,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],47:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1581,7 +1871,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"../lang/isObject":56}],48:[function(require,module,exports){
+},{"../lang/isObject":65}],56:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('./isIndex'),
@@ -1624,7 +1914,38 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":52,"../lang/isArray":53,"../object/keysIn":60,"./isIndex":42,"./isLength":45}],49:[function(require,module,exports){
+},{"../lang/isArguments":61,"../lang/isArray":62,"../object/keysIn":69,"./isIndex":50,"./isLength":53}],57:[function(require,module,exports){
+/**
+ * An implementation of `_.uniq` optimized for sorted arrays without support
+ * for callback shorthands and `this` binding.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {Function} [iteratee] The function invoked per iteration.
+ * @returns {Array} Returns the new duplicate free array.
+ */
+function sortedUniq(array, iteratee) {
+  var seen,
+      index = -1,
+      length = array.length,
+      resIndex = -1,
+      result = [];
+
+  while (++index < length) {
+    var value = array[index],
+        computed = iteratee ? iteratee(value, index, array) : value;
+
+    if (!index || seen !== computed) {
+      seen = computed;
+      result[++resIndex] = value;
+    }
+  }
+  return result;
+}
+
+module.exports = sortedUniq;
+
+},{}],58:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1640,7 +1961,7 @@ function toObject(value) {
 
 module.exports = toObject;
 
-},{"../lang/isObject":56}],50:[function(require,module,exports){
+},{"../lang/isObject":65}],59:[function(require,module,exports){
 var baseToString = require('./baseToString'),
     isArray = require('../lang/isArray');
 
@@ -1670,7 +1991,7 @@ function toPath(value) {
 
 module.exports = toPath;
 
-},{"../lang/isArray":53,"./baseToString":25}],51:[function(require,module,exports){
+},{"../lang/isArray":62,"./baseToString":28}],60:[function(require,module,exports){
 var baseClone = require('../internal/baseClone'),
     bindCallback = require('../internal/bindCallback'),
     isIterateeCall = require('../internal/isIterateeCall');
@@ -1742,7 +2063,7 @@ function clone(value, isDeep, customizer, thisArg) {
 
 module.exports = clone;
 
-},{"../internal/baseClone":9,"../internal/bindCallback":26,"../internal/isIterateeCall":43}],52:[function(require,module,exports){
+},{"../internal/baseClone":11,"../internal/bindCallback":30,"../internal/isIterateeCall":51}],61:[function(require,module,exports){
 var isArrayLike = require('../internal/isArrayLike'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1778,7 +2099,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":41,"../internal/isObjectLike":46}],53:[function(require,module,exports){
+},{"../internal/isArrayLike":49,"../internal/isObjectLike":54}],62:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
@@ -1820,7 +2141,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":37,"../internal/isLength":45,"../internal/isObjectLike":46}],54:[function(require,module,exports){
+},{"../internal/getNative":44,"../internal/isLength":53,"../internal/isObjectLike":54}],63:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** `Object#toString` result references. */
@@ -1860,7 +2181,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":56}],55:[function(require,module,exports){
+},{"./isObject":65}],64:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1910,7 +2231,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":46,"./isFunction":54}],56:[function(require,module,exports){
+},{"../internal/isObjectLike":54,"./isFunction":63}],65:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1940,7 +2261,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],57:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -2016,7 +2337,7 @@ function isTypedArray(value) {
 
 module.exports = isTypedArray;
 
-},{"../internal/isLength":45,"../internal/isObjectLike":46}],58:[function(require,module,exports){
+},{"../internal/isLength":53,"../internal/isObjectLike":54}],67:[function(require,module,exports){
 /**
  * Checks if `value` is `undefined`.
  *
@@ -2039,7 +2360,7 @@ function isUndefined(value) {
 
 module.exports = isUndefined;
 
-},{}],59:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isArrayLike = require('../internal/isArrayLike'),
     isObject = require('../lang/isObject'),
@@ -2086,7 +2407,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":37,"../internal/isArrayLike":41,"../internal/shimKeys":48,"../lang/isObject":56}],60:[function(require,module,exports){
+},{"../internal/getNative":44,"../internal/isArrayLike":49,"../internal/shimKeys":56,"../lang/isObject":65}],69:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -2152,7 +2473,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":42,"../internal/isLength":45,"../lang/isArguments":52,"../lang/isArray":53,"../lang/isObject":56}],61:[function(require,module,exports){
+},{"../internal/isIndex":50,"../internal/isLength":53,"../lang/isArguments":61,"../lang/isArray":62,"../lang/isObject":65}],70:[function(require,module,exports){
 var keys = require('./keys'),
     toObject = require('../internal/toObject');
 
@@ -2187,7 +2508,7 @@ function pairs(object) {
 
 module.exports = pairs;
 
-},{"../internal/toObject":49,"./keys":59}],62:[function(require,module,exports){
+},{"../internal/toObject":58,"./keys":68}],71:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -2209,7 +2530,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],63:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 var baseProperty = require('../internal/baseProperty'),
     basePropertyDeep = require('../internal/basePropertyDeep'),
     isKey = require('../internal/isKey');
@@ -2242,7 +2563,7 @@ function property(path) {
 
 module.exports = property;
 
-},{"../internal/baseProperty":22,"../internal/basePropertyDeep":23,"../internal/isKey":44}],64:[function(require,module,exports){
+},{"../internal/baseProperty":25,"../internal/basePropertyDeep":26,"../internal/isKey":52}],73:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -2586,7 +2907,7 @@ function extractAllOfType(str, type) {
     return opts.type === type;
   });
 }
-},{"./lexer-utils":65}],65:[function(require,module,exports){
+},{"./lexer-utils":74}],74:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -2909,7 +3230,117 @@ function Lexer(_lexer) {
     return matcher([], charStream).tokens;
   };
 }
-},{}],66:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
+/**
+ * Ensure some object is a coerced to a string
+ **/
+module.exports = function makeString(object) {
+  if (object == null) return '';
+  return '' + object;
+};
+
+},{}],76:[function(require,module,exports){
+// Wrap
+// wraps a string by a certain width
+
+makeString = require('./helper/makeString');
+
+module.exports = function wrap(str, options){
+	str = makeString(str);
+
+	options = options || {};
+
+	width = options.width || 75;
+	seperator = options.seperator || '\n';
+	cut = options.cut || false;
+	preserveSpaces = options.preserveSpaces || false;
+	trailingSpaces = options.trailingSpaces || false;
+
+	if(width <= 0){
+		return str;
+	}
+
+	else if(!cut){
+
+		words = str.split(" ");
+		result = "";
+		current_column = 0;
+
+		while(words.length > 0){
+			
+			// if adding a space and the next word would cause this line to be longer than width...
+			if(1 + words[0].length + current_column > width){
+				//start a new line if this line is not already empty
+				if(current_column > 0){
+					// add a space at the end of the line is preserveSpaces is true
+					if (preserveSpaces){
+						result += ' ';
+						current_column++;
+					}
+					// fill the rest of the line with spaces if trailingSpaces option is true
+					else if(trailingSpaces){
+						while(current_column < width){
+							result += ' ';
+							current_column++;
+						}						
+					}
+					//start new line
+					result += seperator;
+					current_column = 0;
+				}
+			}
+
+			// if not at the begining of the line, add a space in front of the word
+			if(current_column > 0){
+				result += " ";
+				current_column++;
+			}
+
+			// tack on the next word, update current column, a pop words array
+			result += words[0];
+			current_column += words[0].length;
+			words.shift();
+
+		}
+
+		// fill the rest of the line with spaces if trailingSpaces option is true
+		if(trailingSpaces){
+			while(current_column < width){
+				result += ' ';
+				current_column++;
+			}						
+		}
+
+		return result;
+
+	}
+
+	else {
+
+		index = 0;
+		result = "";
+
+		// walk through each character and add seperators where appropriate
+		while(index < str.length){
+			if(index % width == 0 && index > 0){
+				result += seperator;
+			}
+			result += str.charAt(index);
+			index++;
+		}
+
+		// fill the rest of the line with spaces if trailingSpaces option is true
+		if(trailingSpaces){
+			while(index % width > 0){
+				result += ' ';
+				index++;
+			}						
+		}
+		
+		return result;
+	}
+};
+},{"./helper/makeString":75}],77:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3010,7 +3441,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":84}],67:[function(require,module,exports){
+},{"../../flare_error":103}],78:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3091,7 +3522,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":84,"./currency":66}],68:[function(require,module,exports){
+},{"../../flare_error":103,"./currency":77}],79:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3479,8 +3910,100 @@ window.FlareCurrencies = FlareCurrencies;
 
 window._baseYForText = 0;
 
-},{"../../node_modules/lodash/collection/find":3,"./shop/currency_shop":70}],69:[function(require,module,exports){
-"use strict";
+},{"../../node_modules/lodash/collection/find":4,"./shop/currency_shop":83}],80:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @namespace FlareCurrency
+ */
+
+var ItemForCurrencySelectableWindow = require('../windows/currency_info/item_info/item_for_currency');
+var ItemInformation = require('../windows/currency_info/item_info/item_information');
+var SceneWindowContainer = require('./scene_window_container');
+
+/**
+ * Create the actual currency scene.
+ *
+ * When the user selects currencies from the menu we want to
+ * create a new scene which then creates a new window.
+ */
+
+var FlareCurrencyInforationExtendedScene = (function (_Scene_MenuBase) {
+  _inherits(FlareCurrencyInforationExtendedScene, _Scene_MenuBase);
+
+  function FlareCurrencyInforationExtendedScene() {
+    _classCallCheck(this, FlareCurrencyInforationExtendedScene);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareCurrencyInforationExtendedScene).call(this));
+  }
+
+  /**
+   * Create the Currency Window
+   */
+
+  _createClass(FlareCurrencyInforationExtendedScene, [{
+    key: 'create',
+    value: function create() {
+      _get(Object.getPrototypeOf(FlareCurrencyInforationExtendedScene.prototype), 'create', this).call(this, this);
+      this.createExtendedInfoScene();
+    }
+
+    /**
+     * Listen for the canel action.
+     *
+     * Close the currency window, pop this scene off the stack.
+     */
+
+  }, {
+    key: 'update',
+    value: function update() {
+      _get(Object.getPrototypeOf(FlareCurrencyInforationExtendedScene.prototype), 'update', this).call(this, this);
+
+      if (Input.isTriggered("cancel")) {
+        this._itemSelectableWindow.close();
+        this.popScene();
+        SceneWindowContainer.emptyContainer();
+      }
+    }
+
+    /**
+     * Create the actual window.
+     */
+
+  }, {
+    key: 'createExtendedInfoScene',
+    value: function createExtendedInfoScene() {
+      SceneWindowContainer.createContainer();
+
+      this._itemSelectableWindow = new ItemForCurrencySelectableWindow();
+      this._itemInformaton = new ItemInformation();
+
+      SceneWindowContainer.setWindowToContainer('flare-item-info', this._itemInformaton);
+
+      this.addWindow(this._itemSelectableWindow);
+      this.addWindow(this._itemInformaton);
+    }
+  }]);
+
+  return FlareCurrencyInforationExtendedScene;
+})(Scene_MenuBase);
+
+;
+
+module.exports = FlareCurrencyInforationExtendedScene;
+
+},{"../windows/currency_info/item_info/item_for_currency":95,"../windows/currency_info/item_info/item_information":96,"./scene_window_container":82}],81:[function(require,module,exports){
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -3497,6 +4020,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 var FlareCurrencyWindow = require('../windows/flare_currency_window');
+var FlareCurrencySelectableWindow = require('../windows/flare_currency_selecatble_window');
+var FlareCurrencyInfo = require('../windows/currency_info/currency_details');
+var SceneWindowContainer = require('./scene_window_container');
 
 /**
  * Create the actual currency scene.
@@ -3519,9 +4045,9 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
    */
 
   _createClass(FlareCurrencyScene, [{
-    key: "create",
+    key: 'create',
     value: function create() {
-      _get(Object.getPrototypeOf(FlareCurrencyScene.prototype), "create", this).call(this, this);
+      _get(Object.getPrototypeOf(FlareCurrencyScene.prototype), 'create', this).call(this, this);
       this.createCurrencyWindowForParty();
     }
 
@@ -3532,13 +4058,14 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
      */
 
   }, {
-    key: "update",
+    key: 'update',
     value: function update() {
-      _get(Object.getPrototypeOf(FlareCurrencyScene.prototype), "update", this).call(this, this);
+      _get(Object.getPrototypeOf(FlareCurrencyScene.prototype), 'update', this).call(this, this);
 
       if (Input.isTriggered("cancel")) {
         this._flareCurrencyWindow.close();
         this.popScene();
+        SceneWindowContainer.emptyContainer();
       }
     }
 
@@ -3547,10 +4074,17 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
      */
 
   }, {
-    key: "createCurrencyWindowForParty",
+    key: 'createCurrencyWindowForParty',
     value: function createCurrencyWindowForParty() {
-      this._flareCurrencyWindow = new FlareCurrencyWindow();
+      SceneWindowContainer.createContainer();
+
+      this._flareCurrencyWindow = new FlareCurrencySelectableWindow();
+      this._flareCurrencyInfo = new FlareCurrencyInfo();
+
+      SceneWindowContainer.setWindowToContainer('flare-currency-info', this._flareCurrencyInfo);
+
       this.addWindow(this._flareCurrencyWindow);
+      this.addWindow(this._flareCurrencyInfo);
     }
   }]);
 
@@ -3562,7 +4096,50 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 module.exports = FlareCurrencyScene;
 window.FlareCurrencyScene = FlareCurrencyScene;
 
-},{"../windows/flare_currency_window":79}],70:[function(require,module,exports){
+},{"../windows/currency_info/currency_details":92,"../windows/flare_currency_selecatble_window":97,"../windows/flare_currency_window":98,"./scene_window_container":82}],82:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var lodashFind = require('../../../node_modules/lodash/collection/find');
+
+var SceneWindowContainer = (function () {
+  function SceneWindowContainer() {
+    _classCallCheck(this, SceneWindowContainer);
+  }
+
+  _createClass(SceneWindowContainer, null, [{
+    key: 'createContainer',
+    value: function createContainer() {
+      this._container = [];
+    }
+  }, {
+    key: 'setWindowToContainer',
+    value: function setWindowToContainer(name, windowObject) {
+      this._container.push({ name: name, windowObject: windowObject });
+    }
+  }, {
+    key: 'emptyContainer',
+    value: function emptyContainer() {
+      this._container = [];
+    }
+  }, {
+    key: 'getWindowFromContainer',
+    value: function getWindowFromContainer(name) {
+      return lodashFind(this._container, function (windows) {
+        return windows.name === name;
+      });
+    }
+  }]);
+
+  return SceneWindowContainer;
+})();
+
+module.exports = SceneWindowContainer;
+
+},{"../../../node_modules/lodash/collection/find":4}],83:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3715,7 +4292,7 @@ module.exports = CurrencyShop;
 // private global method for storing currency currency shop info
 window._currencyShopInfo = { currency_name: null };
 
-},{"../../../node_modules/lodash/array/findIndex":1}],71:[function(require,module,exports){
+},{"../../../node_modules/lodash/array/findIndex":1}],84:[function(require,module,exports){
 'use strict';
 
 var lodashClone = require('../../../node_modules/lodash/lang/clone');
@@ -3838,7 +4415,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/clone":51,"../../../node_modules/lodash/lang/isUndefined":58,"../update_core_data_manager/reward_currencies_check":74}],72:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":4,"../../../node_modules/lodash/lang/clone":60,"../../../node_modules/lodash/lang/isUndefined":67,"../update_core_data_manager/reward_currencies_check":87}],85:[function(require,module,exports){
 'use strict';
 
 var GatherItemsForShop = require('./gather_items');
@@ -3944,7 +4521,7 @@ DataManager._returnIconFromName = function (currencyName) {
   return parseInt(foundCurrency.icon);
 };
 
-},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/isUndefined":58,"./gather_items":73,"rmmv-mrp-core/option-parser":64}],73:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":4,"../../../node_modules/lodash/lang/isUndefined":67,"./gather_items":86,"rmmv-mrp-core/option-parser":73}],86:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4061,7 +4638,7 @@ var GatherItems = (function () {
 
 module.exports = GatherItems;
 
-},{"../../../node_modules/lodash/collection/find":3,"../../../node_modules/lodash/lang/isUndefined":58,"rmmv-mrp-core/option-parser":64}],74:[function(require,module,exports){
+},{"../../../node_modules/lodash/collection/find":4,"../../../node_modules/lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],87:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4174,7 +4751,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":85}],75:[function(require,module,exports){
+},{"../../flare_random_number":104}],88:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyScene = require('../scenes/flare_currency_scene');
@@ -4189,7 +4766,7 @@ Scene_Menu.prototype.currencyCommand = function () {
   SceneManager.push(FlareCurrencyScene);
 };
 
-},{"../scenes/flare_currency_scene":69}],76:[function(require,module,exports){
+},{"../scenes/flare_currency_scene":81}],89:[function(require,module,exports){
 'use strict';
 
 var CurrencyValueWindow = require("../windows/shop/currency_value_window");
@@ -4450,7 +5027,7 @@ Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
   }
 };
 
-},{"../windows/shop/currency_value_window":80}],77:[function(require,module,exports){
+},{"../windows/shop/currency_value_window":99}],90:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyRewardWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -4491,7 +5068,7 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
   };
 }
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":83}],78:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":102}],91:[function(require,module,exports){
 'use strict';
 
 var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
@@ -4500,7 +5077,509 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Currencies', 'Currencies');
 };
 
-},{}],79:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowSelectable = require('../../../flare_window_selectable');
+var wordWrap = require('../../../../node_modules/underscore.string/wrap');
+
+var CurrencyDetails = (function (_FlareWindowSelectabl) {
+  _inherits(CurrencyDetails, _FlareWindowSelectabl);
+
+  function CurrencyDetails() {
+    _classCallCheck(this, CurrencyDetails);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(CurrencyDetails).call(this));
+  }
+
+  _createClass(CurrencyDetails, [{
+    key: 'initialize',
+    value: function initialize() {
+      var width = Graphics.boxWidth / 2 + 70;
+      var height = Graphics.boxHeight;
+
+      _get(Object.getPrototypeOf(CurrencyDetails.prototype), 'initialize', this).call(this, width - 140, 0, width, height);
+      this.opacity = 0;
+    }
+  }, {
+    key: 'open',
+    value: function open(currencyObject) {
+      this.opacity = 255;
+      this.refresh(currencyObject);
+    }
+  }, {
+    key: 'close',
+    value: function close(currencyObject) {
+      this.contentsOpacity = 0;
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh(currencyObject) {
+      this.contents.clear();
+      this.drawCurrencyInfo(currencyObject);
+    }
+  }, {
+    key: 'drawCurrencyInfo',
+    value: function drawCurrencyInfo(currencyInfo) {
+      this.contents.fontSize = 18;
+      var contents = wordWrap(currencyInfo.description, { width: 48 });
+      this.flareDrawTextEx(contents, 0, 0);
+
+      var helpText = '\\\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\\c[0]';
+      helpText = wordWrap(helpText, { width: 48 });
+
+      this.flareDrawTextEx('\\c[2]---------------------------------\\c[0]', 0, Graphics.boxHeight - 150);
+      this.flareDrawTextEx(helpText, 0, Graphics.boxHeight - 100);
+
+      this.resetFontSettings();
+    }
+  }]);
+
+  return CurrencyDetails;
+})(FlareWindowSelectable);
+
+module.exports = CurrencyDetails;
+
+},{"../../../../node_modules/underscore.string/wrap":76,"../../../flare_window_selectable":106}],93:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StoreCurrencyItemInfo = (function () {
+  function StoreCurrencyItemInfo() {
+    _classCallCheck(this, StoreCurrencyItemInfo);
+  }
+
+  _createClass(StoreCurrencyItemInfo, null, [{
+    key: "storeCurrencyItemInformation",
+    value: function storeCurrencyItemInformation(arrayOfItemsForCurrency) {
+      this._arrayOfItemsForCurrencies = arrayOfItemsForCurrency;
+    }
+  }, {
+    key: "getCurrencyItemArray",
+    value: function getCurrencyItemArray() {
+      return this._arrayOfItemsForCurrencies;
+    }
+  }]);
+
+  return StoreCurrencyItemInfo;
+})();
+
+module.exports = StoreCurrencyItemInfo;
+
+},{}],94:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StoreCurrentCurrencyName = (function () {
+  function StoreCurrentCurrencyName() {
+    _classCallCheck(this, StoreCurrentCurrencyName);
+  }
+
+  _createClass(StoreCurrentCurrencyName, null, [{
+    key: "setName",
+    value: function setName(name) {
+      this._name = name;
+    }
+  }, {
+    key: "getName",
+    value: function getName() {
+      return this._name;
+    }
+  }]);
+
+  return StoreCurrentCurrencyName;
+})();
+
+module.exports = StoreCurrentCurrencyName;
+
+},{}],95:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowSelectable = require('../../../../flare_window_selectable');
+var StoreCurrentCurrencyName = require('../helper/store_current_currency_name');
+var lodashFind = require('../../../../../node_modules/lodash/collection/find');
+var lodashArrayUnique = require('../../../../../node_modules/lodash/array/uniq');
+var lodashClone = require('../../../../../node_modules/lodash/lang/clone');
+var StoreCurrencyItemInfo = require('../helper/store_currency_item_info');
+var SceneWindowContainer = require('../../../scenes/scene_window_container');
+
+var ItemForCurrency = (function (_FlareWindowSelectabl) {
+  _inherits(ItemForCurrency, _FlareWindowSelectabl);
+
+  function ItemForCurrency() {
+    _classCallCheck(this, ItemForCurrency);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ItemForCurrency).call(this));
+
+    _this.initialize();
+    return _this;
+  }
+
+  _createClass(ItemForCurrency, [{
+    key: 'initialize',
+    value: function initialize() {
+      var width = Graphics.boxWidth / 2 - 70;
+      var height = Graphics.boxHeight;
+
+      this._listOfItems = [];
+      this.getListOfItems();
+
+      _get(Object.getPrototypeOf(ItemForCurrency.prototype), 'initialize', this).call(this, 0, 0, width, height);
+
+      this.selectFirstItem();
+      StoreCurrencyItemInfo.storeCurrencyItemInformation(this._listOfItems);
+
+      this.refresh();
+    }
+  }, {
+    key: 'getListOfItems',
+    value: function getListOfItems() {
+
+      $dataItems.slice(0, 2999);
+      $dataWeapons.slice(0, 2999);
+      $dataArmors.slice(0, 2999);
+
+      for (var i = 0; i < $dataItems.length; i++) {
+        if ($dataItems[i] !== null && $dataItems[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
+
+          this._listOfItems.push({
+            currencyCost: $dataItems[i].currencyCost,
+            itemName: $dataItems[i].name,
+            itemIcon: $dataItems[i].iconIndex,
+            description: $dataItems[i].description
+          });
+        }
+      }
+
+      for (var i = 0; i < $dataWeapons.length; i++) {
+        if ($dataWeapons[i] !== null && $dataWeapons[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
+
+          this._listOfItems.push({
+            currencyCost: $dataWeapons[i].currencyCost,
+            itemName: $dataWeapons[i].name,
+            itemIcon: $dataWeapons[i].iconIndex,
+            description: $dataWeapons[i].description
+          });
+        }
+      }
+
+      for (var i = 0; i < $dataArmors.length; i++) {
+        if ($dataArmors[i] !== null && $dataArmors[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
+
+          this._listOfItems.push({
+            currencyCost: $dataArmors[i].currencyCost,
+            itemName: $dataArmors[i].name,
+            itemIcon: $dataArmors[i].iconIndex,
+            description: $dataArmors[i].description
+          });
+        }
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      _get(Object.getPrototypeOf(ItemForCurrency.prototype), 'update', this).call(this, this);
+
+      if (Input.isTriggered("ok")) {
+        SceneWindowContainer.getWindowFromContainer('flare-item-info').windowObject.open(this.index());
+      }
+    }
+  }, {
+    key: 'selectFirstItem',
+    value: function selectFirstItem() {
+      return this.select(0);
+    }
+  }, {
+    key: 'isCursorMovable',
+    value: function isCursorMovable() {
+      return true;
+    }
+  }, {
+    key: 'maxItems',
+    value: function maxItems() {
+      return this._listOfItems.length;
+    }
+  }, {
+    key: 'itemHeight',
+    value: function itemHeight() {
+      return 80;
+    }
+  }, {
+    key: 'currentItem',
+    value: function currentItem() {
+      var index = this.index();
+      return this._listOfItems[index];
+    }
+  }, {
+    key: 'isCurrentItemEnabled',
+    value: function isCurrentItemEnabled() {
+      return this.isEnabled(this.currentItem());
+    }
+  }, {
+    key: 'drawItem',
+    value: function drawItem(index) {
+      var item = this._listOfItems[index];
+
+      if (!item) {
+        return;
+      }
+
+      this.drawCurrencyItemToScreen(item, index);
+    }
+  }, {
+    key: 'drawCurrencyItemToScreen',
+    value: function drawCurrencyItemToScreen(item, index) {
+      var rectangle = this.itemRect(index);
+      this.contents.fontSize = 18;
+      this.drawIcon(item.itemIcon, 10, rectangle.y + 20);
+      this.flareDrawTextEx(item.itemName, 60, rectangle.y + 10);
+      this.flareDrawTextEx('Shops Sell For: ' + item.currencyCost, 60, rectangle.y + 32, 250, 'left');
+      this.resetFontSettings();
+    }
+  }]);
+
+  return ItemForCurrency;
+})(FlareWindowSelectable);
+
+module.exports = ItemForCurrency;
+
+},{"../../../../../node_modules/lodash/array/uniq":3,"../../../../../node_modules/lodash/collection/find":4,"../../../../../node_modules/lodash/lang/clone":60,"../../../../flare_window_selectable":106,"../../../scenes/scene_window_container":82,"../helper/store_currency_item_info":93,"../helper/store_current_currency_name":94}],96:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowSelectable = require('../../../../flare_window_selectable');
+var StoreCurrencyItemInfo = require('../helper/store_currency_item_info');
+var wordWrap = require('../../../../../node_modules/underscore.string/wrap');
+
+var ItemInformation = (function (_FlareWindowSelectabl) {
+  _inherits(ItemInformation, _FlareWindowSelectabl);
+
+  function ItemInformation() {
+    _classCallCheck(this, ItemInformation);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ItemInformation).call(this));
+
+    _this.initialize();
+    return _this;
+  }
+
+  _createClass(ItemInformation, [{
+    key: 'initialize',
+    value: function initialize() {
+      var width = Graphics.boxWidth / 2 + 70;
+      var height = Graphics.boxHeight;
+
+      _get(Object.getPrototypeOf(ItemInformation.prototype), 'initialize', this).call(this, width - 140, 0, width, height);
+      this.opacity = 0;
+    }
+  }, {
+    key: 'open',
+    value: function open(index) {
+      this.opacity = 255;
+      this.refresh(index);
+    }
+  }, {
+    key: 'close',
+    value: function close() {
+      this.opacity = 0;
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh(index) {
+      this.contents.clear();
+      this.drawItemInformation(index);
+    }
+  }, {
+    key: 'drawItemInformation',
+    value: function drawItemInformation(index) {
+      this.contents.fontSize = 18;
+      var itemInformation = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
+      var content = wordWrap(itemInformation.description, { width: 48 });
+
+      var helpText = '\\\c[18]Hit Enter to see what regions in the world sell this item.\\\c[0]';
+      helpText = wordWrap(helpText, { width: 48 });
+
+      this.drawIcon(itemInformation.itemIcon, 10, 20);
+      this.flareDrawTextEx(itemInformation.itemName, 60, 20);
+      this.flareDrawTextEx('Shops are selling for: ' + itemInformation.currencyCost, 10, 60);
+      this.flareDrawTextEx(content, 10, 110);
+
+      this.flareDrawTextEx('\\c[2]---------------------------------\\c[0]', 0, Graphics.boxHeight - 150);
+      this.flareDrawTextEx(helpText, 0, Graphics.boxHeight - 100);
+
+      this.resetFontSettings();
+    }
+  }]);
+
+  return ItemInformation;
+})(FlareWindowSelectable);
+
+module.exports = ItemInformation;
+
+},{"../../../../../node_modules/underscore.string/wrap":76,"../../../../flare_window_selectable":106,"../helper/store_currency_item_info":93}],97:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FlareWindowSelectable = require('../../flare_window_selectable');
+var SceneWindowContainer = require('../scenes/scene_window_container');
+var FlareMoreInfoScene = require('../scenes/flare_currency_information_extended_scene');
+var StoreCurrencyName = require('./currency_info/helper/store_current_currency_name');
+
+var FlareCurrencies = (function (_FlareWindowSelectabl) {
+  _inherits(FlareCurrencies, _FlareWindowSelectabl);
+
+  function FlareCurrencies() {
+    _classCallCheck(this, FlareCurrencies);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FlareCurrencies).call(this));
+
+    _this.initialize();
+    return _this;
+  }
+
+  _createClass(FlareCurrencies, [{
+    key: 'initialize',
+    value: function initialize() {
+      var width = Graphics.boxWidth / 2 - 70;
+      var height = Graphics.boxHeight;
+      this._currenciesForWindow = [];
+      this._count = 0;
+
+      this.getCurrencies();
+
+      _get(Object.getPrototypeOf(FlareCurrencies.prototype), 'initialize', this).call(this, 0, 0, width, height);
+
+      this.selectFirstItem();
+      this.refresh();
+    }
+  }, {
+    key: 'getCurrencies',
+    value: function getCurrencies() {
+      for (var i = 0; i < flareCurrency.getCurrencyStore().length; i++) {
+        if (flareCurrency.getCurrencyStore()[i].name !== '') {
+          this._currenciesForWindow.push(flareCurrency.getCurrencyStore()[i]);
+        }
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      _get(Object.getPrototypeOf(FlareCurrencies.prototype), 'update', this).call(this, this);
+      if (Input.isTriggered("ok")) {
+        SceneWindowContainer.getWindowFromContainer('flare-currency-info').windowObject.open(this._currenciesForWindow[this.index()]);
+        this._count += 1;
+
+        if (this._count === 2) {
+          StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
+          SceneManager.push(FlareMoreInfoScene);
+          this.count = 0;
+        }
+      }
+    }
+  }, {
+    key: 'selectFirstItem',
+    value: function selectFirstItem() {
+      return this.select(0);
+    }
+  }, {
+    key: 'isCursorMovable',
+    value: function isCursorMovable() {
+      return true;
+    }
+  }, {
+    key: 'maxItems',
+    value: function maxItems() {
+      return this._currenciesForWindow.length;
+    }
+  }, {
+    key: 'itemHeight',
+    value: function itemHeight() {
+      return 80;
+    }
+  }, {
+    key: 'currency',
+    value: function currency() {
+      var index = this.index();
+      return this._currenciesForWindow[index];
+    }
+  }, {
+    key: 'isCurrentItemEnabled',
+    value: function isCurrentItemEnabled() {
+      return this.isEnabled(this.currency());
+    }
+  }, {
+    key: 'drawItem',
+    value: function drawItem(index) {
+      var currency = this._currenciesForWindow[index];
+
+      if (!currency) {
+        return;
+      }
+
+      this.drawCurrencyToScreen(currency, index);
+    }
+  }, {
+    key: 'drawCurrencyToScreen',
+    value: function drawCurrencyToScreen(currency, index) {
+      var rectangle = this.itemRect(index);
+      this.contents.fontSize = 18;
+      this.drawIcon(currency.icon, 10, rectangle.y + 20);
+      this.flareDrawTextEx(currency.name, 60, rectangle.y + 10);
+      this.flareDrawTextEx('Currently Have: ' + currency.amount, 60, rectangle.y + 32, 250, 'left');
+      this.resetFontSettings();
+    }
+  }]);
+
+  return FlareCurrencies;
+})(FlareWindowSelectable);
+
+module.exports = FlareCurrencies;
+
+},{"../../flare_window_selectable":106,"../scenes/flare_currency_information_extended_scene":80,"../scenes/scene_window_container":82,"./currency_info/helper/store_current_currency_name":94}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4602,7 +5681,7 @@ var FlareCurrencyWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareCurrencyWindow;
 
-},{"../../flare_window_base":86,"../currencies/currency":66}],80:[function(require,module,exports){
+},{"../../flare_window_base":105,"../currencies/currency":77}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4690,7 +5769,7 @@ var CurrencyValueWindow = (function (_Window_Base) {
 
 module.exports = CurrencyValueWindow;
 
-},{"../../../../node_modules/lodash/collection/find":3}],81:[function(require,module,exports){
+},{"../../../../node_modules/lodash/collection/find":4}],100:[function(require,module,exports){
 "use strict";
 
 Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currencyName) {
@@ -4742,7 +5821,7 @@ Window_ShopBuy.prototype.makeItemList = function () {
   }
 };
 
-},{}],82:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 'use strict';
 
 var oldWindowShopNumberPrototTypeSetCurrencyUnit = Window_ShopNumber.prototype.setCurrencyUnit;
@@ -4770,7 +5849,7 @@ Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, widt
     this.drawIcon(unit, x + width - unitWidth, y);
 };
 
-},{}],83:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4876,7 +5955,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"../../../../node_modules/lodash/collection/find":3,"../../../../node_modules/lodash/lang/clone":51,"../../../../node_modules/lodash/lang/isUndefined":58}],84:[function(require,module,exports){
+},{"../../../../node_modules/lodash/collection/find":4,"../../../../node_modules/lodash/lang/clone":60,"../../../../node_modules/lodash/lang/isUndefined":67}],103:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4941,7 +6020,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],85:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4983,8 +6062,8 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],86:[function(require,module,exports){
-"use strict";
+},{}],105:[function(require,module,exports){
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -5025,12 +6104,14 @@ var FlareWindowBase = (function (_Window_Base) {
    */
 
   _createClass(FlareWindowBase, [{
-    key: "flareDrawTextEx",
+    key: 'flareDrawTextEx',
     value: function flareDrawTextEx(text, x, y) {
       if (text) {
         var textState = { index: 0, x: x, y: y, left: x };
         textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
         textState.height = this.calcTextHeight(textState, false);
+
         while (textState.index < textState.text.length) {
           this.processCharacter(textState);
         }
@@ -5046,4 +6127,68 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}]},{},[68,75,78,67,72,71,77,76,82,81,83]);
+},{}],106:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Flares custom window selectable.
+ *
+ * Allows a specific level of abstraction to be addd.
+ */
+
+var FlareWindowSelectable = (function (_Window_Selectable) {
+  _inherits(FlareWindowSelectable, _Window_Selectable);
+
+  function FlareWindowSelectable(args) {
+    _classCallCheck(this, FlareWindowSelectable);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowSelectable).call(this, args));
+  }
+
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
+  _createClass(FlareWindowSelectable, [{
+    key: 'flareDrawTextEx',
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
+        textState.height = this.calcTextHeight(textState, false);
+
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+
+        return textState.x - x;
+      } else {
+        return 0;
+      }
+    }
+  }]);
+
+  return FlareWindowSelectable;
+})(Window_Selectable);
+
+module.exports = FlareWindowSelectable;
+
+},{}]},{},[79,88,91,78,85,84,90,89,101,100,102]);

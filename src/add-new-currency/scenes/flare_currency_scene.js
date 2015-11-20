@@ -2,7 +2,10 @@
  * @namespace FlareCurrency
  */
 
-var FlareCurrencyWindow = require('../windows/flare_currency_window');
+var FlareCurrencyWindow           = require('../windows/flare_currency_window');
+var FlareCurrencySelectableWindow = require('../windows/flare_currency_selecatble_window');
+var FlareCurrencyInfo             = require('../windows/currency_info/currency_details');
+var SceneWindowContainer          = require('./scene_window_container');
 
 /**
  * Create the actual currency scene.
@@ -11,6 +14,7 @@ var FlareCurrencyWindow = require('../windows/flare_currency_window');
  * create a new scene which then creates a new window.
  */
 class FlareCurrencyScene extends Scene_MenuBase {
+
   constructor() {
     super();
   }
@@ -34,6 +38,7 @@ class FlareCurrencyScene extends Scene_MenuBase {
     if (Input.isTriggered("cancel")) {
       this._flareCurrencyWindow.close();
       this.popScene();
+      SceneWindowContainer.emptyContainer();
     }
   }
 
@@ -41,8 +46,15 @@ class FlareCurrencyScene extends Scene_MenuBase {
    * Create the actual window.
    */
   createCurrencyWindowForParty() {
-    this._flareCurrencyWindow = new FlareCurrencyWindow();
+    SceneWindowContainer.createContainer();
+
+    this._flareCurrencyWindow = new FlareCurrencySelectableWindow();
+    this._flareCurrencyInfo   = new FlareCurrencyInfo();
+
+    SceneWindowContainer.setWindowToContainer('flare-currency-info', this._flareCurrencyInfo);
+
     this.addWindow(this._flareCurrencyWindow);
+    this.addWindow(this._flareCurrencyInfo);
   }
 };
 
