@@ -1,4 +1,4 @@
-var FlareWindowSelectable    = require('../../../../flare_window_selectable');
+var FlareWindowBase          = require('../../../../flare_window_base');
 var StoreCurrencyItemInfo    = require('../helper/store_currency_item_info');
 var wordWrap                 = require('../../../../../node_modules/underscore.string/wrap');
 var lodashIsUndefined        = require('../../../../../node_modules/lodash/lang/isUndefined');
@@ -12,7 +12,7 @@ var extractAllOfType         = require('rmmv-mrp-core/option-parser').extractAll
 /**
  * Create a window to display item information thats associated to x currency.
  */
-class ItemInformation extends FlareWindowSelectable {
+class ItemInformation extends FlareWindowBase {
 
   constructor() {
     super();
