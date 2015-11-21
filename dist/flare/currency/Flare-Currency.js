@@ -3972,7 +3972,6 @@ var FlareCurrencyInforationExtendedScene = (function (_Scene_MenuBase) {
       if (Input.isTriggered("cancel")) {
         this._itemSelectableWindow.close();
         this.popScene();
-        SceneWindowContainer.emptyContainer();
       }
     }
 
@@ -4118,7 +4117,10 @@ var SceneWindowContainer = (function () {
   }, {
     key: 'setWindowToContainer',
     value: function setWindowToContainer(name, windowObject) {
-      this._container.push({ name: name, windowObject: windowObject });
+      this._container.push({
+        name: name,
+        windowObject: windowObject
+      });
     }
   }, {
     key: 'emptyContainer',
@@ -4131,6 +4133,15 @@ var SceneWindowContainer = (function () {
       return lodashFind(this._container, function (windows) {
         return windows.name === name;
       });
+    }
+  }, {
+    key: 'isContainerEmpty',
+    value: function isContainerEmpty() {
+      if (this._container.length > 0) {
+        return false;
+      }
+
+      return true;
     }
   }]);
 
@@ -5132,7 +5143,8 @@ var CurrencyDetails = (function (_FlareWindowSelectabl) {
     key: 'drawCurrencyInfo',
     value: function drawCurrencyInfo(currencyInfo) {
       this.contents.fontSize = 18;
-      var contents = wordWrap(currencyInfo.description, { width: 48 });
+      var contents = currencyInfo.description.replace(/\\\\/g, '\\\\\\');
+      contents = wordWrap(contents, { width: 48 });
       this.flareDrawTextEx(contents, 0, 0);
 
       var helpText = '\\\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\\c[0]';
@@ -5344,8 +5356,6 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
         if ($dataItems[i] !== null && $dataItems[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
 
           this._listOfItems.push({
-            type: 'item',
-            itemId: $dataItems[i].id,
             currencyCost: $dataItems[i].currencyCost,
             itemName: $dataItems[i].name,
             itemIcon: $dataItems[i].iconIndex,
@@ -5358,8 +5368,6 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
         if ($dataWeapons[i] !== null && $dataWeapons[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
 
           this._listOfItems.push({
-            type: 'weapon',
-            itemId: $dataWeapons[i].id,
             currencyCost: $dataWeapons[i].currencyCost,
             itemName: $dataWeapons[i].name,
             itemIcon: $dataWeapons[i].iconIndex,
@@ -5517,71 +5525,24 @@ var ItemInformation = (function (_FlareWindowSelectabl) {
       return doesMapHaveCurrencyShop.doesMapHaveCurrencyShop();
     }
   }, {
-    key: 'getCustomDescription',
-    value: function getCustomDescription(itemInfo) {
-      var description = false;
-
-      switch (itemInfo.type) {
-        case 'item':
-          $dataItems.forEach(function (item) {
-            if (item !== null && item.id === itemInfo.itemId && !lodashIsUndefined(itemCustomDescriptionTag[0])) {
-              var itemCustomDescriptionTag = extractAllOfType(item.note, 'currencyItem');
-              description = itemCustomDescriptionTag[0].description;
-            }
-          });
-          break;
-        case 'weapon':
-          $dataWeapons.forEach(function (weapon) {
-            if (weapon !== null && weapon.id === itemInfo.itemId && !lodashIsUndefined(itemCustomDescriptionTag[0])) {
-              var itemCustomDescriptionTag = extractAllOfType(weapon.note, 'currencyItem');
-              description = itemCustomDescriptionTag[0].description;
-            }
-          });
-          break;
-        case 'armor':
-          $dataArmors.forEach(function (armor) {
-            if (armor !== null && armor.id === itemInfo.itemId && !lodashIsUndefined(itemCustomDescriptionTag[0])) {
-              var itemCustomDescriptionTag = extractAllOfType(armor.note, 'currencyItem');
-              description = itemCustomDescriptionTag[0].description;
-            }
-          });
-          break;
-      }
-
-      if (description !== false) {
-        description = description.replace(/\\\\/g, "\\\\\\");
-        description = wordWrap(description, { width: 48 });
-        return description;
-      } else {
-        return false;
-      }
-    }
-  }, {
     key: 'drawItemInformation',
     value: function drawItemInformation(index) {
       this.contents.fontSize = 18;
-
       var itemInformation = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
-      itemInformation = itemInformation.replace(/\\\\/g, "\\\\\\");
+      var itemInformationDescription = itemInformation.description.replace(/\\\\/g, "\\\\\\");
 
-      var content = wordWrap(itemInformation.description, { width: 48 });
+      var content = wordWrap(itemInformationDescription, { width: 48 });
       var IsMapSelling = this.getCountOfShopsSellingThisCurrency();
-      var customDescription = this.getCustomDescription(itemInformation);
 
       this.drawIcon(itemInformation.itemIcon, 10, 20);
-      this.flareDrawTextEx(itemInformation.itemName, 60, 20);
-      this.flareDrawTextEx('- Shops are selling for: ' + itemInformation.currencyCost, 10, 80);
+      this.drawText(itemInformation.itemName, 60, 20);
+      this.drawText('- Shops are selling for: ' + itemInformation.currencyCost, 10, 80);
 
       if (IsMapSelling) {
         this.flareDrawTextEx('- There is a \\c[14]currency shop\\c[0] selling this item.', 10, 100);
       }
 
-      if (customDescription !== false) {
-        this.flareDrawTextEx(customDescription, 10, 140);
-      } else {
-        this.flareDrawTextEx(content, 10, 140);
-      }
-
+      this.flareDrawTextEx(content, 10, 140);
       this.resetFontSettings();
     }
   }]);
@@ -5651,6 +5612,7 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
       _get(Object.getPrototypeOf(FlareCurrencies.prototype), 'update', this).call(this, this);
       if (Input.isTriggered("ok")) {
         SceneWindowContainer.getWindowFromContainer('flare-currency-info').windowObject.open(this._currenciesForWindow[this.index()]);
+
         this._count += 1;
 
         if (this._count === 2) {

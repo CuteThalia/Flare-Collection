@@ -37,7 +37,6 @@ class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
     if (Input.isTriggered("cancel")) {
       this._itemSelectableWindow.close();
       this.popScene();
-      SceneWindowContainer.emptyContainer();
     }
   }
 

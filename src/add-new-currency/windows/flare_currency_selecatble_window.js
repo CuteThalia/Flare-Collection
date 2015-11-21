@@ -36,6 +36,7 @@ class FlareCurrencies extends FlareWindowSelectable {
     super.update(this);
     if (Input.isTriggered("ok")) {
       SceneWindowContainer.getWindowFromContainer('flare-currency-info').windowObject.open(this._currenciesForWindow[this.index()]);
+
       this._count += 1
 
       if (this._count === 2) {

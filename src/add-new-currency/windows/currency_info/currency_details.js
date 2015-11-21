@@ -31,7 +31,8 @@ class CurrencyDetails extends FlareWindowSelectable {
 
   drawCurrencyInfo(currencyInfo) {
     this.contents.fontSize = 18
-    var contents = wordWrap(currencyInfo.description, {width: 48});
+    var contents = currencyInfo.description.replace(/\\\\/g, '\\\\\\');
+    contents = wordWrap(contents, {width: 48});
     this.flareDrawTextEx(contents, 0, 0);
 
     var helpText = '\\\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\\c[0]'

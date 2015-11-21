@@ -40,8 +40,6 @@ class ItemForCurrency extends FlareWindowSelectable {
           ) {
 
         this._listOfItems.push({
-          type:           'item',
-          itemId:         $dataItems[i].id,
           currencyCost:   $dataItems[i].currencyCost,
           itemName:       $dataItems[i].name,
           itemIcon:       $dataItems[i].iconIndex,
@@ -57,8 +55,6 @@ class ItemForCurrency extends FlareWindowSelectable {
           ) {
 
         this._listOfItems.push({
-          type:           'weapon',
-          itemId:         $dataWeapons[i].id,
           currencyCost:   $dataWeapons[i].currencyCost,
           itemName:       $dataWeapons[i].name,
           itemIcon:       $dataWeapons[i].iconIndex,

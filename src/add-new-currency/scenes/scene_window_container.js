@@ -7,7 +7,10 @@ class SceneWindowContainer {
   }
 
   static setWindowToContainer(name, windowObject) {
-    this._container.push({name: name, windowObject: windowObject})
+    this._container.push({
+      name: name,
+      windowObject: windowObject
+    });
   }
 
   static emptyContainer() {
@@ -18,6 +21,14 @@ class SceneWindowContainer {
     return lodashFind(this._container, function(windows) {
       return windows.name === name;
     });
+  }
+
+  static isContainerEmpty() {
+    if (this._container.length > 0) {
+      return false;
+    }
+
+    return true;
   }
 }
 
