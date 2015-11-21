@@ -5344,6 +5344,8 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
         if ($dataItems[i] !== null && $dataItems[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
 
           this._listOfItems.push({
+            type: 'item',
+            itemId: $dataItems[i].id,
             currencyCost: $dataItems[i].currencyCost,
             itemName: $dataItems[i].name,
             itemIcon: $dataItems[i].iconIndex,
@@ -5356,6 +5358,8 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
         if ($dataWeapons[i] !== null && $dataWeapons[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
 
           this._listOfItems.push({
+            type: 'weapon',
+            itemId: $dataWeapons[i].id,
             currencyCost: $dataWeapons[i].currencyCost,
             itemName: $dataWeapons[i].name,
             itemIcon: $dataWeapons[i].iconIndex,
@@ -5368,6 +5372,8 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
         if ($dataArmors[i] !== null && $dataArmors[i].belongsToCurrency === StoreCurrentCurrencyName.getName() && i <= 2999) {
 
           this._listOfItems.push({
+            type: 'armor',
+            itemId: $dataArmors[i].id,
             currencyCost: $dataArmors[i].currencyCost,
             itemName: $dataArmors[i].name,
             itemIcon: $dataArmors[i].iconIndex,
@@ -5460,7 +5466,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FlareWindowSelectable = require('../../../../flare_window_selectable');
 var StoreCurrencyItemInfo = require('../helper/store_currency_item_info');
 var wordWrap = require('../../../../../node_modules/underscore.string/wrap');
+var lodashIsUndefined = require('../../../../../node_modules/lodash/lang/isUndefined');
 var MapHasCureencyShop = require('../helper/map_has_currency_shop');
+var extractAllOfType = require('rmmv-mrp-core/option-parser').extractAllOfType;
 
 var ItemInformation = (function (_FlareWindowSelectabl) {
   _inherits(ItemInformation, _FlareWindowSelectabl);
@@ -5509,15 +5517,56 @@ var ItemInformation = (function (_FlareWindowSelectabl) {
       return doesMapHaveCurrencyShop.doesMapHaveCurrencyShop();
     }
   }, {
+    key: 'getCustomDescription',
+    value: function getCustomDescription(itemInfo) {
+      var description = false;
+
+      switch (itemInfo.type) {
+        case 'item':
+          $dataItems.forEach(function (item) {
+            if (item !== null && item.id === itemInfo.itemId && !lodashIsUndefined(itemCustomDescriptionTag[0])) {
+              var itemCustomDescriptionTag = extractAllOfType(item.note, 'currencyItem');
+              description = itemCustomDescriptionTag[0].description;
+            }
+          });
+          break;
+        case 'weapon':
+          $dataWeapons.forEach(function (weapon) {
+            if (weapon !== null && weapon.id === itemInfo.itemId && !lodashIsUndefined(itemCustomDescriptionTag[0])) {
+              var itemCustomDescriptionTag = extractAllOfType(weapon.note, 'currencyItem');
+              description = itemCustomDescriptionTag[0].description;
+            }
+          });
+          break;
+        case 'armor':
+          $dataArmors.forEach(function (armor) {
+            if (armor !== null && armor.id === itemInfo.itemId && !lodashIsUndefined(itemCustomDescriptionTag[0])) {
+              var itemCustomDescriptionTag = extractAllOfType(armor.note, 'currencyItem');
+              description = itemCustomDescriptionTag[0].description;
+            }
+          });
+          break;
+      }
+
+      if (description !== false) {
+        description = description.replace(/\\\\/g, "\\\\\\");
+        description = wordWrap(description, { width: 48 });
+        return description;
+      } else {
+        return false;
+      }
+    }
+  }, {
     key: 'drawItemInformation',
     value: function drawItemInformation(index) {
       this.contents.fontSize = 18;
+
       var itemInformation = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
+      itemInformation = itemInformation.replace(/\\\\/g, "\\\\\\");
+
       var content = wordWrap(itemInformation.description, { width: 48 });
       var IsMapSelling = this.getCountOfShopsSellingThisCurrency();
-
-      var helpText = '\\\c[18]Hit Enter to see what regions in the world sell this item.\\\c[0]';
-      helpText = wordWrap(helpText, { width: 48 });
+      var customDescription = this.getCustomDescription(itemInformation);
 
       this.drawIcon(itemInformation.itemIcon, 10, 20);
       this.flareDrawTextEx(itemInformation.itemName, 60, 20);
@@ -5527,10 +5576,11 @@ var ItemInformation = (function (_FlareWindowSelectabl) {
         this.flareDrawTextEx('- There is a \\c[14]currency shop\\c[0] selling this item.', 10, 100);
       }
 
-      this.flareDrawTextEx(content, 10, 140);
-
-      this.flareDrawTextEx('\\c[2]---------------------------------\\c[0]', 0, Graphics.boxHeight - 150);
-      this.flareDrawTextEx(helpText, 0, Graphics.boxHeight - 100);
+      if (customDescription !== false) {
+        this.flareDrawTextEx(customDescription, 10, 140);
+      } else {
+        this.flareDrawTextEx(content, 10, 140);
+      }
 
       this.resetFontSettings();
     }
@@ -5541,7 +5591,7 @@ var ItemInformation = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemInformation;
 
-},{"../../../../../node_modules/underscore.string/wrap":76,"../../../../flare_window_selectable":107,"../helper/map_has_currency_shop":93,"../helper/store_currency_item_info":94}],98:[function(require,module,exports){
+},{"../../../../../node_modules/lodash/lang/isUndefined":67,"../../../../../node_modules/underscore.string/wrap":76,"../../../../flare_window_selectable":107,"../helper/map_has_currency_shop":93,"../helper/store_currency_item_info":94,"rmmv-mrp-core/option-parser":73}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
