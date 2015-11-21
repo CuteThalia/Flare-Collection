@@ -2,10 +2,9 @@
  * @namespace FlareCurrency
  */
 
-var FlareCurrencyWindow           = require('../windows/flare_currency_window');
 var FlareCurrencySelectableWindow = require('../windows/flare_currency_selecatble_window');
 var FlareCurrencyInfo             = require('../windows/currency_info/currency_details');
-var SceneWindowContainer          = require('./scene_window_container');
+var SceneWindowContainer          = require('../../scene_window_container');
 
 /**
  * Create the actual currency scene.

@@ -4,8 +4,15 @@ var lodashFind                = require('../../../../../node_modules/lodash/coll
 var lodashArrayUnique         = require('../../../../../node_modules/lodash/array/uniq');
 var lodashClone               = require('../../../../../node_modules/lodash/lang/clone');
 var StoreCurrencyItemInfo     = require('../helper/store_currency_item_info');
-var SceneWindowContainer      = require('../../../scenes/scene_window_container');
+var SceneWindowContainer      = require('../../../../scene_window_container');
 
+/**
+ * @namespace FlareCurrency
+ */
+
+/**
+ * Creates a selectable window to display items for currency.
+ */
 class ItemForCurrency extends FlareWindowSelectable {
   constructor() {
     super();

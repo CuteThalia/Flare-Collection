@@ -4,13 +4,14 @@
 
 var ItemForCurrencySelectableWindow = require('../windows/currency_info/item_info/item_for_currency');
 var ItemInformation                 = require('../windows/currency_info/item_info/item_information');
-var SceneWindowContainer            = require('./scene_window_container');
+var SceneWindowContainer            = require('../../scene_window_container');
 
 /**
- * Create the actual currency scene.
+ * Create the actual currency information scene.
  *
  * When the user selects currencies from the menu we want to
- * create a new scene which then creates a new window.
+ * create a new scene which then creates a new window that displays information
+ * about that currency.
  */
 class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
 
@@ -19,7 +20,7 @@ class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
   }
 
   /**
-   * Create the Currency Window
+   * Create the currency info window
    */
   create() {
     super.create(this);
@@ -29,7 +30,7 @@ class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
   /**
    * Listen for the canel action.
    *
-   * Close the currency window, pop this scene off the stack.
+   * Close the currency info window, pop this scene off the stack.
    */
   update() {
     super.update(this);

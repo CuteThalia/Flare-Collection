@@ -5,6 +5,13 @@ var lodashIsUndefined        = require('../../../../../node_modules/lodash/lang/
 var MapHasCureencyShop       = require('../helper/map_has_currency_shop');
 var extractAllOfType         = require('rmmv-mrp-core/option-parser').extractAllOfType;
 
+/**
+ * @namespace FlareCurrency
+ */
+
+/**
+ * Create a window to display item information thats associated to x currency.
+ */
 class ItemInformation extends FlareWindowSelectable {
 
   constructor() {

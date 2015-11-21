@@ -1,7 +1,14 @@
-var FlareWindowSelectable = require('../../../flare_window_selectable');
-var wordWrap              = require('../../../../node_modules/underscore.string/wrap')
+var FlareWindowBase = require('../../../flare_window_base');
+var wordWrap        = require('../../../../node_modules/underscore.string/wrap')
 
-class CurrencyDetails extends FlareWindowSelectable {
+/**
+ * @namespace FlareCurrency
+ */
+
+/**
+ * Displays infoirmation about said currency.
+ */
+class CurrencyDetails extends FlareWindowBase {
 
   constructor() {
     super();
