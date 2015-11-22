@@ -39,12 +39,12 @@ class ItemInformation extends FlareWindowBase {
   }
 
   drawItemInformation(index) {
-    this.contents.fontSize                = 18;
-    var itemInformation                   = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
-    var itemInformationDescription        = itemInformation.description.replace(/\\/g, "\\\\\\");
+    this.contents.fontSize         = 18;
+    var itemInformation            = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
+    var itemInformationDescription = itemInformation.description.replace(/\\/g, "\\\\\\");
 
-    var content             = wordWrap(itemInformationDescription, {width: 48});
-    var IsMapSelling        = this.getCountOfShopsSellingThisCurrency();
+    var content      = wordWrap(itemInformationDescription, {width: 48});
+    var IsMapSelling = this.getCountOfShopsSellingThisCurrency();
 
     this.drawIcon(itemInformation.itemIcon, 10, 20);
     this.drawText(itemInformation.itemName, 60, 20);
