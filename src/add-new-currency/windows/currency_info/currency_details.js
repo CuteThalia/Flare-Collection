@@ -19,16 +19,6 @@ class CurrencyDetails extends FlareWindowBase {
     var height = Graphics.boxHeight;
 
     super.initialize(width - 140, 0, width, height);
-    this.opacity = 0;
-  }
-
-  open(currencyObject) {
-    this.opacity = 255;
-    this.refresh(currencyObject);
-  }
-
-  close(currencyObject) {
-    this.contentsOpacity = 0;
   }
 
   refresh(currencyObject) {

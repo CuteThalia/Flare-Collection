@@ -2,6 +2,9 @@ var FlareWindowSelectable = require('../../flare_window_selectable');
 var SceneWindowContainer  = require('../../scene_window_container');
 var FlareMoreInfoScene    = require('../scenes/flare_currency_information_extended_scene');
 var StoreCurrencyName     = require('./currency_info/helper/store_current_currency_name');
+var CurrencyHasItems      = require('./currency_info/helper/currency_has_items');
+var NoItemsScene          = require('../scenes/no_items_found_scene');
+
 /**
  * @namespace FlareCurrency
  */
@@ -40,15 +43,15 @@ class FlareCurrencies extends FlareWindowSelectable {
 
   update() {
     super.update(this);
+
     if (Input.isTriggered("ok")) {
-      SceneWindowContainer.getWindowFromContainer('flare-currency-info').windowObject.open(this._currenciesForWindow[this.index()]);
+      SceneWindowContainer.getWindowFromContainer('flare-currency-info').windowObject.refresh(this._currenciesForWindow[this.index()]);
+      this._count += 1;
 
-      this._count += 1
-
-      if (this._count === 2) {
-        StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
-        SceneManager.push(FlareMoreInfoScene);
-        this.count = 0;
+      if (this._count === 2){
+          StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
+          this._count = 0;
+          SceneManager.push(FlareMoreInfoScene);
       }
     }
   }

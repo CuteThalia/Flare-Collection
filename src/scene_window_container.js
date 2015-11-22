@@ -62,6 +62,15 @@ class SceneWindowContainer {
   }
 
   /**
+   * Get the whole container.
+   *
+   * @return array
+   */
+  static getContainer() {
+    return this._container;
+  }
+
+  /**
    * Determines if a container is empty.
    *
    * Undefined containers are considered empty.
