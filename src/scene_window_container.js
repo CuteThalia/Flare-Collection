@@ -14,17 +14,6 @@ var lodashIsUndefined = require('../node_modules/lodash/lang/isUndefined');
 class SceneWindowContainer {
 
   /**
-   * Create the actual container.
-   *
-   * Will only create a container if the container is empty
-   */
-  static createContainer() {
-    if (this.isContainerEmpty()) {
-      this._container = [];
-    }
-  }
-
-  /**
    * Sets a window to a container.
    *
    * Best done in a scene before or after you add the window to the

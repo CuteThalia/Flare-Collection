@@ -37,7 +37,6 @@ class FlareCurrencyScene extends Scene_MenuBase {
     if (Input.isTriggered("cancel")) {
       this._flareCurrencyWindow.close();
       this.popScene();
-      SceneWindowContainer.emptyContainer();
     }
   }
 
@@ -45,7 +44,7 @@ class FlareCurrencyScene extends Scene_MenuBase {
    * Create the actual window.
    */
   createCurrencyWindowForParty() {
-    SceneWindowContainer.createContainer();
+    SceneWindowContainer.emptyContainer();
 
     this._flareCurrencyWindow = new FlareCurrencySelectableWindow();
     this._flareCurrencyInfo   = new FlareCurrencyInfo();

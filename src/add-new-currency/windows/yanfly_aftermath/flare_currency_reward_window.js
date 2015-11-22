@@ -1,6 +1,6 @@
-var lodashClone       = require('../../../../node_modules/lodash/lang/clone');
-var lodashIsUndefined = require('../../../../node_modules/lodash/lang/isUndefined');
-var lodashFind        = require('../../../../node_modules/lodash/collection/find');
+var lodashClone       = require('lodash/lang/clone');
+var lodashIsUndefined = require('lodash/lang/isUndefined');
+var lodashFind        = require('lodash/collection/find');
 
 /**
  * Creates the Flare Currencie Reward window for Yanfly Aftermath.
@@ -65,7 +65,7 @@ class FlareCurrencyRewardWindow extends Window_Base {
         });
 
         console.log(amountToGain);
-        
+
         if (!lodashIsUndefined(amountToGain)) {
           this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i['+amountToGain.icon+'] ' +  data[0].name, 0, window._baseYForText, 500, 'left');
           BattleManager._gainCurrencies.shift();

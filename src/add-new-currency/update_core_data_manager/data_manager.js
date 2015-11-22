@@ -1,7 +1,7 @@
 var GatherItemsForShop    = require('./gather_items');
 var extractAllOfType      = require('rmmv-mrp-core/option-parser').extractAllOfType;
-var lodashIsUndefined     = require('../../../node_modules/lodash/lang/isUndefined');
-var lodashFind            = require('../../../node_modules/lodash/collection/find');
+var lodashIsUndefined     = require('lodash/lang/isUndefined');
+var lodashFind            = require('lodash/collection/find');
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {

@@ -34,7 +34,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var FlareNotificationWindow = require('./windows/flare_notification_window');
 var NotificationOptions = require('./notification_options/notification_options');
-var lodashIsUndefined = require('../../node_modules/lodash/lang/isUndefined');
+var lodashIsUndefined = require('lodash/lang/isUndefined');
 
 /*:
  * @plugindesc Allows you to create notifications for player based events.
@@ -167,7 +167,7 @@ FlareNotification._arrayOfNotifications = [];
 // Do Not touch or manipulate this.
 window._windowOptions = {};
 
-},{"../../node_modules/lodash/lang/isUndefined":1,"./notification_options/notification_options":3,"./windows/flare_notification_window":5}],3:[function(require,module,exports){
+},{"./notification_options/notification_options":3,"./windows/flare_notification_window":5,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -431,7 +431,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 module.exports = FlareNotificationWindow;
 
 },{"../../flare_window_base":6}],6:[function(require,module,exports){
-"use strict";
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -472,12 +472,14 @@ var FlareWindowBase = (function (_Window_Base) {
    */
 
   _createClass(FlareWindowBase, [{
-    key: "flareDrawTextEx",
+    key: 'flareDrawTextEx',
     value: function flareDrawTextEx(text, x, y) {
       if (text) {
         var textState = { index: 0, x: x, y: y, left: x };
         textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
         textState.height = this.calcTextHeight(textState, false);
+
         while (textState.index < textState.text.length) {
           this.processCharacter(textState);
         }

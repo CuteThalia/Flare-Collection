@@ -1,10 +1,10 @@
-var lodashFind = require('../../../../node_modules/lodash/collection/find')
+var lodashFind = require('lodash/collection/find')
 
 /**
  * Creates a currency window for the currency shop
  */
 class CurrencyValueWindow extends Window_Base {
-  
+
   constructor(currencyName) {
     super(currencyName);
     this.initialize(currencyName);

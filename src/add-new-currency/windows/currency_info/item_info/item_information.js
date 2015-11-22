@@ -1,7 +1,7 @@
 var FlareWindowBase          = require('../../../../flare_window_base');
 var StoreCurrencyItemInfo    = require('../helper/store_currency_item_info');
-var wordWrap                 = require('../../../../../node_modules/underscore.string/wrap');
-var lodashIsUndefined        = require('../../../../../node_modules/lodash/lang/isUndefined');
+var wordWrap                 = require('underscore.string/wrap');
+var lodashIsUndefined        = require('lodash/lang/isUndefined');
 var MapHasCureencyShop       = require('../helper/map_has_currency_shop');
 var extractAllOfType         = require('rmmv-mrp-core/option-parser').extractAllOfType;
 
@@ -24,16 +24,6 @@ class ItemInformation extends FlareWindowBase {
     var height = Graphics.boxHeight;
 
     super.initialize(width - 140, 0, width, height);
-    this.opacity = 0;
-  }
-
-  open(index) {
-    this.opacity = 255;
-    this.refresh(index);
-  }
-
-  close() {
-    this.opacity = 0;
   }
 
   refresh(index) {
@@ -51,7 +41,7 @@ class ItemInformation extends FlareWindowBase {
   drawItemInformation(index) {
     this.contents.fontSize                = 18;
     var itemInformation                   = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
-    var itemInformationDescription        = itemInformation.description.replace(/\\\\/g, "\\\\\\");
+    var itemInformationDescription        = itemInformation.description.replace(/\\/g, "\\\\\\");
 
     var content             = wordWrap(itemInformationDescription, {width: 48});
     var IsMapSelling        = this.getCountOfShopsSellingThisCurrency();

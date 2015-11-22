@@ -1,8 +1,8 @@
 var FlareWindowSelectable     = require('../../../../flare_window_selectable');
 var StoreCurrentCurrencyName  = require('../helper/store_current_currency_name');
-var lodashFind                = require('../../../../../node_modules/lodash/collection/find');
-var lodashArrayUnique         = require('../../../../../node_modules/lodash/array/uniq');
-var lodashClone               = require('../../../../../node_modules/lodash/lang/clone');
+var lodashFind                = require('lodash/collection/find');
+var lodashArrayUnique         = require('lodash/array/uniq');
+var lodashClone               = require('lodash/lang/clone');
 var StoreCurrencyItemInfo     = require('../helper/store_currency_item_info');
 var SceneWindowContainer      = require('../../../../scene_window_container');
 
@@ -28,7 +28,6 @@ class ItemForCurrency extends FlareWindowSelectable {
 
     super.initialize(0, 0, width, height);
 
-    this.selectFirstItem();
     StoreCurrencyItemInfo.storeCurrencyItemInformation(this._listOfItems);
 
     this.refresh();
@@ -88,16 +87,14 @@ class ItemForCurrency extends FlareWindowSelectable {
     }
   }
 
-  update() {
-    super.update(this);
-
-    if (Input.isTriggered("ok")) {
-      SceneWindowContainer.getWindowFromContainer('flare-item-info').windowObject.open(this.index());
-    }
+  cursorDown() {
+    super.cursorDown(this);
+    SceneWindowContainer.getWindowFromContainer('flare-item-info').windowObject.refresh(this.index());
   }
 
-  selectFirstItem() {
-    return this.select(0);
+  cursorUp() {
+    super.cursorUp(this);
+    SceneWindowContainer.getWindowFromContainer('flare-item-info').windowObject.refresh(this.index());
   }
 
   isCursorMovable() {

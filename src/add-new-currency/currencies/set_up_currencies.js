@@ -2,8 +2,8 @@
  * @namespace FlareCurrencies
  */
 
- var Currency          = require('./currency');
- var FlareError        = require('../../flare_error');
+var Currency   = require('./currency');
+var FlareError = require('../../flare_error');
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
 

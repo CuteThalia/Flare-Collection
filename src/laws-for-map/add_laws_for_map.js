@@ -1,9 +1,9 @@
 var extractAllOfType  = require('rmmv-mrp-core/option-parser').extractAllOfType;
 var Punishments       = require('./punishment_storage/punishments');
 var LawManagement     = require('./law_storage/laws_for_map');
-var ladashArrayUnique = require('../../node_modules/lodash/array/uniq');
-var lodashClone       = require('../../node_modules/lodash/lang/clone');
-var lodashIsUndefined = require('../../node_modules/lodash/lang/isUndefined');
+var ladashArrayUnique = require('lodash/array/uniq');
+var lodashClone       = require('lodash/lang/clone');
+var lodashIsUndefined = require('lodash/lang/isUndefined');
 
 /**
  * @namespace FlareLawsForMap.

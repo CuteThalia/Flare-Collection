@@ -13,7 +13,7 @@ var SceneWindowContainer            = require('../../scene_window_container');
  * create a new scene which then creates a new window that displays information
  * about that currency.
  */
-class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
+class FlareCurrencyInformationExtendedScene extends Scene_MenuBase {
 
   constructor() {
     super();
@@ -36,7 +36,6 @@ class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
     super.update(this);
 
     if (Input.isTriggered("cancel")) {
-      this._itemSelectableWindow.close();
       this.popScene();
     }
   }
@@ -45,7 +44,7 @@ class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
    * Create the actual window.
    */
   createExtendedInfoScene() {
-    SceneWindowContainer.createContainer();
+    SceneWindowContainer.emptyContainer();
 
     this._itemSelectableWindow = new ItemForCurrencySelectableWindow();
     this._itemInformaton       = new ItemInformation();
@@ -58,4 +57,4 @@ class FlareCurrencyInforationExtendedScene extends Scene_MenuBase {
   }
 };
 
-module.exports = FlareCurrencyInforationExtendedScene;
+module.exports = FlareCurrencyInformationExtendedScene;

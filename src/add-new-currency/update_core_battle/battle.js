@@ -1,6 +1,6 @@
-var lodashClone       = require('../../../node_modules/lodash/lang/clone');
-var lodashFind        = require('../../../node_modules/lodash/collection/find');
-var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
+var lodashClone       = require('lodash/lang/clone');
+var lodashFind        = require('lodash/collection/find');
+var lodashIsUndefined = require('lodash/lang/isUndefined');
 var RewardCurrencies  = require('../update_core_data_manager/reward_currencies_check');
 
 var oldBattleManagerSetupMethod = BattleManager.setup;

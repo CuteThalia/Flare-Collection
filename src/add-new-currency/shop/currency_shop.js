@@ -1,4 +1,4 @@
-var lodashFindIndex = require('../../../node_modules/lodash/array/findIndex');
+var lodashFindIndex = require('lodash/array/findIndex');
 
 /**
  * Responsible for gathering all the items related to a currency.

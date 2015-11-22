@@ -1,4 +1,4 @@
-var lodashFind = require('../../../node_modules/lodash/collection/find');
+var lodashFind = require('lodash/collection/find');
 
 /**
  * @namespace FlareLawsForMap.

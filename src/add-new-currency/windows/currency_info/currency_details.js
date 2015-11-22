@@ -1,5 +1,5 @@
 var FlareWindowBase = require('../../../flare_window_base');
-var wordWrap        = require('../../../../node_modules/underscore.string/wrap')
+var wordWrap        = require('underscore.string/wrap')
 
 /**
  * @namespace FlareCurrency
@@ -28,8 +28,9 @@ class CurrencyDetails extends FlareWindowBase {
 
   drawCurrencyInfo(currencyInfo) {
     this.contents.fontSize = 18
-    var contents = currencyInfo.description.replace(/\\\\/g, '\\\\\\');
+    var contents = currencyInfo.description.replace(/\\/g, '\\\\\\');
     contents = wordWrap(contents, {width: 48});
+
     this.flareDrawTextEx(contents, 0, 0);
 
     var helpText = '\\\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\\c[0]'
