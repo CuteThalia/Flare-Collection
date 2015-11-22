@@ -43,11 +43,11 @@ class MapHasCureencyShop {
 
   determineTruthy(params) {
     var self = this;
-    var currencyShopInfo = extractAllOfType(params, 'IsCurrencyShop');
+    var currencyShopInfo = extractAllOfType(params, 'CurrencyShop');
 
     if (currencyShopInfo.length >= 1) {
       currencyShopInfo.forEach(function(information){
-        if (information.currencyUsed === StoreCurrencyName.getName()) {
+        if (information.typeOfCurrency === StoreCurrencyName.getName()) {
           self._hasCurrencyShop = true;
         }
       });
