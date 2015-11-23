@@ -2,7 +2,8 @@
  * @namespace FlareCurrency
  */
 
-import lodashFindIndex from 'lodash/array/findIndex';
+import lodashFindIndex  from 'lodash/array/findIndex';
+import CurrencyShopInfo from './helper/currency_shop_info_container';
 
 /**
  * Responsible for gathering all the items related to a currency.
@@ -26,7 +27,9 @@ class CurrencyShop {
    * @param boolean purchaseOnly
    */
   openShopWindow(currency, purchaseOnly) {
-    _currencyShopInfo.currency_name = currency;
+    CurrencyShopInfo.emptyContainer();
+    CurrencyShopInfo.setCurrency(currency);
+
     this._createShopGoods(currency);
     SceneManager.push(Scene_Shop);
     SceneManager.prepareNextScene(this._goods, purchaseOnly);

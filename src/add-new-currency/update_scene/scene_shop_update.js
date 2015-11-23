@@ -3,6 +3,8 @@
  */
 
 import CurrencyValueWindow from "../windows/shop/currency_value_window";
+import CurrencyShopInfo    from "../shop/helper/currency_shop_info_container";
+import lodashIsUndefined   from "lodash/lang/isUndefined";
 
 Scene_Shop.prototype.createCurrencyWindow = function(currencyName) {
   this._curencyValueWindow = new CurrencyValueWindow(currencyName);
@@ -13,18 +15,18 @@ Scene_Shop.prototype.createCurrencyWindow = function(currencyName) {
 
 var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
 Scene_Shop.prototype.create = function() {
-    if (_currencyShopInfo.currency_name !== null) {
+    if (CurrencyShopInfo.getCurrency() !== null) {
       Scene_MenuBase.prototype.create.call(this);
       this.createHelpWindow();
-      this.createCurrencyWindow(_currencyShopInfo.currency_name);
-      this.createCommandWindow(_currencyShopInfo.currency_name);
+      this.createCurrencyWindow(CurrencyShopInfo.getCurrency());
+      this.createCommandWindow(CurrencyShopInfo.getCurrency());
       this.createDummyWindow();
-      this.createNumberWindow(_currencyShopInfo.currency_name);
+      this.createNumberWindow(CurrencyShopInfo.getCurrency());
       this.createStatusWindow();
-      this.createBuyWindow(_currencyShopInfo.currency_name);
+      this.createBuyWindow(CurrencyShopInfo.getCurrency());
       this.createCategoryWindow();
-      this.createSellWindow(_currencyShopInfo.currency_name);
-      _currencyShopInfo.currency_name = null;
+      this.createSellWindow(CurrencyShopInfo.getCurrency());
+      CurrencyShopInfo.emptyContainer();
     } else {
       OldSceneShopPrototypeCreateMethod.call(this);
     }
