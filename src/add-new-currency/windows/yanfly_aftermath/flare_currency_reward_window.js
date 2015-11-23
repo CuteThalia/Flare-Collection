@@ -68,13 +68,13 @@ class FlareCurrencyRewardWindow extends Window_Base {
           return amount.name === data[0].name;
         });
 
-        console.log(amountToGain);
-
         if (!lodashIsUndefined(amountToGain)) {
+          console.log('uh ....');
           this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i['+amountToGain.icon+'] ' +  data[0].name, 0, window._baseYForText, 500, 'left');
           BattleManager._gainCurrencies.shift();
 
         } else {
+          console.log('hmmm');
           this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i['+amountToGain.icon+'] ' + data[0].name, 0, window._baseYForText, 500, 'left');
         }
 
