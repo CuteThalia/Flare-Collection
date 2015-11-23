@@ -39,13 +39,17 @@ class FlareCurrencies extends FlareWindowSelectable {
 
   update() {
     super.update(this);
-    var currencyExists = new CurrencyExists(this._currenciesForWindow[this.index()]);
-    if (Input.isTriggered("ok") &&
-        this._currenciesForWindow[this.index()] !== undefined &&
-        currencyExists.doesMapHaveItems()) {
 
-      StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
-      SceneManager.push(FlareMoreInfoScene);
+    if (Input.isTriggered("ok") &&
+        this._currenciesForWindow[this.index()] !== undefined
+       ) {
+
+      var currencyExists = new CurrencyExists(this._currenciesForWindow[this.index()].name);
+
+      if (currencyExists.doesMapHaveItems()) {
+        StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
+        SceneManager.push(FlareMoreInfoScene);
+      }
     }
   }
 
