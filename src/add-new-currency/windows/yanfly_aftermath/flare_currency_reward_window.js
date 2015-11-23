@@ -1,6 +1,10 @@
-var lodashClone       = require('lodash/lang/clone');
-var lodashIsUndefined = require('lodash/lang/isUndefined');
-var lodashFind        = require('lodash/collection/find');
+/**
+ * @namespace FlareCurrency
+ */
+
+import lodashClone       from 'lodash/lang/clone';
+import lodashIsUndefined from 'lodash/lang/isUndefined';
+import lodashFind        from 'lodash/collection/find';
 
 /**
  * Creates the Flare Currencie Reward window for Yanfly Aftermath.

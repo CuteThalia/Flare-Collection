@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareCurrency
+ */
+
 Window_ShopBuy.prototype.initialize = function(x, y, height, shopGoods, currencyName) {
     var width = this.windowWidth();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);

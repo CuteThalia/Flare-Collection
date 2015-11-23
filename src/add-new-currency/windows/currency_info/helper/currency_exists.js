@@ -1,9 +1,28 @@
+/**
+ * @namespace FlareCurrency
+ */
+
+/**
+ * Determine if any item, weapon or armor has a currency name
+ */
 class CurrencyExists {
 
+  /**
+   * @param String currencyName
+   */
   constructor(currencyName) {
     this._currencyName = currencyName;
   }
 
+  /**
+   * Do we have any items for the currency?
+   *
+   * Walk over every items, armor and or weapon as on of those
+   * might have a belongsTo this._currencyName. If this is true, instantly
+   * return true.
+   *
+   * @return boolean
+   */
   doesMapHaveItems() {
     for (var i = 1; i < $dataItems.length; i++) {
       if ($dataItems[i] !== null) {

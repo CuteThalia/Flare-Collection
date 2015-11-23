@@ -1,6 +1,8 @@
 # Flare currency
 
-![Image Of Currency Window](http://i.imgur.com/WbcjKhl.png)
+![Image Of Currency Window](http://i.imgur.com/Gl1FqjD.png)
+
+![Image of Currency Item Information](http://i.imgur.com/Kr0IytH.png)
 
 ![Image Of Menu](http://i.imgur.com/0J3Yh99.png)
 
@@ -8,9 +10,9 @@
 
 ![Image of Currency Shop](http://i.imgur.com/fKhPqSD.png)
 
-![Image of Currency Shop Selling] (http://i.imgur.com/46XWlnk.png)
+![Image of Currency Shop Selling](http://i.imgur.com/46XWlnk.png)
 
-Flare Currency allows you to add up to 5 currencies to your game via the options menu when setting up a script.
+Flare Currency allows you to add up to 10 currencies to your game via the options menu when setting up a script.
 
 When a currency is added you can add the following tags in enemy note tags, **not troops**.
 
@@ -49,6 +51,20 @@ That should real like english. We are saying this item belongs to a currency sho
 We also state that the it costs x of that currency.
 
 So lets read it together: *For the currency shop this item belongs to sample name and costs 76 of sample name*.
+
+The next things, for the currency information section is to then do:
+
+```js
+<currencyShopEvent belongsTo: "currency Name">
+```
+
+In a comment for that event. What this does is:
+
+![Image example](http://i.imgur.com/Kr0IytH.png)
+
+As you can see we have an extra line: "There is a currency shop selling this item."
+
+This tells the player that hey, there is a currency shop on this map.
 
 So now that you went through your weapons, armors and items and added tags to stipulate which items belong to what
 currencies and how much they cost, how do you open said shop?

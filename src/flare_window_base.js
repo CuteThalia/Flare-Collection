@@ -41,4 +41,4 @@ class FlareWindowBase extends Window_Base {
 
 }
 
-module.exports = FlareWindowBase;
+module.exports = FlareWindowBase = FlareWindowBase;

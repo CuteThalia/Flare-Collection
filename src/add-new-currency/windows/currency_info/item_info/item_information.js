@@ -1,9 +1,13 @@
-var FlareWindowBase          = require('../../../../flare_window_base');
-var StoreCurrencyItemInfo    = require('../helper/store_currency_item_info');
-var wordWrap                 = require('underscore.string/wrap');
-var lodashIsUndefined        = require('lodash/lang/isUndefined');
-var MapHasCureencyShop       = require('../helper/map_has_currency_shop');
-var extractAllOfType         = require('rmmv-mrp-core/option-parser').extractAllOfType;
+/**
+ * @namespace FlareCurrency
+ */
+
+import FlareWindowBase          from '../../../../flare_window_base';
+import StoreCurrencyItemInfo    from '../helper/store_currency_item_info';
+import wordWrap                 from 'underscore.string/wrap';
+import lodashIsUndefined        from 'lodash/lang/isUndefined';
+import MapHasCureencyShop       from '../helper/map_has_currency_shop';
+import {extractAllOfType}         from 'rmmv-mrp-core/option-parser';
 
 /**
  * @namespace FlareCurrency

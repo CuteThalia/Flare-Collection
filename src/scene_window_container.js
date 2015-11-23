@@ -1,9 +1,11 @@
-var lodashFind        = require('../node_modules/lodash/collection/find');
-var lodashIsUndefined = require('../node_modules/lodash/lang/isUndefined');
-
 /**
  * @namespace FlareCollection
  */
+
+import lodashFind        from '../node_modules/lodash/collection/find';
+import lodashIsUndefined from '../node_modules/lodash/lang/isUndefined';
+
+
 
 /**
  * Allows us to store a window object.
@@ -75,4 +77,4 @@ class SceneWindowContainer {
   }
 }
 
-module.exports = SceneWindowContainer;
+module.exports = SceneWindowContainer = SceneWindowContainer;

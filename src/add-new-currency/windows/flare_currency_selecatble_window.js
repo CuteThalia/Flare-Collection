@@ -1,12 +1,13 @@
-var FlareWindowSelectable = require('../../flare_window_selectable');
-var SceneWindowContainer  = require('../../scene_window_container');
-var FlareMoreInfoScene    = require('../scenes/flare_currency_information_extended_scene');
-var StoreCurrencyName     = require('./currency_info/helper/store_current_currency_name');
-var CurrencyExists        = require('./currency_info/helper/currency_exists');
-
 /**
  * @namespace FlareCurrency
  */
+
+
+import FlareWindowSelectable from '../../flare_window_selectable';
+import SceneWindowContainer  from '../../scene_window_container';
+import FlareMoreInfoScene    from '../scenes/flare_currency_information_extended_scene';
+import StoreCurrencyName     from './currency_info/helper/store_current_currency_name';
+import CurrencyExists        from './currency_info/helper/currency_exists';
 
 /**
  * Currencie window. Lets you select a currency.

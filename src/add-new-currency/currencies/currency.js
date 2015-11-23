@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-var FlareError = require('../../flare_error');
+import FlareError from '../../flare_error';
 
 /**
  * Currency Object Creation Class

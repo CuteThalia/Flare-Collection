@@ -21,4 +21,4 @@ class FlareRandomNumber {
   }
 }
 
-module.exports = FlareRandomNumber;
+module.exports = FlareRandomNumber = FlareRandomNumber;

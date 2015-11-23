@@ -33,4 +33,4 @@ class FlareLawWindowScene extends Scene_MenuBase {
   }
 }
 
-module.exports = FlareLawWindowScene;
+exports FlareLawWindowScene;

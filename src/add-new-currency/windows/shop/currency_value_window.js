@@ -1,4 +1,9 @@
-var lodashFind = require('lodash/collection/find')
+/**
+ * @namespace FlareCurrency
+ */
+
+
+import lodashFind from 'lodash/collection/find';
 
 /**
  * Creates a currency window for the currency shop

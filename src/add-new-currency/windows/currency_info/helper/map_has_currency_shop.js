@@ -1,53 +1,91 @@
-var extractAllOfType  = require('rmmv-mrp-core/option-parser').extractAllOfType;
-var StoreCurrencyName = require('./store_current_currency_name');
+/**
+ * @namespace FlareCurrency
+ */
 
-class MapHasCureencyShop {
+import {extractAllOfType}  from 'rmmv-mrp-core/option-parser';
+import StoreCurrencyName from './store_current_currency_name';
 
+/**
+ * Determine if the current map has events.
+ */
+class MapHasCurrencyShop {
+
+  /**
+   * @param Array events
+   */
   constructor(events) {
     this._events = events;
     this._hasCurrencyShop = false;
 
   }
 
+  /**
+   * Does the current map have a currency shop?
+   *
+   * Walk over all the events looking deep with in an event for a
+   * <CurrencyShop typeOfCurrency: "name"> tag.
+   *
+   * @return boolean
+   */
   doesMapHaveCurrencyShop() {
     var self = this;
     this._events.forEach(function(event){
       if (event !== null) {
-        self.walkOverPages(event);
+        self._walkOverPages(event);
       }
     });
 
     return this._hasCurrencyShop;
   }
 
-  walkOverPages(event) {
+  /**
+   * Walk over a set of events.
+   *
+   * @param Array events
+   */
+  _walkOverPages(event) {
     var self = this;
     event.pages.forEach(function(page){
-      self.walkOverLists(page);
+      self._walkOverLists(page);
     });
   }
 
-  walkOverLists(page) {
+  /**
+   * Walk over a set of events pages.
+   *
+   * @param Array pages
+   */
+  _walkOverLists(page) {
     var self = this;
     page.list.forEach(function(list){
-      self.walkOverParameters(list)
+      self._walkOverParameters(list)
     });
   }
 
-  walkOverParameters(list) {
+  /**
+   * Walk over a set of events pages list.
+   *
+   * @param Array list
+   */
+  _walkOverParameters(list) {
     var self = this;
     list.parameters.forEach(function(params){
-      self.determineTruthy(params);
+      self._determineTruthy(params);
     });
   }
 
-  determineTruthy(params) {
+  /**
+   * Walk over a set of events pages list params determining truthy.
+   *
+   * @param Array params
+   */
+  _determineTruthy(params) {
     var self = this;
-    var currencyShopInfo = extractAllOfType(params, 'CurrencyShop');
+    var currencyShopInfo = extractAllOfType(params, 'currencyShopEvent');
 
     if (currencyShopInfo.length >= 1) {
       currencyShopInfo.forEach(function(information){
-        if (information.typeOfCurrency === StoreCurrencyName.getName()) {
+        if (information.belongsTo === StoreCurrencyName.getName()) {
           self._hasCurrencyShop = true;
         }
       });
@@ -55,4 +93,4 @@ class MapHasCureencyShop {
   }
 }
 
-module.exports = MapHasCureencyShop;
+module.exports = MapHasCurrencyShop;

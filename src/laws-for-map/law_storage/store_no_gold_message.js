@@ -29,4 +29,4 @@ class StoreNoGoldMessage {
   }
 }
 
-module.exports = StoreNoGoldMessage;
+exports StoreNoGoldMessage;

@@ -32,4 +32,4 @@ class NotificationOptions {
 window._NotificationOptions = NotificationOptions;
 _NotificationOptions._notificationOptions = null;
 
-module.exports = NotificationOptions
+exports NotificationOptions

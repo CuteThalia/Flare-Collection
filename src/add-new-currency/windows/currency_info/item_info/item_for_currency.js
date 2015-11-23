@@ -1,14 +1,15 @@
-var FlareWindowSelectable     = require('../../../../flare_window_selectable');
-var StoreCurrentCurrencyName  = require('../helper/store_current_currency_name');
-var lodashFind                = require('lodash/collection/find');
-var lodashArrayUnique         = require('lodash/array/uniq');
-var lodashClone               = require('lodash/lang/clone');
-var StoreCurrencyItemInfo     = require('../helper/store_currency_item_info');
-var SceneWindowContainer      = require('../../../../scene_window_container');
-
 /**
  * @namespace FlareCurrency
  */
+
+import FlareWindowSelectable     from '../../../../flare_window_selectable';
+import StoreCurrentCurrencyName  from '../helper/store_current_currency_name';
+import lodashFind                from 'lodash/collection/find';
+import lodashArrayUnique         from 'lodash/array/uniq';
+import lodashClone               from 'lodash/lang/clone';
+import StoreCurrencyItemInfo     from '../helper/store_currency_item_info';
+import SceneWindowContainer      from '../../../../scene_window_container';
+
 
 /**
  * Creates a selectable window to display items for currency.

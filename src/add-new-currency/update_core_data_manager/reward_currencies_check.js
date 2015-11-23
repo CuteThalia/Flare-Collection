@@ -1,7 +1,8 @@
 /**
  * @namespace FlareCurrency
  */
-var FlareRandomNumber = require('../../flare_random_number');
+
+import FlareRandomNumber from '../../flare_random_number';
 
 /**
  * Determine if the playr gets currencies.

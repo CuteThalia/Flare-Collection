@@ -40,4 +40,4 @@ class Punishments {
   }
 }
 
-module.exports = Punishments;
+exports Punishments;

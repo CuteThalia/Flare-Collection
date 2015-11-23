@@ -1,9 +1,9 @@
-var lodashFind   = require('lodash/collection/find');
-var CurrencyShop = require('./shop/currency_shop');
-
 /**
  * @namespace FlareCurrency
  */
+
+import lodashFind   from 'lodash/collection/find';
+import CurrencyShop from './shop/currency_shop';
 
  /*:
   * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -357,5 +357,3 @@ class FlareCurrencies {
 
 // Create public API.
 window.FlareCurrencies = FlareCurrencies;
-
-window._baseYForText = 0;

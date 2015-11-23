@@ -1,7 +1,11 @@
-var lodashClone       = require('lodash/lang/clone');
-var lodashFind        = require('lodash/collection/find');
-var lodashIsUndefined = require('lodash/lang/isUndefined');
-var RewardCurrencies  = require('../update_core_data_manager/reward_currencies_check');
+/**
+ * @namespace FlareCurrency
+ */
+
+import lodashClone       from 'lodash/lang/clone';
+import lodashFind        from 'lodash/collection/find';
+import lodashIsUndefined from 'lodash/lang/isUndefined';
+import RewardCurrencies  from '../update_core_data_manager/reward_currencies_check';
 
 var oldBattleManagerSetupMethod = BattleManager.setup;
 BattleManager.setup = function(troopId, canEscape, canLose) {

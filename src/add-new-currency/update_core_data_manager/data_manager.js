@@ -1,7 +1,11 @@
-var GatherItemsForShop    = require('./gather_items');
-var extractAllOfType      = require('rmmv-mrp-core/option-parser').extractAllOfType;
-var lodashIsUndefined     = require('lodash/lang/isUndefined');
-var lodashFind            = require('lodash/collection/find');
+/**
+ * @namespace FlareCurrency
+ */
+
+import GatherItemsForShop    from './gather_items';
+import {extractAllOfType}      from 'rmmv-mrp-core/option-parser';
+import lodashIsUndefined     from 'lodash/lang/isUndefined';
+import lodashFind            from 'lodash/collection/find';
 
 var olderDataManagerIsDataBaseLoadedMethod = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {

@@ -39,4 +39,4 @@ class FlareWindowSelectable extends Window_Selectable {
   }
 }
 
-module.exports = FlareWindowSelectable;
+module.exports = FlareWindowSelectable = FlareWindowSelectable;

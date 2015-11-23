@@ -172,7 +172,7 @@ class ProcessBrokenLaw {
   }
 }
 
-module.exports = ProcessBrokenLaw;
+exports ProcessBrokenLaw;
 
 // Don't touch.
 window._lawMessageForLawBattleWindow = null;

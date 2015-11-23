@@ -2,9 +2,9 @@
  * @namespace FlareCurrency
  */
 
-var FlareCurrencySelectableWindow = require('../windows/flare_currency_selecatble_window');
-var FlareCurrencyInfo             = require('../windows/currency_info/currency_details');
-var SceneWindowContainer          = require('../../scene_window_container');
+import FlareCurrencySelectableWindow from '../windows/flare_currency_selecatble_window';
+import FlareCurrencyInfo             from '../windows/currency_info/currency_details';
+import SceneWindowContainer          from '../../scene_window_container';
 
 /**
  * Create the actual currency scene.
@@ -57,4 +57,3 @@ class FlareCurrencyScene extends Scene_MenuBase {
 };
 
 module.exports = FlareCurrencyScene;
-window.FlareCurrencyScene = FlareCurrencyScene;

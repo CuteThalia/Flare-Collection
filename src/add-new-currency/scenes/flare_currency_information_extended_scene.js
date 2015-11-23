@@ -2,9 +2,9 @@
  * @namespace FlareCurrency
  */
 
-var ItemForCurrencySelectableWindow = require('../windows/currency_info/item_info/item_for_currency');
-var ItemInformation                 = require('../windows/currency_info/item_info/item_information');
-var SceneWindowContainer            = require('../../scene_window_container');
+import ItemForCurrencySelectableWindow from '../windows/currency_info/item_info/item_for_currency';
+import ItemInformation                 from '../windows/currency_info/item_info/item_information';
+import SceneWindowContainer            from '../../scene_window_container';
 
 /**
  * Create the actual currency information scene.

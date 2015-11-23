@@ -2,8 +2,8 @@
  * @namespace FlareCurrencies
  */
 
-var Currency   = require('./currency');
-var FlareError = require('../../flare_error');
+import Currency   from './currency';
+import FlareError from '../../flare_error';
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
 
@@ -52,7 +52,7 @@ flareCurrency.createCurrencies();
 // @see FlareError
 var mainSceneMapInitializer = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function () {
-	mainSceneMapInitializer.call(this);
+  mainSceneMapInitializer.call(this);
 
   if (FlareError.getError() !== undefined) {
     throw new Error(FlareError.getError());

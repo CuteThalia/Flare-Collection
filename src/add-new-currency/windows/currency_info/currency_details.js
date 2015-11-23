@@ -1,9 +1,9 @@
-var FlareWindowBase = require('../../../flare_window_base');
-var wordWrap        = require('underscore.string/wrap')
-
 /**
  * @namespace FlareCurrency
  */
+
+import FlareWindowBase from '../../../flare_window_base';
+import wordWrap        from 'underscore.string/wrap';
 
 /**
  * Displays infoirmation about said currency.

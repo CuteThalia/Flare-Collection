@@ -103,4 +103,4 @@ class AddLawsForMap {
   }
 }
 
-module.exports = AddLawsForMap;
+exports AddLawsForMap;

@@ -114,4 +114,4 @@ class FlareNotificationWindow extends FlareWindowBase {
   }
 }
 
-module.exports = FlareNotificationWindow;
+exports FlareNotificationWindow;
