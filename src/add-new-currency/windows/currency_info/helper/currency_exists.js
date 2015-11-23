@@ -7,6 +7,7 @@ class CurrencyExists {
   doesMapHaveItems() {
     for (var i = 1; i < $dataItems.length; i++) {
       if ($dataItems[i] !== null) {
+        console.log($dataItems[i].belongsToCurrency, this._currencyName);
         if ($dataItems[i].belongsToCurrency === this._currencyName) {
           return true;
         }
