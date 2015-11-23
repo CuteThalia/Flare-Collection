@@ -2,6 +2,7 @@ var FlareWindowSelectable = require('../../flare_window_selectable');
 var SceneWindowContainer  = require('../../scene_window_container');
 var FlareMoreInfoScene    = require('../scenes/flare_currency_information_extended_scene');
 var StoreCurrencyName     = require('./currency_info/helper/store_current_currency_name');
+var CurrencyExists        = require('./currency_info/helper/currency_exists');
 
 /**
  * @namespace FlareCurrency
@@ -21,7 +22,6 @@ class FlareCurrencies extends FlareWindowSelectable {
     var width  = (Graphics.boxWidth / 2) - 70;
     var height = Graphics.boxHeight;
     this._currenciesForWindow = [];
-    this._count = 0;
 
     this.getCurrencies();
 
@@ -39,8 +39,11 @@ class FlareCurrencies extends FlareWindowSelectable {
 
   update() {
     super.update(this);
+    var currencyExists = new CurrencyExists(this._currenciesForWindow[this.index()]);
+    if (Input.isTriggered("ok") &&
+        this._currenciesForWindow[this.index()] !== undefined &&
+        currencyExists.doesMapHaveItems()) {
 
-    if (Input.isTriggered("ok") && this._currenciesForWindow[this.index()] !== undefined) {
       StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
       SceneManager.push(FlareMoreInfoScene);
     }

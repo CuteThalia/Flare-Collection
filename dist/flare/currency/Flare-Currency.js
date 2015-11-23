@@ -3518,7 +3518,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":102}],78:[function(require,module,exports){
+},{"../../flare_error":103}],78:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3599,7 +3599,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":102,"./currency":77}],79:[function(require,module,exports){
+},{"../../flare_error":103,"./currency":77}],79:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4078,7 +4078,7 @@ var FlareCurrencyInformationExtendedScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyInformationExtendedScene;
 
-},{"../../scene_window_container":106,"../windows/currency_info/item_info/item_for_currency":95,"../windows/currency_info/item_info/item_information":96}],81:[function(require,module,exports){
+},{"../../scene_window_container":107,"../windows/currency_info/item_info/item_for_currency":96,"../windows/currency_info/item_info/item_information":97}],81:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4170,7 +4170,7 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 module.exports = FlareCurrencyScene;
 window.FlareCurrencyScene = FlareCurrencyScene;
 
-},{"../../scene_window_container":106,"../windows/currency_info/currency_details":91,"../windows/flare_currency_selecatble_window":97}],82:[function(require,module,exports){
+},{"../../scene_window_container":107,"../windows/currency_info/currency_details":91,"../windows/flare_currency_selecatble_window":98}],82:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4782,7 +4782,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":103}],87:[function(require,module,exports){
+},{"../../flare_random_number":104}],87:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyScene = require('../scenes/flare_currency_scene');
@@ -5058,7 +5058,7 @@ Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
   }
 };
 
-},{"../windows/shop/currency_value_window":98}],89:[function(require,module,exports){
+},{"../windows/shop/currency_value_window":99}],89:[function(require,module,exports){
 'use strict';
 
 var FlareCurrencyRewardWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -5099,7 +5099,7 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
   };
 }
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":101}],90:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":102}],90:[function(require,module,exports){
 'use strict';
 
 var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
@@ -5179,7 +5179,57 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
 module.exports = CurrencyDetails;
 
-},{"../../../flare_window_base":104,"underscore.string/wrap":76}],92:[function(require,module,exports){
+},{"../../../flare_window_base":105,"underscore.string/wrap":76}],92:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CurrencyExists = (function () {
+  function CurrencyExists(currencyName) {
+    _classCallCheck(this, CurrencyExists);
+
+    this._currencyName = currencyName;
+  }
+
+  _createClass(CurrencyExists, [{
+    key: "doesMapHaveItems",
+    value: function doesMapHaveItems() {
+      for (var i = 1; i < $dataItems.length; i++) {
+        if ($dataItems[i] !== null) {
+          if ($dataItems[i].belongsToCurrency === this._currencyName) {
+            return true;
+          }
+        }
+      }
+
+      for (var i = 1; i < $dataWeapons.length; i++) {
+        if ($dataWeapons[i] !== null) {
+          if ($dataWeapons[i].belongsToCurrency === this._currencyName) {
+            return true;
+          }
+        }
+      }
+
+      for (var i = 1; i < $dataArmors.length; i++) {
+        if ($dataArmors[i] !== null) {
+          if ($dataArmors[i].belongsToCurrency === this._currencyName) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+  }]);
+
+  return CurrencyExists;
+})();
+
+module.exports = CurrencyExists;
+
+},{}],93:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5254,7 +5304,7 @@ var MapHasCureencyShop = (function () {
 
 module.exports = MapHasCureencyShop;
 
-},{"./store_current_currency_name":94,"rmmv-mrp-core/option-parser":73}],93:[function(require,module,exports){
+},{"./store_current_currency_name":95,"rmmv-mrp-core/option-parser":73}],94:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5311,7 +5361,7 @@ var StoreCurrencyItemInfo = (function () {
 
 module.exports = StoreCurrencyItemInfo;
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5363,7 +5413,7 @@ var StoreCurrentCurrencyName = (function () {
 
 module.exports = StoreCurrentCurrencyName;
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5531,7 +5581,7 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemForCurrency;
 
-},{"../../../../flare_window_selectable":105,"../../../../scene_window_container":106,"../helper/store_currency_item_info":93,"../helper/store_current_currency_name":94,"lodash/array/uniq":3,"lodash/collection/find":4,"lodash/lang/clone":60}],96:[function(require,module,exports){
+},{"../../../../flare_window_selectable":106,"../../../../scene_window_container":107,"../helper/store_currency_item_info":94,"../helper/store_current_currency_name":95,"lodash/array/uniq":3,"lodash/collection/find":4,"lodash/lang/clone":60}],97:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5621,7 +5671,7 @@ var ItemInformation = (function (_FlareWindowBase) {
 
 module.exports = ItemInformation;
 
-},{"../../../../flare_window_base":104,"../helper/map_has_currency_shop":92,"../helper/store_currency_item_info":93,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],97:[function(require,module,exports){
+},{"../../../../flare_window_base":105,"../helper/map_has_currency_shop":93,"../helper/store_currency_item_info":94,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5638,6 +5688,7 @@ var FlareWindowSelectable = require('../../flare_window_selectable');
 var SceneWindowContainer = require('../../scene_window_container');
 var FlareMoreInfoScene = require('../scenes/flare_currency_information_extended_scene');
 var StoreCurrencyName = require('./currency_info/helper/store_current_currency_name');
+var CurrencyExists = require('./currency_info/helper/currency_exists');
 
 /**
  * @namespace FlareCurrency
@@ -5665,7 +5716,6 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
       var width = Graphics.boxWidth / 2 - 70;
       var height = Graphics.boxHeight;
       this._currenciesForWindow = [];
-      this._count = 0;
 
       this.getCurrencies();
 
@@ -5685,8 +5735,9 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
     key: 'update',
     value: function update() {
       _get(Object.getPrototypeOf(FlareCurrencies.prototype), 'update', this).call(this, this);
+      var currencyExists = new CurrencyExists(this._currenciesForWindow[this.index()]);
+      if (Input.isTriggered("ok") && this._currenciesForWindow[this.index()] !== undefined && currencyExists.doesMapHaveItems()) {
 
-      if (Input.isTriggered("ok") && this._currenciesForWindow[this.index()] !== undefined) {
         StoreCurrencyName.setName(this._currenciesForWindow[this.index()].name);
         SceneManager.push(FlareMoreInfoScene);
       }
@@ -5757,7 +5808,7 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
 
 module.exports = FlareCurrencies;
 
-},{"../../flare_window_selectable":105,"../../scene_window_container":106,"../scenes/flare_currency_information_extended_scene":80,"./currency_info/helper/store_current_currency_name":94}],98:[function(require,module,exports){
+},{"../../flare_window_selectable":106,"../../scene_window_container":107,"../scenes/flare_currency_information_extended_scene":80,"./currency_info/helper/currency_exists":92,"./currency_info/helper/store_current_currency_name":95}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5845,7 +5896,7 @@ var CurrencyValueWindow = (function (_Window_Base) {
 
 module.exports = CurrencyValueWindow;
 
-},{"lodash/collection/find":4}],99:[function(require,module,exports){
+},{"lodash/collection/find":4}],100:[function(require,module,exports){
 "use strict";
 
 Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currencyName) {
@@ -5897,7 +5948,7 @@ Window_ShopBuy.prototype.makeItemList = function () {
   }
 };
 
-},{}],100:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 'use strict';
 
 var oldWindowShopNumberPrototTypeSetCurrencyUnit = Window_ShopNumber.prototype.setCurrencyUnit;
@@ -5925,7 +5976,7 @@ Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, widt
     this.drawIcon(unit, x + width - unitWidth, y);
 };
 
-},{}],101:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6031,7 +6082,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],102:[function(require,module,exports){
+},{"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],103:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6096,7 +6147,7 @@ var FlareError = (function () {
 
 module.exports = FlareError;
 
-},{}],103:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6138,7 +6189,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber;
 
-},{}],104:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6203,7 +6254,7 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase;
 
-},{}],105:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6267,7 +6318,7 @@ var FlareWindowSelectable = (function (_Window_Selectable) {
 
 module.exports = FlareWindowSelectable;
 
-},{}],106:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6375,4 +6426,4 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":4,"../node_modules/lodash/lang/isUndefined":67}]},{},[79,87,90,78,84,83,89,88,100,99,101]);
+},{"../node_modules/lodash/collection/find":4,"../node_modules/lodash/lang/isUndefined":67}]},{},[79,87,90,78,84,83,89,88,101,100,102]);
