@@ -4111,6 +4111,7 @@ var FlareCurrencies = (function () {
 // Create public API.
 
 window.FlareCurrencies = FlareCurrencies;
+window._baseYForText = 0;
 
 },{"./shop/currency_shop":82,"lodash/collection/find":4}],80:[function(require,module,exports){
 'use strict';
@@ -6506,13 +6507,12 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
             return amount.name === data[0].name;
           });
 
-          console.log(amountToGain);
-
           if (!(0, _isUndefined2.default)(amountToGain)) {
-            this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i[' + amountToGain.icon + '] ' + data[0].name, 0, window._baseYForText, 500, 'left');
+            this.drawTextEx('You gained: ' + amountToGain.amount + ' of \\i[' + amountToGain.icon + ']' + amountToGain.name, 0, window._baseYForText, 500, 'left');
             BattleManager._gainCurrencies.shift();
           } else {
-            this.drawTextEx("You gained: " + amountToGain.amount + ", of: " + ' \\i[' + amountToGain.icon + '] ' + data[0].name, 0, window._baseYForText, 500, 'left');
+            console.log('hmmm');
+            this.drawTextEx("You gained: " + amountToGain.amount + " of " + ' \\i[' + amountToGain.icon + '] ' + amountToGain.name, 0, window._baseYForText, 500, 'left');
           }
 
           window._baseYForText += 45;

@@ -447,3 +447,4 @@ class FlareCurrencies {
 
 // Create public API.
 window.FlareCurrencies = FlareCurrencies;
+window._baseYForText = 0;
