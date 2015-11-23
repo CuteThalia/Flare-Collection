@@ -4,7 +4,7 @@
 
 var FlareNotificationWindow = require('./windows/flare_notification_window');
 var NotificationOptions     = require('./notification_options/notification_options');
-var lodashIsUndefined       = require('../../node_modules/lodash/lang/isUndefined');
+var lodashIsUndefined       = require('lodash/lang/isUndefined');
 
 /*:
  * @plugindesc Allows you to create notifications for player based events.

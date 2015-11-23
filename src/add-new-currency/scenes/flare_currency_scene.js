@@ -2,7 +2,9 @@
  * @namespace FlareCurrency
  */
 
-var FlareCurrencyWindow = require('../windows/flare_currency_window');
+import FlareCurrencySelectableWindow from '../windows/flare_currency_selecatble_window';
+import FlareCurrencyInfo             from '../windows/currency_info/currency_details';
+import SceneWindowContainer          from '../../scene_window_container';
 
 /**
  * Create the actual currency scene.
@@ -11,6 +13,7 @@ var FlareCurrencyWindow = require('../windows/flare_currency_window');
  * create a new scene which then creates a new window.
  */
 class FlareCurrencyScene extends Scene_MenuBase {
+
   constructor() {
     super();
   }
@@ -41,10 +44,16 @@ class FlareCurrencyScene extends Scene_MenuBase {
    * Create the actual window.
    */
   createCurrencyWindowForParty() {
-    this._flareCurrencyWindow = new FlareCurrencyWindow();
+    SceneWindowContainer.emptyContainer();
+
+    this._flareCurrencyWindow = new FlareCurrencySelectableWindow();
+    this._flareCurrencyInfo   = new FlareCurrencyInfo();
+
+    SceneWindowContainer.setWindowToContainer('flare-currency-info', this._flareCurrencyInfo);
+
     this.addWindow(this._flareCurrencyWindow);
+    this.addWindow(this._flareCurrencyInfo);
   }
 };
 
 module.exports = FlareCurrencyScene;
-window.FlareCurrencyScene = FlareCurrencyScene;

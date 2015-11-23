@@ -41,4 +41,4 @@ class FlareError {
   }
 }
 
-module.exports = FlareError;
+module.exports = FlareError = FlareError;

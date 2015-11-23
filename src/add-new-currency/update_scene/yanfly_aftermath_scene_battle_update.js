@@ -1,4 +1,8 @@
-var FlareCurrencyRewardWindow = require('../windows/yanfly_aftermath/flare_currency_reward_window');
+/**
+ * @namespace FlareCurrency
+ */
+
+import FlareCurrencyRewardWindow from '../windows/yanfly_aftermath/flare_currency_reward_window';
 
 // Make sure this actually exists.
 if (Scene_Battle.prototype.addCustomVictorySteps) {

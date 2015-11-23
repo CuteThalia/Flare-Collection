@@ -2,9 +2,9 @@
  * @namespace FlareCurrency
  */
 
-var extractAllOfType  = require('rmmv-mrp-core/option-parser').extractAllOfType;
-var lodashFind        = require('../../../node_modules/lodash/collection/find');
-var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined')
+import {extractAllOfType}  from 'rmmv-mrp-core/option-parser';
+import lodashFind        from 'lodash/collection/find';
+import lodashIsUndefined from 'lodash/lang/isUndefined';
 
 /**
  * Creates objects for the currency shop.

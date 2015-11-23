@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareCurrency
+ */
+
 var oldWindowShopNumberPrototTypeSetCurrencyUnit = Window_ShopNumber.prototype.setCurrencyUnit;
 Window_ShopNumber.prototype.setCurrencyUnit = function(currencyUnit, currencyName) {
     this._currencyName = currencyName;

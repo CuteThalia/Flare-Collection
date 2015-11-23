@@ -27,7 +27,9 @@ class FlareWindowBase extends Window_Base {
     if (text) {
       var textState = { index: 0, x: x, y: y, left: x };
       textState.text = this.convertEscapeCharacters(text);
+      textState.text = textState.text.replace(/\\/g, '');
       textState.height = this.calcTextHeight(textState, false);
+
       while (textState.index < textState.text.length) {
           this.processCharacter(textState);
       }
@@ -39,4 +41,4 @@ class FlareWindowBase extends Window_Base {
 
 }
 
-module.exports = FlareWindowBase;
+module.exports = FlareWindowBase = FlareWindowBase;

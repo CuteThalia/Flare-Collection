@@ -1,7 +1,7 @@
-var lodashFindWhere   = require('../../../node_modules/lodash/collection/findWhere');
-var lodashIsUndefined = require('../../../node_modules/lodash/lang/isUndefined');
-var lodashCapitalize  = require('../../../node_modules/lodash/string/capitalize');
-var lodashTrim        = require('../../../node_modules/lodash/string/trim');
+var lodashFindWhere   = require('lodash/collection/findWhere');
+var lodashIsUndefined = require('lodash/lang/isUndefined');
+var lodashCapitalize  = require('lodash/string/capitalize');
+var lodashTrim        = require('lodash/string/trim');
 
 /**
  * @namespace FlareLawsForMap.
@@ -74,4 +74,4 @@ class LawsForMap {
   }
 }
 
-module.exports = LawsForMap;
+module.exports =  LawsForMap;

@@ -1,4 +1,8 @@
-var CurrencyValueWindow = require("../windows/shop/currency_value_window");
+/**
+ * @namespace FlareCurrency
+ */
+
+import CurrencyValueWindow from "../windows/shop/currency_value_window";
 
 Scene_Shop.prototype.createCurrencyWindow = function(currencyName) {
   this._curencyValueWindow = new CurrencyValueWindow(currencyName);

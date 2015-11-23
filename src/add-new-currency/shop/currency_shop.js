@@ -1,4 +1,8 @@
-var lodashFindIndex = require('../../../node_modules/lodash/array/findIndex');
+/**
+ * @namespace FlareCurrency
+ */
+
+import lodashFindIndex from 'lodash/array/findIndex';
 
 /**
  * Responsible for gathering all the items related to a currency.
@@ -120,6 +124,3 @@ class CurrencyShop {
 }
 
 module.exports = CurrencyShop;
-
-// private global method for storing currency currency shop info
-window._currencyShopInfo = {currency_name: null};

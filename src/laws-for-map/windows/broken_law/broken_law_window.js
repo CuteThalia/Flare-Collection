@@ -1,6 +1,6 @@
 var FlareWindowBase     = require('../../../flare_window_base');
 var StoreNoGoldMessage  = require('../../law_storage/store_no_gold_message');
-var lodashIsUndefined   = require('../../../../node_modules/lodash/lang/isUndefined');
+var lodashIsUndefined   = require('lodash/lang/isUndefined');
 
 /**
  * @namespace FlareLawsForMap.

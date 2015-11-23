@@ -10,11 +10,20 @@
     "babelify": "7.2.0",
     "browserify": "12.0.1",
     "gulp": "3.9.0",
+    "underscore.string": "^3.2.2",
     "vinyl-source-stream": "1.1.0"
   },
   "devDependencies": {
+    "babel-core": "^6.2.1",
+    "babel-runtime": "^6.2.0",
+    "babel-template": "^6.2.0",
+    "babel-traverse": "^6.2.0",
+    "babel-types": "^6.2.0",
+    "core-js": "^1.2.6",
     "filesaver.js": "0.2.0",
-    "lodash": "3.10.1",
-    "rmmv-mrp-core": "0.0.3"
+    "inherits": "^2.0.1",
+    "isarray": "0.0.1",
+    "lodash": "^3.10.1",
+    "rmmv-mrp-core": "0.0.14"
   }
 }

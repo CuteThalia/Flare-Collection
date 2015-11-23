@@ -1,4 +1,8 @@
-var FlareCurrencyScene = require('../scenes/flare_currency_scene');
+/**
+ * @namespace FlareCurrency
+ */
+
+import FlareCurrencyScene from '../scenes/flare_currency_scene';
 
 var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow;
 Scene_Menu.prototype.createCommandWindow = function() {
