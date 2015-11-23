@@ -3481,6 +3481,31 @@ var Currency = (function () {
         description: currency["Currency Five Description"],
         icon: currency["Currency Five Icon Index"],
         amount: 0
+      }, {
+        name: currency["Currency Six Name"],
+        description: currency["Currency Six Description"],
+        icon: currency["Currency Six Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Seven Name"],
+        description: currency["Currency Seven Description"],
+        icon: currency["Currency Seven Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Eight Name"],
+        description: currency["Currency Eight Description"],
+        icon: currency["Currency Eight Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Nine Name"],
+        description: currency["Currency Nine Description"],
+        icon: currency["Currency Nine Icon Index"],
+        amount: 0
+      }, {
+        name: currency["Currency Ten Name"],
+        description: currency["Currency Ten Description"],
+        icon: currency["Currency Ten Icon Index"],
+        amount: 0
       }];
     }
 
