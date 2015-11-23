@@ -31,4 +31,4 @@ class OptionHandler {
   }
 }
 
-exports OptionHandler
+module.exports = OptionHandler

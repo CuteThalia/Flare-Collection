@@ -74,4 +74,4 @@ class LawsForMap {
   }
 }
 
-exports LawsForMap;
+module.exports =  LawsForMap;

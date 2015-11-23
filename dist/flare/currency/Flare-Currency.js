@@ -3661,90 +3661,180 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @param Currency One Name
  * @desc Name of the Currency
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency One Description
  * @desc Keep it short. Currency description
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency One Icon Index
  * @desc icon index.
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param ---Currency Two---
  * @desc
  *
  * @param Currency Two Name
  * @desc Name of the Currency
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Two Description
  * @desc Keep it short. Currency description
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Two Icon Index
  * @desc icon index.
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param ---Currency Three---
  * @desc
  *
  * @param Currency Three Name
  * @desc Name of the Currency
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Three Description
  * @desc Keep it short. Currency description
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Three Icon Index
  * @desc icon index.
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param ---Currency Four---
  * @desc
  *
  * @param Currency Four Name
  * @desc Name of the Currency
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Four Description
  * @desc Keep it short. Currency description
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Four Icon Index
  * @desc icon index.
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param ---Currency Five---
  * @desc
  *
  * @param Currency Five Name
  * @desc Name of the Currency
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Five Description
  * @desc Keep it short. Currency description
- * Default: ''
- * @default ''
+ * Default:
+ * @default
  *
  * @param Currency Five Icon Index
  * @desc icon index.
- * Default: ''
- * @default ''
+ * Default:
+ * @default
+ *
+ * @param ---Currency Six---
+ * @desc
+ *
+ * @param Currency Six Name
+ * @desc Name of the Currency
+ * Default:
+ * @default
+ *
+ * @param Currency Six Description
+ * @desc Keep it short. Currency description
+ * Default:
+ * @default
+ *
+ * @param Currency Six Icon Index
+ * @desc icon index.
+ * Default:
+ * @default
+ *
+ * @param ---Currency Seven---
+ * @desc
+ *
+ * @param Currency Seven Name
+ * @desc Name of the Currency
+ * Default:
+ * @default
+ *
+ * @param Currency Seven Description
+ * @desc Keep it short. Currency description
+ * Default:
+ * @default
+ *
+ * @param Currency Seven Icon Index
+ * @desc icon index.
+ * Default:
+ * @default
+ *
+ * @param ---Currency Eight---
+ * @desc
+ *
+ * @param Currency Eight Name
+ * @desc Name of the Currency
+ * Default:
+ * @default
+ *
+ * @param Currency Eight Description
+ * @desc Keep it short. Currency description
+ * Default:
+ * @default
+ *
+ * @param Currency Eight Icon Index
+ * @desc icon index.
+ * Default:
+ * @default
+ *
+ * @param ---Currency Nine---
+ * @desc
+ *
+ * @param Currency Nine Name
+ * @desc Name of the Currency
+ * Default:
+ * @default
+ *
+ * @param Currency Nine Description
+ * @desc Keep it short. Currency description
+ * Default:
+ * @default
+ *
+ * @param Currency Nine Icon Index
+ * @desc icon index.
+ * Default:
+ * @default
+ *
+ * @param ---Currency Ten---
+ * @desc
+ *
+ * @param Currency Ten Name
+ * @desc Name of the Currency
+ * Default:
+ * @default
+ *
+ * @param Currency Ten Description
+ * @desc Keep it short. Currency description
+ * Default:
+ * @default
+ *
+ * @param Currency Ten Icon Index
+ * @desc icon index.
+ * Default:
+ * @default
  *
  * @help
  *

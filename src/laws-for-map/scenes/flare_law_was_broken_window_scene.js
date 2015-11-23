@@ -40,4 +40,4 @@ class FlareLawWasBrokenWindowScene extends Scene_MenuBase {
   }
 }
 
-exports FlareLawWasBrokenWindowScene;
+module.exports = FlareLawWasBrokenWindowScene;

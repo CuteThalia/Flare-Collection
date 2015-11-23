@@ -123,4 +123,4 @@ class LawWindow extends FlareWindowBase {
   }
 }
 
-exports LawWindow;
+module.exports = LawWindow;

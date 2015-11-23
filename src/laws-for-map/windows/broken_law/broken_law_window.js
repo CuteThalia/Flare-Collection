@@ -57,4 +57,4 @@ class BrokenLawWindow extends FlareWindowBase {
   }
 }
 
-exports BrokenLawWindow;
+module.exports = BrokenLawWindow;

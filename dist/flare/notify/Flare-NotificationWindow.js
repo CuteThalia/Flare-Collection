@@ -19,7 +19,7 @@ function isUndefined(value) {
   return value === undefined;
 }
 
-exports isUndefined;
+module.exports = isUndefined;
 
 },{}],2:[function(require,module,exports){
 'use strict';
@@ -219,7 +219,7 @@ var NotificationOptions = (function () {
 window._NotificationOptions = NotificationOptions;
 _NotificationOptions._notificationOptions = null;
 
-exports NotificationOptions;
+module.exports = NotificationOptions;
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -428,7 +428,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
   return FlareNotificationWindow;
 })(FlareWindowBase);
 
-exports FlareNotificationWindow;
+module.exports = FlareNotificationWindow;
 
 },{"../../flare_window_base":6}],6:[function(require,module,exports){
 'use strict';
@@ -493,6 +493,6 @@ var FlareWindowBase = (function (_Window_Base) {
   return FlareWindowBase;
 })(Window_Base);
 
-exports FlareWindowBase;
+module.exports = FlareWindowBase = FlareWindowBase;
 
 },{}]},{},[2,4]);
