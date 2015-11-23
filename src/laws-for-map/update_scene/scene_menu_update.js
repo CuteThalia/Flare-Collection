@@ -1,4 +1,4 @@
-var FlareLawWindowScene = require('../scenes/flare_law_window_scene');
+import FlareLawWindowScene from '../scenes/flare_law_window_scene';
 
 /**
  * @namespace FlareLawsForMap.

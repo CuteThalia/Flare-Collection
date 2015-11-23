@@ -1,7 +1,7 @@
-var lodashFindWhere   = require('lodash/collection/findWhere');
-var lodashIsUndefined = require('lodash/lang/isUndefined');
-var lodashCapitalize  = require('lodash/string/capitalize');
-var lodashTrim        = require('lodash/string/trim');
+import lodashFindWhere   from 'lodash/collection/findWhere';
+import lodashIsUndefined from 'lodash/lang/isUndefined';
+import lodashCapitalize  from 'lodash/string/capitalize';
+import lodashTrim        from 'lodash/string/trim';
 
 /**
  * @namespace FlareLawsForMap.
@@ -21,7 +21,7 @@ class LawsForMap {
    *
    * @param Object law
    */
-  static storeLaw(law) {
+  static storeLaw(law, number) {
     var lawCannotUse = null;
 
     if (law.cantUse.indexOf(',') !== -1) {
@@ -44,11 +44,12 @@ class LawsForMap {
       name: law.name,
       punishment: law.punishment,
       amount: law.amount,
+      description: law.description,
       icon: law.icon,
       cantUse: lawCannotUse
     }
 
-    if (this._lawsForMap.length === 3) {
+    if (this._lawsForMap.length === number) {
       this.setLawsForMap([]);
     }
 

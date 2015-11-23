@@ -1,4 +1,4 @@
-var ProcessBrokenLaw = require('../law_handler/process_broken_law');
+import ProcessBrokenLaw from '../law_handler/process_broken_law';
 
 /**
  * @namespace FlareLawsForMap.

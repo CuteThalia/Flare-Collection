@@ -1,4 +1,4 @@
-var LawsForMap = require('../law_storage/laws_for_map');
+import LawsForMap from '../law_storage/laws_for_map';
 
 /**
  * @namespace FlareLawsForMap.

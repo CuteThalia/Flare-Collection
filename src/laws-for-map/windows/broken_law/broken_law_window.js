@@ -1,6 +1,6 @@
-var FlareWindowBase     = require('../../../flare_window_base');
-var StoreNoGoldMessage  = require('../../law_storage/store_no_gold_message');
-var lodashIsUndefined   = require('lodash/lang/isUndefined');
+import FlareWindowBase     from '../../../flare_window_base';
+import StoreNoGoldMessage  from '../../law_storage/store_no_gold_message';
+import lodashIsUndefined   from 'lodash/lang/isUndefined';
 
 /**
  * @namespace FlareLawsForMap.

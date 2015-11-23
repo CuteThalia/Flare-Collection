@@ -1,9 +1,10 @@
-var extractAllOfType  = require('rmmv-mrp-core/option-parser').extractAllOfType;
-var Punishments       = require('./punishment_storage/punishments');
-var LawManagement     = require('./law_storage/laws_for_map');
-var ladashArrayUnique = require('lodash/array/uniq');
-var lodashClone       = require('lodash/lang/clone');
-var lodashIsUndefined = require('lodash/lang/isUndefined');
+import {extractAllOfType}  from 'rmmv-mrp-core/option-parser';
+import Punishments         from './punishment_storage/punishments';
+import LawManagement       from './law_storage/laws_for_map';
+import ladashArrayUnique   from 'lodash/array/uniq';
+import lodashClone         from 'lodash/lang/clone';
+import lodashIsUndefined   from 'lodash/lang/isUndefined';
+import OptionHandler       from './options/option_handler';
 
 /**
  * @namespace FlareLawsForMap.
@@ -36,24 +37,25 @@ class AddLawsForMap {
    */
   grabMapInformation() {
     var noteBoxData = $dataMap.note;
-    var lawData     = extractAllOfType(noteBoxData, 'law');
     var self        = this;
 
-    var noteData          = extractAllOfType(noteBoxData, 'law');
+    var noteData = extractAllOfType(noteBoxData, 'law');
+
     var arrayOfRandomLaws = [];
-    var threeLaws         = 3;
+    var randomLawsNumber  = parseInt(OptionHandler.getOptions().number_of_laws_for_map);
+    console.log(randomLawsNumber)
 
     // Get unique laws.
     noteData = ladashArrayUnique(noteData, function(lawInfo) {
       return lawInfo.name;
     });
 
-    // If theres more then three randomize which ones we get.
-    if (noteData.length > 3) {
+    // If theres more then x laws (default: 3) randomize which ones we get.
+    if (noteData.length > parseInt(OptionHandler.getOptions().number_of_laws_for_map)) {
       var lawsForRadomizing = lodashClone(noteData);
 
       // Loop over, creating an array of three random and unique laws.
-      while (threeLaws > 0) {
+      while (randomLawsNumber > 0) {
         var index = this._generateRandomNumber(0, lawsForRadomizing.length);
         index = index - 1;
 
@@ -63,7 +65,7 @@ class AddLawsForMap {
 
         arrayOfRandomLaws.push(lawsForRadomizing[index]);
         lawsForRadomizing.splice(index, 1);
-        threeLaws--;
+        randomLawsNumber--;
       }
     } else {
       arrayOfRandomLaws = noteData;
@@ -75,7 +77,7 @@ class AddLawsForMap {
 
     for (var i = 0; i < arrayOfRandomLaws.length; i++) {
       if (arrayOfRandomLaws[i] instanceof Object && this.validatePunishment(arrayOfRandomLaws[i].punishment)) {
-        LawManagement.storeLaw(arrayOfRandomLaws[i]);
+        LawManagement.storeLaw(arrayOfRandomLaws[i], randomLawsNumber);
       }
     }
   }

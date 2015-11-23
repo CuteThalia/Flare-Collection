@@ -1,5 +1,5 @@
-var FlareWindowBase = require('../../flare_window_base');
-var LawsForMap      = require('../law_storage/laws_for_map');
+import FlareWindowBase from '../../flare_window_base';
+import LawsForMap      from '../law_storage/laws_for_map';
 
 /**
  * @namespace FlareLawsForMap.

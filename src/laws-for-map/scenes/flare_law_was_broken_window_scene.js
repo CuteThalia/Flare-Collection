@@ -1,4 +1,4 @@
-var BrokenLawWindow = require('../windows/broken_law/broken_law_window');
+import BrokenLawWindow from '../windows/broken_law/broken_law_window';
 
 /**
  * @namespace FlareLawsForMap.

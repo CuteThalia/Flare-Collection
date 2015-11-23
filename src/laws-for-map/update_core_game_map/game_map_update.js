@@ -1,4 +1,4 @@
-var AddLawsForMap = require('../add_laws_for_map.js');
+import AddLawsForMap from '../add_laws_for_map.js';
 
 /**
  * @namespace FlareLawsForMap.

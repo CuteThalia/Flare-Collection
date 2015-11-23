@@ -1,5 +1,5 @@
-var LawManagement     = require('./law_storage/laws_for_map');
-var OptionsHandler        = require('./options/option_handler');
+import LawManagement  from './law_storage/laws_for_map';
+import OptionsHandler from './options/option_handler';
 
 /**
  * @namespace FlareLawsForMap.
@@ -14,9 +14,14 @@ var OptionsHandler        = require('./options/option_handler');
  * Default: 1
  * @default 1
  *
+ * @param How many laws per map?
+ * @desc default is 3 random laws.
+ * Default: 3
+ * @default 3
+ *
  * @help
  *
- * You can have as many laws as you want, any less then 3 we will show them, any more
+ * You can have as many laws as you want, any less then 3 (default) we will show them, any more
  * then three will randomly be picked every time you enter the map.
  *
  * How to set up a law:
@@ -27,6 +32,7 @@ var OptionsHandler        = require('./options/option_handler');
  *    amount: 700
  *    icon: 26
  *    cantUse: "potion, attack, Fire"
+ *    description: "I am required or the system will blow up, I can be long text with \c[5]color\c[0]."
  *  >
  *
  * ===============================================================

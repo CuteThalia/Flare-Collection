@@ -15,7 +15,8 @@ class OptionHandler {
    */
   static createOptionsStorage() {
     this._lawOptions = {
-      death_state_id:  FlareLasForMap['Death State ID'],
+      death_state_id:            FlareLasForMap['Death State ID'],
+      number_of_laws_for_map:    FlareLasForMap['How many laws per map?'],
     };
   }
 

@@ -1,5 +1,5 @@
-var FlareLawWasBrokenWindowScene = require('../scenes/flare_law_was_broken_window_scene');
-var LawsForMap                   = require('../law_storage/laws_for_map');
+import FlareLawWasBrokenWindowScene from '../scenes/flare_law_was_broken_window_scene';
+import LawsForMap                   from '../law_storage/laws_for_map';
 
 /**
  * @namespace FlareLawsForMap.
