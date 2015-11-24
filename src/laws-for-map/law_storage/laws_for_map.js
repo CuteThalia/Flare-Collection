@@ -6,6 +6,7 @@ import lodashFindWhere   from 'lodash/collection/findWhere';
 import lodashIsUndefined from 'lodash/lang/isUndefined';
 import lodashCapitalize  from 'lodash/string/capitalize';
 import lodashTrim        from 'lodash/string/trim';
+import humanize          from 'underscore.string/humanize';
 
 /**
  * Stores the various laws for a specific map.
@@ -31,7 +32,7 @@ class LawsForMap {
 
       lawCannotUse.forEach(function(cannotUse){
         var trimmedCannotUse = lodashTrim((cannotUse));
-        upperCaseCannotUse.push(lodashCapitalize(trimmedCannotUse));
+        upperCaseCannotUse.push(humanize(lodashCapitalize(trimmedCannotUse)));
       });
 
       lawCannotUse = upperCaseCannotUse.join();

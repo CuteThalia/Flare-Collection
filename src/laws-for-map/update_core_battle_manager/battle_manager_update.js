@@ -2,6 +2,8 @@
  * @namespace FlareLawsForMap.
  */
 
+import CountContainer from  '../../flare_counter';
+
 // We want our own custom message.
 BattleManager.processDefeat = function() {
     this.customDisplayMessage();
@@ -16,4 +18,15 @@ BattleManager.processDefeat = function() {
 
 BattleManager.customDisplayMessage = function() {
   $gameMessage.add('The whole party was defeated ...');
+}
+
+var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
+BattleManager.gainRewards = function() {
+  oldBattleManagerGainRewardsMethod.call(this);
+}
+
+var oldBattleManagerDisplayRewards = BattleManager.gainRewards;
+BattleManager.displayRewards = function() {
+  oldBattleManagerDisplayRewards.call(this);
+  console.log(CountContainer.getCurrentState());
 }

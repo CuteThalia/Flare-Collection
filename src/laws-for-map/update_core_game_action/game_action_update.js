@@ -36,7 +36,7 @@ Game_Action.prototype.apply = function(target) {
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, target) {
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
   FlareCounter.resetCounter();
-  
+
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {

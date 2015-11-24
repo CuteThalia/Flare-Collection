@@ -7,6 +7,7 @@ import lodashFindWhere              from 'lodash/collection/findWhere';
 import FlareLawWasBrokenWindowScene from '../scenes/flare_law_was_broken_window_scene';
 import OptionHandler                from '../options/option_handler';
 import StoreNoGoldMessage           from '../law_storage/store_no_gold_message';
+import slugify                      from 'underscore.string/slugify';
 
 /**
  * When a player breaks a law, we need to punish the actor.
@@ -20,7 +21,7 @@ class ProcessBrokenLaw {
    * @param Game_Actor actorWhoBrokeTheLaw
    */
   constructor(nameOfAction, actorWhoBrokeLaw) {
-    this._nameOfAction     = nameOfAction;
+    this._nameOfAction     = slugify(nameOfAction);
     this._actorWhobrokeLaw = actorWhoBrokeLaw
   }
 
@@ -30,10 +31,20 @@ class ProcessBrokenLaw {
    * @return boolean
    */
   validatePlayerBrokeTheLaw() {
-
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
-      if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
-        return true;
+      var cantUse = LawsForMap.getLawsForMap()[i].cantUse
+
+      if (cantUse.indexOf(',') === -1) {
+        if (slugify(cantUse) === this._nameOfAction) {
+          return true;
+        }
+      } else {
+        cantUse = cantUse.split(',');
+        for (var j = 0; j < cantUse.length; j++) {
+          if (slugify([cantUse[j]]) === this._nameOfAction) {
+            return true;
+          }
+        }
       }
     }
 

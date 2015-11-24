@@ -3432,6 +3432,66 @@ function Lexer(_lexer) {
   };
 }
 },{}],81:[function(require,module,exports){
+var makeString = require('./helper/makeString');
+
+module.exports = function capitalize(str, lowercaseRest) {
+  str = makeString(str);
+  var remainingChars = !lowercaseRest ? str.slice(1) : str.slice(1).toLowerCase();
+
+  return str.charAt(0).toUpperCase() + remainingChars;
+};
+
+},{"./helper/makeString":86}],82:[function(require,module,exports){
+
+var makeString = require('./helper/makeString');
+
+var from  = "ąàáäâãåæăćčĉęèéëêĝĥìíïîĵłľńňòóöőôõðøśșšŝťțŭùúüűûñÿýçżźž",
+    to    = "aaaaaaaaaccceeeeeghiiiijllnnoooooooossssttuuuuuunyyczzz";
+
+from += from.toUpperCase();
+to += to.toUpperCase();
+
+to = to.split("");
+
+// for tokens requireing multitoken output
+from += "ß";
+to.push('ss');
+
+
+module.exports = function cleanDiacritics(str) {
+    return makeString(str).replace(/.{1}/g, function(c){
+      var index = from.indexOf(c);
+      return index === -1 ? c : to[index];
+  });
+};
+
+},{"./helper/makeString":86}],83:[function(require,module,exports){
+var trim = require('./trim');
+
+module.exports = function dasherize(str) {
+  return trim(str).replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase();
+};
+
+},{"./trim":89}],84:[function(require,module,exports){
+var escapeRegExp = require('./escapeRegExp');
+
+module.exports = function defaultToWhiteSpace(characters) {
+  if (characters == null)
+    return '\\s';
+  else if (characters.source)
+    return characters.source;
+  else
+    return '[' + escapeRegExp(characters) + ']';
+};
+
+},{"./escapeRegExp":85}],85:[function(require,module,exports){
+var makeString = require('./makeString');
+
+module.exports = function escapeRegExp(str) {
+  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+};
+
+},{"./makeString":86}],86:[function(require,module,exports){
 /**
  * Ensure some object is a coerced to a string
  **/
@@ -3440,7 +3500,46 @@ module.exports = function makeString(object) {
   return '' + object;
 };
 
-},{}],82:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
+var capitalize = require('./capitalize');
+var underscored = require('./underscored');
+var trim = require('./trim');
+
+module.exports = function humanize(str) {
+  return capitalize(trim(underscored(str).replace(/_id$/, '').replace(/_/g, ' ')));
+};
+
+},{"./capitalize":81,"./trim":89,"./underscored":90}],88:[function(require,module,exports){
+var makeString = require('./helper/makeString');
+var defaultToWhiteSpace = require('./helper/defaultToWhiteSpace');
+var trim = require('./trim');
+var dasherize = require('./dasherize');
+var cleanDiacritics = require("./cleanDiacritics");
+
+module.exports = function slugify(str) {
+  return trim(dasherize(cleanDiacritics(str).replace(/[^\w\s-]/g, '-').toLowerCase()), '-');
+};
+
+},{"./cleanDiacritics":82,"./dasherize":83,"./helper/defaultToWhiteSpace":84,"./helper/makeString":86,"./trim":89}],89:[function(require,module,exports){
+var makeString = require('./helper/makeString');
+var defaultToWhiteSpace = require('./helper/defaultToWhiteSpace');
+var nativeTrim = String.prototype.trim;
+
+module.exports = function trim(str, characters) {
+  str = makeString(str);
+  if (!characters && nativeTrim) return nativeTrim.call(str);
+  characters = defaultToWhiteSpace(characters);
+  return str.replace(new RegExp('^' + characters + '+|' + characters + '+$', 'g'), '');
+};
+
+},{"./helper/defaultToWhiteSpace":84,"./helper/makeString":86}],90:[function(require,module,exports){
+var trim = require('./trim');
+
+module.exports = function underscored(str) {
+  return trim(str).replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
+};
+
+},{"./trim":89}],91:[function(require,module,exports){
 // Wrap
 // wraps a string by a certain width
 
@@ -3541,7 +3640,66 @@ module.exports = function wrap(str, options){
 		return result;
 	}
 };
-},{"./helper/makeString":81}],83:[function(require,module,exports){
+},{"./helper/makeString":86}],92:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Store the current count.
+ *
+ * Used if you want to store the current count of
+ * something and then use the value of that count else where.
+ */
+
+var FlareCounter = (function () {
+  function FlareCounter() {
+    _classCallCheck(this, FlareCounter);
+  }
+
+  _createClass(FlareCounter, null, [{
+    key: "resetCounter",
+
+    /**
+     * Reset the counter to 0.
+     */
+    value: function resetCounter() {
+      this._counter = 0;
+    }
+
+    /**
+     * Appends the value to the current counter.
+     *
+     * @param int value
+     */
+
+  }, {
+    key: "addValue",
+    value: function addValue(value) {
+      this._counter += parseInt(value);
+    }
+
+    /**
+     * Get the current state of the count.
+     *
+     * @return int
+     */
+
+  }, {
+    key: "getCurrentState",
+    value: function getCurrentState() {
+      return this._counter;
+    }
+  }]);
+
+  return FlareCounter;
+})();
+
+module.exports = FlareCounter;
+
+},{}],93:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3606,7 +3764,7 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}],84:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3670,10 +3828,12 @@ var FlareWindowSelectable = (function (_Window_Selectable) {
 
 module.exports = FlareWindowSelectable = FlareWindowSelectable;
 
-},{}],85:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _optionParser = require('rmmv-mrp-core/option-parser');
 
@@ -3704,10 +3864,6 @@ var _option_handler2 = _interopRequireDefault(_option_handler);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * Add a law to a global private name space.
@@ -3822,10 +3978,12 @@ var AddLawsForMap = (function () {
 
 module.exports = AddLawsForMap;
 
-},{"./law_storage/laws_for_map":88,"./options/option_handler":90,"./punishment_storage/punishments":91,"lodash/array/uniq":2,"lodash/lang/clone":64,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],86:[function(require,module,exports){
+},{"./law_storage/laws_for_map":98,"./options/option_handler":100,"./punishment_storage/punishments":101,"lodash/array/uniq":2,"lodash/lang/clone":64,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],96:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _laws_for_map = require('./law_storage/laws_for_map');
 
@@ -3838,10 +3996,6 @@ var _option_handler2 = _interopRequireDefault(_option_handler);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /*:
  * @plugindesc Allows you to have a set of laws for a map.
@@ -3989,10 +4143,12 @@ _option_handler2.default.createOptionsStorage();
 // Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;
 
-},{"./law_storage/laws_for_map":88,"./options/option_handler":90}],87:[function(require,module,exports){
+},{"./law_storage/laws_for_map":98,"./options/option_handler":100}],97:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _laws_for_map = require('../law_storage/laws_for_map');
 
@@ -4014,13 +4170,13 @@ var _store_no_gold_message = require('../law_storage/store_no_gold_message');
 
 var _store_no_gold_message2 = _interopRequireDefault(_store_no_gold_message);
 
+var _slugify = require('underscore.string/slugify');
+
+var _slugify2 = _interopRequireDefault(_slugify);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * When a player breaks a law, we need to punish the actor.
@@ -4038,7 +4194,7 @@ var ProcessBrokenLaw = (function () {
   function ProcessBrokenLaw(nameOfAction, actorWhoBrokeLaw) {
     _classCallCheck(this, ProcessBrokenLaw);
 
-    this._nameOfAction = nameOfAction;
+    this._nameOfAction = (0, _slugify2.default)(nameOfAction);
     this._actorWhobrokeLaw = actorWhoBrokeLaw;
   }
 
@@ -4051,10 +4207,20 @@ var ProcessBrokenLaw = (function () {
   _createClass(ProcessBrokenLaw, [{
     key: 'validatePlayerBrokeTheLaw',
     value: function validatePlayerBrokeTheLaw() {
-
       for (var i = 0; i < _laws_for_map2.default.getLawsForMap().length; i++) {
-        if (_laws_for_map2.default.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
-          return true;
+        var cantUse = _laws_for_map2.default.getLawsForMap()[i].cantUse;
+
+        if (cantUse.indexOf(',') === -1) {
+          if ((0, _slugify2.default)(cantUse) === this._nameOfAction) {
+            return true;
+          }
+        } else {
+          cantUse = cantUse.split(',');
+          for (var j = 0; j < cantUse.length; j++) {
+            if ((0, _slugify2.default)([cantUse[j]]) === this._nameOfAction) {
+              return true;
+            }
+          }
         }
       }
 
@@ -4216,10 +4382,12 @@ module.exports = ProcessBrokenLaw;
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
 
-},{"../law_storage/laws_for_map":88,"../law_storage/store_no_gold_message":89,"../options/option_handler":90,"../scenes/flare_law_was_broken_window_scene":92,"lodash/collection/findWhere":4}],88:[function(require,module,exports){
+},{"../law_storage/laws_for_map":98,"../law_storage/store_no_gold_message":99,"../options/option_handler":100,"../scenes/flare_law_was_broken_window_scene":102,"lodash/collection/findWhere":4,"underscore.string/slugify":88}],98:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _findWhere = require('lodash/collection/findWhere');
 
@@ -4237,13 +4405,13 @@ var _trim = require('lodash/string/trim');
 
 var _trim2 = _interopRequireDefault(_trim);
 
+var _humanize = require('underscore.string/humanize');
+
+var _humanize2 = _interopRequireDefault(_humanize);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * Stores the various laws for a specific map.
@@ -4276,7 +4444,7 @@ var LawsForMap = (function () {
 
         lawCannotUse.forEach(function (cannotUse) {
           var trimmedCannotUse = (0, _trim2.default)(cannotUse);
-          upperCaseCannotUse.push((0, _capitalize2.default)(trimmedCannotUse));
+          upperCaseCannotUse.push((0, _humanize2.default)((0, _capitalize2.default)(trimmedCannotUse)));
         });
 
         lawCannotUse = upperCaseCannotUse.join();
@@ -4330,12 +4498,16 @@ var LawsForMap = (function () {
 
 module.exports = LawsForMap;
 
-},{"lodash/collection/findWhere":4,"lodash/lang/isUndefined":71,"lodash/string/capitalize":75,"lodash/string/trim":76}],89:[function(require,module,exports){
+},{"lodash/collection/findWhere":4,"lodash/lang/isUndefined":71,"lodash/string/capitalize":75,"lodash/string/trim":76,"underscore.string/humanize":87}],99:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareLawsForMap.
+ */
 
 /**
  * Static class to store the "no gold" message
@@ -4386,7 +4558,7 @@ var StoreNoGoldMessage = (function () {
 
 module.exports = StoreNoGoldMessage;
 
-},{}],90:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4442,10 +4614,12 @@ var OptionHandler = (function () {
 
 module.exports = OptionHandler;
 
-},{}],91:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 "use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _find = require("lodash/collection/find");
 
@@ -4454,10 +4628,6 @@ var _find2 = _interopRequireDefault(_find);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * Stores the types of punishments.
@@ -4506,7 +4676,7 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{"lodash/collection/find":3}],92:[function(require,module,exports){
+},{"lodash/collection/find":3}],102:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4523,11 +4693,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareLawsForMap.
- */
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 /**
  * Creates a scene for showing when a law was broken on the map.
@@ -4579,7 +4747,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":101}],93:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":111}],103:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4604,11 +4772,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareLawsForMap.
- */
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 /**
  * Creates a scene for a window that shows all the laws.
@@ -4660,9 +4826,16 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../../scene_window_container":104,"../windows/details/laws_details.js":102,"../windows/laws_window_selectable":103}],94:[function(require,module,exports){
+},{"../../scene_window_container":114,"../windows/details/laws_details.js":112,"../windows/laws_window_selectable":113}],104:[function(require,module,exports){
 'use strict';
 
+var _flare_counter = require('../../flare_counter');
+
+var _flare_counter2 = _interopRequireDefault(_flare_counter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// We want our own custom message.
 BattleManager.processDefeat = function () {
     this.customDisplayMessage();
     this.playDefeatMe();
@@ -4672,18 +4845,35 @@ BattleManager.processDefeat = function () {
         AudioManager.stopBgm();
     }
     this.endBattle(2);
-};
+}; /**
+    * @namespace FlareLawsForMap.
+    */
 
 BattleManager.customDisplayMessage = function () {
     $gameMessage.add('The whole party was defeated ...');
 };
 
-},{}],95:[function(require,module,exports){
-"use strict";
+var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
+BattleManager.gainRewards = function () {
+    oldBattleManagerGainRewardsMethod.call(this);
+};
 
-var _process_broken_law = require("../law_handler/process_broken_law");
+var oldBattleManagerDisplayRewards = BattleManager.gainRewards;
+BattleManager.displayRewards = function () {
+    oldBattleManagerDisplayRewards.call(this);
+    console.log(_flare_counter2.default.getCurrentState());
+};
+
+},{"../../flare_counter":92}],105:[function(require,module,exports){
+'use strict';
+
+var _process_broken_law = require('../law_handler/process_broken_law');
 
 var _process_broken_law2 = _interopRequireDefault(_process_broken_law);
+
+var _flare_counter = require('../../flare_counter');
+
+var _flare_counter2 = _interopRequireDefault(_flare_counter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4721,6 +4911,7 @@ Game_Action.prototype.apply = function (target) {
  */
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, target) {
   var processWhatShouldHappenOnHit = new _process_broken_law2.default(item.name, subject);
+  _flare_counter2.default.resetCounter();
 
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {
@@ -4729,6 +4920,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
     processWhatShouldHappenOnHit.checkForGoldBeforePunish(true);
     processWhatShouldHappenOnHit.openMessageWindow();
     processWhatShouldHappenOnHit.punishPlayer();
+    _flare_counter2.default.addValue(1);
   } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() || subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && $gameParty.inBattle()) {
     var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
 
@@ -4739,6 +4931,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
     // Display no more gold message and punish the player.
     processWhatShouldHappenOnHit.checkForGoldBeforePunish(false);
     processWhatShouldHappenOnHit.punishPlayer();
+    _flare_counter2.default.addValue(1);
   } else {
     item.effects.forEach(function (effect) {
       this.applyItemEffect(target, effect);
@@ -4748,7 +4941,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   }
 };
 
-},{"../law_handler/process_broken_law":87}],96:[function(require,module,exports){
+},{"../../flare_counter":92,"../law_handler/process_broken_law":97}],106:[function(require,module,exports){
 'use strict';
 
 var _add_laws_for_map = require('../add_laws_for_map.js');
@@ -4757,11 +4950,10 @@ var _add_laws_for_map2 = _interopRequireDefault(_add_laws_for_map);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @namespace FlareLawsForMap.
- */
+var oldGameMapPrototypeSetupMethod = Game_Map.prototype.setup; /**
+                                                                * @namespace FlareLawsForMap.
+                                                                */
 
-var oldGameMapPrototypeSetupMethod = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function (mapId) {
   oldGameMapPrototypeSetupMethod.call(this, mapId);
 
@@ -4770,7 +4962,7 @@ Game_Map.prototype.setup = function (mapId) {
   flarAddLawsForMap.grabMapInformation();
 };
 
-},{"../add_laws_for_map.js":85}],97:[function(require,module,exports){
+},{"../add_laws_for_map.js":95}],107:[function(require,module,exports){
 'use strict';
 
 var _flare_law_was_broken_window_scene = require('../scenes/flare_law_was_broken_window_scene');
@@ -4798,7 +4990,7 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../law_storage/laws_for_map":88,"../scenes/flare_law_was_broken_window_scene":92}],98:[function(require,module,exports){
+},{"../law_storage/laws_for_map":98,"../scenes/flare_law_was_broken_window_scene":102}],108:[function(require,module,exports){
 'use strict';
 
 var _flare_law_window_scene = require('../scenes/flare_law_window_scene');
@@ -4807,11 +4999,10 @@ var _flare_law_window_scene2 = _interopRequireDefault(_flare_law_window_scene);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @namespace FlareLawsForMap.
- */
+var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow; /**
+                                                                                           * @namespace FlareLawsForMap.
+                                                                                           */
 
-var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow;
 Scene_Menu.prototype.createCommandWindow = function () {
   oldSceneMenuPrototypeCreateCommandWindiow.call(this);
   this._commandWindow.setHandler('Laws', this.lawsCommand.bind(this));
@@ -4821,7 +5012,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(_flare_law_window_scene2.default);
 };
 
-},{"../scenes/flare_law_window_scene":93}],99:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":103}],109:[function(require,module,exports){
 'use strict';
 
 var _laws_for_map = require('../law_storage/laws_for_map');
@@ -4830,11 +5021,10 @@ var _laws_for_map2 = _interopRequireDefault(_laws_for_map);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @namespace FlareLawsForMap.
- */
+var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge; /**
+                                                                              * @namespace FlareLawsForMap.
+                                                                              */
 
-var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge;
 Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   if (_laws_for_map2.default.getLawsForMap() !== undefined && _laws_for_map2.default.getLawsForMap().length > 0) {
     var color3 = this.gaugeBackColor();
@@ -4861,7 +5051,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{"../law_storage/laws_for_map":88}],100:[function(require,module,exports){
+},{"../law_storage/laws_for_map":98}],110:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4874,7 +5064,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],101:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4899,11 +5089,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareLawsForMap.
- */
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 /**
  * Creates a window for displaying broken laws on map.
@@ -4974,7 +5162,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":83,"../../law_storage/store_no_gold_message":89,"lodash/lang/isUndefined":71}],102:[function(require,module,exports){
+},{"../../../flare_window_base":93,"../../law_storage/store_no_gold_message":99,"lodash/lang/isUndefined":71}],112:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4995,7 +5183,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 var LawDetails = (function (_FlareWindowBase) {
   _inherits(LawDetails, _FlareWindowBase);
@@ -5041,7 +5231,7 @@ var LawDetails = (function (_FlareWindowBase) {
 
 module.exports = LawDetails;
 
-},{"../../../flare_window_base":83,"underscore.string/wrap":82}],103:[function(require,module,exports){
+},{"../../../flare_window_base":93,"underscore.string/wrap":91}],113:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5066,7 +5256,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
   _inherits(LawsWindowSelectable, _FlareWindowSelecatbl);
@@ -5158,7 +5350,7 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
 
 module.exports = LawsWindowSelectable;
 
-},{"../../flare_window_selectable":84,"../../scene_window_container":104,"../law_storage/laws_for_map":88}],104:[function(require,module,exports){
+},{"../../flare_window_selectable":94,"../../scene_window_container":114,"../law_storage/laws_for_map":98}],114:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5271,4 +5463,4 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}]},{},[99,86,98,100,97,95,96,94]);
+},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}]},{},[109,96,108,110,107,105,106,104]);
