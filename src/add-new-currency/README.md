@@ -17,7 +17,7 @@ Flare Currency allows you to add up to 10 currencies to your game via the option
 When a currency is added you can add the following tags in enemy note tags, **not troops**.
 
 ```javascript
-<currencyToGain name:"Name", amount: 10, chance: 90>
+<currencyToGain name:"Name", amount: 10 chance: 90>
 ```
 
 - `name`: The name of the currency, must match that of the currency you set up in the script options.
