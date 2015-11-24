@@ -3,6 +3,7 @@
  */
 
 import ProcessBrokenLaw from '../law_handler/process_broken_law';
+import FlareCounter     from '../../flare_counter';
 
 var oldGameActionPrototypeInitializeMethod = Game_Action.prototype.initialize;
 Game_Action.prototype.initialize = function(subject, forcing) {
@@ -34,7 +35,8 @@ Game_Action.prototype.apply = function(target) {
  */
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, target) {
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
-
+  FlareCounter.resetCounter();
+  
   // Punish the user for breaking a law, assuming they have.
   if (subject instanceof Game_Actor && target instanceof Game_Actor &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && !$gameParty.inBattle()) {
@@ -43,6 +45,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     processWhatShouldHappenOnHit.checkForGoldBeforePunish(true);
     processWhatShouldHappenOnHit.openMessageWindow();
     processWhatShouldHappenOnHit.punishPlayer();
+    FlareCounter.addValue(1);
 
   } else if ((target instanceof Game_Enemy &&
     processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw()) ||
@@ -58,6 +61,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, tar
     // Display no more gold message and punish the player.
     processWhatShouldHappenOnHit.checkForGoldBeforePunish(false);
     processWhatShouldHappenOnHit.punishPlayer();
+    FlareCounter.addValue(1);
 
   } else {
     item.effects.forEach(function(effect) {
