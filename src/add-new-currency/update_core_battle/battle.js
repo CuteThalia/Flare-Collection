@@ -57,7 +57,7 @@ BattleManager._gainCurrencyMessage = function(enemy) {
       var amountGained = BattleManager.howMuchToGive(data);
       self._gainCurrencies.push({name: data[0].name, amount: amountGained, icon: data[0].icon})
 
-      $gameMessage.add('\\c[8]You Gained: \\c[0]' + amountGained + ' of: ' + ' \\i['+data[0].icon+'] ' + data[0].name);
+      $gameMessage.add('\\c[8]You Gained: \\c[0]' + amountGained + ' of ' + '\\i['+data[0].icon+'] ' + data[0].name);
       data.shift();
     }
   });
@@ -72,7 +72,7 @@ BattleManager.gainRewards = function() {
 BattleManager.howMuchToGive = function(data) {
   var amountToGive = 0;
 
-  if (data[0].amount.indexOf('~') !== -1) {
+  if (isNaN(data[0].amount) && data[0].amount.indexOf('~') !== -1) {
     var minMax = data[0].amount.split('~');
     return amountToGive = Math.round(Math.random() * (parseInt(minMax[1]) - parseInt(minMax[0])) + parseInt(minMax[0]))
   } else {
