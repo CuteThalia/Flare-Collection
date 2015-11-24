@@ -45,23 +45,23 @@ So lets set up a law:
 > Consider the following example:
 >
 > ```
->    <law
->       name:"Attacking Causes Death"
->       punishment:"hp"
->       amount: 1000
->       icon: 26
->       cantUse: "attack, potion, heal"
->    >
->    <law
->       name:"Minor Health Loss"
->       punishment:"hp"
->       amount: 10
->       icon: 26
->       cantUse: "attack, potion, heal"
->    >
+> <law
+>   name:"Attacking Causes Death"
+>   punishment:"hp"
+>   amount: 1000
+>   icon: 26
+>   cantUse: "attack, potion, heal"
+> >
+> <law
+>   name:"Minor Health Loss"
+>   punishment:"hp"
+>   amount: 10
+>   icon: 26
+>   cantUse: "attack, potion, heal"
+> >
 >```
 >
-> The issue here is that when we process which law you broke, we take the first one we find in
+> The issue here is that when we process which law you broke, > we take the first one we find in
 > the array of laws for the map is the first one we take. In this case `Minor Health Loss` would
 > never get used because we found `Attacking causes death` first.
 >
