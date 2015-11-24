@@ -1,12 +1,12 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 import LawsForMap                   from '../law_storage/laws_for_map';
 import lodashFindWhere              from 'lodash/collection/findWhere';
 import FlareLawWasBrokenWindowScene from '../scenes/flare_law_was_broken_window_scene';
 import OptionHandler                from '../options/option_handler';
 import StoreNoGoldMessage           from '../law_storage/store_no_gold_message';
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * When a player breaks a law, we need to punish the actor.

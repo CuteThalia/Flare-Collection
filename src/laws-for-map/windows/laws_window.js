@@ -1,9 +1,9 @@
-import FlareWindowBase from '../../flare_window_base';
-import LawsForMap      from '../law_storage/laws_for_map';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import FlareWindowBase from '../../flare_window_base';
+import LawsForMap      from '../law_storage/laws_for_map';
 
 /**
  * Creates a window displaying the laws for said map.

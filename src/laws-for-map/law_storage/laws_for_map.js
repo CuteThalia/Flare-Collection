@@ -1,11 +1,11 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 import lodashFindWhere   from 'lodash/collection/findWhere';
 import lodashIsUndefined from 'lodash/lang/isUndefined';
 import lodashCapitalize  from 'lodash/string/capitalize';
 import lodashTrim        from 'lodash/string/trim';
-
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * Stores the various laws for a specific map.

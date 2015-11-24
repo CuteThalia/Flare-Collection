@@ -1,9 +1,9 @@
-import LawManagement  from './law_storage/laws_for_map';
-import OptionsHandler from './options/option_handler';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import LawManagement  from './law_storage/laws_for_map';
+import OptionsHandler from './options/option_handler';
 
 /*:
  * @plugindesc Allows you to have a set of laws for a map.

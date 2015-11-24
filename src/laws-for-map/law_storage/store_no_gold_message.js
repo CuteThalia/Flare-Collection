@@ -1,4 +1,8 @@
 /**
+ * @namespace FlareLawsForMap.
+ */
+
+/**
  * Static class to store the "no gold" message
  */
 class StoreNoGoldMessage {

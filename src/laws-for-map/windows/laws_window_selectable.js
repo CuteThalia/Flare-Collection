@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 import FlareWindowSelecatble from '../../flare_window_selectable';
 import LawsForMap            from '../law_storage/laws_for_map';
 import SceneWindowContainer  from '../../scene_window_container';

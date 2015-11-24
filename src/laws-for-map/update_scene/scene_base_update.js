@@ -1,9 +1,9 @@
-import FlareLawWasBrokenWindowScene from '../scenes/flare_law_was_broken_window_scene';
-import LawsForMap                   from '../law_storage/laws_for_map';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import FlareLawWasBrokenWindowScene from '../scenes/flare_law_was_broken_window_scene';
+import LawsForMap                   from '../law_storage/laws_for_map';
 
 var oldSceneBasePrototypeCheckGameOverMethod = Scene_Base.prototype.checkGameover;
 Scene_Base.prototype.checkGameover = function() {

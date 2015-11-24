@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 import FlareWindowBase from '../../../flare_window_base';
 import wordWrap        from 'underscore.string/wrap';
 

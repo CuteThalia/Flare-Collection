@@ -1,3 +1,7 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 import {extractAllOfType}  from 'rmmv-mrp-core/option-parser';
 import Punishments         from './punishment_storage/punishments';
 import LawManagement       from './law_storage/laws_for_map';
@@ -6,9 +10,6 @@ import lodashClone         from 'lodash/lang/clone';
 import lodashIsUndefined   from 'lodash/lang/isUndefined';
 import OptionHandler       from './options/option_handler';
 
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * Add a law to a global private name space.

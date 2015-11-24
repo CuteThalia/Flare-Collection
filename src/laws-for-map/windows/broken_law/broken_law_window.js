@@ -1,10 +1,10 @@
-import FlareWindowBase     from '../../../flare_window_base';
-import StoreNoGoldMessage  from '../../law_storage/store_no_gold_message';
-import lodashIsUndefined   from 'lodash/lang/isUndefined';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import FlareWindowBase     from '../../../flare_window_base';
+import StoreNoGoldMessage  from '../../law_storage/store_no_gold_message';
+import lodashIsUndefined   from 'lodash/lang/isUndefined';
 
 /**
  * Creates a window for displaying broken laws on map.

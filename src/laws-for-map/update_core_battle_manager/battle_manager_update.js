@@ -1,3 +1,8 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+// We want our own custom message.
 BattleManager.processDefeat = function() {
     this.customDisplayMessage();
     this.playDefeatMe();

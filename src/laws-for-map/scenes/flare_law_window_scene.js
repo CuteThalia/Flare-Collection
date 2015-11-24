@@ -1,10 +1,11 @@
+/**
+ * @namespace FlareLawsForMap.
+ */
+
 import FlareLawWindow       from '../windows/laws_window_selectable';
 import FlareLawDetails      from '../windows/details/laws_details.js';
 import SceneWindowContainer from '../../scene_window_container';
 
-/**
- * @namespace FlareLawsForMap.
- */
 
 /**
  * Creates a scene for a window that shows all the laws.

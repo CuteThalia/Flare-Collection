@@ -1,8 +1,8 @@
-import LawsForMap from '../law_storage/laws_for_map';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import LawsForMap from '../law_storage/laws_for_map';
 
 var oldWindowBasePrototypeDrawGaugeMethod = Window_Base.prototype.drawGauge
 Window_Base.prototype.drawGauge = function(dx, dy, dw, rate, color1, color2) {

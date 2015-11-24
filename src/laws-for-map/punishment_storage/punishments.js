@@ -1,8 +1,8 @@
-import lodashFind from 'lodash/collection/find';
-
 /**
  * @namespace FlareLawsForMap.
  */
+ 
+import lodashFind from 'lodash/collection/find';
 
 /**
  * Stores the types of punishments.

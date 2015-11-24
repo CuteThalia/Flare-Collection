@@ -1,8 +1,8 @@
-import ProcessBrokenLaw from '../law_handler/process_broken_law';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import ProcessBrokenLaw from '../law_handler/process_broken_law';
 
 var oldGameActionPrototypeInitializeMethod = Game_Action.prototype.initialize;
 Game_Action.prototype.initialize = function(subject, forcing) {

@@ -1,8 +1,8 @@
-import BrokenLawWindow from '../windows/broken_law/broken_law_window';
-
 /**
  * @namespace FlareLawsForMap.
  */
+
+import BrokenLawWindow from '../windows/broken_law/broken_law_window';
 
 /**
  * Creates a scene for showing when a law was broken on the map.
