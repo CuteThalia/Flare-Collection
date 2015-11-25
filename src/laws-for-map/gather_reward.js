@@ -26,9 +26,6 @@ class GatherReward {
     if (this._getObjectForOtherRewards(rewardData.gold, 'gold') !== false) {
       RewardStorage.setToStorage(this._getObjectForOtherRewards(rewardData.gold, 'gold'));
     }
-
-    console.log(RewardStorage.getContainer());
-
   }
 
   _getObjectForOtherRewards(data, key) {
