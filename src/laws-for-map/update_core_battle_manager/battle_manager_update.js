@@ -23,12 +23,13 @@ BattleManager.customDisplayMessage = function() {
 var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
 BattleManager.gainRewards = function() {
   oldBattleManagerGainRewardsMethod.call(this);
+  console.log('uh ....');
 }
 
 var oldBattleManagerDisplayRewards = BattleManager.gainRewards;
 BattleManager.displayRewards = function() {
   oldBattleManagerDisplayRewards.call(this);
   if (CountContainer.getCurrentState() === 0) {
-    // do soemthing  .... 
+    // do soemthing  ....
   }
 }
