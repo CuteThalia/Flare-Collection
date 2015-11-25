@@ -73,7 +73,7 @@ class FlareCurrencyRewardWindow extends Window_Base {
           BattleManager._gainCurrencies.shift();
 
         } else {
-          console.log('hmmm');
+          'hmmm');
           this.drawTextEx("You gained: " + amountToGain.amount + " of " + ' \\i['+amountToGain.icon+'] ' + amountToGain.name, 0, window._baseYForText, 500, 'left');
         }
 

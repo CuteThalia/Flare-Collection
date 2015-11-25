@@ -28,5 +28,7 @@ BattleManager.gainRewards = function() {
 var oldBattleManagerDisplayRewards = BattleManager.gainRewards;
 BattleManager.displayRewards = function() {
   oldBattleManagerDisplayRewards.call(this);
-  console.log(CountContainer.getCurrentState());
+  if (CountContainer.getCurrentState() === 0) {
+    // do soemthing  .... 
+  }
 }

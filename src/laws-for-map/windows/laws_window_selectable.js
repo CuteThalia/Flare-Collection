@@ -71,7 +71,6 @@ class LawsWindowSelectable extends FlareWindowSelecatble {
 
 
   _getlawsForMap() {
-    console.log(LawsForMap.getLawsForMap());
     this._lawsForMap = LawsForMap.getLawsForMap();
   }
 }

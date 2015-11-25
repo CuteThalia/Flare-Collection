@@ -119,12 +119,10 @@ class ProcessBrokenLaw {
    */
   checkForGoldBeforePunish(storeMessage) {
     if (this.getBrokenLawObject().punishment === 'gold') {
-          console.log('hello');
       if ($gameParty._gold === 0) {
         if (!storeMessage) {
           $gameMessage.add('Party has no gold to take.');
         } else {
-          console.log('hello');
           StoreNoGoldMessage.createStorage();
           StoreNoGoldMessage.setMessage('Party has no gold to take.');
         }

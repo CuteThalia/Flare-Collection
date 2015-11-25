@@ -44,7 +44,6 @@ class AddLawsForMap {
 
     var arrayOfRandomLaws = [];
     var randomLawsNumber  = parseInt(OptionHandler.getOptions().number_of_laws_for_map);
-    console.log(randomLawsNumber)
 
     // Get unique laws.
     noteData = ladashArrayUnique(noteData, function(lawInfo) {

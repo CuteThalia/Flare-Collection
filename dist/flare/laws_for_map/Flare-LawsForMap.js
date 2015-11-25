@@ -3700,6 +3700,48 @@ var FlareCounter = (function () {
 module.exports = FlareCounter;
 
 },{}],93:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Create a ranom number
+ *
+ * Methods here are useful for creating random numbers.
+ */
+
+var FlareRandomNumber = (function () {
+  function FlareRandomNumber() {
+    _classCallCheck(this, FlareRandomNumber);
+  }
+
+  _createClass(FlareRandomNumber, null, [{
+    key: "minMax",
+
+    /**
+     * Create random number between nim and max.
+     *
+     * @param Int min
+     * @param Int max
+     * @return int
+     */
+    value: function minMax(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  }]);
+
+  return FlareRandomNumber;
+})();
+
+module.exports = FlareRandomNumber = FlareRandomNumber;
+
+},{}],94:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3764,7 +3806,7 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3828,7 +3870,7 @@ var FlareWindowSelectable = (function (_Window_Selectable) {
 
 module.exports = FlareWindowSelectable = FlareWindowSelectable;
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -3905,7 +3947,6 @@ var AddLawsForMap = (function () {
 
       var arrayOfRandomLaws = [];
       var randomLawsNumber = parseInt(_option_handler2.default.getOptions().number_of_laws_for_map);
-      console.log(randomLawsNumber);
 
       // Get unique laws.
       noteData = (0, _uniq2.default)(noteData, function (lawInfo) {
@@ -3978,7 +4019,7 @@ var AddLawsForMap = (function () {
 
 module.exports = AddLawsForMap;
 
-},{"./law_storage/laws_for_map":99,"./options/option_handler":101,"./punishment_storage/punishments":102,"lodash/array/uniq":2,"lodash/lang/clone":64,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],96:[function(require,module,exports){
+},{"./law_storage/laws_for_map":101,"./options/option_handler":103,"./punishment_storage/punishments":104,"lodash/array/uniq":2,"lodash/lang/clone":64,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],97:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4143,7 +4184,148 @@ _option_handler2.default.createOptionsStorage();
 // Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;
 
-},{"./law_storage/laws_for_map":99,"./options/option_handler":101}],97:[function(require,module,exports){
+},{"./law_storage/laws_for_map":101,"./options/option_handler":103}],98:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _reward_storage = require('./reward_storage/reward_storage');
+
+var _reward_storage2 = _interopRequireDefault(_reward_storage);
+
+var _optionParser = require('rmmv-mrp-core/option-parser');
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _flare_random_number = require('../flare_random_number');
+
+var _flare_random_number2 = _interopRequireDefault(_flare_random_number);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GatherReward = (function () {
+  function GatherReward() {
+    _classCallCheck(this, GatherReward);
+
+    _reward_storage2.default.createContainer();
+    this._itemIdContainer = [];
+  }
+
+  _createClass(GatherReward, [{
+    key: 'processPotentialRewards',
+    value: function processPotentialRewards() {
+      var rewardData = (0, _optionParser.extractAllOfType)($dataMap.note, 'lawReward');
+      rewardData = rewardData[0];
+
+      // Collects things we can give phyiscally to the player
+      this._storeReward(rewardData.a, $dataArmors, 'armors');
+      this._storeReward(rewardData.w, $dataWeapons, 'weapons');
+      this._storeReward(rewardData.i, $dataItems, 'items');
+
+      if (this._getObjectForOtherRewards(rewardData.xp, 'xp') !== false) {
+        _reward_storage2.default.setToStorage(this._getObjectForOtherRewards(rewardData.xp, 'xp'));
+      }
+
+      if (this._getObjectForOtherRewards(rewardData.gold, 'gold') !== false) {
+        _reward_storage2.default.setToStorage(this._getObjectForOtherRewards(rewardData.gold, 'gold'));
+      }
+
+      console.log(_reward_storage2.default.getContainer());
+    }
+  }, {
+    key: '_getObjectForOtherRewards',
+    value: function _getObjectForOtherRewards(data, key) {
+      var otherTypesOfRewards = {};
+
+      if (!(0, _isUndefined2.default)(data)) {
+        if (isNaN(data)) {
+          data = data.split('~');
+          var randomAmount = _flare_random_number2.default.minMax(parseInt(data[0]), parseInt(data[1]));
+          otherTypesOfRewards[key] = randomAmount;
+
+          return otherTypesOfRewards;
+        } else {
+          otherTypesOfRewards[key] = data;
+          return otherTypesOfRewards;
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: '_storeReward',
+    value: function _storeReward(rewardData, dataObject, key) {
+      var object = {};
+      if (!(0, _isUndefined2.default)(rewardData)) {
+        if (this._doesItemIdExist(rewardData, dataObject)) {
+          // Store everything ...
+          if (this._itemIdContainer.length > 0) {
+            if (this._itemIdContainer.length === 1) {
+              object[key] = this._itemIdContainer[0];
+            } else {
+              object[key] = this._itemIdContainer;
+            }
+
+            _reward_storage2.default.setToStorage(object);
+            this._itemIdContainer = [];
+          } else {
+            object[key] = rewardData;
+            _reward_storage2.default.setToStorage(object);
+          }
+        }
+      }
+    }
+  }, {
+    key: '_doesItemIdExist',
+    value: function _doesItemIdExist(itemId, dataObject) {
+      var ids = [];
+      var found = false;
+
+      // Does the item contain more then one item id.
+      if (isNaN(itemId) && itemId.indexOf(',') !== -1) {
+        ids = itemId.split(',');
+      }
+
+      // Does the player want randomized?
+      if (isNaN(itemId) && itemId.indexOf('~') !== -1) {
+        itemId = itemId.split('~');
+        ids.push(_flare_random_number2.default.minMax(parseInt(itemId[0]), parseInt(itemId[1])));
+      }
+
+      if (ids.length > 0) {
+        for (var i = 0; i < ids.length; i++) {
+          for (var j = 1; j < dataObject.length; j++) {
+            if (dataObject[j] !== null && j < 2999 && dataObject[j].id === parseInt(ids[i])) {
+              this._itemIdContainer.push(dataObject[j].id);
+            }
+          }
+        }
+
+        if (this._itemIdContainer.length > 0) {
+          return true;
+        }
+      } else {
+        for (var i = 1; i < dataObject.length; i++) {
+          if (dataObject[i] !== null && i < 2999 && dataObject[i].id === itemId) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+  }]);
+
+  return GatherReward;
+})();
+
+module.exports = GatherReward;
+
+},{"../flare_random_number":93,"./reward_storage/reward_storage":105,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],99:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4212,7 +4394,7 @@ var StoreBrokenLawObject = (function () {
 
 module.exports = StoreBrokenLawObject;
 
-},{}],98:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4309,7 +4491,6 @@ var ProcessBrokenLaw = (function () {
   }, {
     key: 'getBrokenLawObject',
     value: function getBrokenLawObject() {
-      console.log('asdasdas', _store_broken_law_object2.default);
       _store_broken_law_object2.default.emptyContainer();
 
       for (var i = 0; i < _laws_for_map2.default.getLawsForMap().length; i++) {
@@ -4377,12 +4558,10 @@ var ProcessBrokenLaw = (function () {
     key: 'checkForGoldBeforePunish',
     value: function checkForGoldBeforePunish(storeMessage) {
       if (this.getBrokenLawObject().punishment === 'gold') {
-        console.log('hello');
         if ($gameParty._gold === 0) {
           if (!storeMessage) {
             $gameMessage.add('Party has no gold to take.');
           } else {
-            console.log('hello');
             _store_no_gold_message2.default.createStorage();
             _store_no_gold_message2.default.setMessage('Party has no gold to take.');
           }
@@ -4472,7 +4651,7 @@ module.exports = ProcessBrokenLaw;
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
 
-},{"../law_storage/laws_for_map":99,"../law_storage/store_no_gold_message":100,"../options/option_handler":101,"../scenes/flare_law_was_broken_window_scene":103,"./helper/store_broken_law_object":97,"lodash/collection/findWhere":4,"underscore.string/slugify":88}],99:[function(require,module,exports){
+},{"../law_storage/laws_for_map":101,"../law_storage/store_no_gold_message":102,"../options/option_handler":103,"../scenes/flare_law_was_broken_window_scene":106,"./helper/store_broken_law_object":99,"lodash/collection/findWhere":4,"underscore.string/slugify":88}],101:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4588,7 +4767,7 @@ var LawsForMap = (function () {
 
 module.exports = LawsForMap;
 
-},{"lodash/collection/findWhere":4,"lodash/lang/isUndefined":71,"lodash/string/capitalize":75,"lodash/string/trim":76,"underscore.string/humanize":87}],100:[function(require,module,exports){
+},{"lodash/collection/findWhere":4,"lodash/lang/isUndefined":71,"lodash/string/capitalize":75,"lodash/string/trim":76,"underscore.string/humanize":87}],102:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4648,7 +4827,7 @@ var StoreNoGoldMessage = (function () {
 
 module.exports = StoreNoGoldMessage;
 
-},{}],101:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4704,7 +4883,7 @@ var OptionHandler = (function () {
 
 module.exports = OptionHandler;
 
-},{}],102:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4766,7 +4945,41 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{"lodash/collection/find":3}],103:[function(require,module,exports){
+},{"lodash/collection/find":3}],105:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var RewardStorage = (function () {
+  function RewardStorage() {
+    _classCallCheck(this, RewardStorage);
+  }
+
+  _createClass(RewardStorage, null, [{
+    key: "createContainer",
+    value: function createContainer() {
+      this._container = [];
+    }
+  }, {
+    key: "setToStorage",
+    value: function setToStorage(item) {
+      this._container.push(item);
+    }
+  }, {
+    key: "getContainer",
+    value: function getContainer() {
+      return this._container;
+    }
+  }]);
+
+  return RewardStorage;
+})();
+
+module.exports = RewardStorage;
+
+},{}],106:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4837,7 +5050,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":112}],104:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":115}],107:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4916,7 +5129,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../../scene_window_container":115,"../windows/details/laws_details.js":113,"../windows/laws_window_selectable":114}],105:[function(require,module,exports){
+},{"../../scene_window_container":118,"../windows/details/laws_details.js":116,"../windows/laws_window_selectable":117}],108:[function(require,module,exports){
 'use strict';
 
 var _flare_counter = require('../../flare_counter');
@@ -4927,34 +5140,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // We want our own custom message.
 BattleManager.processDefeat = function () {
-    this.customDisplayMessage();
-    this.playDefeatMe();
-    if (this._canLose) {
-        this.replayBgmAndBgs();
-    } else {
-        AudioManager.stopBgm();
-    }
-    this.endBattle(2);
+  this.customDisplayMessage();
+  this.playDefeatMe();
+  if (this._canLose) {
+    this.replayBgmAndBgs();
+  } else {
+    AudioManager.stopBgm();
+  }
+  this.endBattle(2);
 }; /**
     * @namespace FlareLawsForMap.
     */
 
 BattleManager.customDisplayMessage = function () {
-    $gameMessage.add('The whole party was defeated ...');
+  $gameMessage.add('The whole party was defeated ...');
 };
 
 var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
 BattleManager.gainRewards = function () {
-    oldBattleManagerGainRewardsMethod.call(this);
+  oldBattleManagerGainRewardsMethod.call(this);
 };
 
 var oldBattleManagerDisplayRewards = BattleManager.gainRewards;
 BattleManager.displayRewards = function () {
-    oldBattleManagerDisplayRewards.call(this);
-    console.log(_flare_counter2.default.getCurrentState());
+  oldBattleManagerDisplayRewards.call(this);
+  if (_flare_counter2.default.getCurrentState() === 0) {
+    // do soemthing  ....
+  }
 };
 
-},{"../../flare_counter":92}],106:[function(require,module,exports){
+},{"../../flare_counter":92}],109:[function(require,module,exports){
 'use strict';
 
 var _process_broken_law = require('../law_handler/process_broken_law');
@@ -5013,7 +5228,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
     _flare_counter2.default.addValue(1);
   } else if (target instanceof Game_Enemy && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() || subject instanceof Game_Actor && target instanceof Game_Actor && processWhatShouldHappenOnHit.validatePlayerBrokeTheLaw() && $gameParty.inBattle()) {
     var brokenLawObject = processWhatShouldHappenOnHit.getBrokenLawObject();
-    console.log(brokenLawObject);
+
     // Punish the player for those that effect the enemy.
     $gameMessage.add("\\c[9]" + subject._name + "\\c[0]" + ' has \\c[14]broken a law\\c[0] prohibiting the use of: ' + "\\c[18]" + item.name + 's\\c[0]');
     $gameMessage.add("\\c[14] Punishment is: \\c[0]" + "\\c[20]" + brokenLawObject.punishment + "\\c[0] in the amount of: " + "\\c[20]" + brokenLawObject.amount + "\\c[0]");
@@ -5031,28 +5246,37 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   }
 };
 
-},{"../../flare_counter":92,"../law_handler/process_broken_law":98}],107:[function(require,module,exports){
+},{"../../flare_counter":92,"../law_handler/process_broken_law":100}],110:[function(require,module,exports){
 'use strict';
 
-var _add_laws_for_map = require('../add_laws_for_map.js');
+var _add_laws_for_map = require('../add_laws_for_map');
 
 var _add_laws_for_map2 = _interopRequireDefault(_add_laws_for_map);
 
+var _gather_reward = require('../gather_reward');
+
+var _gather_reward2 = _interopRequireDefault(_gather_reward);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var oldGameMapPrototypeSetupMethod = Game_Map.prototype.setup; /**
-                                                                * @namespace FlareLawsForMap.
-                                                                */
+/**
+ * @namespace FlareLawsForMap.
+ */
 
+var oldGameMapPrototypeSetupMethod = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function (mapId) {
   oldGameMapPrototypeSetupMethod.call(this, mapId);
 
   // Process laws for map.
   var flarAddLawsForMap = new _add_laws_for_map2.default();
   flarAddLawsForMap.grabMapInformation();
+
+  //Gather reward data.
+  var gatherReward = new _gather_reward2.default();
+  gatherReward.processPotentialRewards();
 };
 
-},{"../add_laws_for_map.js":95}],108:[function(require,module,exports){
+},{"../add_laws_for_map":96,"../gather_reward":98}],111:[function(require,module,exports){
 'use strict';
 
 var _flare_law_was_broken_window_scene = require('../scenes/flare_law_was_broken_window_scene');
@@ -5080,7 +5304,7 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../law_storage/laws_for_map":99,"../scenes/flare_law_was_broken_window_scene":103}],109:[function(require,module,exports){
+},{"../law_storage/laws_for_map":101,"../scenes/flare_law_was_broken_window_scene":106}],112:[function(require,module,exports){
 'use strict';
 
 var _flare_law_window_scene = require('../scenes/flare_law_window_scene');
@@ -5102,7 +5326,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(_flare_law_window_scene2.default);
 };
 
-},{"../scenes/flare_law_window_scene":104}],110:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":107}],113:[function(require,module,exports){
 'use strict';
 
 var _laws_for_map = require('../law_storage/laws_for_map');
@@ -5141,7 +5365,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{"../law_storage/laws_for_map":99}],111:[function(require,module,exports){
+},{"../law_storage/laws_for_map":101}],114:[function(require,module,exports){
 'use strict';
 
 /**
@@ -5154,7 +5378,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],112:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5256,7 +5480,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":93,"../../law_handler/helper/store_broken_law_object":97,"../../law_storage/store_no_gold_message":100,"lodash/lang/isUndefined":71}],113:[function(require,module,exports){
+},{"../../../flare_window_base":94,"../../law_handler/helper/store_broken_law_object":99,"../../law_storage/store_no_gold_message":102,"lodash/lang/isUndefined":71}],116:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5325,7 +5549,7 @@ var LawDetails = (function (_FlareWindowBase) {
 
 module.exports = LawDetails;
 
-},{"../../../flare_window_base":93,"underscore.string/wrap":91}],114:[function(require,module,exports){
+},{"../../../flare_window_base":94,"underscore.string/wrap":91}],117:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5434,7 +5658,6 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
   }, {
     key: '_getlawsForMap',
     value: function _getlawsForMap() {
-      console.log(_laws_for_map2.default.getLawsForMap());
       this._lawsForMap = _laws_for_map2.default.getLawsForMap();
     }
   }]);
@@ -5444,7 +5667,7 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
 
 module.exports = LawsWindowSelectable;
 
-},{"../../flare_window_selectable":94,"../../scene_window_container":115,"../law_storage/laws_for_map":99}],115:[function(require,module,exports){
+},{"../../flare_window_selectable":95,"../../scene_window_container":118,"../law_storage/laws_for_map":101}],118:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5557,4 +5780,4 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}]},{},[110,96,109,111,108,106,107,105]);
+},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}]},{},[113,97,112,114,111,109,110,108]);

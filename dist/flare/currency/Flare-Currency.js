@@ -6511,7 +6511,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
             this.drawTextEx('You gained: ' + amountToGain.amount + ' of \\i[' + amountToGain.icon + ']' + amountToGain.name, 0, window._baseYForText, 500, 'left');
             BattleManager._gainCurrencies.shift();
           } else {
-            console.log('hmmm');
+            'hmmm');
             this.drawTextEx("You gained: " + amountToGain.amount + " of " + ' \\i[' + amountToGain.icon + '] ' + amountToGain.name, 0, window._baseYForText, 500, 'left');
           }
 
