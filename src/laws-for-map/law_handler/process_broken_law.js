@@ -8,6 +8,7 @@ import FlareLawWasBrokenWindowScene from '../scenes/flare_law_was_broken_window_
 import OptionHandler                from '../options/option_handler';
 import StoreNoGoldMessage           from '../law_storage/store_no_gold_message';
 import slugify                      from 'underscore.string/slugify';
+import BrokenLawObject              from './helper/store_broken_law_object';
 
 /**
  * When a player breaks a law, we need to punish the actor.
@@ -57,14 +58,30 @@ class ProcessBrokenLaw {
    * @return object lawObject
    */
   getBrokenLawObject() {
+    BrokenLawObject.emptyContainer();
+
     for (var i = 0; i < LawsForMap.getLawsForMap().length; i ++) {
-      if (LawsForMap.getLawsForMap()[i].cantUse.indexOf(this._nameOfAction) !== -1) {
+      var cantUse = LawsForMap.getLawsForMap()[i].cantUse
 
-        window._brokenLawObject = LawsForMap.getLawsForMap()[i];
-        window._brokenLawObject.subject    = this._actorWhobrokeLaw._name;
-        window._brokenLawObject.actionUsed = this._nameOfAction;
+      if (cantUse.indexOf(',') === -1) {
+        if (slugify(cantUse) === this._nameOfAction) {
+            BrokenLawObject.setObject(LawsForMap.getLawsForMap()[i]);
+            BrokenLawObject.setKeyValue('subject', this._actorWhobrokeLaw._name);
+            BrokenLawObject.setKeyValue('actionUsed', this._nameOfAction);
 
-        return LawsForMap.getLawsForMap()[i];
+            return LawsForMap.getLawsForMap()[i];
+        }
+      } else {
+        cantUse = cantUse.split(',');
+        for (var j = 0; j < cantUse.length; j++) {
+          if (slugify([cantUse[j]]) === this._nameOfAction) {
+            BrokenLawObject.setObject(LawsForMap.getLawsForMap()[i]);
+            BrokenLawObject.setKeyValue('subject', this._actorWhobrokeLaw._name);
+            BrokenLawObject.setKeyValue('actionUsed', this._nameOfAction);
+
+            return LawsForMap.getLawsForMap()[i];
+          }
+        }
       }
     }
   }

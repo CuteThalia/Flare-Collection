@@ -5,6 +5,7 @@
 import FlareWindowBase     from '../../../flare_window_base';
 import StoreNoGoldMessage  from '../../law_storage/store_no_gold_message';
 import lodashIsUndefined   from 'lodash/lang/isUndefined';
+import BrokenLawObject     from '../../law_handler/helper/store_broken_law_object';
 
 /**
  * Creates a window for displaying broken laws on map.
@@ -18,7 +19,7 @@ class BrokenLawWindow extends FlareWindowBase {
 
   initialize() {
     super.initialize(this.tryAndCenter() - 40, this.tryAndCenter() - 20, this.windowWidth(), this.windowHeight());
-    this._law = window._brokenLawObject;
+    this._law = BrokenLawObject.getLawObject();;
   }
 
   tryAndCenter() {
