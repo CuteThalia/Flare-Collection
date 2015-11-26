@@ -39,7 +39,6 @@ class LawDetails extends FlareWindowBase {
     this.flareDrawTextEx("\\\c[2]----------------------------------------\\\c[0]", 0 ,120)
     this.flareDrawTextEx("\\\c[16]punishment\\\c[0]: " + lawObject.punishment, 0, 140);
     this.flareDrawTextEx("\\\c[16]amount lost when violated\\\c[0]: " + lawObject.amount, 0, 170);
-
   }
 }
 

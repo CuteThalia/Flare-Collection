@@ -13,13 +13,13 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
   }
 
   initialize() {
-    var width  = (Graphics.boxWidth / 2) + 70;
-    var height = Graphics.boxHeight / 2;
+    var width  = (Graphics.boxWidth / 2) - 70;
+    var height = 150;
     var data   = new ShowRewardData();
 
     this._rewards = [];
 
-    super.initialize(width - 140, Graphics.boxHeight / 2, width, height);
+    super.initialize(width - 140, (Graphics.boxHeight / 2) + 80, width, height);
     data.processForWindow();
 
     if (data.getWeaponNames().length > 0) {
