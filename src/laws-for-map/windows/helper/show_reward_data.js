@@ -11,7 +11,7 @@ class ShowRewardData {
     this._armors      = [];
     this._goldAmount  = 0;
     this._xpAmount    = 0;
-   }
+  }
 
   processForWindow() {
     for (var i = 0; i < this._rewardData.length; i++) {
@@ -25,11 +25,11 @@ class ShowRewardData {
     }
 
     if (!lodashIsUndefined(rewardDataObject.items)){
-      this._storeInArray('item', $dataItems, rewardDataObject.armors);
+      this._storeInArray('item', $dataItems, rewardDataObject.items);
     }
 
     if (!lodashIsUndefined(rewardDataObject.armors)){
-      this._storeInArray('armor', $dataArmors, rewardDataObject.items);
+      this._storeInArray('armor', $dataArmors, rewardDataObject.armors);
     }
 
     if (!lodashIsUndefined(rewardDataObject.gold)){
@@ -39,72 +39,78 @@ class ShowRewardData {
     if (!lodashIsUndefined(rewardDataObject.xp)){
       this._xpAmount = rewardDataObject.xp;
     }
-   }
+  }
 
-   _storeInArray(name, data, rewardData) {
-
+  _storeInArray(name, data, rewardData) {
     switch(name) {
       case 'weapon':
-        if (this._getRewardNames(data, rewardData) !== false) {
-          this._weapons = this._getRewardNames(data, rewardData);
+        if (this._getRewardData(data, rewardData) !== false) {
+          this._weapons = this._getRewardData(data, rewardData);
         }
         break;
       case 'armor':
-        if (this._getRewardNames(data, rewardData) !== false) {
-          this._armors = this._getRewardNames(data, rewardData);
+        if (this._getRewardData(data, rewardData) !== false) {
+          this._armors = this._getRewardData(data, rewardData);
         }
         break;
       case 'item':
-        if (this._getRewardNames(data, rewardData) !== false) {
-          this._items = this._getRewardNames(data, rewardData);
+        if (this._getRewardData(data, rewardData) !== false) {
+          this._items = this._getRewardData(data, rewardData);
         }
         break;
     }
-   }
+  }
 
-   _getRewardNames(data, rewardData) {
-     var rewardNames = [];
-     console.log(rewardData);
-     for (var i = 1; i < data.length; i++) {
-       if (Array.isArray(rewardData)) {
-         for (var j = 0; j < rewardData.length; j++) {
-           if (data[i] !== null && i < 2999 && data[i].id === rewardData[j]) {
-             rewardNames.push(data[i]);
-           }
-         }
-       } else {
-         if (data[i] !== null && i < 2999 && data[i].id === rewardData) {
-           rewardNames.push(data[i]);
-         }
-       }
-     }
+  _getRewardData(data, rewardData) {
+    var rewardDataContainer = [];
 
-     if (rewardNames.length > 0) {
-       return rewardNames;
-     }
+    for (var i = 1; i < data.length; i++) {
+      // Are we an array?
+      if (Array.isArray(rewardData)) {
+        // Walk through.
+        for (var j = 0; j < rewardData.length; j++) {
+          // Push each piece.
+          if (data[i] !== null && i < 2999 && data[i].id === rewardData[j]) {
+            rewardDataContainer.push(data[i]);
+          }
+        }
+      // Not an array?
+      } else {
+        // Compare and push.
+        if (data[i] !== null && i < 2999 && data[i].id === rewardData) {
+          rewardDataContainer.push(data[i]);
+        }
+      }
+    }
 
-     return false;
-   }
+    // Anything at all? Return it.
+    if (rewardDataContainer.length > 0) {
+      return rewardDataContainer;
+    }
 
-   getWeaponNames() {
-     return this._weapons;
-   }
+    // Else default is a false.
+    return false;
+  }
 
-   getArmorNames() {
-     return this._armors;
-   }
+  getWeaponNames() {
+    return this._weapons;
+  }
 
-   getItemNames() {
-     return this._items;
-   }
+  getArmorNames() {
+    return this._armors;
+  }
 
-   getGoldAmount() {
-     return this._goldAmount;
-   }
+  getItemNames() {
+    return this._items;
+  }
 
-   getXpAmount() {
-     return this._xpAmount;
-   }
+  getGoldAmount() {
+    return this._goldAmount;
+  }
+
+  getXpAmount() {
+    return this._xpAmount;
+  }
 }
 
 module.exports = ShowRewardData;

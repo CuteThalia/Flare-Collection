@@ -5063,9 +5063,9 @@ var _laws_details = require('../windows/details/laws_details');
 
 var _laws_details2 = _interopRequireDefault(_laws_details);
 
-var _items_for_laws = require('../windows/details/items_for_laws');
+var _items_for_laws_title = require('../windows/details/items_for_laws_title');
 
-var _items_for_laws2 = _interopRequireDefault(_items_for_laws);
+var _items_for_laws_title2 = _interopRequireDefault(_items_for_laws_title);
 
 var _scene_window_container = require('../../scene_window_container');
 
@@ -5118,13 +5118,13 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
       this._flareLawWindow = new _laws_window_selectable2.default();
       this._flareLawDetails = new _laws_details2.default();
-      this._flareLawItems = new _items_for_laws2.default();
+      this._flareLawItemsTitle = new _items_for_laws_title2.default();
 
       _scene_window_container2.default.setWindowToContainer('law-details', this._flareLawDetails);
 
       this.addWindow(this._flareLawDetails);
       this.addWindow(this._flareLawWindow);
-      this.addWindow(this._flareLawItems);
+      this.addWindow(this._flareLawItemsTitle);
     }
   }]);
 
@@ -5133,7 +5133,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../../scene_window_container":120,"../windows/details/items_for_laws":116,"../windows/details/laws_details":117,"../windows/laws_window_selectable":119}],108:[function(require,module,exports){
+},{"../../scene_window_container":120,"../windows/details/items_for_laws_title":116,"../windows/details/laws_details":117,"../windows/laws_window_selectable":119}],108:[function(require,module,exports){
 'use strict';
 
 var _flare_counter = require('../../flare_counter');
@@ -5513,48 +5513,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @namespace FlareLawsForMap.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
-var ItemsForLaw = (function (_FlareWindowSelectabl) {
-  _inherits(ItemsForLaw, _FlareWindowSelectabl);
+var ItemsForLawTitle = (function (_FlareWindowBase) {
+  _inherits(ItemsForLawTitle, _FlareWindowBase);
 
-  function ItemsForLaw() {
-    _classCallCheck(this, ItemsForLaw);
+  function ItemsForLawTitle() {
+    _classCallCheck(this, ItemsForLawTitle);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemsForLaw).call(this));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemsForLawTitle).call(this));
   }
 
-  _createClass(ItemsForLaw, [{
+  _createClass(ItemsForLawTitle, [{
     key: 'initialize',
     value: function initialize() {
       var width = Graphics.boxWidth / 2 + 70;
-      var height = Graphics.boxHeight / 2;
-      var data = new _show_reward_data2.default();
-
-      this._rewards = [];
-
-      _get(Object.getPrototypeOf(ItemsForLaw.prototype), 'initialize', this).call(this, width - 140, Graphics.boxHeight / 2, width, height);
-      data.processForWindow();
-
-      if (data.getWeaponNames().length > 0) {
-        this._rewards.push(data.getWeaponNames());
-      }
-
-      if (data.getArmorNames().length > 0) {
-        this._rewards.push(data.getArmorNames());
-      }
-
-      if (data.getItemNames().length > 0) {
-        this._rewards.push(data.getItemNames());
-      }
-
-      if (data.getGoldAmount().length > 0) {
-        this._rewards.push(data.getGoldAmount());
-      }
-
-      if (data.getXpAmount().length > 0) {
-        this._rewards.push(data.getXpAmount());
-      }
-
-      console.log(this._rewards);
+      var height = 100;
+      _get(Object.getPrototypeOf(ItemsForLawTitle.prototype), 'initialize', this).call(this, width - 140, Graphics.boxHeight / 2 - 80, width, height);
       this.refresh();
     }
   }, {
@@ -5572,14 +5545,13 @@ var ItemsForLaw = (function (_FlareWindowSelectabl) {
       text = (0, _wrap2.default)(text);
 
       this.flareDrawTextEx(text, 0, 10);
-      this.flareDrawTextEx('\\\c[2]----------------------------------------\\\c[0]', 0, 50);
     }
   }]);
 
-  return ItemsForLaw;
+  return ItemsForLawTitle;
 })(_flare_window_base2.default);
 
-module.exports = ItemsForLaw;
+module.exports = ItemsForLawTitle;
 
 },{"../../../flare_window_base":94,"../helper/show_reward_data":118,"underscore.string/wrap":91}],117:[function(require,module,exports){
 'use strict';
@@ -5595,6 +5567,10 @@ var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 var _wrap = require('underscore.string/wrap');
 
 var _wrap2 = _interopRequireDefault(_wrap);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5619,7 +5595,7 @@ var LawDetails = (function (_FlareWindowBase) {
     key: 'initialize',
     value: function initialize() {
       var width = Graphics.boxWidth / 2 + 70;
-      var height = Graphics.boxHeight / 2;
+      var height = Graphics.boxHeight / 2 - 80;
 
       _get(Object.getPrototypeOf(LawDetails.prototype), 'initialize', this).call(this, width - 140, 0, width, height);
     }
@@ -5633,14 +5609,19 @@ var LawDetails = (function (_FlareWindowBase) {
     key: 'drawLawInfo',
     value: function drawLawInfo(lawObject) {
       this.contents.fontSize = 18;
+
+      if ((0, _isUndefined2.default)(lawObject.description)) {
+        throw new Error('All Laws MUST have a description, please add the description: attribute to the law tag.');
+      }
+
       var contents = lawObject.description.replace(/\\/g, '\\\\\\');
       contents = (0, _wrap2.default)(contents, { width: 48 });
 
       this.flareDrawTextEx(contents, 0, 0);
 
-      this.flareDrawTextEx("\\\c[2]----------------------------------------\\\c[0]", 0, 150);
-      this.flareDrawTextEx("\\\c[16]punishment\\\c[0]: " + lawObject.punishment, 0, 170);
-      this.flareDrawTextEx("\\\c[16]amount lost when violated\\\c[0]: " + lawObject.amount, 0, 190);
+      this.flareDrawTextEx("\\\c[2]----------------------------------------\\\c[0]", 0, 120);
+      this.flareDrawTextEx("\\\c[16]punishment\\\c[0]: " + lawObject.punishment, 0, 140);
+      this.flareDrawTextEx("\\\c[16]amount lost when violated\\\c[0]: " + lawObject.amount, 0, 170);
     }
   }]);
 
@@ -5649,7 +5630,7 @@ var LawDetails = (function (_FlareWindowBase) {
 
 module.exports = LawDetails;
 
-},{"../../../flare_window_base":94,"underscore.string/wrap":91}],118:[function(require,module,exports){
+},{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],118:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5694,11 +5675,11 @@ var ShowRewardData = (function () {
       }
 
       if (!(0, _isUndefined2.default)(rewardDataObject.items)) {
-        this._storeInArray('item', $dataItems, rewardDataObject.armors);
+        this._storeInArray('item', $dataItems, rewardDataObject.items);
       }
 
       if (!(0, _isUndefined2.default)(rewardDataObject.armors)) {
-        this._storeInArray('armor', $dataArmors, rewardDataObject.items);
+        this._storeInArray('armor', $dataArmors, rewardDataObject.armors);
       }
 
       if (!(0, _isUndefined2.default)(rewardDataObject.gold)) {
@@ -5712,48 +5693,54 @@ var ShowRewardData = (function () {
   }, {
     key: '_storeInArray',
     value: function _storeInArray(name, data, rewardData) {
-
       switch (name) {
         case 'weapon':
-          if (this._getRewardNames(data, rewardData) !== false) {
-            this._weapons = this._getRewardNames(data, rewardData);
+          if (this._getRewardData(data, rewardData) !== false) {
+            this._weapons = this._getRewardData(data, rewardData);
           }
           break;
         case 'armor':
-          if (this._getRewardNames(data, rewardData) !== false) {
-            this._armors = this._getRewardNames(data, rewardData);
+          if (this._getRewardData(data, rewardData) !== false) {
+            this._armors = this._getRewardData(data, rewardData);
           }
           break;
         case 'item':
-          if (this._getRewardNames(data, rewardData) !== false) {
-            this._items = this._getRewardNames(data, rewardData);
+          if (this._getRewardData(data, rewardData) !== false) {
+            this._items = this._getRewardData(data, rewardData);
           }
           break;
       }
     }
   }, {
-    key: '_getRewardNames',
-    value: function _getRewardNames(data, rewardData) {
-      var rewardNames = [];
-      console.log(rewardData);
+    key: '_getRewardData',
+    value: function _getRewardData(data, rewardData) {
+      var rewardDataContainer = [];
+
       for (var i = 1; i < data.length; i++) {
+        // Are we an array?
         if (Array.isArray(rewardData)) {
+          // Walk through.
           for (var j = 0; j < rewardData.length; j++) {
+            // Push each piece.
             if (data[i] !== null && i < 2999 && data[i].id === rewardData[j]) {
-              rewardNames.push(data[i]);
+              rewardDataContainer.push(data[i]);
             }
           }
+          // Not an array?
         } else {
-          if (data[i] !== null && i < 2999 && data[i].id === rewardData) {
-            rewardNames.push(data[i]);
+            // Compare and push.
+            if (data[i] !== null && i < 2999 && data[i].id === rewardData) {
+              rewardDataContainer.push(data[i]);
+            }
           }
-        }
       }
 
-      if (rewardNames.length > 0) {
-        return rewardNames;
+      // Anything at all? Return it.
+      if (rewardDataContainer.length > 0) {
+        return rewardDataContainer;
       }
 
+      // Else default is a false.
       return false;
     }
   }, {
