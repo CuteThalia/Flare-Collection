@@ -3,7 +3,8 @@
  */
 
 import FlareLawWindow       from '../windows/laws_window_selectable';
-import FlareLawDetails      from '../windows/details/laws_details.js';
+import FlareLawDetails      from '../windows/details/laws_details';
+import FlareItemsForLaw     from '../windows/details/items_for_laws';
 import SceneWindowContainer from '../../scene_window_container';
 
 
@@ -35,11 +36,13 @@ class FlareLawWindowScene extends Scene_MenuBase {
 
     this._flareLawWindow  = new FlareLawWindow();
     this._flareLawDetails = new FlareLawDetails();
+    this._flareLawItems   = new FlareItemsForLaw();
 
     SceneWindowContainer.setWindowToContainer('law-details', this._flareLawDetails);
 
     this.addWindow(this._flareLawDetails)
     this.addWindow(this._flareLawWindow);
+    this.addWindow(this._flareLawItems)
   }
 }
 
