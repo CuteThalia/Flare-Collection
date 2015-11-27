@@ -1,5 +1,5 @@
-import RewardStorage      from '../../reward_storage/reward_storage';
-import lodashIsUndefined  from 'lodash/lang/isUndefined';
+import RewardStorage             from '../../reward_storage/reward_storage';
+import lodashIsUndefined         from 'lodash/lang/isUndefined';
 
 class ShowRewardData {
 

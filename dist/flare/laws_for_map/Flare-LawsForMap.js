@@ -5067,9 +5067,17 @@ var _items_for_laws_title = require('../windows/details/items_for_laws_title');
 
 var _items_for_laws_title2 = _interopRequireDefault(_items_for_laws_title);
 
+var _items_for_laws_selectable = require('../windows/details/items_for_laws_selectable');
+
+var _items_for_laws_selectable2 = _interopRequireDefault(_items_for_laws_selectable);
+
 var _scene_window_container = require('../../scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
+
+var _selectable_window_container = require('../../selectable_window_container');
+
+var _selectable_window_container2 = _interopRequireDefault(_selectable_window_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5106,9 +5114,11 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
     value: function update() {
       _get(Object.getPrototypeOf(FlareLawWindowScene.prototype), 'update', this).call(this, this);
 
-      if (Input.isTriggered("cancel")) {
-        this._flareLawWindow.close();
-        this.popScene();
+      if (_selectable_window_container2.default.getKeyValue('turnOffSceneInputListener') !== true) {
+        if (Input.isTriggered("cancel")) {
+          this._flareLawWindow.close();
+          this.popScene();
+        }
       }
     }
   }, {
@@ -5119,12 +5129,14 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
       this._flareLawWindow = new _laws_window_selectable2.default();
       this._flareLawDetails = new _laws_details2.default();
       this._flareLawItemsTitle = new _items_for_laws_title2.default();
+      this._flareLawItemsSelectable = new _items_for_laws_selectable2.default();
 
       _scene_window_container2.default.setWindowToContainer('law-details', this._flareLawDetails);
 
       this.addWindow(this._flareLawDetails);
       this.addWindow(this._flareLawWindow);
       this.addWindow(this._flareLawItemsTitle);
+      this.addWindow(this._flareLawItemsSelectable);
     }
   }]);
 
@@ -5133,7 +5145,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../../scene_window_container":120,"../windows/details/items_for_laws_title":116,"../windows/details/laws_details":117,"../windows/laws_window_selectable":119}],108:[function(require,module,exports){
+},{"../../scene_window_container":121,"../../selectable_window_container":122,"../windows/details/items_for_laws_selectable":116,"../windows/details/items_for_laws_title":117,"../windows/details/laws_details":118,"../windows/laws_window_selectable":120}],108:[function(require,module,exports){
 'use strict';
 
 var _flare_counter = require('../../flare_counter');
@@ -5491,6 +5503,165 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
+var _flare_window_selectable = require('../../../flare_window_selectable');
+
+var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
+
+var _wrap = require('underscore.string/wrap');
+
+var _wrap2 = _interopRequireDefault(_wrap);
+
+var _show_reward_data = require('../helper/show_reward_data');
+
+var _show_reward_data2 = _interopRequireDefault(_show_reward_data);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _selectable_window_container = require('../../../selectable_window_container');
+
+var _selectable_window_container2 = _interopRequireDefault(_selectable_window_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareLawsForMap.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
+  _inherits(ItemsForLawSelectable, _FlareWindowSelectabl);
+
+  function ItemsForLawSelectable() {
+    _classCallCheck(this, ItemsForLawSelectable);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemsForLawSelectable).call(this));
+  }
+
+  _createClass(ItemsForLawSelectable, [{
+    key: 'initialize',
+    value: function initialize() {
+      var width = Graphics.boxWidth / 2 - 70;
+      var height = 290;
+      var data = new _show_reward_data2.default();
+
+      this._rewards = [];
+
+      _get(Object.getPrototypeOf(ItemsForLawSelectable.prototype), 'initialize', this).call(this, width, Graphics.boxHeight / 2 + 20, width + 140, height);
+      data.processForWindow();
+
+      if (data.getWeaponNames().length > 0) {
+        this._rewards.push(data.getWeaponNames());
+      }
+
+      if (data.getArmorNames().length > 0) {
+        this._rewards.push(data.getArmorNames());
+      }
+
+      if (data.getItemNames().length > 0) {
+        this._rewards.push(data.getItemNames());
+      }
+
+      if (data.getGoldAmount().length > 0) {
+        this._rewards.push(data.getGoldAmount());
+      }
+
+      if (data.getXpAmount().length > 0) {
+        this._rewards.push(data.getXpAmount());
+      }
+
+      // flatten the array.
+      this._rewards = [].concat.apply([], this._rewards);
+
+      this.refresh();
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      _get(Object.getPrototypeOf(ItemsForLawSelectable.prototype), 'update', this).call(this);
+
+      if (Input.isTriggered("cancel")) {
+        _selectable_window_container2.default.setKeyValue('parentCursorIsMovable', true);
+        _selectable_window_container2.default.setKeyValue('cursorIsMovable', false);
+
+        this._cursorIsMovable = false;
+      }
+    }
+  }, {
+    key: 'isCursorMovable',
+    value: function isCursorMovable() {
+      if ((0, _isUndefined2.default)(_selectable_window_container2.default.getKeyValue('cursorIsMovable'))) {
+        return false;
+      } else {
+        return _selectable_window_container2.default.getKeyValue('cursorIsMovable');
+      }
+    }
+  }, {
+    key: 'maxItems',
+    value: function maxItems() {
+      return this._rewards.length;
+    }
+  }, {
+    key: 'itemHeight',
+    value: function itemHeight() {
+      return 105;
+    }
+  }, {
+    key: 'isCurrentItemEnabled',
+    value: function isCurrentItemEnabled() {
+      return this.isEnabled(this._rewards);
+    }
+  }, {
+    key: 'drawItem',
+    value: function drawItem(index) {
+      var reward = this._rewards[index];
+
+      if (!reward) {
+        return;
+      }
+
+      this.drawRewardToScreen(reward, index);
+    }
+  }, {
+    key: 'drawRewardToScreen',
+    value: function drawRewardToScreen(reward, index) {
+      var rectangle = this.itemRect(index);
+      this.contents.fontSize = 18;
+
+      if ((typeof reward === 'undefined' ? 'undefined' : _typeof(reward)) === 'object') {
+        this.drawIcon(reward.iconIndex, 10, rectangle.y + 20);
+        this.drawText(reward.name, 60, rectangle.y + 20);
+
+        if (!(0, _isUndefined2.default)(reward.belongsToCurrency)) {
+          this.flareDrawTextEx('\\\c[14]Belongs to currency\\\c[0]: ' + reward.belongsToCurrency, 10, rectangle.y + 60);
+          this.flareDrawTextEx('\\\c[14]And costs\\\c[0]: ' + reward.currencyCost, 10, rectangle.y + 80);
+        } else {
+          this.flareDrawTextEx('\\\c[14]Sold in shops for\\\c[0]: ' + reward.price, 10, rectangle.y + 60);
+        }
+      }
+
+      this.resetFontSettings();
+    }
+  }]);
+
+  return ItemsForLawSelectable;
+})(_flare_window_selectable2.default);
+
+module.exports = ItemsForLawSelectable;
+
+},{"../../../flare_window_selectable":95,"../../../selectable_window_container":122,"../helper/show_reward_data":119,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],117:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _flare_window_base = require('../../../flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
@@ -5553,7 +5724,7 @@ var ItemsForLawTitle = (function (_FlareWindowBase) {
 
 module.exports = ItemsForLawTitle;
 
-},{"../../../flare_window_base":94,"../helper/show_reward_data":118,"underscore.string/wrap":91}],117:[function(require,module,exports){
+},{"../../../flare_window_base":94,"../helper/show_reward_data":119,"underscore.string/wrap":91}],118:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5630,7 +5801,7 @@ var LawDetails = (function (_FlareWindowBase) {
 
 module.exports = LawDetails;
 
-},{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],118:[function(require,module,exports){
+},{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],119:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5775,7 +5946,7 @@ var ShowRewardData = (function () {
 
 module.exports = ShowRewardData;
 
-},{"../../reward_storage/reward_storage":105,"lodash/lang/isUndefined":71}],119:[function(require,module,exports){
+},{"../../reward_storage/reward_storage":105,"lodash/lang/isUndefined":71}],120:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5793,6 +5964,14 @@ var _laws_for_map2 = _interopRequireDefault(_laws_for_map);
 var _scene_window_container = require('../../scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
+
+var _selectable_window_container = require('../../selectable_window_container');
+
+var _selectable_window_container2 = _interopRequireDefault(_selectable_window_container);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5823,15 +6002,35 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
       var height = Graphics.boxHeight;
       this._lawsForMap = null;
 
+      this._cursorIsMovable = true;
+
       this._getlawsForMap();
+      _selectable_window_container2.default.emptyContainer();
 
       _get(Object.getPrototypeOf(LawsWindowSelectable.prototype), 'initialize', this).call(this, 0, 0, width, height);
       this.refresh();
     }
   }, {
+    key: 'update',
+    value: function update() {
+      _get(Object.getPrototypeOf(LawsWindowSelectable.prototype), 'update', this).call(this, this);
+
+      if (Input.isTriggered("ok")) {
+        _selectable_window_container2.default.setKeyValue('cursorIsMovable', true);
+        _selectable_window_container2.default.setKeyValue('turnOffSceneInputListener', true);
+        this._cursorIsMovable = false;
+      }
+
+      if (_selectable_window_container2.default.getKeyValue('parentCursorIsMovable')) {
+        this._cursorIsMovable = _selectable_window_container2.default.getKeyValue('parentCursorIsMovable');
+        _selectable_window_container2.default.setKeyValue('parentCursorIsMovable', false);
+        _selectable_window_container2.default.setKeyValue('turnOffSceneInputListener', false);
+      }
+    }
+  }, {
     key: 'isCursorMovable',
     value: function isCursorMovable() {
-      return true;
+      return this._cursorIsMovable;
     }
   }, {
     key: 'maxItems',
@@ -5893,7 +6092,7 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
 
 module.exports = LawsWindowSelectable;
 
-},{"../../flare_window_selectable":95,"../../scene_window_container":120,"../law_storage/laws_for_map":101}],120:[function(require,module,exports){
+},{"../../flare_window_selectable":95,"../../scene_window_container":121,"../../selectable_window_container":122,"../law_storage/laws_for_map":101,"lodash/lang/isUndefined":71}],121:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5935,11 +6134,13 @@ var SceneWindowContainer = (function () {
      *
      * @param string name
      * @param classInstance windowObject
+     * @param mixed options
      */
-    value: function setWindowToContainer(name, windowObject) {
+    value: function setWindowToContainer(name, windowObject, options) {
       this._container.push({
         name: name,
-        windowObject: windowObject
+        windowObject: windowObject,
+        options: options
       });
     }
 
@@ -6006,4 +6207,52 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}]},{},[113,97,112,114,111,109,110,108]);
+},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}],122:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SelectableWindowContainer = (function () {
+  function SelectableWindowContainer() {
+    _classCallCheck(this, SelectableWindowContainer);
+  }
+
+  _createClass(SelectableWindowContainer, null, [{
+    key: 'emptyContainer',
+    value: function emptyContainer() {
+      this._windowObjectContainer = {};
+    }
+  }, {
+    key: 'setKeyValue',
+    value: function setKeyValue(key, value) {
+      this._windowObjectContainer[key] = value;
+    }
+  }, {
+    key: 'getKeyValue',
+    value: function getKeyValue(key) {
+      if ((0, _isUndefined2.default)(this._windowObjectContainer)) {
+        return false;
+      }
+
+      if ((0, _isUndefined2.default)(this._windowObjectContainer[key])) {
+        return false;
+      }
+
+      return this._windowObjectContainer[key];
+    }
+  }]);
+
+  return SelectableWindowContainer;
+})();
+
+module.exports = SelectableWindowContainer;
+
+},{"lodash/lang/isUndefined":71}]},{},[113,97,112,114,111,109,110,108]);

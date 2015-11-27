@@ -7,6 +7,7 @@ import FlareLawDetails            from '../windows/details/laws_details';
 import FlareItemsForLawTitle      from '../windows/details/items_for_laws_title';
 import FlareItemsForLawSelectable from '../windows/details/items_for_laws_selectable';
 import SceneWindowContainer       from '../../scene_window_container';
+import SelectableWindowContainer  from '../../selectable_window_container';
 
 /**
  * Creates a scene for a window that shows all the laws.
@@ -25,9 +26,11 @@ class FlareLawWindowScene extends Scene_MenuBase {
   update() {
     super.update(this);
 
-    if (Input.isTriggered("cancel")) {
-      this._flareLawWindow.close();
-      this.popScene();
+    if (SelectableWindowContainer.getKeyValue('turnOffSceneInputListener') !== true) {
+      if (Input.isTriggered("cancel")) {
+        this._flareLawWindow.close();
+        this.popScene();
+      }
     }
   }
 

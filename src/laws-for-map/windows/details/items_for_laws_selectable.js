@@ -2,9 +2,11 @@
  * @namespace FlareLawsForMap.
  */
 
-import FlareWindowSelectable from '../../../flare_window_selectable';
-import wordWrap              from 'underscore.string/wrap';
-import ShowRewardData        from '../helper/show_reward_data';
+import FlareWindowSelectable      from '../../../flare_window_selectable';
+import wordWrap                   from 'underscore.string/wrap';
+import ShowRewardData             from '../helper/show_reward_data';
+import lodashIsUndefined          from 'lodash/lang/isUndefined';
+import SelectableWindowContainer  from '../../../selectable_window_container';
 
 class ItemsForLawSelectable extends FlareWindowSelectable {
 
@@ -14,12 +16,12 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
 
   initialize() {
     var width  = (Graphics.boxWidth / 2) - 70;
-    var height = 150;
+    var height = 290;
     var data   = new ShowRewardData();
 
     this._rewards = [];
 
-    super.initialize(width - 140, (Graphics.boxHeight / 2) + 80, width, height);
+    super.initialize(width, (Graphics.boxHeight / 2) + 20, width + 140, height);
     data.processForWindow();
 
     if (data.getWeaponNames().length > 0) {
@@ -48,8 +50,23 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
     this.refresh();
   }
 
+  update() {
+    super.update();
+
+    if (Input.isTriggered("cancel")) {
+      SelectableWindowContainer.setKeyValue('parentCursorIsMovable', true);
+      SelectableWindowContainer.setKeyValue('cursorIsMovable', false);
+
+      this._cursorIsMovable = false;
+    }
+  }
+
   isCursorMovable() {
-    return true;
+    if (lodashIsUndefined(SelectableWindowContainer.getKeyValue('cursorIsMovable'))) {
+      return false;
+    } else {
+      return SelectableWindowContainer.getKeyValue('cursorIsMovable');
+    }
   }
 
   maxItems() {
@@ -78,13 +95,13 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
     var rectangle = this.itemRect(index);
     this.contents.fontSize = 18;
 
-    if (reward instanceof 'object') {
-      this.drawIcon(reward.icon, 10, rectangle.y + 20 );
+    if (typeof reward === 'object') {
+      this.drawIcon(reward.iconIndex, 10, rectangle.y + 20 );
       this.drawText(reward.name, 60, rectangle.y + 20);
 
       if (!lodashIsUndefined(reward.belongsToCurrency)) {
         this.flareDrawTextEx('\\\c[14]Belongs to currency\\\c[0]: ' + reward.belongsToCurrency, 10, rectangle.y + 60);
-        this.flareDrawTextEx('\\\c[14]And costs\\\c[0]: ' + reward.currencyCosts, 10, rectangle.y + 80);
+        this.flareDrawTextEx('\\\c[14]And costs\\\c[0]: ' + reward.currencyCost, 10, rectangle.y + 80);
       } else {
         this.flareDrawTextEx('\\\c[14]Sold in shops for\\\c[0]: ' + reward.price, 10, rectangle.y + 60);
       }

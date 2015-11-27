@@ -2,9 +2,11 @@
  * @namespace FlareLawsForMap.
  */
 
-import FlareWindowSelecatble from '../../flare_window_selectable';
-import LawsForMap            from '../law_storage/laws_for_map';
-import SceneWindowContainer  from '../../scene_window_container';
+import FlareWindowSelecatble     from '../../flare_window_selectable';
+import LawsForMap                from '../law_storage/laws_for_map';
+import SceneWindowContainer      from '../../scene_window_container';
+import SelectableWindowContainer from '../../selectable_window_container';
+import lodashIsUndefined         from 'lodash/lang/isUndefined';
 
 class LawsWindowSelectable extends FlareWindowSelecatble {
 
@@ -18,14 +20,33 @@ class LawsWindowSelectable extends FlareWindowSelecatble {
     var height = Graphics.boxHeight;
     this._lawsForMap = null;
 
+    this._cursorIsMovable = true;
+
     this._getlawsForMap();
+    SelectableWindowContainer.emptyContainer();
 
     super.initialize(0, 0, width, height);
     this.refresh();
   }
 
+  update() {
+    super.update(this);
+
+    if (Input.isTriggered("ok")) {
+      SelectableWindowContainer.setKeyValue('cursorIsMovable', true);
+      SelectableWindowContainer.setKeyValue('turnOffSceneInputListener', true);
+      this._cursorIsMovable = false;
+    }
+
+    if (SelectableWindowContainer.getKeyValue('parentCursorIsMovable')) {
+      this._cursorIsMovable = SelectableWindowContainer.getKeyValue('parentCursorIsMovable');
+      SelectableWindowContainer.setKeyValue('parentCursorIsMovable', false);
+      SelectableWindowContainer.setKeyValue('turnOffSceneInputListener', false);
+    }
+  }
+
   isCursorMovable() {
-    return true;
+    return this._cursorIsMovable;
   }
 
   maxItems() {
@@ -68,7 +89,6 @@ class LawsWindowSelectable extends FlareWindowSelecatble {
     this.flareDrawTextEx('\\\c[14]cant Use\\\c[0]: ' + law.cantUse, 10, rectangle.y + 60);
     this.resetFontSettings();
   }
-
 
   _getlawsForMap() {
     this._lawsForMap = LawsForMap.getLawsForMap();

@@ -23,11 +23,13 @@ class SceneWindowContainer {
    *
    * @param string name
    * @param classInstance windowObject
+   * @param mixed options
    */
-  static setWindowToContainer(name, windowObject) {
+  static setWindowToContainer(name, windowObject, options) {
     this._container.push({
       name: name,
-      windowObject: windowObject
+      windowObject: windowObject,
+      options: options
     });
   }
 
