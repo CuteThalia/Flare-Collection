@@ -22,17 +22,18 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
     this._rewards = [];
 
     super.initialize(width, (Graphics.boxHeight / 2) + 20, width + 140, height);
+
     data.processForWindow();
 
-    if (data.getWeaponNames().length > 0) {
+    if (data.getWeapons().length > 0) {
       this._rewards.push(data.getWeapons());
     }
 
-    if (data.getArmorNames().length > 0) {
+    if (data.getArmors().length > 0) {
       this._rewards.push(data.getArmors());
     }
 
-    if (data.getItemNames().length > 0) {
+    if (data.getItems().length > 0) {
       this._rewards.push(data.getItems());
     }
 
@@ -96,6 +97,7 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
     this.contents.fontSize = 18;
 
     if (typeof reward === 'object') {
+      console.log(reward);
       this.drawIcon(reward.iconIndex, 10, rectangle.y + 20 );
       this.drawText(reward.name, 60, rectangle.y + 20);
 
@@ -105,6 +107,8 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
       } else {
         this.flareDrawTextEx('\\\c[14]Sold in shops for\\\c[0]: ' + reward.price, 10, rectangle.y + 60);
       }
+    } else {
+      console.log(reward);
     }
 
     this.resetFontSettings();

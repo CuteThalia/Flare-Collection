@@ -5554,18 +5554,19 @@ var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
       this._rewards = [];
 
       _get(Object.getPrototypeOf(ItemsForLawSelectable.prototype), 'initialize', this).call(this, width, Graphics.boxHeight / 2 + 20, width + 140, height);
+
       data.processForWindow();
 
-      if (data.getWeaponNames().length > 0) {
-        this._rewards.push(data.getWeaponNames());
+      if (data.getWeapons().length > 0) {
+        this._rewards.push(data.getWeapons());
       }
 
-      if (data.getArmorNames().length > 0) {
-        this._rewards.push(data.getArmorNames());
+      if (data.getArmors().length > 0) {
+        this._rewards.push(data.getArmors());
       }
 
-      if (data.getItemNames().length > 0) {
-        this._rewards.push(data.getItemNames());
+      if (data.getItems().length > 0) {
+        this._rewards.push(data.getItems());
       }
 
       if (data.getGoldAmount().length > 0) {
@@ -5635,6 +5636,7 @@ var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
       this.contents.fontSize = 18;
 
       if ((typeof reward === 'undefined' ? 'undefined' : _typeof(reward)) === 'object') {
+        console.log(reward);
         this.drawIcon(reward.iconIndex, 10, rectangle.y + 20);
         this.drawText(reward.name, 60, rectangle.y + 20);
 
@@ -5644,6 +5646,8 @@ var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
         } else {
           this.flareDrawTextEx('\\\c[14]Sold in shops for\\\c[0]: ' + reward.price, 10, rectangle.y + 60);
         }
+      } else {
+        console.log(reward);
       }
 
       this.resetFontSettings();
@@ -5804,7 +5808,9 @@ module.exports = LawDetails;
 },{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],119:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareCollection
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _reward_storage = require('../../reward_storage/reward_storage');
 
@@ -5818,7 +5824,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Container based object for storing different reward types.
+ *
+ * We can store an array of weapons, items, armors and then ints for gold and xp.
+ */
+
 var ShowRewardData = (function () {
+
+  /**
+   * Basic constructor.
+   */
+
   function ShowRewardData() {
     _classCallCheck(this, ShowRewardData);
 
@@ -5831,6 +5848,10 @@ var ShowRewardData = (function () {
     this._xpAmount = 0;
   }
 
+  /**
+   * Process the reward data.
+   */
+
   _createClass(ShowRewardData, [{
     key: 'processForWindow',
     value: function processForWindow() {
@@ -5838,6 +5859,13 @@ var ShowRewardData = (function () {
         this._processForArray(this._rewardData[i]);
       }
     }
+
+    /**
+     * Private Method. Determing which type to process.
+     *
+     * @param object RewardDataObject
+     */
+
   }, {
     key: '_processForArray',
     value: function _processForArray(rewardDataObject) {
@@ -5861,6 +5889,18 @@ var ShowRewardData = (function () {
         this._xpAmount = rewardDataObject.xp;
       }
     }
+
+    /**
+     * Private Method. Store the information in an array.
+     *
+     * The constructor contains specific arrays for weapons, items and armors.
+     * this information is processed and then stored.
+     *
+     * @param string name
+     * @param object data
+     * @param mixed rewardData, can be int or array
+     */
+
   }, {
     key: '_storeInArray',
     value: function _storeInArray(name, data, rewardData) {
@@ -5882,6 +5922,24 @@ var ShowRewardData = (function () {
           break;
       }
     }
+
+    /**
+     * Private Method. Creates array of reward data.
+     *
+     * Walk over the reward data and the approprate data object
+     * be it $dataItems, $dataWeapons, $dataArmors and then store, if we found anything
+     * the information in an array thats then returned.
+     *
+     * If the reward data is not an array then we want to walk over the data object array looking for
+     * an id that matches and store that object.
+     *
+     * We also only walk over things till 2999.
+     *
+     * @param array data - $dataItems, $dataWeapons, $dataArmors
+     * @param mixed rewardData - Array or int.
+     * @return Array or false
+     */
+
   }, {
     key: '_getRewardData',
     value: function _getRewardData(data, rewardData) {
@@ -5914,26 +5972,61 @@ var ShowRewardData = (function () {
       // Else default is a false.
       return false;
     }
+
+    /**
+     * Get Weapons
+     *
+     * @return array of objects
+     */
+
   }, {
-    key: 'getWeaponNames',
-    value: function getWeaponNames() {
+    key: 'getWeapons',
+    value: function getWeapons() {
       return this._weapons;
     }
+
+    /**
+     * Get Armors
+     *
+     * @return array of objects
+     */
+
   }, {
-    key: 'getArmorNames',
-    value: function getArmorNames() {
+    key: 'getArmors',
+    value: function getArmors() {
       return this._armors;
     }
+
+    /**
+     * Get items
+     *
+     * @return array of objects
+     */
+
   }, {
-    key: 'getItemNames',
-    value: function getItemNames() {
+    key: 'getItems',
+    value: function getItems() {
       return this._items;
     }
+
+    /**
+     * Get Gold Amount
+     *
+     * @return int
+     */
+
   }, {
     key: 'getGoldAmount',
     value: function getGoldAmount() {
       return this._goldAmount;
     }
+
+    /**
+     * Get Xp Amount
+     *
+     * @return int
+     */
+
   }, {
     key: 'getXpAmount',
     value: function getXpAmount() {
@@ -6210,7 +6303,9 @@ module.exports = SceneWindowContainer = SceneWindowContainer;
 },{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}],122:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareCollection
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _isUndefined = require('lodash/lang/isUndefined');
 
@@ -6220,6 +6315,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Great in selectable windows to conain options.
+ *
+ * Good example of this class being used is when you need
+ * to store options that are then passed between selectable windows
+ * in the same scene. Maybe one activates when one hits enter and the other
+ * becomes dorment.
+ */
+
 var SelectableWindowContainer = (function () {
   function SelectableWindowContainer() {
     _classCallCheck(this, SelectableWindowContainer);
@@ -6227,14 +6331,34 @@ var SelectableWindowContainer = (function () {
 
   _createClass(SelectableWindowContainer, null, [{
     key: 'emptyContainer',
+
+    /**
+     * Empty the container.
+     */
     value: function emptyContainer() {
       this._windowObjectContainer = {};
     }
+
+    /**
+     * Set a key and a value to the object.
+     *
+     * @param string key
+     * @param mixed value
+     */
+
   }, {
     key: 'setKeyValue',
     value: function setKeyValue(key, value) {
       this._windowObjectContainer[key] = value;
     }
+
+    /**
+     * Get the value from from the key.
+     *
+     * @param string key
+     * @return mixed or false if nothing was found.
+     */
+
   }, {
     key: 'getKeyValue',
     value: function getKeyValue(key) {
