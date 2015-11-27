@@ -5,8 +5,6 @@
 import lodashFind        from '../node_modules/lodash/collection/find';
 import lodashIsUndefined from '../node_modules/lodash/lang/isUndefined';
 
-
-
 /**
  * Allows us to store a window object.
  *
