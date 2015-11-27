@@ -25,15 +25,15 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
     data.processForWindow();
 
     if (data.getWeaponNames().length > 0) {
-      this._rewards.push(data.getWeaponNames());
+      this._rewards.push(data.getWeapons());
     }
 
     if (data.getArmorNames().length > 0) {
-      this._rewards.push(data.getArmorNames());
+      this._rewards.push(data.getArmors());
     }
 
     if (data.getItemNames().length > 0) {
-      this._rewards.push(data.getItemNames());
+      this._rewards.push(data.getItems());
     }
 
     if (data.getGoldAmount().length > 0) {

@@ -1,8 +1,20 @@
+/**
+ * @namespace FlareCollection
+ */
+
 import RewardStorage             from '../../reward_storage/reward_storage';
 import lodashIsUndefined         from 'lodash/lang/isUndefined';
 
+/**
+ * Container based object for storing different reward types.
+ *
+ * We can store an array of weapons, items, armors and then ints for gold and xp.
+ */
 class ShowRewardData {
 
+  /**
+   * Basic constructor.
+   */
   constructor() {
     this._rewardData = RewardStorage.getContainer();
 
@@ -13,12 +25,20 @@ class ShowRewardData {
     this._xpAmount    = 0;
   }
 
+  /**
+   * Process the reward data.
+   */
   processForWindow() {
     for (var i = 0; i < this._rewardData.length; i++) {
       this._processForArray(this._rewardData[i])
     }
   }
 
+  /**
+   * Private Method. Determing which type to process.
+   *
+   * @param object RewardDataObject
+   */
   _processForArray(rewardDataObject) {
     if (!lodashIsUndefined(rewardDataObject.weapons)){
       this._storeInArray('weapon', $dataWeapons, rewardDataObject.weapons);
@@ -41,6 +61,16 @@ class ShowRewardData {
     }
   }
 
+  /**
+   * Private Method. Store the information in an array.
+   *
+   * The constructor contains specific arrays for weapons, items and armors.
+   * this information is processed and then stored.
+   *
+   * @param string name
+   * @param object data
+   * @param mixed rewardData, can be int or array
+   */
   _storeInArray(name, data, rewardData) {
     switch(name) {
       case 'weapon':
@@ -61,6 +91,22 @@ class ShowRewardData {
     }
   }
 
+  /**
+   * Private Method. Creates array of reward data.
+   *
+   * Walk over the reward data and the approprate data object
+   * be it $dataItems, $dataWeapons, $dataArmors and then store, if we found anything
+   * the information in an array thats then returned.
+   *
+   * If the reward data is not an array then we want to walk over the data object array looking for
+   * an id that matches and store that object.
+   *
+   * We also only walk over things till 2999.
+   *
+   * @param array data - $dataItems, $dataWeapons, $dataArmors
+   * @param mixed rewardData - Array or int.
+   * @return Array or false
+   */
   _getRewardData(data, rewardData) {
     var rewardDataContainer = [];
 
@@ -92,22 +138,47 @@ class ShowRewardData {
     return false;
   }
 
-  getWeaponNames() {
+  /**
+   * Get Weapons
+   *
+   * @return array of objects
+   */
+  getWeapons() {
     return this._weapons;
   }
 
-  getArmorNames() {
+  /**
+   * Get Armors
+   *
+   * @return array of objects
+   */
+  getArmors() {
     return this._armors;
   }
 
-  getItemNames() {
+  /**
+   * Get items
+   *
+   * @return array of objects
+   */
+  getItems() {
     return this._items;
   }
 
+  /**
+   * Get Gold Amount
+   *
+   * @return int
+   */
   getGoldAmount() {
     return this._goldAmount;
   }
 
+  /**
+   * Get Xp Amount
+   *
+   * @return int
+   */
   getXpAmount() {
     return this._xpAmount;
   }
