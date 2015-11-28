@@ -4,9 +4,10 @@
 
 import FlareWindowSelectable      from '../../../flare_window_selectable';
 import wordWrap                   from 'underscore.string/wrap';
-import ShowRewardData             from '../helper/show_reward_data';
+import RewardProcessor            from '../../reward_storage/reward_processor';
 import lodashIsUndefined          from 'lodash/lang/isUndefined';
 import SelectableWindowContainer  from '../../../selectable_window_container';
+import CompiledStorageContainer   from '../../reward_storage/compiled_storage_container';
 
 class ItemsForLawSelectable extends FlareWindowSelectable {
 
@@ -17,37 +18,11 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
   initialize() {
     var width  = (Graphics.boxWidth / 2) - 70;
     var height = 290;
-    var data   = new ShowRewardData();
+    var data   = new RewardProcessor();
 
-    this._rewards = [];
+    this._rewards = CompiledStorageContainer.getContainer();
 
     super.initialize(width, (Graphics.boxHeight / 2) + 20, width + 140, height);
-
-    data.processForWindow();
-
-    if (data.getWeapons().length > 0) {
-      this._rewards.push(data.getWeapons());
-    }
-
-    if (data.getArmors().length > 0) {
-      this._rewards.push(data.getArmors());
-    }
-
-    if (data.getItems().length > 0) {
-      this._rewards.push(data.getItems());
-    }
-
-    if (data.getGoldAmount().length > 0) {
-      this._rewards.push(data.getGoldAmount());
-    }
-
-    if (data.getXpAmount().length > 0) {
-      this._rewards.push(data.getXpAmount());
-    }
-
-    // flatten the array.
-    this._rewards = [].concat.apply([], this._rewards);
-
     this.refresh();
   }
 
@@ -97,18 +72,23 @@ class ItemsForLawSelectable extends FlareWindowSelectable {
     this.contents.fontSize = 18;
 
     if (typeof reward === 'object') {
-      console.log(reward);
       this.drawIcon(reward.iconIndex, 10, rectangle.y + 20 );
       this.drawText(reward.name, 60, rectangle.y + 20);
 
-      if (!lodashIsUndefined(reward.belongsToCurrency)) {
+      if (!lodashIsUndefined(reward.belongsToCurrency) && reward.belongsToCurrency !== null) {
         this.flareDrawTextEx('\\\c[14]Belongs to currency\\\c[0]: ' + reward.belongsToCurrency, 10, rectangle.y + 60);
         this.flareDrawTextEx('\\\c[14]And costs\\\c[0]: ' + reward.currencyCost, 10, rectangle.y + 80);
       } else {
-        this.flareDrawTextEx('\\\c[14]Sold in shops for\\\c[0]: ' + reward.price, 10, rectangle.y + 60);
+
+        if (!lodashIsUndefined(reward['xp'])) {
+          this.flareDrawTextEx('\\\c[16]Xp to gain:\\\c[0] ' + reward.xp, 10, rectangle.y + 20);
+        } else if (!lodashIsUndefined(reward['gold'])) {
+          this.flareDrawTextEx('\\\c[16]Gold to gain:\\\c[0] ' + reward.gold, 10, rectangle.y + 20);
+        } else {
+          this.flareDrawTextEx('\\\c[14]Sold in shops for\\\c[0]: ' + reward.price, 10, rectangle.y + 60);
+        }
       }
-    } else {
-      console.log(reward);
+
     }
 
     this.resetFontSettings();

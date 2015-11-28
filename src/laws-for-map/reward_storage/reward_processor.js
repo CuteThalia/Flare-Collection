@@ -2,15 +2,16 @@
  * @namespace FlareCollection
  */
 
-import RewardStorage             from '../../reward_storage/reward_storage';
+import RewardStorage             from './reward_storage';
 import lodashIsUndefined         from 'lodash/lang/isUndefined';
 
 /**
- * Container based object for storing different reward types.
+ * This class takes the reward data and creates them into objects.
  *
- * We can store an array of weapons, items, armors and then ints for gold and xp.
+ * Take the weapons, armor and item id's and get the actual objects.
+ * This can be taken from the Reward Storage.
  */
-class ShowRewardData {
+class RewardProcessor {
 
   /**
    * Basic constructor.
@@ -28,7 +29,7 @@ class ShowRewardData {
   /**
    * Process the reward data.
    */
-  processForWindow() {
+  processAndStore() {
     for (var i = 0; i < this._rewardData.length; i++) {
       this._processForArray(this._rewardData[i])
     }
@@ -184,4 +185,4 @@ class ShowRewardData {
   }
 }
 
-module.exports = ShowRewardData;
+module.exports = RewardProcessor;

@@ -4,6 +4,8 @@
     "es2015"
   ],
   "plugins": [
-    "syntax-exponentiation-operator"
+    "syntax-exponentiation-operator",
+    "syntax-class-constructor-call",
+    "transform-class-constructor-call"
   ]
 }

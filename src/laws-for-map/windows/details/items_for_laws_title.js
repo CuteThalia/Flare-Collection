@@ -4,7 +4,6 @@
 
 import FlareWindowBase       from '../../../flare_window_base';
 import wordWrap              from 'underscore.string/wrap';
-import ShowRewardData        from '../helper/show_reward_data';
 
 class ItemsForLawTitle extends FlareWindowBase {
 
