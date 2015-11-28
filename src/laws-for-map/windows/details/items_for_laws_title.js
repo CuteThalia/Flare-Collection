@@ -5,6 +5,9 @@
 import FlareWindowBase       from '../../../flare_window_base';
 import wordWrap              from 'underscore.string/wrap';
 
+/**
+ * Creates a title window.
+ */
 class ItemsForLawTitle extends FlareWindowBase {
 
   constructor() {

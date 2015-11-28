@@ -9,6 +9,9 @@ import lodashIsUndefined          from 'lodash/lang/isUndefined';
 import SelectableWindowContainer  from '../../../selectable_window_container';
 import CompiledStorageContainer   from '../../reward_storage/compiled_storage_container';
 
+/**
+ * Creates a list of items including xp and gold
+ */
 class ItemsForLawSelectable extends FlareWindowSelectable {
 
   constructor() {
