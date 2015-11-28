@@ -5465,7 +5465,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":118}],110:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":119}],110:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5562,7 +5562,7 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../../scene_window_container":123,"../../selectable_window_container":124,"../windows/details/items_for_laws_selectable":119,"../windows/details/items_for_laws_title":120,"../windows/details/laws_details":121,"../windows/laws_window_selectable":122}],111:[function(require,module,exports){
+},{"../../scene_window_container":125,"../../selectable_window_container":126,"../windows/details/items_for_laws_selectable":120,"../windows/details/items_for_laws_title":121,"../windows/details/laws_details":122,"../windows/laws_window_selectable":123}],111:[function(require,module,exports){
 'use strict';
 
 var _flare_counter = require('../../flare_counter');
@@ -5829,6 +5829,65 @@ Scene_Menu.prototype.lawsCommand = function () {
 },{"../scenes/flare_law_window_scene":110}],116:[function(require,module,exports){
 'use strict';
 
+var _reward_window = require('../windows/yanfly_aftermath/reward_window');
+
+var _reward_window2 = _interopRequireDefault(_reward_window);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Make sure this actually exists.
+/**
+ * @namespace FlareLawsForMap
+ */
+
+if (Scene_Battle.prototype.addCustomVictorySteps) {
+
+  var oldSceneBattleprototypeUpdateVictoryStepsMethod = Scene_Battle.prototype.updateVictorySteps;
+  Scene_Battle.prototype.updateVictorySteps = function () {
+    oldSceneBattleprototypeUpdateVictoryStepsMethod.call(this);
+    if (this.isVictoryStep('LAWS')) {
+      this.updateRewardLawStep();
+    }
+  };
+
+  Scene_Battle.prototype.addCustomLawsGainWindow = function () {
+    if (!(0, _isUndefined2.default)(this._yanflyAfterMathCurrencyWindowReward)) {
+      this._yanflyAfterMathCurrencyWindowReward.close();
+    } else {
+      this._victoryDropWindow.close();
+    }
+
+    this._yanflyLawsRewardWindow = new _reward_window2.default();
+
+    this.addWindow(this._yanflyLawsRewardWindow);
+    this._yanflyLawsRewardWindow.open();
+    this._yanflyLawsRewardWindow.y = 72;
+  };
+
+  Scene_Battle.prototype.updateRewardLawStep = function () {
+    if (!this._yanflyLawsRewardWindow) {
+      this.addCustomLawsGainWindow();
+    } else if (this._yanflyLawsRewardWindow.isOpen()) {
+      if (this.victoryTriggerContinue()) {
+        this.finishVictoryCurrencies();
+      }
+    }
+  };
+
+  Scene_Battle.prototype.finishVictoryCurrencies = function () {
+    SoundManager.playOk();
+    this._yanflyLawsRewardWindow.close();
+    this.processNextVictoryStep();
+  };
+}
+
+},{"../windows/yanfly_aftermath/reward_window":124,"lodash/lang/isUndefined":71}],117:[function(require,module,exports){
+'use strict';
+
 var _laws_for_map = require('../law_storage/laws_for_map');
 
 var _laws_for_map2 = _interopRequireDefault(_laws_for_map);
@@ -5865,7 +5924,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{"../law_storage/laws_for_map":101}],117:[function(require,module,exports){
+},{"../law_storage/laws_for_map":101}],118:[function(require,module,exports){
 'use strict';
 
 /**
@@ -5878,7 +5937,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   this.addCommand('Laws', 'Laws');
 };
 
-},{}],118:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5980,7 +6039,7 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":94,"../../law_handler/helper/store_broken_law_object":99,"../../law_storage/store_no_gold_message":102,"lodash/lang/isUndefined":71}],119:[function(require,module,exports){
+},{"../../../flare_window_base":94,"../../law_handler/helper/store_broken_law_object":99,"../../law_storage/store_no_gold_message":102,"lodash/lang/isUndefined":71}],120:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6129,7 +6188,7 @@ var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemsForLawSelectable;
 
-},{"../../../flare_window_selectable":95,"../../../selectable_window_container":124,"../../reward_storage/compiled_storage_container":105,"../../reward_storage/reward_processor":107,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],120:[function(require,module,exports){
+},{"../../../flare_window_selectable":95,"../../../selectable_window_container":126,"../../reward_storage/compiled_storage_container":105,"../../reward_storage/reward_processor":107,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],121:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6198,7 +6257,7 @@ var ItemsForLawTitle = (function (_FlareWindowBase) {
 
 module.exports = ItemsForLawTitle;
 
-},{"../../../flare_window_base":94,"underscore.string/wrap":91}],121:[function(require,module,exports){
+},{"../../../flare_window_base":94,"underscore.string/wrap":91}],122:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6275,7 +6334,7 @@ var LawDetails = (function (_FlareWindowBase) {
 
 module.exports = LawDetails;
 
-},{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],122:[function(require,module,exports){
+},{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],123:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6421,7 +6480,130 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
 
 module.exports = LawsWindowSelectable;
 
-},{"../../flare_window_selectable":95,"../../scene_window_container":123,"../../selectable_window_container":124,"../law_storage/laws_for_map":101,"lodash/lang/isUndefined":71}],123:[function(require,module,exports){
+},{"../../flare_window_selectable":95,"../../scene_window_container":125,"../../selectable_window_container":126,"../law_storage/laws_for_map":101,"lodash/lang/isUndefined":71}],124:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _clone = require('lodash/lang/clone');
+
+var _clone2 = _interopRequireDefault(_clone);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _find = require('lodash/collection/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+var _flare_window_selectable = require('../../../flare_window_selectable');
+
+var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
+
+var _compiled_storage_container = require('../../reward_storage/compiled_storage_container');
+
+var _compiled_storage_container2 = _interopRequireDefault(_compiled_storage_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareCurrency
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * Creates the Flare Law Reward window for Yanfly Aftermath.
+ */
+
+var LawRewardWindowYanfly = (function (_FlareWindowSelectabl) {
+  _inherits(LawRewardWindowYanfly, _FlareWindowSelectabl);
+
+  function LawRewardWindowYanfly() {
+    _classCallCheck(this, LawRewardWindowYanfly);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LawRewardWindowYanfly).call(this));
+
+    _this.initialize();
+    return _this;
+  }
+
+  _createClass(LawRewardWindowYanfly, [{
+    key: 'initialize',
+    value: function initialize() {
+      var width = Graphics.boxWidth;
+      var height = Graphics.boxHeight;
+      this._rewards = _compiled_storage_container2.default.getContainer();
+
+      _get(Object.getPrototypeOf(LawRewardWindowYanfly.prototype), 'initialize', this).call(this, 0, 0, width, height);
+      this.refresh();
+    }
+  }, {
+    key: 'isCursorMovable',
+    value: function isCursorMovable() {
+      return true;
+    }
+  }, {
+    key: 'maxItems',
+    value: function maxItems() {
+      return this._rewards.length;
+    }
+  }, {
+    key: 'itemHeight',
+    value: function itemHeight() {
+      return 85;
+    }
+  }, {
+    key: 'isCurrentItemEnabled',
+    value: function isCurrentItemEnabled() {
+      return this.isEnabled(this._rewards);
+    }
+  }, {
+    key: 'drawItem',
+    value: function drawItem(index) {
+      var reward = this._rewards[index];
+
+      if (!reward) {
+        return;
+      }
+
+      this.drawRewardsToScreen(reward, index);
+    }
+  }, {
+    key: 'drawRewardsToScreen',
+    value: function drawRewardsToScreen(reward, index) {
+      var rectangle = this.itemRect(index);
+      this.contents.fontSize = 18;
+
+      if ((typeof reward === 'undefined' ? 'undefined' : _typeof(reward)) === 'object') {
+        if (!(0, _isUndefined2.default)(reward['xp'])) {
+          this.flareDrawTextEx('\\\c[16]Bonus Xp gained (By all Actors (already given)):\\\c[0] ' + reward.xp, 10, rectangle.y + 20);
+        } else if (!(0, _isUndefined2.default)(reward['gold'])) {
+          this.flareDrawTextEx('\\\c[16]Bonus Gold gained:\\\c[0] ' + reward.gold, 10, rectangle.y + 20);
+        } else {
+          this.flareDrawTextEx('\\\c[14]You gained\\\c[0]:', 10, rectangle.y + 20);
+          this.drawIcon(reward.iconIndex, 125, rectangle.y + 20);
+          this.drawText(reward.name, 175, rectangle.y + 20);
+        }
+      }
+
+      this.resetFontSettings();
+    }
+  }]);
+
+  return LawRewardWindowYanfly;
+})(_flare_window_selectable2.default);
+
+module.exports = LawRewardWindowYanfly;
+
+},{"../../../flare_window_selectable":95,"../../reward_storage/compiled_storage_container":105,"lodash/collection/find":3,"lodash/lang/clone":64,"lodash/lang/isUndefined":71}],125:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -6536,7 +6718,7 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}],124:[function(require,module,exports){
+},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}],126:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -6615,4 +6797,4 @@ var SelectableWindowContainer = (function () {
 
 module.exports = SelectableWindowContainer;
 
-},{"lodash/lang/isUndefined":71}]},{},[116,97,115,117,114,112,113,111]);
+},{"lodash/lang/isUndefined":71}]},{},[117,97,115,118,114,112,113,111,116]);
