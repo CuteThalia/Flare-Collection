@@ -5082,7 +5082,7 @@ Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
 
 var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
 Scene_Shop.prototype.create = function () {
-  if (_currency_shop_info_container2.default.getCurrency() !== null) {
+  if (_currency_shop_info_container2.default.getCurrency() !== undefined) {
     Scene_MenuBase.prototype.create.call(this);
     this.createHelpWindow();
     this.createCurrencyWindow(_currency_shop_info_container2.default.getCurrency());
@@ -6294,6 +6294,7 @@ var CurrencyValueWindow = (function (_Window_Base) {
   }, {
     key: 'getCurrencyObject',
     value: function getCurrencyObject(currencyName) {
+
       var foundCurrency = (0, _find2.default)(flareCurrency.getCurrencyStore(), function (currencyObject) {
         if (currencyObject.name.indexOf(currencyName) !== -1 || currencyName.indexOf(currencyObject.name) !== -1) {
           return currencyObject;
@@ -6511,7 +6512,6 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
             this.drawTextEx('You gained: ' + amountToGain.amount + ' of \\i[' + amountToGain.icon + ']' + amountToGain.name, 0, window._baseYForText, 500, 'left');
             BattleManager._gainCurrencies.shift();
           } else {
-            'hmmm');
             this.drawTextEx("You gained: " + amountToGain.amount + " of " + ' \\i[' + amountToGain.icon + '] ' + amountToGain.name, 0, window._baseYForText, 500, 'left');
           }
 
@@ -6805,11 +6805,13 @@ var SceneWindowContainer = (function () {
      *
      * @param string name
      * @param classInstance windowObject
+     * @param mixed options
      */
-    value: function setWindowToContainer(name, windowObject) {
+    value: function setWindowToContainer(name, windowObject, options) {
       this._container.push({
         name: name,
-        windowObject: windowObject
+        windowObject: windowObject,
+        options: options
       });
     }
 

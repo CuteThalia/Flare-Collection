@@ -38,6 +38,7 @@ class CurrencyValueWindow extends Window_Base {
   };
 
   getCurrencyObject(currencyName) {
+    
     var foundCurrency = lodashFind(flareCurrency.getCurrencyStore(), function(currencyObject) {
       if (currencyObject.name.indexOf(currencyName) !== -1 ||
           currencyName.indexOf(currencyObject.name) !== -1 ) {
