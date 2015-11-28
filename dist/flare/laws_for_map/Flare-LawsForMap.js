@@ -5569,7 +5569,29 @@ var _flare_counter = require('../../flare_counter');
 
 var _flare_counter2 = _interopRequireDefault(_flare_counter);
 
+var _clone = require('lodash/lang/clone');
+
+var _clone2 = _interopRequireDefault(_clone);
+
+var _compiled_storage_container = require('../reward_storage/compiled_storage_container');
+
+var _compiled_storage_container2 = _interopRequireDefault(_compiled_storage_container);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @namespace FlareLawsForMap.
+ */
+
+var oldBattleManagerSetupMethod = BattleManager.setup;
+BattleManager.setup = function (troopId, canEscape, canLose) {
+  oldBattleManagerSetupMethod.call(this, troopId, canEscape, canLose);
+  this._gainedRewards = false;
+};
 
 // We want our own custom message.
 BattleManager.processDefeat = function () {
@@ -5581,9 +5603,7 @@ BattleManager.processDefeat = function () {
     AudioManager.stopBgm();
   }
   this.endBattle(2);
-}; /**
-    * @namespace FlareLawsForMap.
-    */
+};
 
 BattleManager.customDisplayMessage = function () {
   $gameMessage.add('The whole party was defeated ...');
@@ -5591,18 +5611,59 @@ BattleManager.customDisplayMessage = function () {
 
 var oldBattleManagerGainRewardsMethod = BattleManager.gainRewards;
 BattleManager.gainRewards = function () {
-  oldBattleManagerGainRewardsMethod.call(this);
+  if (!this._gainedRewards) {
+    oldBattleManagerGainRewardsMethod.call(this);
+    if (_flare_counter2.default.getCurrentState() === 0 && _compiled_storage_container2.default.getContainer().length > 0) {
+
+      for (var i = 0; i < _compiled_storage_container2.default.getContainer().length; i++) {
+        var item = _compiled_storage_container2.default.getContainer()[i];
+
+        if (DataManager.isItem(item) || DataManager.isArmor(item) || DataManager.isWeapon(item)) {
+          $gameParty.gainItem(item, 1);
+        }
+
+        if (!(0, _isUndefined2.default)(item['xp'])) {
+          $gameParty.allMembers().forEach(function (actor) {
+            actor.gainExp(item.xp);
+          });
+        }
+
+        if (!(0, _isUndefined2.default)(item['gold'])) {
+          $gameParty.gainGold(item.gold);
+        }
+      }
+    }
+  }
+
+  this._gainedRewards = true;
 };
 
 var oldBattleManagerDisplayRewards = BattleManager.gainRewards;
 BattleManager.displayRewards = function () {
   oldBattleManagerDisplayRewards.call(this);
-  if (_flare_counter2.default.getCurrentState() === 0) {
-    // do soemthing  ....
+  if (_flare_counter2.default.getCurrentState() === 0 && _compiled_storage_container2.default.getContainer().length > 0) {
+    $gameMessage.add('\\c[16]Party broke no laws. Have some bonus rewards!!!\\c[0]');
+
+    for (var i = 0; i < _compiled_storage_container2.default.getContainer().length; i++) {
+      var item = _compiled_storage_container2.default.getContainer()[i];
+
+      if (DataManager.isItem(item) || DataManager.isArmor(item) || DataManager.isWeapon(item)) {
+        $gameMessage.add('Gained (As a bonus): ' + '\\i[' + item.iconIndex + '] ' + item.name);
+        $gameMessage.add(''); // spacing for icons.
+      }
+
+      if (!(0, _isUndefined2.default)(item['xp'])) {
+        $gameMessage.add('Gained (As a bonus): ' + item.xp + ' XP (All actors gain this)');
+      }
+
+      if (!(0, _isUndefined2.default)(item['gold'])) {
+        $gameMessage.add('Gained (As a bonus): ' + item.gold + ' Gold');
+      }
+    }
   }
 };
 
-},{"../../flare_counter":92}],112:[function(require,module,exports){
+},{"../../flare_counter":92,"../reward_storage/compiled_storage_container":105,"lodash/lang/clone":64,"lodash/lang/isUndefined":71}],112:[function(require,module,exports){
 'use strict';
 
 var _process_broken_law = require('../law_handler/process_broken_law');
@@ -5962,6 +6023,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @namespace FlareLawsForMap.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
+/**
+ * Creates a list of items including xp and gold
+ */
+
 var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
   _inherits(ItemsForLawSelectable, _FlareWindowSelectabl);
 
@@ -6088,6 +6153,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @namespace FlareLawsForMap.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
+
+/**
+ * Creates a title window.
+ */
 
 var ItemsForLawTitle = (function (_FlareWindowBase) {
   _inherits(ItemsForLawTitle, _FlareWindowBase);
