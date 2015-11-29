@@ -7,6 +7,7 @@ import LawsForMap                from '../law_storage/laws_for_map';
 import SceneWindowContainer      from '../../scene_window_container';
 import SelectableWindowContainer from '../../selectable_window_container';
 import lodashIsUndefined         from 'lodash/lang/isUndefined';
+import OptionsHandler            from '../options/option_handler';
 
 class LawsWindowSelectable extends FlareWindowSelecatble {
 
@@ -32,7 +33,7 @@ class LawsWindowSelectable extends FlareWindowSelecatble {
   update() {
     super.update(this);
 
-    if (Input.isTriggered("ok")) {
+    if (Input.isTriggered("ok") && OptionsHandler.getOptions().before_or_after === 'before') {
       SelectableWindowContainer.setKeyValue('cursorIsMovable', true);
       SelectableWindowContainer.setKeyValue('turnOffSceneInputListener', true);
       this._cursorIsMovable = false;

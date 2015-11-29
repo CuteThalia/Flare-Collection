@@ -19,6 +19,11 @@ import OptionsHandler from './options/option_handler';
  * Default: 3
  * @default 3
  *
+ * @param Calculate law after or before battle?
+ * @desc calculates the rewards before battle or after (see help)
+ * Default: before
+ * @default before
+ *
  * @help
  *
  * You can have as many laws as you want, any less then 3 (default) we will show them, any more
@@ -107,6 +112,22 @@ import OptionsHandler from './options/option_handler';
  * If you punish on gold and tha party runs out, well then we tell you that
  * you have been fined x gold, but that the party is out of gold.
  *
+ * === Law Rewards ===
+ *
+ * When you are setting up your laws for the map, you can also add a tag called
+ * law rewards. Lets look at that now:
+ *
+ * <lawRewards i: 1 w: 45 a:67 gold: 20 xp: 90>
+ *
+ * This means that you will gain item id of 1, weapon id of 45 and armor id of 67.
+ * gold of 20 will be assigned. All xp will be assigned directly after battle when
+ * the other xp is gained. This xp also applies to the whole party, not just the
+ * actor who didnt break any laws.
+ *
+ * Law rewards are only handed out if NO law is EVER broken. Assume you enter a map
+ * and that map has 4 laws, if no law is broken then the reward is handed out. If any
+ * law is broken out of the four then no reward is handed out.
+ *
  * === Regarding Battles ===
  *
  * When you are in battle and you use something like attack or gaurd and you
@@ -117,6 +138,18 @@ import OptionsHandler from './options/option_handler';
  *
  * Also note, it doesn't matter if you hit or not, as long as you have done
  * the action then you are as good as guilty.
+ *
+ * === Calculating Law Rewards ===
+ *
+ * If you enter before for: Calculate law after or before battle? Then all the battles
+ * on the map with will use the same rewards as the rewards are calculated on map load.
+ *
+ * If you enter after for: Calculate law after or before battle? Then all battles will
+ * generate rewards, this is where you might want to do something like:
+ *
+ * <lawRewards i: "1 ~ x" w: "1 ~ x" a: "1 ~ x" xp: "1 ~ x" gold: "1 ~ x">
+ *
+ * This assures that every battle you get random rewards.
  */
 
 /**

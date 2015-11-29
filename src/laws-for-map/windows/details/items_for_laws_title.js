@@ -30,7 +30,7 @@ class ItemsForLawTitle extends FlareWindowBase {
     this.contents.fontSize = 18
 
     var text = "\\\c[14]All rewards below are rewarded assuming you break no laws associated with this map.\\\c[0]"
-    text = wordWrap(text);
+    text = wordWrap(text, {width: 48});
 
     this.flareDrawTextEx(text, 0 ,10);
   }

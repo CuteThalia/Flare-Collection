@@ -6,11 +6,23 @@ import CountContainer           from  '../../flare_counter';
 import lodashClone              from  'lodash/lang/clone';
 import CompiledStorageContainer from  '../reward_storage/compiled_storage_container';
 import lodashIsUndefined        from  'lodash/lang/isUndefined';
+import OptionHandler            from  '../options/option_handler';
+import GatherReward             from '../gather_reward';
+import CreateRewardStorage      from '../reward_storage/create_reward_storage';
 
 var oldBattleManagerSetupMethod = BattleManager.setup;
 BattleManager.setup = function(troopId, canEscape, canLose) {
     oldBattleManagerSetupMethod.call(this, troopId, canEscape, canLose);
     this._gainedRewards = false;
+
+    if (OptionHandler.getOptions().before_or_after === 'after') {
+      //Gather reward data.
+      var gatherReward = new GatherReward();
+      gatherReward.processPotentialRewards();
+
+      // Now we need reward items.
+      new CreateRewardStorage();
+    }
 };
 
 // We want our own custom message.
@@ -81,5 +93,9 @@ BattleManager.displayRewards = function() {
         $gameMessage.add('Gained (As a bonus): ' + item.gold + ' Gold');
       }
     }
+  }
+
+  if (OptionHandler.getOptions().before_or_after === 'after') {
+    CompiledStorageContainer.emptyContainer();
   }
 }

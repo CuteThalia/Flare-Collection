@@ -3,7 +3,7 @@
  */
 
 // Plugin Options.
-var FlareLasForMap = PluginManager.parameters('Flare-LawsForMap');
+var FlareLawsForMap = PluginManager.parameters('Flare-LawsForMap');
 
 /**
  * Laws for Map plugin options
@@ -15,8 +15,9 @@ class OptionHandler {
    */
   static createOptionsStorage() {
     this._lawOptions = {
-      death_state_id:            FlareLasForMap['Death State ID'],
-      number_of_laws_for_map:    FlareLasForMap['How many laws per map?'],
+      death_state_id:            FlareLawsForMap['Death State ID'],
+      number_of_laws_for_map:    FlareLawsForMap['How many laws per map?'],
+      before_or_after:           FlareLawsForMap['Calculate law after or before battle?']
     };
   }
 
