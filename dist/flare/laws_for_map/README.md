@@ -1,9 +1,12 @@
 # Laws for map
 
 ![Broken Law on Map](http://i.imgur.com/ozElbqY.png)
-![List Of Laws](http://i.imgur.com/9jpa8Px.png)
 ![Laws in Menu](http://i.imgur.com/IPlCqXn.png)
 ![broke law in battle](http://i.imgur.com/ZYdBEz9.png)
+![law window](http://orig14.deviantart.net/d8e8/f/2015/333/1/6/screen_shot_2015_11_29_at_11_42_57_am_by_createdthoughts-d9igoqo.png)
+![rewards](http://orig08.deviantart.net/32ab/f/2015/333/e/8/screen_shot_2015_11_29_at_11_44_26_am_by_createdthoughts-d9igoh9.png)
+![Yanfly rewards](http://orig08.deviantart.net/8529/f/2015/333/0/4/screen_shot_2015_11_29_at_11_43_33_am_by_createdthoughts-d9igogx.png)
+![When laws are rewarded after battle](http://orig09.deviantart.net/c5b1/f/2015/333/1/a/screen_shot_2015_11_29_at_12_05_50_pm_by_createdthoughts-d9igpbt.png)
 
 Welcome to Laws for Map.
 
@@ -45,23 +48,23 @@ So lets set up a law:
 > Consider the following example:
 >
 > ```
->    <law
->       name:"Attacking Causes Death"
->       punishment:"hp"
->       amount: 1000
->       icon: 26
->       cantUse: "attack, potion, heal"
->    >
->    <law
->       name:"Minor Health Loss"
->       punishment:"hp"
->       amount: 10
->       icon: 26
->       cantUse: "attack, potion, heal"
->    >
+> <law
+>   name:"Attacking Causes Death"
+>   punishment:"hp"
+>   amount: 1000
+>   icon: 26
+>   cantUse: "attack, potion, heal"
+> >
+> <law
+>   name:"Minor Health Loss"
+>   punishment:"hp"
+>   amount: 10
+>   icon: 26
+>   cantUse: "attack, potion, heal"
+> >
 >```
 >
-> The issue here is that when we process which law you broke, we take the first one we find in
+> The issue here is that when we process which law you broke, > we take the first one we find in
 > the array of laws for the map is the first one we take. In this case `Minor Health Loss` would
 > never get used because we found `Attacking causes death` first.
 >
@@ -128,6 +131,47 @@ cannot attack and you attack, but it misses, you still broke the law and will be
 ## Regarding Yanfly Scripts.
 
 For Yanfly battle and Yanfly Menu Manager, you don't have to do anything at all.
+
+This script also works with Yanfly Aftermath, you just have to place `laws` in the list of reward windows:
+
+```js
+exp custom drops laws
+```
+
+## Reward for not breaking a law
+
+You can set this up with a tag in the map notes:
+
+```js
+<lawReward i: 5 w:5 a:8 gold:78 xp:90>
+```
+This will reward the player it an item of id 5, weapon of id 5 and armor id of 8. The party will also gain 78 gold and the whole party will gain 90 xp.
+
+You can also do:
+
+```js
+<lawReward i: "5,6,7" w:"5~89" a:8 gold:"1~78" xp:90>
+```
+
+This reads as, gain item id of 5,6 and 7. Gain a random weapon between if 5 and 89. Gain armor with id of 8. Gain random gold between 1 and 78 and finally the whole party gains 90 xp.
+
+## Calculate Before or After Battle?
+
+If you set this plugin option as `before` then you will see:
+
+![law window](http://orig14.deviantart.net/d8e8/f/2015/333/1/6/screen_shot_2015_11_29_at_11_42_57_am_by_createdthoughts-d9igoqo.png)
+
+You can scroll through the laws that associated with this map and hit enter to scroll through the list of rewards.
+
+All of these rewards will be the same for every single battle.
+
+If you want to have the rewards calculated after every single battle and you are using concepts of: `"1 ~ 6"` which is how we calculate random rewards.
+
+Then you'll see:
+
+![When laws are rewarded after battle](http://orig09.deviantart.net/c5b1/f/2015/333/1/a/screen_shot_2015_11_29_at_12_05_50_pm_by_createdthoughts-d9igpbt.png)
+
+Which indicates that there is no reward information to be shown because that information is calulated after every battle.
 
 ## Public API
 
