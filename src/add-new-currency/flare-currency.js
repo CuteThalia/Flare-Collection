@@ -11,6 +11,38 @@ import CurrencyShop from './shop/currency_shop';
   * used in shops.
   * @author Adam Balan (AKA: DarknessFalls)
   *
+  * @param ---Currency Translation---
+  *
+  * @param Label For Menu
+  * @desc The name the player will see in the menu.
+  * Default: Currency
+  * @default Currency
+  *
+  * @param Currently Have
+  * @desc the label for "currently have" in the list of currencies.
+  * Default: Currently have:
+  * @default Currently have:
+  *
+  * @param Help Text
+  * @desc The help text when looking at the details of a single currency.
+  * Default: \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
+  * @default \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
+  *
+  * @param Shops sell for text
+  * @desc The text used to show: "Shops sell" for when looking at currency items.
+  * Default: Shops Sell For:
+  * @default Shops Sell For:
+  *
+  * @param Shops are selling for text
+  * @desc The text used to show: "Shops are selling for" for when looking at currency items details.
+  * Default: - Shops are selling for:
+  * @default - Shops are selling for:
+  *
+  * @param Currency Shops Selling This item
+  * @desc Text when the there are shops selling the item on the map.
+  * Default: - There is a \\c[14]currency shop\\c[0] selling this item.
+  * @default - There is a \\c[14]currency shop\\c[0] selling this item.
+  *
   * @param ---Currency One---
   * @desc
   *

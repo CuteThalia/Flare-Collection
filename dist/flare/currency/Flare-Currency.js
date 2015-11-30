@@ -3420,17 +3420,13 @@ module.exports = function wrap(str, options){
 },{"./helper/makeString":75}],77:[function(require,module,exports){
 "use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareCurrency
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
-
-var _flare_error = require("../../flare_error");
-
-var _flare_error2 = _interopRequireDefault(_flare_error);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareCurrency
+ */
 
 /**
  * Currency Object Creation Class
@@ -3545,7 +3541,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{"../../flare_error":104}],78:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -3559,6 +3555,10 @@ var _currency2 = _interopRequireDefault(_currency);
 var _flare_error = require('../../flare_error');
 
 var _flare_error2 = _interopRequireDefault(_flare_error);
+
+var _text_handler = require('./text_handler');
+
+var _text_handler2 = _interopRequireDefault(_text_handler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3578,6 +3578,7 @@ var FlareCurrency = (function () {
     _classCallCheck(this, FlareCurrency);
 
     window.flareCurrency = new _currency2.default();
+    _text_handler2.default.storeText(FlareCurrencyPluginParamters);
   }
 
   /**
@@ -3631,7 +3632,47 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":104,"./currency":77}],79:[function(require,module,exports){
+},{"../../flare_error":105,"./currency":77,"./text_handler":79}],79:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareCurrency
+ */
+
+var TexHandler = (function () {
+  function TexHandler() {
+    _classCallCheck(this, TexHandler);
+  }
+
+  _createClass(TexHandler, null, [{
+    key: 'storeText',
+    value: function storeText(flarePluginOptions) {
+      this._currencyText = {
+        menuLabel: flarePluginOptions['Label For Menu'],
+        currentlyHave: flarePluginOptions['Currently Have'],
+        helpText: flarePluginOptions['Help Text'],
+        shopsSellFor: flarePluginOptions['Shops sell for text'],
+        areSellingFor: flarePluginOptions['Shops are selling for text'],
+        currencyShopsSelling: flarePluginOptions['Currency Shops Selling This item']
+      };
+    }
+  }, {
+    key: 'getText',
+    value: function getText() {
+      return this._currencyText;
+    }
+  }]);
+
+  return TexHandler;
+})();
+
+module.exports = TexHandler;
+
+},{}],80:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -3655,6 +3696,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * such currencies can include things like "clay pot" or "silver coin" they are then
  * used in shops.
  * @author Adam Balan (AKA: DarknessFalls)
+ *
+ * @param ---Currency Translation---
+ *
+ * @param Label For Menu
+ * @desc The name the player will see in the menu.
+ * Default: Currency
+ * @default Currency
+ *
+ * @param Currently Have
+ * @desc the label for "currently have" in the list of currencies.
+ * Default: Currently have:
+ * @default Currently have:
+ *
+ * @param Help Text
+ * @desc The help text when looking at the details of a single currency.
+ * Default: \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
+ * @default \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
+ *
+ * @param Shops sell for text
+ * @desc The text used to show: "Shops sell" for when looking at currency items.
+ * Default: Shops Sell For:
+ * @default Shops Sell For:
+ *
+ * @param Shops are selling for text
+ * @desc The text used to show: "Shops are selling for" for when looking at currency items details.
+ * Default: - Shops are selling for:
+ * @default - Shops are selling for:
+ *
+ * @param Currency Shops Selling This item
+ * @desc Text when the there are shops selling the item on the map.
+ * Default: - There is a \\c[14]currency shop\\c[0] selling this item.
+ * @default - There is a \\c[14]currency shop\\c[0] selling this item.
  *
  * @param ---Currency One---
  * @desc
@@ -4113,7 +4186,7 @@ var FlareCurrencies = (function () {
 window.FlareCurrencies = FlareCurrencies;
 window._baseYForText = 0;
 
-},{"./shop/currency_shop":82,"lodash/collection/find":4}],80:[function(require,module,exports){
+},{"./shop/currency_shop":83,"lodash/collection/find":4}],81:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4212,7 +4285,7 @@ var FlareCurrencyInformationExtendedScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyInformationExtendedScene;
 
-},{"../../scene_window_container":108,"../windows/currency_info/item_info/item_for_currency":97,"../windows/currency_info/item_info/item_information":98}],81:[function(require,module,exports){
+},{"../../scene_window_container":109,"../windows/currency_info/item_info/item_for_currency":98,"../windows/currency_info/item_info/item_information":99}],82:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4311,7 +4384,7 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../../scene_window_container":108,"../windows/currency_info/currency_details":92,"../windows/flare_currency_selecatble_window":99}],82:[function(require,module,exports){
+},{"../../scene_window_container":109,"../windows/currency_info/currency_details":93,"../windows/flare_currency_selecatble_window":100}],83:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4473,7 +4546,7 @@ var CurrencyShop = (function () {
 
 module.exports = CurrencyShop;
 
-},{"./helper/currency_shop_info_container":83,"lodash/array/findIndex":1}],83:[function(require,module,exports){
+},{"./helper/currency_shop_info_container":84,"lodash/array/findIndex":1}],84:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4533,7 +4606,7 @@ var CurrencyShopInfoContainer = (function () {
 
 module.exports = CurrencyShopInfoContainer;
 
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 'use strict';
 
 var _clone = require('lodash/lang/clone');
@@ -4673,7 +4746,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../update_core_data_manager/reward_currencies_check":87,"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],85:[function(require,module,exports){
+},{"../update_core_data_manager/reward_currencies_check":88,"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],86:[function(require,module,exports){
 'use strict';
 
 var _gather_items = require('./gather_items');
@@ -4794,7 +4867,7 @@ DataManager._returnIconFromName = function (currencyName) {
   return parseInt(foundCurrency.icon);
 };
 
-},{"./gather_items":86,"lodash/collection/find":4,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],86:[function(require,module,exports){
+},{"./gather_items":87,"lodash/collection/find":4,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],87:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4917,7 +4990,7 @@ var GatherItems = (function () {
 
 module.exports = GatherItems;
 
-},{"lodash/collection/find":4,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],87:[function(require,module,exports){
+},{"lodash/collection/find":4,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],88:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5033,7 +5106,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":105}],88:[function(require,module,exports){
+},{"../../flare_random_number":106}],89:[function(require,module,exports){
 'use strict';
 
 var _flare_currency_scene = require('../scenes/flare_currency_scene');
@@ -5055,7 +5128,7 @@ Scene_Menu.prototype.currencyCommand = function () {
   SceneManager.push(_flare_currency_scene2.default);
 };
 
-},{"../scenes/flare_currency_scene":81}],89:[function(require,module,exports){
+},{"../scenes/flare_currency_scene":82}],90:[function(require,module,exports){
 "use strict";
 
 var _currency_value_window = require("../windows/shop/currency_value_window");
@@ -5330,7 +5403,7 @@ Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
   }
 };
 
-},{"../shop/helper/currency_shop_info_container":83,"../windows/shop/currency_value_window":100,"lodash/lang/isUndefined":67}],90:[function(require,module,exports){
+},{"../shop/helper/currency_shop_info_container":84,"../windows/shop/currency_value_window":101,"lodash/lang/isUndefined":67}],91:[function(require,module,exports){
 'use strict';
 
 var _flare_currency_reward_window = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -5377,8 +5450,18 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
    * @namespace FlareCurrency
    */
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":103}],91:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":104}],92:[function(require,module,exports){
 'use strict';
+
+var _text_handler = require('../currencies/text_handler');
+
+var _text_handler2 = _interopRequireDefault(_text_handler);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * @namespace FlareCurrency
@@ -5388,15 +5471,19 @@ var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand
 Window_MenuCommand.prototype.addOriginalCommands = function () {
   oldWindowMenuCommandProtottypeAddOriginalCommandsMethod.call(this);
 
+  if ((0, _isUndefined2.default)(_text_handler2.default.getText())) {
+    return;
+  }
+
   for (var i = 0; i < flareCurrency.getCurrencyStore().length; i++) {
     if (flareCurrency.getCurrencyStore()[i].name !== "") {
-      this.addCommand('Currencies', 'Currencies');
+      this.addCommand(_text_handler2.default.getText().menuLabel, _text_handler2.default.getText().menuLabel);
       return;
     }
   }
 };
 
-},{}],92:[function(require,module,exports){
+},{"../currencies/text_handler":79,"lodash/lang/isUndefined":67}],93:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5410,6 +5497,10 @@ var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 var _wrap = require('underscore.string/wrap');
 
 var _wrap2 = _interopRequireDefault(_wrap);
+
+var _currency = require('../../currencies/currency');
+
+var _currency2 = _interopRequireDefault(_currency);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5457,7 +5548,7 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
       this.flareDrawTextEx(contents, 0, 0);
 
-      var helpText = '\\\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\\c[0]';
+      var helpText = _currency2.default.getText().helpText;
       helpText = (0, _wrap2.default)(helpText, { width: 48 });
 
       this.flareDrawTextEx('\\c[2]---------------------------------\\c[0]', 0, Graphics.boxHeight - 150);
@@ -5472,7 +5563,7 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
 module.exports = CurrencyDetails;
 
-},{"../../../flare_window_base":106,"underscore.string/wrap":76}],93:[function(require,module,exports){
+},{"../../../flare_window_base":107,"../../currencies/currency":77,"underscore.string/wrap":76}],94:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5545,7 +5636,7 @@ var CurrencyExists = (function () {
 
 module.exports = CurrencyExists;
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5673,7 +5764,7 @@ var MapHasCurrencyShop = (function () {
 
 module.exports = MapHasCurrencyShop;
 
-},{"./store_current_currency_name":96,"rmmv-mrp-core/option-parser":73}],95:[function(require,module,exports){
+},{"./store_current_currency_name":97,"rmmv-mrp-core/option-parser":73}],96:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5730,7 +5821,7 @@ var StoreCurrencyItemInfo = (function () {
 
 module.exports = StoreCurrencyItemInfo;
 
-},{}],96:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5782,7 +5873,7 @@ var StoreCurrentCurrencyName = (function () {
 
 module.exports = StoreCurrentCurrencyName;
 
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5816,6 +5907,10 @@ var _store_currency_item_info2 = _interopRequireDefault(_store_currency_item_inf
 var _scene_window_container = require('../../../../scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
+
+var _text_handler = require('../../../currencies/text_handler');
+
+var _text_handler2 = _interopRequireDefault(_text_handler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5960,7 +6055,7 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
       this.contents.fontSize = 18;
       this.drawIcon(item.itemIcon, 10, rectangle.y + 20);
       this.flareDrawTextEx(item.itemName, 60, rectangle.y + 10);
-      this.flareDrawTextEx('Shops Sell For: ' + item.currencyCost, 60, rectangle.y + 32, 250, 'left');
+      this.flareDrawTextEx(_text_handler2.default.getText().shopsSellFor + ' ' + item.currencyCost, 60, rectangle.y + 32, 250, 'left');
       this.resetFontSettings();
     }
   }]);
@@ -5970,7 +6065,7 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemForCurrency;
 
-},{"../../../../flare_window_selectable":107,"../../../../scene_window_container":108,"../helper/store_currency_item_info":95,"../helper/store_current_currency_name":96,"lodash/array/uniq":3,"lodash/collection/find":4,"lodash/lang/clone":60}],98:[function(require,module,exports){
+},{"../../../../flare_window_selectable":108,"../../../../scene_window_container":109,"../../../currencies/text_handler":79,"../helper/store_currency_item_info":96,"../helper/store_current_currency_name":97,"lodash/array/uniq":3,"lodash/collection/find":4,"lodash/lang/clone":60}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5998,6 +6093,10 @@ var _map_has_currency_shop = require('../helper/map_has_currency_shop');
 var _map_has_currency_shop2 = _interopRequireDefault(_map_has_currency_shop);
 
 var _optionParser = require('rmmv-mrp-core/option-parser');
+
+var _currency = require('../../../currencies/currency');
+
+var _currency2 = _interopRequireDefault(_currency);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6063,10 +6162,10 @@ var ItemInformation = (function (_FlareWindowBase) {
 
       this.drawIcon(itemInformation.itemIcon, 10, 20);
       this.drawText(itemInformation.itemName, 60, 20);
-      this.drawText('- Shops are selling for: ' + itemInformation.currencyCost, 10, 80);
+      this.drawText(_currency2.default.getText().areSellingFor + ' ' + itemInformation.currencyCost, 10, 80);
 
       if (IsMapSelling) {
-        this.flareDrawTextEx('- There is a \\c[14]currency shop\\c[0] selling this item.', 10, 100);
+        this.flareDrawTextEx(_currency2.default.getText().currencyShopsSelling + ' ', 10, 100);
       }
 
       this.flareDrawTextEx(content, 10, 140);
@@ -6079,7 +6178,7 @@ var ItemInformation = (function (_FlareWindowBase) {
 
 module.exports = ItemInformation;
 
-},{"../../../../flare_window_base":106,"../helper/map_has_currency_shop":94,"../helper/store_currency_item_info":95,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],99:[function(require,module,exports){
+},{"../../../../flare_window_base":107,"../../../currencies/currency":77,"../helper/map_has_currency_shop":95,"../helper/store_currency_item_info":96,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],100:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6105,6 +6204,10 @@ var _store_current_currency_name2 = _interopRequireDefault(_store_current_curren
 var _currency_exists = require('./currency_info/helper/currency_exists');
 
 var _currency_exists2 = _interopRequireDefault(_currency_exists);
+
+var _text_handler = require('../currencies/text_handler');
+
+var _text_handler2 = _interopRequireDefault(_text_handler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6224,7 +6327,7 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
       this.contents.fontSize = 18;
       this.drawIcon(currency.icon, 10, rectangle.y + 20);
       this.flareDrawTextEx(currency.name, 60, rectangle.y + 10);
-      this.flareDrawTextEx('Currently Have: ' + currency.amount, 60, rectangle.y + 32, 250, 'left');
+      this.flareDrawTextEx(_text_handler2.default.getText().currentlyHave + ' ' + currency.amount, 60, rectangle.y + 32, 250, 'left');
       this.resetFontSettings();
     }
   }]);
@@ -6234,7 +6337,7 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
 
 module.exports = FlareCurrencies;
 
-},{"../../flare_window_selectable":107,"../../scene_window_container":108,"../scenes/flare_currency_information_extended_scene":80,"./currency_info/helper/currency_exists":93,"./currency_info/helper/store_current_currency_name":96}],100:[function(require,module,exports){
+},{"../../flare_window_selectable":108,"../../scene_window_container":109,"../currencies/text_handler":79,"../scenes/flare_currency_information_extended_scene":81,"./currency_info/helper/currency_exists":94,"./currency_info/helper/store_current_currency_name":97}],101:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6329,7 +6432,7 @@ var CurrencyValueWindow = (function (_Window_Base) {
 
 module.exports = CurrencyValueWindow;
 
-},{"lodash/collection/find":4}],101:[function(require,module,exports){
+},{"lodash/collection/find":4}],102:[function(require,module,exports){
 "use strict";
 
 /**
@@ -6385,7 +6488,7 @@ Window_ShopBuy.prototype.makeItemList = function () {
   }
 };
 
-},{}],102:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 'use strict';
 
 /**
@@ -6431,7 +6534,7 @@ Window_ShopNumber.prototype.changeNumber = function (amount) {
   }
 };
 
-},{}],103:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6547,7 +6650,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],104:[function(require,module,exports){
+},{"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],105:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6612,7 +6715,7 @@ var FlareError = (function () {
 
 module.exports = FlareError = FlareError;
 
-},{}],105:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6654,7 +6757,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber = FlareRandomNumber;
 
-},{}],106:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6719,7 +6822,7 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}],107:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6783,7 +6886,7 @@ var FlareWindowSelectable = (function (_Window_Selectable) {
 
 module.exports = FlareWindowSelectable = FlareWindowSelectable;
 
-},{}],108:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -6898,4 +7001,4 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":4,"../node_modules/lodash/lang/isUndefined":67}]},{},[79,88,91,78,85,84,90,89,102,101,103]);
+},{"../node_modules/lodash/collection/find":4,"../node_modules/lodash/lang/isUndefined":67}]},{},[80,89,92,78,86,85,91,90,103,102,104]);

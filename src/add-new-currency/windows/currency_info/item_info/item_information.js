@@ -7,7 +7,8 @@ import StoreCurrencyItemInfo    from '../helper/store_currency_item_info';
 import wordWrap                 from 'underscore.string/wrap';
 import lodashIsUndefined        from 'lodash/lang/isUndefined';
 import MapHasCureencyShop       from '../helper/map_has_currency_shop';
-import {extractAllOfType}         from 'rmmv-mrp-core/option-parser';
+import {extractAllOfType}       from 'rmmv-mrp-core/option-parser';
+import TextHandler              from '../../../currencies/currency';
 
 /**
  * @namespace FlareCurrency
@@ -52,10 +53,10 @@ class ItemInformation extends FlareWindowBase {
 
     this.drawIcon(itemInformation.itemIcon, 10, 20);
     this.drawText(itemInformation.itemName, 60, 20);
-    this.drawText('- Shops are selling for: ' + itemInformation.currencyCost, 10, 80);
+    this.drawText(TextHandler.getText().areSellingFor + ' ' + itemInformation.currencyCost, 10, 80);
 
     if (IsMapSelling) {
-      this.flareDrawTextEx('- There is a \\c[14]currency shop\\c[0] selling this item.', 10, 100);
+      this.flareDrawTextEx(TextHandler.getText().currencyShopsSelling + ' ', 10, 100);
     }
 
     this.flareDrawTextEx(content, 10, 140);

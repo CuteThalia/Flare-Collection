@@ -8,6 +8,7 @@ import SceneWindowContainer  from '../../scene_window_container';
 import FlareMoreInfoScene    from '../scenes/flare_currency_information_extended_scene';
 import StoreCurrencyName     from './currency_info/helper/store_current_currency_name';
 import CurrencyExists        from './currency_info/helper/currency_exists';
+import TextHandler           from '../currencies/text_handler';
 
 /**
  * Currencie window. Lets you select a currency.
@@ -100,7 +101,7 @@ class FlareCurrencies extends FlareWindowSelectable {
     this.contents.fontSize = 18;
     this.drawIcon(currency.icon, 10, rectangle.y + 20 );
     this.flareDrawTextEx(currency.name, 60, rectangle.y + 10);
-    this.flareDrawTextEx('Currently Have: ' + currency.amount, 60, rectangle.y + 32, 250, 'left');
+    this.flareDrawTextEx(TextHandler.getText().currentlyHave + ' ' + currency.amount, 60, rectangle.y + 32, 250, 'left');
     this.resetFontSettings();
   }
 }

@@ -2,8 +2,6 @@
  * @namespace FlareCurrency
  */
 
-import FlareError from '../../flare_error';
-
 /**
  * Currency Object Creation Class
  *

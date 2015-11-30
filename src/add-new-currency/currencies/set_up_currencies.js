@@ -2,8 +2,9 @@
  * @namespace FlareCurrencies
  */
 
-import Currency   from './currency';
-import FlareError from '../../flare_error';
+import Currency    from './currency';
+import FlareError  from '../../flare_error';
+import TextHandler from './text_handler';
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');
 
@@ -17,6 +18,7 @@ class FlareCurrency {
 
   constructor() {
     window.flareCurrency = new Currency();
+    TextHandler.storeText(FlareCurrencyPluginParamters);
   }
 
   /**

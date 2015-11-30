@@ -9,6 +9,7 @@ import lodashArrayUnique         from 'lodash/array/uniq';
 import lodashClone               from 'lodash/lang/clone';
 import StoreCurrencyItemInfo     from '../helper/store_currency_item_info';
 import SceneWindowContainer      from '../../../../scene_window_container';
+import TextHandler               from '../../../currencies/text_handler';
 
 
 /**
@@ -134,7 +135,7 @@ class ItemForCurrency extends FlareWindowSelectable {
     this.contents.fontSize = 18;
     this.drawIcon(item.itemIcon, 10, rectangle.y + 20 );
     this.flareDrawTextEx(item.itemName, 60, rectangle.y + 10);
-    this.flareDrawTextEx('Shops Sell For: ' + item.currencyCost, 60, rectangle.y + 32, 250, 'left');
+    this.flareDrawTextEx(TextHandler.getText().shopsSellFor + ' ' + item.currencyCost, 60, rectangle.y + 32, 250, 'left');
     this.resetFontSettings();
   }
 }
