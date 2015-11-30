@@ -6006,6 +6006,16 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
 },{"../law_storage/laws_for_map":101}],118:[function(require,module,exports){
 'use strict';
 
+var _reward_storage = require('../reward_storage/reward_storage');
+
+var _reward_storage2 = _interopRequireDefault(_reward_storage);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * @namespace FlareLawsForMap.
  */
@@ -6013,10 +6023,13 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
 var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand.prototype.addOriginalCommands;
 Window_MenuCommand.prototype.addOriginalCommands = function () {
   oldWindowMenuCommandProtottypeAddOriginalCommandsMethod.call(this);
-  this.addCommand('Laws', 'Laws');
+
+  if (!(0, _isUndefined2.default)(_reward_storage2.default.getContainer())) {
+    this.addCommand('Laws', 'Laws');
+  }
 };
 
-},{}],119:[function(require,module,exports){
+},{"../reward_storage/reward_storage":108,"lodash/lang/isUndefined":71}],119:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

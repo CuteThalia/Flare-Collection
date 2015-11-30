@@ -3,7 +3,7 @@
  */
 
 import GatherItemsForShop    from './gather_items';
-import {extractAllOfType}      from 'rmmv-mrp-core/option-parser';
+import {extractAllOfType}    from 'rmmv-mrp-core/option-parser';
 import lodashIsUndefined     from 'lodash/lang/isUndefined';
 import lodashFind            from 'lodash/collection/find';
 
