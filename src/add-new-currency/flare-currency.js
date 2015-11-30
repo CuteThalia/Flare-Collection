@@ -25,8 +25,8 @@ import CurrencyShop from './shop/currency_shop';
   *
   * @param Help Text
   * @desc The help text when looking at the details of a single currency.
-  * Default: \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
-  * @default \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
+  * Default: \c[18]Hit Enter to see more information, or switch to another currency and hit enter\c[0]
+  * @default \c[18]Hit Enter to see more information, or switch to another currency and hit enter\c[0]
   *
   * @param Shops sell for text
   * @desc The text used to show: "Shops sell" for when looking at currency items.
@@ -40,8 +40,8 @@ import CurrencyShop from './shop/currency_shop';
   *
   * @param Currency Shops Selling This item
   * @desc Text when the there are shops selling the item on the map.
-  * Default: - There is a \\c[14]currency shop\\c[0] selling this item.
-  * @default - There is a \\c[14]currency shop\\c[0] selling this item.
+  * Default: - There is a \c[14]currency shop\c[0] selling this item.
+  * @default - There is a \c[14]currency shop\c[0] selling this item.
   *
   * @param ---Currency One---
   * @desc

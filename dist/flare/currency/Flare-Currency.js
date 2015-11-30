@@ -3711,8 +3711,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @param Help Text
  * @desc The help text when looking at the details of a single currency.
- * Default: \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
- * @default \\c[18]Hit Enter to see more information, or switch to another currency and hit enter\\c[0]
+ * Default: \c[18]Hit Enter to see more information, or switch to another currency and hit enter\c[0]
+ * @default \c[18]Hit Enter to see more information, or switch to another currency and hit enter\c[0]
  *
  * @param Shops sell for text
  * @desc The text used to show: "Shops sell" for when looking at currency items.
@@ -3726,8 +3726,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @param Currency Shops Selling This item
  * @desc Text when the there are shops selling the item on the map.
- * Default: - There is a \\c[14]currency shop\\c[0] selling this item.
- * @default - There is a \\c[14]currency shop\\c[0] selling this item.
+ * Default: - There is a \c[14]currency shop\c[0] selling this item.
+ * @default - There is a \c[14]currency shop\c[0] selling this item.
  *
  * @param ---Currency One---
  * @desc
@@ -5113,22 +5113,27 @@ var _flare_currency_scene = require('../scenes/flare_currency_scene');
 
 var _flare_currency_scene2 = _interopRequireDefault(_flare_currency_scene);
 
+var _text_handler = require('../currencies/text_handler');
+
+var _text_handler2 = _interopRequireDefault(_text_handler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow; /**
-                                                                                           * @namespace FlareCurrency
-                                                                                           */
+/**
+ * @namespace FlareCurrency
+ */
 
+var oldSceneMenuPrototypeCreateCommandWindiow = Scene_Menu.prototype.createCommandWindow;
 Scene_Menu.prototype.createCommandWindow = function () {
   oldSceneMenuPrototypeCreateCommandWindiow.call(this);
-  this._commandWindow.setHandler('Currencies', this.currencyCommand.bind(this));
+  this._commandWindow.setHandler(_text_handler2.default.getText().menuLabel, this.currencyCommand.bind(this));
 };
 
 Scene_Menu.prototype.currencyCommand = function () {
   SceneManager.push(_flare_currency_scene2.default);
 };
 
-},{"../scenes/flare_currency_scene":82}],90:[function(require,module,exports){
+},{"../currencies/text_handler":79,"../scenes/flare_currency_scene":82}],90:[function(require,module,exports){
 "use strict";
 
 var _currency_value_window = require("../windows/shop/currency_value_window");
@@ -5498,9 +5503,9 @@ var _wrap = require('underscore.string/wrap');
 
 var _wrap2 = _interopRequireDefault(_wrap);
 
-var _currency = require('../../currencies/currency');
+var _text_handler = require('../../currencies/text_handler');
 
-var _currency2 = _interopRequireDefault(_currency);
+var _text_handler2 = _interopRequireDefault(_text_handler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5548,7 +5553,7 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
       this.flareDrawTextEx(contents, 0, 0);
 
-      var helpText = _currency2.default.getText().helpText;
+      var helpText = _text_handler2.default.getText().helpText.replace(/\\/g, '\\\\\\');
       helpText = (0, _wrap2.default)(helpText, { width: 48 });
 
       this.flareDrawTextEx('\\c[2]---------------------------------\\c[0]', 0, Graphics.boxHeight - 150);
@@ -5563,7 +5568,7 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
 module.exports = CurrencyDetails;
 
-},{"../../../flare_window_base":107,"../../currencies/currency":77,"underscore.string/wrap":76}],94:[function(require,module,exports){
+},{"../../../flare_window_base":107,"../../currencies/text_handler":79,"underscore.string/wrap":76}],94:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6094,9 +6099,9 @@ var _map_has_currency_shop2 = _interopRequireDefault(_map_has_currency_shop);
 
 var _optionParser = require('rmmv-mrp-core/option-parser');
 
-var _currency = require('../../../currencies/currency');
+var _text_handler = require('../../../currencies/text_handler');
 
-var _currency2 = _interopRequireDefault(_currency);
+var _text_handler2 = _interopRequireDefault(_text_handler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6155,17 +6160,17 @@ var ItemInformation = (function (_FlareWindowBase) {
     value: function drawItemInformation(index) {
       this.contents.fontSize = 18;
       var itemInformation = _store_currency_item_info2.default.getCurrencyItemArray()[index];
-      var itemInformationDescription = itemInformation.description.replace(/\\/g, "\\\\\\");
+      var itemInformationDescription = itemInformation.description.replace(/\\\\/g, "\\\\\\");
 
       var content = (0, _wrap2.default)(itemInformationDescription, { width: 48 });
       var IsMapSelling = this.getCountOfShopsSellingThisCurrency();
 
       this.drawIcon(itemInformation.itemIcon, 10, 20);
       this.drawText(itemInformation.itemName, 60, 20);
-      this.drawText(_currency2.default.getText().areSellingFor + ' ' + itemInformation.currencyCost, 10, 80);
+      this.drawText(_text_handler2.default.getText().areSellingFor + ' ' + itemInformation.currencyCost, 10, 80);
 
       if (IsMapSelling) {
-        this.flareDrawTextEx(_currency2.default.getText().currencyShopsSelling + ' ', 10, 100);
+        this.flareDrawTextEx(_text_handler2.default.getText().currencyShopsSelling.replace(/\\/g, "\\\\\\") + ' ', 10, 100);
       }
 
       this.flareDrawTextEx(content, 10, 140);
@@ -6178,7 +6183,7 @@ var ItemInformation = (function (_FlareWindowBase) {
 
 module.exports = ItemInformation;
 
-},{"../../../../flare_window_base":107,"../../../currencies/currency":77,"../helper/map_has_currency_shop":95,"../helper/store_currency_item_info":96,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],100:[function(require,module,exports){
+},{"../../../../flare_window_base":107,"../../../currencies/text_handler":79,"../helper/map_has_currency_shop":95,"../helper/store_currency_item_info":96,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],100:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

@@ -8,7 +8,7 @@ import wordWrap                 from 'underscore.string/wrap';
 import lodashIsUndefined        from 'lodash/lang/isUndefined';
 import MapHasCureencyShop       from '../helper/map_has_currency_shop';
 import {extractAllOfType}       from 'rmmv-mrp-core/option-parser';
-import TextHandler              from '../../../currencies/currency';
+import TextHandler              from '../../../currencies/text_handler';
 
 /**
  * @namespace FlareCurrency
@@ -46,7 +46,7 @@ class ItemInformation extends FlareWindowBase {
   drawItemInformation(index) {
     this.contents.fontSize         = 18;
     var itemInformation            = StoreCurrencyItemInfo.getCurrencyItemArray()[index];
-    var itemInformationDescription = itemInformation.description.replace(/\\/g, "\\\\\\");
+    var itemInformationDescription = itemInformation.description.replace(/\\\\/g, "\\\\\\");
 
     var content      = wordWrap(itemInformationDescription, {width: 48});
     var IsMapSelling = this.getCountOfShopsSellingThisCurrency();
@@ -56,7 +56,7 @@ class ItemInformation extends FlareWindowBase {
     this.drawText(TextHandler.getText().areSellingFor + ' ' + itemInformation.currencyCost, 10, 80);
 
     if (IsMapSelling) {
-      this.flareDrawTextEx(TextHandler.getText().currencyShopsSelling + ' ', 10, 100);
+      this.flareDrawTextEx(TextHandler.getText().currencyShopsSelling.replace(/\\/g, "\\\\\\") + ' ', 10, 100);
     }
 
     this.flareDrawTextEx(content, 10, 140);
