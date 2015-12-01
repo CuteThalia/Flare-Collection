@@ -26,12 +26,13 @@ For example an event can have:
 
 ```javascript
 FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", false, true, {windoWidth: 900, windowX: 2, windowY: 90});
-FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", true, false, {windoWidth: 900, windowX: 2, windowY: 90});
+FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]", true, false, {windoWidth: 900, windowX: 2, windowY: 90, fontSize: 20});
 
 // Options are passed in as an object:
 // windowWidth = The width of the notification window.
 // windowX     = The x position of the window.
 // windowY     = the y position of the window.
+// fontSize    = the font size for the window.
 
 FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
 FlareNotification.notify("\\i[8] \\c[10]Hello World\\c[0]");
@@ -54,3 +55,13 @@ This adds ten windows to an event that will then all be called.
 > If you set the window Y to low or too high you may never see the notification because
 > the window moved down the y axis and as it does it fades out over time. That time
 > can be adjusted how ever.
+
+## Event Based Notifications
+
+Now you can enable a set of options to turn on event based notifications for weapons, armor, items, xp, gold, hp, mp and so on. There are a ton of individual event notifications that you can turn on or off so that you
+are not creating events all the time that contain notifications after a party gains x item or loses x hp.
+
+These only trigger on events that require the player to some how activate them. They do not play in battle or in
+menus.
+
+Event based notifications have options for the way the window looks and behaves including width, font size, stay at the top, how long till next window and so on. These options are different then self created notification  window options and are individual for each type of event notification.
