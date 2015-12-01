@@ -1,4 +1,4 @@
-/**
+  /**
  * @namespace FlareNotification.
  */
 
@@ -14,33 +14,39 @@ var FlareNotificationWindow = PluginManager.parameters('Flare-NotificationWindow
 class NotificationOptions {
 
   static createNotificationOptions() {
-
-    var windowGainMoveDown = false;
-    var windowGainFadeOut  = false;
-
-    if (FlareNotificationWindow['Should window stay at the top?'] === "true") {
-      windowGainMoveDown = true;
-    }
-
-    if (FlareNotificationWindow['Should the window fade out?'] === "true") {
-      windowGainFadeOut = true;
-    }
+    this.getGoldInformation(FlareNotificationWindow);
 
     this._notificationOptions = {
-      timeTillNextWindow:   FlareNotificationWindow['Till Next Notification?'],
-      fadeOutTime:          FlareNotificationWindow['How Long Till Notification Fade Out?'],
-      stickToTop:           FlareNotificationWindow['Should I stay at the top?'],
-      fadeOutCalculation:   FlareNotificationWindow['Calulation For Fade out'],
-      showWindow:           FlareNotificationWindow['Show Window?'],
-      windowGainWidth:      parseInt(FlareNotificationWindow['Window width']),
-      windowGainFontSize:   parseInt(FlareNotificationWindow['Window font size']),
-      windowGainMoveDown:   windowGainMoveDown,
-      windowGainFadeOut:    windowGainFadeOut,
+      timeTillNextWindow:             FlareNotificationWindow['Till Next Notification?'],
+      fadeOutTime:                    FlareNotificationWindow['How Long Till Notification Fade Out?'],
+      stickToTop:                     FlareNotificationWindow['Should I stay at the top?'],
+      fadeOutCalculation:             FlareNotificationWindow['Calulation For Fade out'],
+      showWindow:                     FlareNotificationWindow['Show Window?'],
+      showGoldNotificationEvent:      FlareNotificationWindow['Display Gold Notification Event?'],
+      goldNotificationWindowWidth:    parseInt(FlareNotificationWindow['Gold Notification Width']),
+      goldNotificationFontSize:       parseInt(FlareNotificationWindow['Gold Notification Font Size']),
+      goldNotificationWindowMoveDown: this._goldNotificationWindowMoveDown,
+      goldNotificationWindowFadeOut:  this._goldNotificationWindowFadeOut,
     };
+
+    console.log(this._notificationOptions);
   }
 
   static getNotificationOptions() {
     return this._notificationOptions;
+  }
+
+  static getGoldInformation(pluginOptions) {
+    this._goldNotificationWindowMoveDown = false;
+    this._goldNotificationWindowFadeOut  = false;
+
+    if (pluginOptions['Gold Notification Stay At The Top?'] === "true") {
+      this._goldNotificationWindowMoveDown = true;
+    }
+
+    if (pluginOptions['Gold Notification Should Fadeout?'] === "true") {
+      this._goldNotificationWindowFadeOut = true;
+    }
   }
 }
 

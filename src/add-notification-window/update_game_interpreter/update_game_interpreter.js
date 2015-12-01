@@ -1,112 +1,46 @@
-import NotificationOptions from '../notification_options/notification_options'
+import NotificationOptions from '../notification_options/notification_options';
 
+// Change Gold
 Game_Interpreter.prototype.command125 = function() {
     var value = this.operateValue(this._params[0], this._params[1], this._params[2]);
 
-    if (value < 0) {
-      FlareNotification.notify(
-        "\\c[16]Looses Gold\\c[0]: " + Math.abs(value),
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
-      );
-    } else {
-      FlareNotification.notify(
-        "\\c[16]Gains Gold\\c[0]: " + value,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
-      );
-    }
+    this.processNotificationEvents("Gold", "showGoldNotificationEvent", value, {
+      moveDown:       NotificationOptions.getNotificationOptions().goldNotificationWindowMoveDown,
+      fadeOut:        NotificationOptions.getNotificationOptions().goldNotificationWindowFadeOut,
+      windowOptions:  {
+        windowWidth: NotificationOptions.getNotificationOptions().goldNotificationWindowWidth,
+        fontSize:    NotificationOptions.getNotificationOptions().goldNotificationFontSize
+      }
+    });
 
     $gameParty.gainGold(value);
-    return NotificationOptions.getNotificationOptions().windowGainFadeOut;
+    return true;
 };
 
-// Change Items
-Game_Interpreter.prototype.command126 = function() {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
-
+/**
+ * Allows us to process notification options.
+ *
+ * @param string type - The type for the message, might be weapons, armors, items, gold and so on.
+ * @param strink showKey - The key to be used to find if we should show the notification.
+ * @param int value - value for the notification window.
+ * @param object options - options for the notification window.
+ */
+Game_Interpreter.prototype.processNotificationEvents = function(type, showKey, value, options) {
+  if (NotificationOptions.getNotificationOptions()[showKey]) {
     if (value < 0) {
       FlareNotification.notify(
-        "\\c[16]Looses Item (Amount: "+Math.abs(value)+") \\c[0]: " + "\\i["+$dataItems[this._params[0]].iconIndex+"] " + $dataItems[this._params[0]].name,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
+        "\\c[16]Looses "+type+"\\c[0]: " + Math.abs(value),
+        options.moveDown,
+        options.fadeOut,
+        options.windowOptions
       );
     } else {
       FlareNotification.notify(
-        "\\c[16]Gains Item (Amount: "+value+") \\c[0]: " + "\\i["+$dataItems[this._params[0]].iconIndex+"] " + $dataItems[this._params[0]].name,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
+        "\\c[16]Gains "+type+"\\c[0]: " + Math.abs(value),
+        options.moveDown,
+        options.fadeOut,
+        options.windowOptions
       );
     }
-
-    $gameParty.gainItem($dataItems[this._params[0]], value);
-    return NotificationOptions.getNotificationOptions().windowGainFadeOut;
-};
-
-// Change Weapons
-Game_Interpreter.prototype.command127 = function() {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
-
-    if (value < 0) {
-      FlareNotification.notify(
-        "\\c[16]Looses Weapon (Amount: "+Math.abs(value)+") \\c[0]: " + "\\i["+$dataItems[this._params[0]].iconIndex+"] " + $dataItems[this._params[0]].name,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
-      );
-    } else {
-      FlareNotification.notify(
-        "\\c[16]Gains Weapon (Amount: "+value+") \\c[0]: " + "\\i["+$dataItems[this._params[0]].iconIndex+"] " + $dataItems[this._params[0]].name,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
-      );
-    }
-
-    $gameParty.gainItem($dataWeapons[this._params[0]], value, this._params[4]);
-    return NotificationOptions.getNotificationOptions().windowGainFadeOut;
-};
-
-// Change Armors
-Game_Interpreter.prototype.command128 = function() {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
-
-    if (value < 0) {
-      FlareNotification.notify(
-        "\\c[16]Looses Armor (Amount: "+Math.abs(value)+") \\c[0]: " + "\\i["+$dataItems[this._params[0]].iconIndex+"] " + $dataItems[this._params[0]].name,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
-      );
-    } else {
-      FlareNotification.notify(
-        "\\c[16]Gains Armor (Amount: "+value+") \\c[0]: " + "\\i["+$dataItems[this._params[0]].iconIndex+"] " + $dataItems[this._params[0]].name,
-        NotificationOptions.getNotificationOptions().windowGainMoveDown,
-        NotificationOptions.getNotificationOptions().windowGainFadeOut,
-        { windowWidth: NotificationOptions.getNotificationOptions().windowGainWidth,
-          fontSize: NotificationOptions.getNotificationOptions().windowGainFontSize
-        }
-      );
-    }
-
-    $gameParty.gainItem($dataArmors[this._params[0]], value, this._params[4]);
-    return NotificationOptions.getNotificationOptions().windowGainFadeOut;
-};
+  }
+}

@@ -36,25 +36,31 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
- * @param ---Notification on event gain---
+ * @param ---Gold Event---
+ * @desc
  *
- * @param Window width
- * @desc What width should windows be when we gain a new item?
- * Default: NotificationOptions.getNotificationOptions().windowGainWidth
+ * @param Display Gold Notification Event?
+ * @desc When party gains gold via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Gold Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
  * @default 500
  *
- * @param Window font size
- * @desc What font size should we use?
+ * @param Gold Notification Font Size
+ * @desc What font size should we use on the gold notification window?
  * Default: 20
  * @default 20
  *
- * @param Should window stay at the top?
- * @desc Should the window stay at the top or move down the screen? True makes it stay.
+ * @param Gold Notification Stay At The Top?
+ * @desc Should the gold notification windw stay at the top?
  * Default: false
  * @default false
  *
- * @param Should the window fade out?
- * @desc Should the window fade out or play its self out and disapear? True is fade out.
+ * @param Gold Notification Should Fadeout?
+ * @desc Should the gold window fade out if it isn't staying at the top?
  * Default: true
  * @default true
  *
