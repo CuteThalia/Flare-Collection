@@ -14,16 +14,28 @@ var FlareNotificationWindow = PluginManager.parameters('Flare-NotificationWindow
 class NotificationOptions {
 
   static createNotificationOptions() {
+
+    var windowGainMoveDown = false;
+    var windowGainFadeOut  = false;
+
+    if (FlareNotificationWindow['Should window stay at the top?'] === "true") {
+      windowGainMoveDown = true;
+    }
+
+    if (FlareNotificationWindow['Should the window fade out?'] === "true") {
+      windowGainFadeOut = true;
+    }
+
     this._notificationOptions = {
-      timeTillNextWindow:  FlareNotificationWindow['Till Next Notification?'],
+      timeTillNextWindow:   FlareNotificationWindow['Till Next Notification?'],
       fadeOutTime:          FlareNotificationWindow['How Long Till Notification Fade Out?'],
       stickToTop:           FlareNotificationWindow['Should I stay at the top?'],
       fadeOutCalculation:   FlareNotificationWindow['Calulation For Fade out'],
-      showWindow:            FlareNotificationWindow['Show Window?'],
-      windowGainWidth:      FlareNotificationWindow['Window width'],
-      windowGainFontSize:  FlareNotificationWindow['Window font size'],
-      windowGainMoveDown:  FlareNotificationWindow['Should window stay at the top?'],
-      windowGainFadeOut:   FlareNotificationWindow['Should the window fade out?'],
+      showWindow:           FlareNotificationWindow['Show Window?'],
+      windowGainWidth:      parseInt(FlareNotificationWindow['Window width']),
+      windowGainFontSize:   parseInt(FlareNotificationWindow['Window font size']),
+      windowGainMoveDown:   windowGainMoveDown,
+      windowGainFadeOut:    windowGainFadeOut,
     };
   }
 

@@ -2,7 +2,7 @@ import NotificationOptions from '../notification_options/notification_options'
 
 Game_Interpreter.prototype.command125 = function() {
     var value = this.operateValue(this._params[0], this._params[1], this._params[2]);
-    console.log(NotificationOptions.getNotificationOptions());
+
     if (value < 0) {
       FlareNotification.notify(
         "\\c[16]Looses Gold\\c[0]: " + Math.abs(value),
