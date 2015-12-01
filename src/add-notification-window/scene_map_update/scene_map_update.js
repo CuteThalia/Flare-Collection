@@ -8,7 +8,8 @@
  * Allows us to show notifications on the map.
  */
 
-var FlareNotificationWindow = require('../windows/flare_notification_window');
+import FlareNotificationWindow from '../windows/flare_notification_window';
+import WindowOptions           from '../notification/window/options';
 
 var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function() {
@@ -45,7 +46,8 @@ Scene_Map.prototype.openFlareNotificationWindow = function() {
   if (this._flareWindow === null) {
     this._flareWindow = FlareNotification._getQueue().shift();
     this.addChild(this._flareWindow.windowMethod);
-    this._flareWindow.windowMethod.open((this._flareWindow.text));
+
+    this._flareWindow.windowMethod.open(this._flareWindow.text);
   }
 }
 

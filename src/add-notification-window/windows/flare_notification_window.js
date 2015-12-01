@@ -2,7 +2,9 @@
  * @namespace FlareNotification.
  */
 
-var FlareWindowBase = require('../../flare_window_base');
+import FlareWindowBase    from '../../flare_window_base';
+import WindowOptions      from '../notification/window/options';
+import lodashIsUndefined  from 'lodash/lang/isUndefined';
 
 /**
  * Create a notiication window.
@@ -12,16 +14,33 @@ var FlareWindowBase = require('../../flare_window_base');
  */
 class FlareNotificationWindow extends FlareWindowBase {
 
-  constructor() {
+  constructor(options) {
     super();
-    this.initialize();
+    this.initialize(options);
   }
 
-  initialize() {
-    var width = this.windowWidth();
+  initialize(options) {
+    if (!lodashIsUndefined(options) && !lodashIsUndefined(options.windowWidth)) {
+      this._windowWidth = options.windowWidth;
+    } else {
+      this._windowWidth = 350;
+    }
+
+    var width = this._windowWidth;
     var height = this.windowHeight();
 
-    super.initialize(0, 0, width, height);
+    var x = 0;
+    var y = 0;
+
+    if (!lodashIsUndefined(options) && !lodashIsUndefined(options.windowX)) {
+      x = options.windowX;
+    }
+
+    if (!lodashIsUndefined(options) && !lodashIsUndefined(options.windowY)) {
+      y = options.windowY;
+    }
+
+    super.initialize(x, y, width, height);
 
     this.contentsOpacity = 0;
     this.opacity = 0;
@@ -33,7 +52,7 @@ class FlareNotificationWindow extends FlareWindowBase {
   }
 
   windowWidth() {
-    return 560;
+    return this._windowWidth;
   }
 
   windowHeight() {
@@ -46,7 +65,7 @@ class FlareNotificationWindow extends FlareWindowBase {
     if (this._showCount > 0) {
       this.updateFadeIn();
 
-      if (window._windowOptions.stayAtTop ||
+      if (!WindowOptions.getContainer().shouldWeStayAtTop ||
           !_NotificationOptions.getNotificationOptions().stick_to_top) {
         this.y += 3;
       }
@@ -67,7 +86,7 @@ class FlareNotificationWindow extends FlareWindowBase {
     }
 
     if (this._fadeInFinished) {
-      if (window._windowOptions.fadeoutTowardsBottom &&
+      if (WindowOptions.getContainer().showWeFadeoutTowardsBottom &&
           this._showCount < this._storeShowCountHalf) {
 
         this.contentsOpacity -= 16;
@@ -77,7 +96,11 @@ class FlareNotificationWindow extends FlareWindowBase {
     }
   }
 
-  open(text) {
+  open(text, windowWidth) {
+
+    if (!lodashIsUndefined(windowWidth)) {
+      this._windowWidth = windowWidth;
+    }
 
     this.refresh(text);
 

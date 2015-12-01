@@ -30,6 +30,5 @@ class NotificationOptions {
 
 // Private global object.
 window._NotificationOptions = NotificationOptions;
-_NotificationOptions._notificationOptions = null;
 
 module.exports = NotificationOptions

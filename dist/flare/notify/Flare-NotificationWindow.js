@@ -24,17 +24,29 @@ module.exports = isUndefined;
 },{}],2:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareNotification.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
+
+var _flare_notification_window = require('./windows/flare_notification_window');
+
+var _flare_notification_window2 = _interopRequireDefault(_flare_notification_window);
+
+var _notification_options = require('./notification_options/notification_options');
+
+var _notification_options2 = _interopRequireDefault(_notification_options);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _options = require('./notification/window/options');
+
+var _options2 = _interopRequireDefault(_options);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareNotification.
- */
-
-var FlareNotificationWindow = require('./windows/flare_notification_window');
-var NotificationOptions = require('./notification_options/notification_options');
-var lodashIsUndefined = require('lodash/lang/isUndefined');
 
 /*:
  * @plugindesc Allows you to create notifications for player based events.
@@ -105,19 +117,17 @@ var FlareNotification = (function () {
      *
      * @param text - text for the window
      */
-    value: function notify(text, stayAtTop, fadeoutTowardsBottom) {
+    value: function notify(text, stayAtTop, fadeoutTowardsBottom, options) {
       this._arrayOfNotifications.push({
-        windowMethod: new FlareNotificationWindow(),
+        windowMethod: new _flare_notification_window2.default(options),
         text: text
       });
 
-      var stayAtTop = false ? lodashIsUndefined(stayAtTop) : stayAtTop;
-      var fadeoutTowardsBottom = false ? lodashIsUndefined(fadeoutTowardsBottom) : fadeoutTowardsBottom;
+      var stayAtTop = false ? (0, _isUndefined2.default)(stayAtTop) : stayAtTop;
+      var fadeoutTowardsBottom = false ? (0, _isUndefined2.default)(fadeoutTowardsBottom) : fadeoutTowardsBottom;
 
-      window._windowOptions = {
-        stayAtTop: stayAtTop,
-        fadeoutTowardsBottom: fadeoutTowardsBottom
-      };
+      _options2.default.setOption('shouldWeStayAtTop', stayAtTop);
+      _options2.default.setOption('shouldWeFadeOutTowardsBottom', fadeoutTowardsBottom);
     }
 
     /**
@@ -164,10 +174,48 @@ _NotificationOptions.createNotificationOptions();
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
 
-// Do Not touch or manipulate this.
-window._windowOptions = {};
+},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":6,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
+'use strict';
 
-},{"./notification_options/notification_options":3,"./windows/flare_notification_window":5,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareNotification.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NotificationWindowOptions = (function () {
+  function NotificationWindowOptions() {
+    _classCallCheck(this, NotificationWindowOptions);
+  }
+
+  _createClass(NotificationWindowOptions, null, [{
+    key: 'setOption',
+    value: function setOption(key, value) {
+      if ((0, _isUndefined2.default)(this._windowOptions)) {
+        this._windowOptions = {};
+      }
+
+      this._windowOptions[key] = value;
+    }
+  }, {
+    key: 'getContainer',
+    value: function getContainer() {
+      return this._windowOptions;
+    }
+  }]);
+
+  return NotificationWindowOptions;
+})();
+
+module.exports = NotificationWindowOptions;
+
+},{"lodash/lang/isUndefined":1}],4:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -217,12 +265,21 @@ var NotificationOptions = (function () {
 // Private global object.
 
 window._NotificationOptions = NotificationOptions;
-_NotificationOptions._notificationOptions = null;
 
 module.exports = NotificationOptions;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
+
+var _flare_notification_window = require('../windows/flare_notification_window');
+
+var _flare_notification_window2 = _interopRequireDefault(_flare_notification_window);
+
+var _options = require('../notification/window/options');
+
+var _options2 = _interopRequireDefault(_options);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * @namespace FlareNotification.
@@ -233,8 +290,6 @@ module.exports = NotificationOptions;
  *
  * Allows us to show notifications on the map.
  */
-
-var FlareNotificationWindow = require('../windows/flare_notification_window');
 
 var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function () {
@@ -271,6 +326,7 @@ Scene_Map.prototype.openFlareNotificationWindow = function () {
   if (this._flareWindow === null) {
     this._flareWindow = FlareNotification._getQueue().shift();
     this.addChild(this._flareWindow.windowMethod);
+
     this._flareWindow.windowMethod.open(this._flareWindow.text);
   }
 };
@@ -281,24 +337,34 @@ Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) 
   this._waitForWindowToClose = 75;
 };
 
-},{"../windows/flare_notification_window":5}],5:[function(require,module,exports){
+},{"../notification/window/options":3,"../windows/flare_notification_window":6}],6:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
+var _flare_window_base = require('../../flare_window_base');
+
+var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
+
+var _options = require('../notification/window/options');
+
+var _options2 = _interopRequireDefault(_options);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareNotification.
- */
-
-var FlareWindowBase = require('../../flare_window_base');
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @namespace FlareNotification.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 /**
  * Create a notiication window.
@@ -310,22 +376,39 @@ var FlareWindowBase = require('../../flare_window_base');
 var FlareNotificationWindow = (function (_FlareWindowBase) {
   _inherits(FlareNotificationWindow, _FlareWindowBase);
 
-  function FlareNotificationWindow() {
+  function FlareNotificationWindow(options) {
     _classCallCheck(this, FlareNotificationWindow);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FlareNotificationWindow).call(this));
 
-    _this.initialize();
+    _this.initialize(options);
     return _this;
   }
 
   _createClass(FlareNotificationWindow, [{
     key: 'initialize',
-    value: function initialize() {
-      var width = this.windowWidth();
+    value: function initialize(options) {
+      if (!(0, _isUndefined2.default)(options) && !(0, _isUndefined2.default)(options.windowWidth)) {
+        this._windowWidth = options.windowWidth;
+      } else {
+        this._windowWidth = 350;
+      }
+
+      var width = this._windowWidth;
       var height = this.windowHeight();
 
-      _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), 'initialize', this).call(this, 0, 0, width, height);
+      var x = 0;
+      var y = 0;
+
+      if (!(0, _isUndefined2.default)(options) && !(0, _isUndefined2.default)(options.windowX)) {
+        x = options.windowX;
+      }
+
+      if (!(0, _isUndefined2.default)(options) && !(0, _isUndefined2.default)(options.windowY)) {
+        y = options.windowY;
+      }
+
+      _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), 'initialize', this).call(this, x, y, width, height);
 
       this.contentsOpacity = 0;
       this.opacity = 0;
@@ -338,7 +421,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
   }, {
     key: 'windowWidth',
     value: function windowWidth() {
-      return 560;
+      return this._windowWidth;
     }
   }, {
     key: 'windowHeight',
@@ -353,7 +436,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
       if (this._showCount > 0) {
         this.updateFadeIn();
 
-        if (window._windowOptions.stayAtTop || !_NotificationOptions.getNotificationOptions().stick_to_top) {
+        if (!_options2.default.getContainer().shouldWeStayAtTop || !_NotificationOptions.getNotificationOptions().stick_to_top) {
           this.y += 3;
         }
 
@@ -375,7 +458,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
       }
 
       if (this._fadeInFinished) {
-        if (window._windowOptions.fadeoutTowardsBottom && this._showCount < this._storeShowCountHalf) {
+        if (_options2.default.getContainer().showWeFadeoutTowardsBottom && this._showCount < this._storeShowCountHalf) {
 
           this.contentsOpacity -= 16;
         }
@@ -385,7 +468,11 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
     }
   }, {
     key: 'open',
-    value: function open(text) {
+    value: function open(text, windowWidth) {
+
+      if (!(0, _isUndefined2.default)(windowWidth)) {
+        this._windowWidth = windowWidth;
+      }
 
       this.refresh(text);
 
@@ -426,11 +513,11 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
   }]);
 
   return FlareNotificationWindow;
-})(FlareWindowBase);
+})(_flare_window_base2.default);
 
 module.exports = FlareNotificationWindow;
 
-},{"../../flare_window_base":6}],6:[function(require,module,exports){
+},{"../../flare_window_base":7,"../notification/window/options":3,"lodash/lang/isUndefined":1}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -495,4 +582,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}]},{},[2,4]);
+},{}]},{},[2,5]);
