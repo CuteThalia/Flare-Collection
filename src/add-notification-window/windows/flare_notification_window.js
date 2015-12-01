@@ -72,7 +72,7 @@ class FlareNotificationWindow extends FlareWindowBase {
       this.updateFadeIn();
 
       if (!WindowOptions.getContainer().shouldWeStayAtTop ||
-          !_NotificationOptions.getNotificationOptions().stick_to_top) {
+          !_NotificationOptions.getNotificationOptions().stickToTop) {
         this.y += 3;
       }
 
@@ -110,14 +110,14 @@ class FlareNotificationWindow extends FlareWindowBase {
 
     this.refresh(text);
 
-    var fadeOutTime = _NotificationOptions.getNotificationOptions().fade_out_time;
+    var fadeOutTime = _NotificationOptions.getNotificationOptions().fadeOutTime;
 
     if (isNaN(parseInt(fadeOutTime))) {
       throw new Error('Sorry but: ' + fadeOutTime + ' is not a number');
     }
 
     this._showCount          = fadeOutTime;
-    this._storeShowCountHalf = Math.round(eval(_NotificationOptions.getNotificationOptions().fade_out_calculation));
+    this._storeShowCountHalf = Math.round(eval(_NotificationOptions.getNotificationOptions().fadeOutCalculation));
   }
 
   close() {
@@ -129,7 +129,7 @@ class FlareNotificationWindow extends FlareWindowBase {
 
     this.contents.fontSize = this._fontSize;
 
-    if (_NotificationOptions.getNotificationOptions().show_window === "true") {
+    if (_NotificationOptions.getNotificationOptions().showWindow === "true") {
       this.drawBackground(0, 0, width, this.lineHeight())
     }
 

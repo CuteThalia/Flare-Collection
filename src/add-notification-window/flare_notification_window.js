@@ -36,6 +36,28 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param ---Notification on event gain---
+ *
+ * @param Window width
+ * @desc What width should windows be when we gain a new item?
+ * Default: NotificationOptions.getNotificationOptions().windowGainWidth
+ * @default 500
+ *
+ * @param Window font size
+ * @desc What font size should we use?
+ * Default: 20
+ * @default 20
+ *
+ * @param Should window stay at the top?
+ * @desc Should the window stay at the top or move down the screen? True makes it stay.
+ * Default: false
+ * @default false
+ *
+ * @param Should the window fade out?
+ * @desc Should the window fade out or play its self out and disapear? True is fade out.
+ * Default: true
+ * @default true
+ *
  * @help
  *
  * Notifications can be created easily, on the fly. Its amazing how easily they
@@ -59,6 +81,16 @@ import WindowOptions           from './notification/window/options';
  * FlareNotification.notify("\\i[8] \\c[10]World\\c[0]");
  *
  * Hello World is First out then Hello and finally World.
+ *
+ * === Notification on event gain ===
+ *
+ * These options above only affect the notification windows that appear when
+ * the player interacts with events that help either gain or loose items, gold,
+ * armor or weapons.
+ *
+ * They are global across all "event notification windows" and cannot individually
+ * be changed.
+ *
  */
 
 class FlareNotification {

@@ -77,6 +77,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param ---Notification on event gain---
+ *
+ * @param Window width
+ * @desc What width should windows be when we gain a new item?
+ * Default: NotificationOptions.getNotificationOptions().windowGainWidth
+ * @default 500
+ *
+ * @param Window font size
+ * @desc What font size should we use?
+ * Default: 20
+ * @default 20
+ *
+ * @param Should window stay at the top?
+ * @desc Should the window stay at the top or move down the screen? True makes it stay.
+ * Default: false
+ * @default false
+ *
+ * @param Should the window fade out?
+ * @desc Should the window fade out or play its self out and disapear? True is fade out.
+ * Default: true
+ * @default true
+ *
  * @help
  *
  * Notifications can be created easily, on the fly. Its amazing how easily they
@@ -100,6 +122,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * FlareNotification.notify("\\i[8] \\c[10]World\\c[0]");
  *
  * Hello World is First out then Hello and finally World.
+ *
+ * === Notification on event gain ===
+ *
+ * These options above only affect the notification windows that appear when
+ * the player interacts with events that help either gain or loose items, gold,
+ * armor or weapons.
+ *
+ * They are global across all "event notification windows" and cannot individually
+ * be changed.
+ *
  */
 
 var FlareNotification = (function () {
@@ -263,11 +295,15 @@ var NotificationOptions = (function () {
     key: 'createNotificationOptions',
     value: function createNotificationOptions() {
       this._notificationOptions = {
-        time_till_next_window: FlareNotificationWindow['Till Next Notification?'],
-        fade_out_time: FlareNotificationWindow['How Long Till Notification Fade Out?'],
-        stick_to_top: FlareNotificationWindow['Should I stay at the top?'],
-        fade_out_calculation: FlareNotificationWindow['Calulation For Fade out'],
-        show_window: FlareNotificationWindow['Show Window?']
+        timeTillNextWindow: FlareNotificationWindow['Till Next Notification?'],
+        fadeOutTime: FlareNotificationWindow['How Long Till Notification Fade Out?'],
+        stickToTop: FlareNotificationWindow['Should I stay at the top?'],
+        fadeOutCalculation: FlareNotificationWindow['Calulation For Fade out'],
+        showWindow: FlareNotificationWindow['Show Window?'],
+        windowGainWidth: FlareNotificationWindow['Window width'],
+        windowGainFontSize: FlareNotificationWindow['Window font size'],
+        windowGainMoveDown: FlareNotificationWindow['Should window stay at the top?'],
+        windowGainFadeOut: FlareNotificationWindow['Should the window fade out?']
       };
     }
   }, {
@@ -314,7 +350,7 @@ Scene_Map.prototype.initialize = function () {
   oldSceneMapPrototypeInitializeMethod.call(this);
   this._isWindowOpen = false;
 
-  var timeTillNextwindow = _NotificationOptions.getNotificationOptions().time_till_next_window;
+  var timeTillNextwindow = _NotificationOptions.getNotificationOptions().timeTillNextWindow;
 
   if (isNaN(parseInt(timeTillNextwindow))) {
     throw new Error('Sorry but: ' + timeTillNextwindow + ' is not a number');
@@ -358,17 +394,23 @@ Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) 
 },{"../notification/window/options":3,"../windows/flare_notification_window":7}],6:[function(require,module,exports){
 "use strict";
 
+var _notification_options = require("../notification_options/notification_options");
+
+var _notification_options2 = _interopRequireDefault(_notification_options);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 Game_Interpreter.prototype.command125 = function () {
   var value = this.operateValue(this._params[0], this._params[1], this._params[2]);
 
   if (value < 0) {
-    FlareNotification.notify("\\c[16]Looses Gold\\c[0]: " + Math.abs(value), false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Looses Gold\\c[0]: " + Math.abs(value), _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   } else {
-    FlareNotification.notify("\\c[16]Gains Gold\\c[0]: " + value, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Gains Gold\\c[0]: " + value, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   }
 
   $gameParty.gainGold(value);
-  return true;
+  return _notification_options2.default.getNotificationOptions().windowGainFadeOut;
 };
 
 // Change Items
@@ -376,13 +418,13 @@ Game_Interpreter.prototype.command126 = function () {
   var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
 
   if (value < 0) {
-    FlareNotification.notify("\\c[16]Looses Item (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Looses Item (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   } else {
-    FlareNotification.notify("\\c[16]Gains Item (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Gains Item (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   }
 
   $gameParty.gainItem($dataItems[this._params[0]], value);
-  return true;
+  return _notification_options2.default.getNotificationOptions().windowGainFadeOut;
 };
 
 // Change Weapons
@@ -390,13 +432,13 @@ Game_Interpreter.prototype.command127 = function () {
   var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
 
   if (value < 0) {
-    FlareNotification.notify("\\c[16]Looses Weapon (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Looses Weapon (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   } else {
-    FlareNotification.notify("\\c[16]Gains Weapon (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Gains Weapon (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   }
 
   $gameParty.gainItem($dataWeapons[this._params[0]], value, this._params[4]);
-  return true;
+  return _notification_options2.default.getNotificationOptions().windowGainFadeOut;
 };
 
 // Change Armors
@@ -404,16 +446,16 @@ Game_Interpreter.prototype.command128 = function () {
   var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
 
   if (value < 0) {
-    FlareNotification.notify("\\c[16]Looses Armor (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Looses Armor (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   } else {
-    FlareNotification.notify("\\c[16]Gains Armor (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+    FlareNotification.notify("\\c[16]Gains Armor (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, _notification_options2.default.getNotificationOptions().windowGainMoveDown, _notification_options2.default.getNotificationOptions().windowGainFadeOut, { windowWidth: _notification_options2.default.getNotificationOptions().windowGainWidth, fontSize: _notification_options2.default.getNotificationOptions().windowGainFontSize });
   }
 
   $gameParty.gainItem($dataArmors[this._params[0]], value, this._params[4]);
-  return true;
+  return _notification_options2.default.getNotificationOptions().windowGainFadeOut;
 };
 
-},{}],7:[function(require,module,exports){
+},{"../notification_options/notification_options":4}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -518,7 +560,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
       if (this._showCount > 0) {
         this.updateFadeIn();
 
-        if (!_options2.default.getContainer().shouldWeStayAtTop || !_NotificationOptions.getNotificationOptions().stick_to_top) {
+        if (!_options2.default.getContainer().shouldWeStayAtTop || !_NotificationOptions.getNotificationOptions().stickToTop) {
           this.y += 3;
         }
 
@@ -558,14 +600,14 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
       this.refresh(text);
 
-      var fadeOutTime = _NotificationOptions.getNotificationOptions().fade_out_time;
+      var fadeOutTime = _NotificationOptions.getNotificationOptions().fadeOutTime;
 
       if (isNaN(parseInt(fadeOutTime))) {
         throw new Error('Sorry but: ' + fadeOutTime + ' is not a number');
       }
 
       this._showCount = fadeOutTime;
-      this._storeShowCountHalf = Math.round(eval(_NotificationOptions.getNotificationOptions().fade_out_calculation));
+      this._storeShowCountHalf = Math.round(eval(_NotificationOptions.getNotificationOptions().fadeOutCalculation));
     }
   }, {
     key: 'close',
@@ -579,7 +621,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
       this.contents.fontSize = this._fontSize;
 
-      if (_NotificationOptions.getNotificationOptions().show_window === "true") {
+      if (_NotificationOptions.getNotificationOptions().showWindow === "true") {
         this.drawBackground(0, 0, width, this.lineHeight());
       }
 

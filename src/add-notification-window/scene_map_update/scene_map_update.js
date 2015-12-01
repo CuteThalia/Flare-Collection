@@ -16,7 +16,7 @@ Scene_Map.prototype.initialize = function() {
   oldSceneMapPrototypeInitializeMethod.call(this);
   this._isWindowOpen = false;
 
-  var timeTillNextwindow = _NotificationOptions.getNotificationOptions().time_till_next_window;
+  var timeTillNextwindow = _NotificationOptions.getNotificationOptions().timeTillNextWindow;
 
   if (isNaN(parseInt(timeTillNextwindow))) {
     throw new Error('Sorry but: ' + timeTillNextwindow + ' is not a number');
