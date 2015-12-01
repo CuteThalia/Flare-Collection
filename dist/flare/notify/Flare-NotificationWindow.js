@@ -118,7 +118,6 @@ var FlareNotification = (function () {
      * @param text - text for the window
      */
     value: function notify(text, stayAtTop, fadeoutTowardsBottom, options) {
-      console.log(options);
       this._arrayOfNotifications.push({
         windowMethod: new _flare_notification_window2.default(options),
         text: text
@@ -175,7 +174,7 @@ _NotificationOptions.createNotificationOptions();
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
 
-},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":6,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
+},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":7,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -356,7 +355,65 @@ Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) 
   this._waitForWindowToClose = 75;
 };
 
-},{"../notification/window/options":3,"../windows/flare_notification_window":6}],6:[function(require,module,exports){
+},{"../notification/window/options":3,"../windows/flare_notification_window":7}],6:[function(require,module,exports){
+"use strict";
+
+Game_Interpreter.prototype.command125 = function () {
+  var value = this.operateValue(this._params[0], this._params[1], this._params[2]);
+
+  if (value < 0) {
+    FlareNotification.notify("\\c[16]Looses Gold\\c[0]: " + Math.abs(value), false, true, { windowWidth: 500, fontSize: 20 });
+  } else {
+    FlareNotification.notify("\\c[16]Gains Gold\\c[0]: " + value, false, true, { windowWidth: 500, fontSize: 20 });
+  }
+
+  $gameParty.gainGold(value);
+  return true;
+};
+
+// Change Items
+Game_Interpreter.prototype.command126 = function () {
+  var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+
+  if (value < 0) {
+    FlareNotification.notify("\\c[16]Looses Item (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+  } else {
+    FlareNotification.notify("\\c[16]Gains Item (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+  }
+
+  $gameParty.gainItem($dataItems[this._params[0]], value);
+  return true;
+};
+
+// Change Weapons
+Game_Interpreter.prototype.command127 = function () {
+  var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+
+  if (value < 0) {
+    FlareNotification.notify("\\c[16]Looses Weapon (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+  } else {
+    FlareNotification.notify("\\c[16]Gains Weapon (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+  }
+
+  $gameParty.gainItem($dataWeapons[this._params[0]], value, this._params[4]);
+  return true;
+};
+
+// Change Armors
+Game_Interpreter.prototype.command128 = function () {
+  var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+
+  if (value < 0) {
+    FlareNotification.notify("\\c[16]Looses Armor (Amount: " + Math.abs(value) + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+  } else {
+    FlareNotification.notify("\\c[16]Gains Armor (Amount: " + value + ") \\c[0]: " + "\\i[" + $dataItems[this._params[0]].iconIndex + "] " + $dataItems[this._params[0]].name, false, true, { windowWidth: 500, fontSize: 20 });
+  }
+
+  $gameParty.gainItem($dataArmors[this._params[0]], value, this._params[4]);
+  return true;
+};
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -425,6 +482,12 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
       if (!(0, _isUndefined2.default)(options) && !(0, _isUndefined2.default)(options.windowY)) {
         y = options.windowY;
+      }
+
+      if (!(0, _isUndefined2.default)(options) && !(0, _isUndefined2.default)(options.fontSize)) {
+        this._fontSize = options.fontSize;
+      } else {
+        this._fontSize = 22;
       }
 
       _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), 'initialize', this).call(this, x, y, width, height);
@@ -514,6 +577,8 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
     value: function refresh(text) {
       var width = this.contentsWidth();
 
+      this.contents.fontSize = this._fontSize;
+
       if (_NotificationOptions.getNotificationOptions().show_window === "true") {
         this.drawBackground(0, 0, width, this.lineHeight());
       }
@@ -536,7 +601,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareNotificationWindow;
 
-},{"../../flare_window_base":7,"../notification/window/options":3,"lodash/lang/isUndefined":1}],7:[function(require,module,exports){
+},{"../../flare_window_base":8,"../notification/window/options":3,"lodash/lang/isUndefined":1}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -601,4 +666,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}]},{},[2,5]);
+},{}]},{},[2,5,6]);

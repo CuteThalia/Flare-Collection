@@ -40,6 +40,12 @@ class FlareNotificationWindow extends FlareWindowBase {
       y = options.windowY;
     }
 
+    if (!lodashIsUndefined(options) && !lodashIsUndefined(options.fontSize)) {
+      this._fontSize = options.fontSize;
+    } else {
+      this._fontSize = 22;
+    }
+
     super.initialize(x, y, width, height);
 
     this.contentsOpacity = 0;
@@ -120,6 +126,8 @@ class FlareNotificationWindow extends FlareWindowBase {
 
   refresh(text) {
     var width = this.contentsWidth();
+
+    this.contents.fontSize = this._fontSize;
 
     if (_NotificationOptions.getNotificationOptions().show_window === "true") {
       this.drawBackground(0, 0, width, this.lineHeight())

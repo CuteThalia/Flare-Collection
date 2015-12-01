@@ -71,7 +71,6 @@ class FlareNotification {
    * @param text - text for the window
    */
   static notify(text, stayAtTop, fadeoutTowardsBottom, options) {
-    console.log(options);
     this._arrayOfNotifications.push({
       windowMethod: new FlareNotificationWindow(options),
       text:         text
