@@ -118,6 +118,7 @@ var FlareNotification = (function () {
      * @param text - text for the window
      */
     value: function notify(text, stayAtTop, fadeoutTowardsBottom, options) {
+      console.log(options);
       this._arrayOfNotifications.push({
         windowMethod: new _flare_notification_window2.default(options),
         text: text
@@ -189,6 +190,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Sets options for the notification windo by key/value
+ */
+
 var NotificationWindowOptions = (function () {
   function NotificationWindowOptions() {
     _classCallCheck(this, NotificationWindowOptions);
@@ -196,6 +201,13 @@ var NotificationWindowOptions = (function () {
 
   _createClass(NotificationWindowOptions, null, [{
     key: 'setOption',
+
+    /**
+     * Sets an option by key => value
+     *
+     * @param string key
+     * @param mixed value
+     */
     value: function setOption(key, value) {
       if ((0, _isUndefined2.default)(this._windowOptions)) {
         this._windowOptions = {};
@@ -203,6 +215,13 @@ var NotificationWindowOptions = (function () {
 
       this._windowOptions[key] = value;
     }
+
+    /**
+     * Returns the container
+     *
+     * @return Object
+     */
+
   }, {
     key: 'getContainer',
     value: function getContainer() {
