@@ -15,21 +15,36 @@ class NotificationOptions {
 
   static createNotificationOptions() {
     this.getGoldInformation(FlareNotificationWindow);
+    this.getItemInformation(FlareNotificationWindow);
+    this.getWeaponInformation(FlareNotificationWindow);
 
     this._notificationOptions = {
-      timeTillNextWindow:             FlareNotificationWindow['Till Next Notification?'],
-      fadeOutTime:                    FlareNotificationWindow['How Long Till Notification Fade Out?'],
-      stickToTop:                     FlareNotificationWindow['Should I stay at the top?'],
-      fadeOutCalculation:             FlareNotificationWindow['Calulation For Fade out'],
-      showWindow:                     FlareNotificationWindow['Show Window?'],
-      showGoldNotificationEvent:      FlareNotificationWindow['Display Gold Notification Event?'],
-      goldNotificationWindowWidth:    parseInt(FlareNotificationWindow['Gold Notification Width']),
-      goldNotificationFontSize:       parseInt(FlareNotificationWindow['Gold Notification Font Size']),
-      goldNotificationWindowMoveDown: this._goldNotificationWindowMoveDown,
-      goldNotificationWindowFadeOut:  this._goldNotificationWindowFadeOut,
+      timeTillNextWindow:               FlareNotificationWindow['Till Next Notification?'],
+      fadeOutTime:                      FlareNotificationWindow['How Long Till Notification Fade Out?'],
+      stickToTop:                       FlareNotificationWindow['Should I stay at the top?'],
+      fadeOutCalculation:               FlareNotificationWindow['Calulation For Fade out'],
+      showWindow:                       FlareNotificationWindow['Show Window?'],
+      showGoldNotificationEvent:        FlareNotificationWindow['Display Gold Notification Event?'],
+      goldNotificationWindowWidth:      parseInt(FlareNotificationWindow['Gold Notification Width']),
+      goldNotificationFontSize:         parseInt(FlareNotificationWindow['Gold Notification Font Size']),
+      goldNotificationWindowMoveDown:   this._goldNotificationWindowMoveDown,
+      goldNotificationWindowFadeOut:    this._goldNotificationWindowFadeOut,
+      showItemNotificationEvent:        FlareNotificationWindow['Display Item Notification Event?'],
+      itemNotificationWindowWidth:      parseInt(FlareNotificationWindow['Item Notification Width']),
+      itemNotificationFontSize:         parseInt(FlareNotificationWindow['Item Notification Font Size']),
+      itemNotificationWindowMoveDown:   this._itemNotificationWindowMoveDown,
+      itemNotificationWindowFadeOut:    this._itemNotificationWindowFadeOut,
+      showWeaponNotificationEvent:      FlareNotificationWindow['Display Weapon Notification Event?'],
+      weaponNotificationWindowWidth:    parseInt(FlareNotificationWindow['Weapon Notification Width']),
+      weaponNotificationFontSize:       parseInt(FlareNotificationWindow['Weapon Notification Font Size']),
+      weaponNotificationWindowMoveDown: this._weaponNotificationWindowMoveDown,
+      weaponNotificationWindowFadeOut:  this._weaponNotificationWindowFadeOut,
+      showArmorNotificationEvent:      FlareNotificationWindow['Display Armor Notification Event?'],
+      armorNotificationWindowWidth:    parseInt(FlareNotificationWindow['Armor Notification Width']),
+      armorNotificationFontSize:       parseInt(FlareNotificationWindow['Armor Notification Font Size']),
+      armorNotificationWindowMoveDown: this._armorNotificationWindowMoveDown,
+      armorNotificationWindowFadeOut:  this._armorNotificationWindowFadeOut,
     };
-
-    console.log(this._notificationOptions);
   }
 
   static getNotificationOptions() {
@@ -46,6 +61,45 @@ class NotificationOptions {
 
     if (pluginOptions['Gold Notification Should Fadeout?'] === "true") {
       this._goldNotificationWindowFadeOut = true;
+    }
+  }
+
+  static getItemInformation(pluginOptions) {
+    this._itemNotificationWindowMoveDown = false;
+    this._itemNotificationWindowFadeOut  = false;
+
+    if (pluginOptions['Item Notification Stay At The Top?'] === "true") {
+      this._itemNotificationWindowMoveDown = true;
+    }
+
+    if (pluginOptions['Item Notification Should Fadeout?'] === "true") {
+      this._itemNotificationWindowFadeOut = true;
+    }
+  }
+
+  static getWeaponInformation(pluginOptions) {
+    this._weaponNotificationWindowMoveDown = false;
+    this._weaponNotificationWindowFadeOut  = false;
+
+    if (pluginOptions['Weapon Notification Stay At The Top?'] === "true") {
+      this._weaponNotificationWindowMoveDown = true;
+    }
+
+    if (pluginOptions['Weapon Notification Should Fadeout?'] === "true") {
+      this._weaponNotificationWindowFadeOut = true;
+    }
+  }
+
+  static getArmorInformation(pluginOptions) {
+    this._armorNotificationWindowMoveDown = false;
+    this._armorNotificationWindowFadeOut  = false;
+
+    if (pluginOptions['Armor Notification Stay At The Top?'] === "true") {
+      this._armorNotificationWindowMoveDown = true;
+    }
+
+    if (pluginOptions['Armor Notification Should Fadeout?'] === "true") {
+      this._armorNotificationWindowMoveDown = true;
     }
   }
 }

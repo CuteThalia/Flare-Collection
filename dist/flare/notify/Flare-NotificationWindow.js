@@ -105,6 +105,90 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param ---Item Event---
+ * @desc
+ *
+ * @param Display Item Notification Event?
+ * @desc When party gains item via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Item Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Item Notification Font Size
+ * @desc What font size should we use on the item notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Item Notification Stay At The Top?
+ * @desc Should the item notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Item Notification Should Fadeout?
+ * @desc Should the item window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Weapon Event---
+ * @desc
+ *
+ * @param Display Weapon Notification Event?
+ * @desc When party gains weapon via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Weapon Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Weapon Notification Font Size
+ * @desc What font size should we use on the weapon notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Weapon Notification Stay At The Top?
+ * @desc Should the weapon notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Weapon Notification Should Fadeout?
+ * @desc Should the weapon window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Armor Event---
+ * @desc
+ *
+ * @param Display Armor Notification Event?
+ * @desc When party gains armor via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Armor Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Armor Notification Font Size
+ * @desc What font size should we use on the armor notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Armor Notification Stay At The Top?
+ * @desc Should the armor notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Armor Notification Should Fadeout?
+ * @desc Should the armor window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
  * @help
  *
  * Notifications can be created easily, on the fly. Its amazing how easily they
@@ -301,6 +385,8 @@ var NotificationOptions = (function () {
     key: 'createNotificationOptions',
     value: function createNotificationOptions() {
       this.getGoldInformation(FlareNotificationWindow);
+      this.getItemInformation(FlareNotificationWindow);
+      this.getWeaponInformation(FlareNotificationWindow);
 
       this._notificationOptions = {
         timeTillNextWindow: FlareNotificationWindow['Till Next Notification?'],
@@ -312,10 +398,23 @@ var NotificationOptions = (function () {
         goldNotificationWindowWidth: parseInt(FlareNotificationWindow['Gold Notification Width']),
         goldNotificationFontSize: parseInt(FlareNotificationWindow['Gold Notification Font Size']),
         goldNotificationWindowMoveDown: this._goldNotificationWindowMoveDown,
-        goldNotificationWindowFadeOut: this._goldNotificationWindowFadeOut
+        goldNotificationWindowFadeOut: this._goldNotificationWindowFadeOut,
+        showItemNotificationEvent: FlareNotificationWindow['Display Item Notification Event?'],
+        itemNotificationWindowWidth: parseInt(FlareNotificationWindow['Item Notification Width']),
+        itemNotificationFontSize: parseInt(FlareNotificationWindow['Item Notification Font Size']),
+        itemNotificationWindowMoveDown: this._itemNotificationWindowMoveDown,
+        itemNotificationWindowFadeOut: this._itemNotificationWindowFadeOut,
+        showWeaponNotificationEvent: FlareNotificationWindow['Display Weapon Notification Event?'],
+        weaponNotificationWindowWidth: parseInt(FlareNotificationWindow['Weapon Notification Width']),
+        weaponNotificationFontSize: parseInt(FlareNotificationWindow['Weapon Notification Font Size']),
+        weaponNotificationWindowMoveDown: this._weaponNotificationWindowMoveDown,
+        weaponNotificationWindowFadeOut: this._weaponNotificationWindowFadeOut,
+        showArmorNotificationEvent: FlareNotificationWindow['Display Armor Notification Event?'],
+        armorNotificationWindowWidth: parseInt(FlareNotificationWindow['Armor Notification Width']),
+        armorNotificationFontSize: parseInt(FlareNotificationWindow['Armor Notification Font Size']),
+        armorNotificationWindowMoveDown: this._armorNotificationWindowMoveDown,
+        armorNotificationWindowFadeOut: this._armorNotificationWindowFadeOut
       };
-
-      console.log(this._notificationOptions);
     }
   }, {
     key: 'getNotificationOptions',
@@ -334,6 +433,48 @@ var NotificationOptions = (function () {
 
       if (pluginOptions['Gold Notification Should Fadeout?'] === "true") {
         this._goldNotificationWindowFadeOut = true;
+      }
+    }
+  }, {
+    key: 'getItemInformation',
+    value: function getItemInformation(pluginOptions) {
+      this._itemNotificationWindowMoveDown = false;
+      this._itemNotificationWindowFadeOut = false;
+
+      if (pluginOptions['Item Notification Stay At The Top?'] === "true") {
+        this._itemNotificationWindowMoveDown = true;
+      }
+
+      if (pluginOptions['Item Notification Should Fadeout?'] === "true") {
+        this._itemNotificationWindowFadeOut = true;
+      }
+    }
+  }, {
+    key: 'getWeaponInformation',
+    value: function getWeaponInformation(pluginOptions) {
+      this._weaponNotificationWindowMoveDown = false;
+      this._weaponNotificationWindowFadeOut = false;
+
+      if (pluginOptions['Weapon Notification Stay At The Top?'] === "true") {
+        this._weaponNotificationWindowMoveDown = true;
+      }
+
+      if (pluginOptions['Weapon Notification Should Fadeout?'] === "true") {
+        this._weaponNotificationWindowFadeOut = true;
+      }
+    }
+  }, {
+    key: 'getArmorInformation',
+    value: function getArmorInformation(pluginOptions) {
+      this._armorNotificationWindowMoveDown = false;
+      this._armorNotificationWindowFadeOut = false;
+
+      if (pluginOptions['Armor Notification Stay At The Top?'] === "true") {
+        this._armorNotificationWindowMoveDown = true;
+      }
+
+      if (pluginOptions['Armor Notification Should Fadeout?'] === "true") {
+        this._armorNotificationWindowMoveDown = true;
       }
     }
   }]);
@@ -417,9 +558,9 @@ Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) 
 };
 
 },{"../notification/window/options":3,"../windows/flare_notification_window":7}],6:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var _notification_options = require("../notification_options/notification_options");
+var _notification_options = require('../notification_options/notification_options');
 
 var _notification_options2 = _interopRequireDefault(_notification_options);
 
@@ -428,8 +569,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Change Gold
 Game_Interpreter.prototype.command125 = function () {
   var value = this.operateValue(this._params[0], this._params[1], this._params[2]);
+  var text = '';
 
-  this.processNotificationEvents("Gold", "showGoldNotificationEvent", value, {
+  if (value < 0) {
+    text = "\\c[16]Party Loses Gold in the amount of\\c[0]: " + Math.abs(value);
+  } else {
+    text = "\\c[16]Party Gains Gold in the amount of\\c[0]: " + Math.abs(value);
+  }
+
+  this.processNotificationEvents(text, "showGoldNotificationEvent", value, {
     moveDown: _notification_options2.default.getNotificationOptions().goldNotificationWindowMoveDown,
     fadeOut: _notification_options2.default.getNotificationOptions().goldNotificationWindowFadeOut,
     windowOptions: {
@@ -442,6 +590,78 @@ Game_Interpreter.prototype.command125 = function () {
   return true;
 };
 
+// Items
+Game_Interpreter.prototype.command126 = function () {
+  var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+  var text = '';
+
+  if (value < 0) {
+    text = "\\c[16]Party Loses " + Math.abs(value) + " \\i[" + $dataItems[this._params[0]].iconIndex + "] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
+  } else {
+    text = "\\c[16]Party Gains " + Math.abs(value) + " \\i[" + $dataItems[this._params[0]].iconIndex + "] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
+  }
+
+  this.processNotificationEvents(text, "showItemNotificationEvent", value, {
+    moveDown: _notification_options2.default.getNotificationOptions().itemNotificationWindowMoveDown,
+    fadeOut: _notification_options2.default.getNotificationOptions().itemNotificationWindowFadeOut,
+    windowOptions: {
+      windowWidth: _notification_options2.default.getNotificationOptions().itemNotificationWindowWidth,
+      fontSize: _notification_options2.default.getNotificationOptions().itemNotificationFontSize
+    }
+  });
+
+  $gameParty.gainItem($dataItems[this._params[0]], value);
+  return true;
+};
+
+// Weapons
+Game_Interpreter.prototype.command127 = function () {
+  var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+  var text = '';
+
+  if (value < 0) {
+    text = "\\c[16]Party Loses " + Math.abs(value) + " \\i[" + $dataWeapons[this._params[0]].iconIndex + "] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
+  } else {
+    text = "\\c[16]Party Gains " + Math.abs(value) + " \\i[" + $dataWeapons[this._params[0]].iconIndex + "] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
+  }
+
+  this.processNotificationEvents(text, "showWeaponNotificationEvent", value, {
+    moveDown: _notification_options2.default.getNotificationOptions().weaponNotificationWindowMoveDown,
+    fadeOut: _notification_options2.default.getNotificationOptions().weaponNotificationWindowFadeOut,
+    windowOptions: {
+      windowWidth: _notification_options2.default.getNotificationOptions().weaponNotificationWindowWidth,
+      fontSize: _notification_options2.default.getNotificationOptions().weaponNotificationFontSize
+    }
+  });
+
+  $gameParty.gainItem($dataWeapons[this._params[0]], value, this._params[4]);
+  return true;
+};
+
+// Armors
+Game_Interpreter.prototype.command128 = function () {
+  var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+  var text = '';
+
+  if (value < 0) {
+    text = "\\c[16]Party Loses " + Math.abs(value) + " \\i[" + $dataArmors[this._params[0]].iconIndex + "] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
+  } else {
+    text = "\\c[16]Party Gains " + Math.abs(value) + " \\i[" + $dataArmors[this._params[0]].iconIndex + "] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
+  }
+
+  this.processNotificationEvents(text, "showArmorNotificationEvent", value, {
+    moveDown: _notification_options2.default.getNotificationOptions().armorNotificationWindowMoveDown,
+    fadeOut: _notification_options2.default.getNotificationOptions().armorNotificationWindowFadeOut,
+    windowOptions: {
+      windowWidth: _notification_options2.default.getNotificationOptions().armorNotificationWindowWidth,
+      fontSize: _notification_options2.default.getNotificationOptions().armorNotificationFontSize
+    }
+  });
+
+  $gameParty.gainItem($dataArmors[this._params[0]], value, this._params[4]);
+  return true;
+};
+
 /**
  * Allows us to process notification options.
  *
@@ -450,12 +670,12 @@ Game_Interpreter.prototype.command125 = function () {
  * @param int value - value for the notification window.
  * @param object options - options for the notification window.
  */
-Game_Interpreter.prototype.processNotificationEvents = function (type, showKey, value, options) {
+Game_Interpreter.prototype.processNotificationEvents = function (text, showKey, value, options) {
   if (_notification_options2.default.getNotificationOptions()[showKey]) {
     if (value < 0) {
-      FlareNotification.notify("\\c[16]Looses " + type + "\\c[0]: " + Math.abs(value), options.moveDown, options.fadeOut, options.windowOptions);
+      FlareNotification.notify(text, options.moveDown, options.fadeOut, options.windowOptions);
     } else {
-      FlareNotification.notify("\\c[16]Gains " + type + "\\c[0]: " + Math.abs(value), options.moveDown, options.fadeOut, options.windowOptions);
+      FlareNotification.notify(text, options.moveDown, options.fadeOut, options.windowOptions);
     }
   }
 };

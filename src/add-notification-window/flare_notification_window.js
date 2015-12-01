@@ -64,6 +64,90 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param ---Item Event---
+ * @desc
+ *
+ * @param Display Item Notification Event?
+ * @desc When party gains item via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Item Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Item Notification Font Size
+ * @desc What font size should we use on the item notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Item Notification Stay At The Top?
+ * @desc Should the item notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Item Notification Should Fadeout?
+ * @desc Should the item window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Weapon Event---
+ * @desc
+ *
+ * @param Display Weapon Notification Event?
+ * @desc When party gains weapon via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Weapon Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Weapon Notification Font Size
+ * @desc What font size should we use on the weapon notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Weapon Notification Stay At The Top?
+ * @desc Should the weapon notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Weapon Notification Should Fadeout?
+ * @desc Should the weapon window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Armor Event---
+ * @desc
+ *
+ * @param Display Armor Notification Event?
+ * @desc When party gains armor via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Armor Notification Width
+ * @desc What width should should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Armor Notification Font Size
+ * @desc What font size should we use on the armor notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Armor Notification Stay At The Top?
+ * @desc Should the armor notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Armor Notification Should Fadeout?
+ * @desc Should the armor window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
  * @help
  *
  * Notifications can be created easily, on the fly. Its amazing how easily they
