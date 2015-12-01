@@ -2,9 +2,10 @@
  * @namespace FlareNotification.
  */
 
-var FlareNotificationWindow = require('./windows/flare_notification_window');
-var NotificationOptions     = require('./notification_options/notification_options');
-var lodashIsUndefined       = require('lodash/lang/isUndefined');
+import FlareNotificationWindow from './windows/flare_notification_window';
+import NotificationOptions     from './notification_options/notification_options';
+import lodashIsUndefined       from 'lodash/lang/isUndefined';
+import WindowOptions           from './notification/window/options';
 
 /*:
  * @plugindesc Allows you to create notifications for player based events.
@@ -69,19 +70,18 @@ class FlareNotification {
    *
    * @param text - text for the window
    */
-  static notify(text, stayAtTop, fadeoutTowardsBottom) {
+  static notify(text, stayAtTop, fadeoutTowardsBottom, options) {
+    console.log(options);
     this._arrayOfNotifications.push({
-      windowMethod: new FlareNotificationWindow(),
+      windowMethod: new FlareNotificationWindow(options),
       text:         text
     });
 
     var stayAtTop            = false ? lodashIsUndefined(stayAtTop) : stayAtTop;
     var fadeoutTowardsBottom = false ? lodashIsUndefined(fadeoutTowardsBottom) : fadeoutTowardsBottom;
 
-    window._windowOptions = {
-      stayAtTop:            stayAtTop,
-      fadeoutTowardsBottom: fadeoutTowardsBottom
-    };
+    WindowOptions.setOption('shouldWeStayAtTop', stayAtTop);
+    WindowOptions.setOption('shouldWeFadeOutTowardsBottom', fadeoutTowardsBottom);
   }
 
   /**
@@ -118,6 +118,3 @@ _NotificationOptions.createNotificationOptions();
 
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
-
-// Do Not touch or manipulate this.
-window._windowOptions = {};
