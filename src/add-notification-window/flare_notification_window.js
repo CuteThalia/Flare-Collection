@@ -202,12 +202,12 @@ import WindowOptions           from './notification/window/options';
  *
  * === Notification on event gain ===
  *
- * These options above only affect the notification windows that appear when
- * the player interacts with events that help either gain or loose items, gold,
- * armor or weapons.
+ * There is options for each type of event, such as width, stay at the top, fadeout and font size.
  *
- * They are global across all "event notification windows" and cannot individually
- * be changed.
+ * We also have an option to show the event should you want too disable that particular
+ * event notification.
+ *
+ * By defauly all notifications will show at the top and slide down the page fading out over time.
  *
  */
 
