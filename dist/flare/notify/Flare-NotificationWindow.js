@@ -86,7 +86,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @default true
  *
  * @param Gold Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -114,7 +114,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @default true
  *
  * @param Item Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -142,7 +142,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @default true
  *
  * @param Weapon Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -170,7 +170,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @default true
  *
  * @param Armor Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -186,6 +186,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @param Armor Notification Should Fadeout?
  * @desc Should the armor window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Party Event---
+ * @desc
+ *
+ * @param Display Party Notification Event?
+ * @desc When party gains an actor via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Party Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Party Notification Font Size
+ * @desc What font size should we use on the party notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Party Notification Stay At The Top?
+ * @desc Should the party notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Party Notification Should Fadeout?
+ * @desc Should the party window fade out if it isn't staying at the top?
  * Default: true
  * @default true
  *
@@ -387,6 +415,7 @@ var NotificationOptions = (function () {
       this.getGoldInformation(FlareNotificationWindow);
       this.getItemInformation(FlareNotificationWindow);
       this.getWeaponInformation(FlareNotificationWindow);
+      this.getPartyInformation(FlareNotificationWindow);
 
       this._notificationOptions = {
         timeTillNextWindow: FlareNotificationWindow['Till Next Notification?'],
@@ -413,7 +442,12 @@ var NotificationOptions = (function () {
         armorNotificationWindowWidth: parseInt(FlareNotificationWindow['Armor Notification Width']),
         armorNotificationFontSize: parseInt(FlareNotificationWindow['Armor Notification Font Size']),
         armorNotificationWindowMoveDown: this._armorNotificationWindowMoveDown,
-        armorNotificationWindowFadeOut: this._armorNotificationWindowFadeOut
+        armorNotificationWindowFadeOut: this._armorNotificationWindowFadeOut,
+        showPartyMemberJoiningParty: FlareNotificationWindow['Display Party Notification Event?'],
+        partyNotificationWindowWidth: parseInt(FlareNotificationWindow['Party Notification Width']),
+        partyNotificationFontSize: parseInt(FlareNotificationWindow['Party Notification Font Size']),
+        partyNotificationWindowMoveDown: this._partyNotificationWindowMoveDown,
+        partyNotificationWindowFadeOut: this._partyNotificationWindowFadeOut
       };
     }
   }, {
@@ -474,7 +508,21 @@ var NotificationOptions = (function () {
       }
 
       if (pluginOptions['Armor Notification Should Fadeout?'] === "true") {
-        this._armorNotificationWindowMoveDown = true;
+        this._armorNotificationWindowFadeOut = true;
+      }
+    }
+  }, {
+    key: 'getPartyInformation',
+    value: function getPartyInformation(pluginOptions) {
+      this._partyNotificationWindowMoveDown = false;
+      this._partyNotificationWindowFadeOut = false;
+
+      if (pluginOptions['Party Notification Stay At The Top?'] === "true") {
+        this._partyNotificationWindowMoveDown = true;
+      }
+
+      if (pluginOptions['Party Notification Should Fadeout?'] === "true") {
+        this._partyNotificationWindowFadeOut = true;
       }
     }
   }]);
@@ -659,6 +707,50 @@ Game_Interpreter.prototype.command128 = function () {
   });
 
   $gameParty.gainItem($dataArmors[this._params[0]], value, this._params[4]);
+  return true;
+};
+
+// Party
+Game_Interpreter.prototype.command129 = function () {
+  var actor = $gameActors.actor(this._params[0]);
+  var text = '';
+
+  if (actor) {
+    if (this._params[1] === 0) {
+      // Add
+      if (this._params[2]) {
+        // Initialize
+        $gameActors.actor(this._params[0]).setup(this._params[0]);
+      }
+
+      text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to join your party!\\c[0]";
+
+      this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
+        moveDown: _notification_options2.default.getNotificationOptions().partyNotificationWindowMoveDown,
+        fadeOut: _notification_options2.default.getNotificationOptions().partyNotificationWindowFadeOut,
+        windowOptions: {
+          windowWidth: _notification_options2.default.getNotificationOptions().partyNotificationWindowWidth,
+          fontSize: _notification_options2.default.getNotificationOptions().partyNotificationFontSize
+        }
+      });
+
+      $gameParty.addActor(this._params[0]);
+    } else {
+      // Remove
+      text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to leave your party.\\c[0]";
+
+      this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
+        moveDown: _notification_options2.default.getNotificationOptions().partyNotificationWindowMoveDown,
+        fadeOut: _notification_options2.default.getNotificationOptions().partyNotificationWindowFadeOut,
+        windowOptions: {
+          windowWidth: _notification_options2.default.getNotificationOptions().partyNotificationWindowWidth,
+          fontSize: _notification_options2.default.getNotificationOptions().partyNotificationFontSize
+        }
+      });
+
+      $gameParty.removeActor(this._params[0]);
+    }
+  }
   return true;
 };
 

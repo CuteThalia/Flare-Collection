@@ -96,6 +96,47 @@ Game_Interpreter.prototype.command128 = function() {
     return true;
 };
 
+// Party
+Game_Interpreter.prototype.command129 = function() {
+    var actor = $gameActors.actor(this._params[0]);
+    var text  = '';
+
+    if (actor) {
+        if (this._params[1] === 0) {  // Add
+            if (this._params[2]) {   // Initialize
+                $gameActors.actor(this._params[0]).setup(this._params[0]);
+            }
+
+            text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to join your party!\\c[0]";
+
+            this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
+              moveDown:       NotificationOptions.getNotificationOptions().partyNotificationWindowMoveDown,
+              fadeOut:        NotificationOptions.getNotificationOptions().partyNotificationWindowFadeOut,
+              windowOptions:  {
+                windowWidth: NotificationOptions.getNotificationOptions().partyNotificationWindowWidth,
+                fontSize:    NotificationOptions.getNotificationOptions().partyNotificationFontSize
+              }
+            });
+
+            $gameParty.addActor(this._params[0]);
+        } else {  // Remove
+            text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to leave your party.\\c[0]";
+
+            this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
+              moveDown:       NotificationOptions.getNotificationOptions().partyNotificationWindowMoveDown,
+              fadeOut:        NotificationOptions.getNotificationOptions().partyNotificationWindowFadeOut,
+              windowOptions:  {
+                windowWidth: NotificationOptions.getNotificationOptions().partyNotificationWindowWidth,
+                fontSize:    NotificationOptions.getNotificationOptions().partyNotificationFontSize
+              }
+            });
+
+            $gameParty.removeActor(this._params[0]);
+        }
+    }
+    return true;
+};
+
 /**
  * Allows us to process notification options.
  *

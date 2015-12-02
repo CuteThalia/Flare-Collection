@@ -17,6 +17,7 @@ class NotificationOptions {
     this.getGoldInformation(FlareNotificationWindow);
     this.getItemInformation(FlareNotificationWindow);
     this.getWeaponInformation(FlareNotificationWindow);
+    this.getPartyInformation(FlareNotificationWindow);
 
     this._notificationOptions = {
       timeTillNextWindow:               FlareNotificationWindow['Till Next Notification?'],
@@ -39,11 +40,16 @@ class NotificationOptions {
       weaponNotificationFontSize:       parseInt(FlareNotificationWindow['Weapon Notification Font Size']),
       weaponNotificationWindowMoveDown: this._weaponNotificationWindowMoveDown,
       weaponNotificationWindowFadeOut:  this._weaponNotificationWindowFadeOut,
-      showArmorNotificationEvent:      FlareNotificationWindow['Display Armor Notification Event?'],
-      armorNotificationWindowWidth:    parseInt(FlareNotificationWindow['Armor Notification Width']),
-      armorNotificationFontSize:       parseInt(FlareNotificationWindow['Armor Notification Font Size']),
-      armorNotificationWindowMoveDown: this._armorNotificationWindowMoveDown,
-      armorNotificationWindowFadeOut:  this._armorNotificationWindowFadeOut,
+      showArmorNotificationEvent:       FlareNotificationWindow['Display Armor Notification Event?'],
+      armorNotificationWindowWidth:     parseInt(FlareNotificationWindow['Armor Notification Width']),
+      armorNotificationFontSize:        parseInt(FlareNotificationWindow['Armor Notification Font Size']),
+      armorNotificationWindowMoveDown:  this._armorNotificationWindowMoveDown,
+      armorNotificationWindowFadeOut:   this._armorNotificationWindowFadeOut,
+      showPartyMemberJoiningParty:      FlareNotificationWindow['Display Party Notification Event?'],
+      partyNotificationWindowWidth:     parseInt(FlareNotificationWindow['Party Notification Width']),
+      partyNotificationFontSize:        parseInt(FlareNotificationWindow['Party Notification Font Size']),
+      partyNotificationWindowMoveDown:  this._partyNotificationWindowMoveDown,
+      partyNotificationWindowFadeOut:   this._partyNotificationWindowFadeOut
     };
   }
 
@@ -99,7 +105,20 @@ class NotificationOptions {
     }
 
     if (pluginOptions['Armor Notification Should Fadeout?'] === "true") {
-      this._armorNotificationWindowMoveDown = true;
+      this._armorNotificationWindowFadeOut = true;
+    }
+  }
+
+  static getPartyInformation(pluginOptions) {
+    this._partyNotificationWindowMoveDown = false;
+    this._partyNotificationWindowFadeOut  = false;
+
+    if (pluginOptions['Party Notification Stay At The Top?'] === "true") {
+      this._partyNotificationWindowMoveDown = true;
+    }
+
+    if (pluginOptions['Party Notification Should Fadeout?'] === "true") {
+      this._partyNotificationWindowFadeOut = true;
     }
   }
 }

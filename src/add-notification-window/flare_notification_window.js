@@ -45,7 +45,7 @@ import WindowOptions           from './notification/window/options';
  * @default true
  *
  * @param Gold Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -73,7 +73,7 @@ import WindowOptions           from './notification/window/options';
  * @default true
  *
  * @param Item Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -101,7 +101,7 @@ import WindowOptions           from './notification/window/options';
  * @default true
  *
  * @param Weapon Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -129,7 +129,7 @@ import WindowOptions           from './notification/window/options';
  * @default true
  *
  * @param Armor Notification Width
- * @desc What width should should the notification window be?
+ * @desc What width should the notification window be?
  * Default: 500
  * @default 500
  *
@@ -145,6 +145,34 @@ import WindowOptions           from './notification/window/options';
  *
  * @param Armor Notification Should Fadeout?
  * @desc Should the armor window fade out if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Party Event---
+ * @desc
+ *
+ * @param Display Party Notification Event?
+ * @desc When party gains an actor via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Party Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Party Notification Font Size
+ * @desc What font size should we use on the party notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Party Notification Stay At The Top?
+ * @desc Should the party notification windw stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Party Notification Should Fadeout?
+ * @desc Should the party window fade out if it isn't staying at the top?
  * Default: true
  * @default true
  *
