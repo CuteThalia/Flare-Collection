@@ -4254,6 +4254,10 @@ var GatherReward = (function () {
       var rewardData = (0, _optionParser.extractAllOfType)($dataMap.note, 'lawReward');
       rewardData = rewardData[0];
 
+      if ((0, _isUndefined2.default)(rewardData)) {
+        return;
+      }
+
       // Collects things we can give phyiscally to the player
       this._storeReward(rewardData.a, $dataArmors, 'armors');
       this._storeReward(rewardData.w, $dataWeapons, 'weapons');
@@ -5959,7 +5963,9 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
 
   Scene_Battle.prototype.finishVictoryCurrencies = function () {
     SoundManager.playOk();
-    this._yanflyLawsRewardWindow.hide();
+    if (!(0, _isUndefined2.default)(this._yanflyLawsRewardWindow)) {
+      this._yanflyLawsRewardWindow.hide();
+    }
     this.processNextVictoryStep();
   };
 }

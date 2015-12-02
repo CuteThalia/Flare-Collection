@@ -14,6 +14,10 @@ class GatherReward {
     var rewardData = extractAllOfType($dataMap.note, 'lawReward');
     rewardData = rewardData[0];
 
+    if (lodashIsUndefined(rewardData)) {
+      return;
+    }
+
     // Collects things we can give phyiscally to the player
     this._storeReward(rewardData.a, $dataArmors, 'armors');
     this._storeReward(rewardData.w, $dataWeapons, 'weapons');

@@ -42,7 +42,9 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
 
   Scene_Battle.prototype.finishVictoryCurrencies = function() {
     SoundManager.playOk();
-    this._yanflyLawsRewardWindow.hide();
+    if (!lodashIsUndefined(this._yanflyLawsRewardWindow)) {
+      this._yanflyLawsRewardWindow.hide();
+    }
     this.processNextVictoryStep();
   }
 }
