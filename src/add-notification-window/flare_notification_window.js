@@ -13,13 +13,13 @@ import WindowOptions           from './notification/window/options';
  *
  * @param Till Next Notification?
  * @desc How long should we wait before displaying the next notification?
- * Default: 175
- * @default 175
+ * Default: 100
+ * @default 100
  *
  * @param How Long Till Notification Fade Out?
  * @desc How long before the notification fades out?
- * Default: 175
- * @default 175
+ * Default: 75
+ * @default 75
  *
  * @param Should I stay at the top?
  * @desc Should the notification stay at the top?
@@ -395,6 +395,27 @@ import WindowOptions           from './notification/window/options';
  * FlareNotification.notify("\\i[8] \\c[10]World\\c[0]");
  *
  * Hello World is First out then Hello and finally World.
+ *
+ * == Regarding Options ===
+ *
+ * The "Till Next Notification?" Needs to be larger then the
+ * "How Long Till Notification Fade Out?" or else you could have over lapping
+ * notifications especially when you choose notifications that "stick to the top."
+ *
+ * === Note on Staying at the top ===
+ *
+ * If you have three events, two of which fade down and a one that stays at the top
+ * and these events are triggered by trigged by player touch:
+ *
+ * Event A: [notification, dont stay at top], [notification, dont stay at top]
+ * Event B: notification, stay at tip
+ *
+ * Lets say you trigger A, and then B, in A the first notification will slide down
+ * the page, the second notifcation will stay at the top and the third will
+ * also stay at the top.
+ *
+ * This is not a bug, this is because you have specifically told us to stay at the
+ * top in the third event which is triggered before the actual notification appears.
  *
  * === Notification on event gain ===
  *

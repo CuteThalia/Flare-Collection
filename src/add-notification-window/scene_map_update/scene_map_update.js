@@ -17,13 +17,11 @@ Scene_Map.prototype.initialize = function() {
   oldSceneMapPrototypeInitializeMethod.call(this);
   this._isWindowOpen = false;
 
-  var timeTillNextwindow = NotificationOptions.getNotificationOptions().timeTillNextWindow;
-
-  if (isNaN(parseInt(timeTillNextwindow))) {
-    throw new Error('Sorry but: ' + timeTillNextwindow + ' is not a number');
+  if (isNaN(parseInt(NotificationOptions.getNotificationOptions().timeTillNextWindow))) {
+    throw new Error('Sorry but: ' + NotificationOptions.getNotificationOptions().timeTillNextWindow + ' is not a number');
   }
 
-  this._waitForWindowToClose = timeTillNextwindow;
+  this._waitForWindowToClose = 0;
   this._flareWindow = null;
 }
 
@@ -57,5 +55,5 @@ Scene_Map.prototype.openFlareNotificationWindow = function() {
 Scene_Map.prototype.allowAnotherWindowToBeOpened = function(flareNotification) {
   this.removeChild(flareNotification);
   this._flareWindow = null;
-  this._waitForWindowToClose = 75;
+  this._waitForWindowToClose = NotificationOptions.getNotificationOptions().timeTillNextWindow;
 }

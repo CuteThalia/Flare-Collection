@@ -65,3 +65,13 @@ These only trigger on events that require the player to some how activate them. 
 menus.
 
 Event based notifications have options for the way the window looks and behaves including width, font size, stay at the top, how long till next window and so on. These options are different then self created notification  window options and are individual for each type of event notification.
+
+> ATTN!!
+>
+> Assume you have 6 events that play (all at once) as the player triggers them.
+> The notification messages are added to a queue. The events will play out,
+> level messages and other types of messages will play out associated with that event.
+> these messages are known as `$gameMessage`'s.
+>
+> The notification event messages will play directly after according to how they were
+> added to a queue.
