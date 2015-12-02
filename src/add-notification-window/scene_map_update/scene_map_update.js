@@ -10,13 +10,14 @@
 
 import FlareNotificationWindow from '../windows/flare_notification_window';
 import WindowOptions           from '../notification/window/options';
+import NotificationOptions     from '../notification_options/notification_options';
 
 var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize;
 Scene_Map.prototype.initialize = function() {
   oldSceneMapPrototypeInitializeMethod.call(this);
   this._isWindowOpen = false;
 
-  var timeTillNextwindow = _NotificationOptions.getNotificationOptions().timeTillNextWindow;
+  var timeTillNextwindow = NotificationOptions.getNotificationOptions().timeTillNextWindow;
 
   if (isNaN(parseInt(timeTillNextwindow))) {
     throw new Error('Sorry but: ' + timeTillNextwindow + ' is not a number');
@@ -32,7 +33,9 @@ Scene_Map.prototype.updateMain = function() {
 
   if (this._waitForWindowToClose > 0) {
     this._waitForWindowToClose--;
+    console.log('waiting');
   } else if (FlareNotification._getQueue().length > 0) {
+    console.log('here');
     this.handleQueue();
   }
 }

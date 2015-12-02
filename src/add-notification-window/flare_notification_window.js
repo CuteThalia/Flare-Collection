@@ -55,12 +55,12 @@ import WindowOptions           from './notification/window/options';
  * @default 20
  *
  * @param Gold Notification Stay At The Top?
- * @desc Should the gold notification windw stay at the top?
+ * @desc Should the gold notification window stay at the top?
  * Default: false
  * @default false
  *
  * @param Gold Notification Should Fadeout?
- * @desc Should the gold window fade out if it isn't staying at the top?
+ * @desc Should the gold window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
  *
@@ -83,12 +83,12 @@ import WindowOptions           from './notification/window/options';
  * @default 20
  *
  * @param Item Notification Stay At The Top?
- * @desc Should the item notification windw stay at the top?
+ * @desc Should the item notification window stay at the top?
  * Default: false
  * @default false
  *
  * @param Item Notification Should Fadeout?
- * @desc Should the item window fade out if it isn't staying at the top?
+ * @desc Should the item window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
  *
@@ -111,12 +111,12 @@ import WindowOptions           from './notification/window/options';
  * @default 20
  *
  * @param Weapon Notification Stay At The Top?
- * @desc Should the weapon notification windw stay at the top?
+ * @desc Should the weapon notification window stay at the top?
  * Default: false
  * @default false
  *
  * @param Weapon Notification Should Fadeout?
- * @desc Should the weapon window fade out if it isn't staying at the top?
+ * @desc Should the weapon window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
  *
@@ -139,12 +139,12 @@ import WindowOptions           from './notification/window/options';
  * @default 20
  *
  * @param Armor Notification Stay At The Top?
- * @desc Should the armor notification windw stay at the top?
+ * @desc Should the armor notification window stay at the top?
  * Default: false
  * @default false
  *
  * @param Armor Notification Should Fadeout?
- * @desc Should the armor window fade out if it isn't staying at the top?
+ * @desc Should the armor window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
  *
@@ -167,12 +167,208 @@ import WindowOptions           from './notification/window/options';
  * @default 20
  *
  * @param Party Notification Stay At The Top?
- * @desc Should the party notification windw stay at the top?
+ * @desc Should the party notification window stay at the top?
  * Default: false
  * @default false
  *
  * @param Party Notification Should Fadeout?
- * @desc Should the party window fade out if it isn't staying at the top?
+ * @desc Should the party window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---HP Change Event---
+ * @desc
+ *
+ * @param Display HP Notification Event?
+ * @desc When actor gains an hp via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param HP Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param HP Notification Font Size
+ * @desc What font size should we use on the hp notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param HP Notification Stay At The Top?
+ * @desc Should the hp notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param HP Notification Should Fadeout?
+ * @desc Should the hp window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---MP Change Event---
+ * @desc
+ *
+ * @param Display MP Notification Event?
+ * @desc When actor gains an mp via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param MP Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param MP Notification Font Size
+ * @desc What font size should we use on the mp notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param MP Notification Stay At The Top?
+ * @desc Should the hp notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param MP Notification Should Fadeout?
+ * @desc Should the hp window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---TP Change Event---
+ * @desc
+ *
+ * @param Display TP Notification Event?
+ * @desc When actor gains an tp via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param TP Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param TP Notification Font Size
+ * @desc What font size should we use on the tp notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param TP Notification Stay At The Top?
+ * @desc Should the tp notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param TP Notification Should Fadeout?
+ * @desc Should the tp window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---State Change Event---
+ * @desc
+ *
+ * @param Display State Notification Event?
+ * @desc When actor gains an state via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param State Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param State Notification Font Size
+ * @desc What font size should we use on the state notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param State Notification Stay At The Top?
+ * @desc Should the state notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param State Notification Should Fadeout?
+ * @desc Should the state window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Recover All Event---
+ * @desc
+ *
+ * @param Display Recover All Notification Event?
+ * @desc When actor recovers all via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Recover All Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Recover All Notification Font Size
+ * @desc What font size should we use on the recover all notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Recover All Notification Stay At The Top?
+ * @desc Should the recover all notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Recover All Notification Should Fadeout?
+ * @desc Should the recover all window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---XP Change Event---
+ * @desc
+ *
+ * @param Display Xp Notification Event?
+ * @desc When actor gains xp via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Xp Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Xp Notification Font Size
+ * @desc What font size should we use on the xp notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Xp Notification Stay At The Top?
+ * @desc Should the xp notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Xp Notification Should Fadeout?
+ * @desc Should the xp window fade out, if it isn't staying at the top?
+ * Default: true
+ * @default true
+ *
+ * @param ---Level Change Event---
+ * @desc
+ *
+ * @param Display Level gain Notification Event?
+ * @desc When actor gains level via events, do we show a notification?
+ * Default: true
+ * @default true
+ *
+ * @param Level gain Notification Width
+ * @desc What width should the notification window be?
+ * Default: 500
+ * @default 500
+ *
+ * @param Level gain Notification Font Size
+ * @desc What font size should we use on the level notification window?
+ * Default: 20
+ * @default 20
+ *
+ * @param Level gain Notification Stay At The Top?
+ * @desc Should the level notification window stay at the top?
+ * Default: false
+ * @default false
+ *
+ * @param Level gain Notification Should Fadeout?
+ * @desc Should the level window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
  *
@@ -202,13 +398,18 @@ import WindowOptions           from './notification/window/options';
  *
  * === Notification on event gain ===
  *
- * There is options for each type of event, such as width, stay at the top, fadeout and font size.
+ * There is options for each type of event, such as width, stay at the top, fadeout
+ * and font size.
  *
  * We also have an option to show the event should you want too disable that particular
  * event notification.
  *
- * By defauly all notifications will show at the top and slide down the page fading out over time.
+ * By defauly all notifications will show at the top and slide down the page fading
+ * out over time.
  *
+ * With these types of notifications, events will play first and then the message,
+ * if there are multiple events, each message is added to the queue and they play one
+ * after the other.
  */
 
 class FlareNotification {

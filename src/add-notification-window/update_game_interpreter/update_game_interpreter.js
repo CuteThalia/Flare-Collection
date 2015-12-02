@@ -137,6 +137,203 @@ Game_Interpreter.prototype.command129 = function() {
     return true;
 };
 
+// Change HP
+Game_Interpreter.prototype.command311 = function() {
+    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    var text  = '';
+    var self = this;
+
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+
+      if (value < 0) {
+        text = actor.name() + " \\c[16]Loses "+Math.abs(value)+" HP \\c[0]";
+      } else {
+        text = actor.name() + " \\c[16]Gains "+Math.abs(value)+" HP \\c[0]";;
+      }
+
+      self.processNotificationEvents(text, "showHpChangingForActor", value, {
+        moveDown:       NotificationOptions.getNotificationOptions().hpNotificationWindowMoveDown,
+        fadeOut:        NotificationOptions.getNotificationOptions().hpNotificationWindowFadeOut,
+        windowOptions:  {
+          windowWidth: NotificationOptions.getNotificationOptions().hpNotificationWindowWidth,
+          fontSize:    NotificationOptions.getNotificationOptions().hpNotificationFontSize
+        }
+      });
+
+
+      this.changeHp(actor, value, this._params[5]);
+    }.bind(this));
+    return true;
+};
+
+// Change MP
+Game_Interpreter.prototype.command312 = function() {
+    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    var text  = '';
+    var self = this;
+
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+      if (value < 0) {
+        text = actor.name() + " \\c[16]Loses "+Math.abs(value)+" MP \\c[0]";
+      } else {
+        text = actor.name() + " \\c[16]Gains "+Math.abs(value)+" MP \\c[0]";;
+      }
+
+      self.processNotificationEvents(text, "showMpChangingForActor", value, {
+        moveDown:       NotificationOptions.getNotificationOptions().mpNotificationWindowMoveDown,
+        fadeOut:        NotificationOptions.getNotificationOptions().mpNotificationWindowFadeOut,
+        windowOptions:  {
+          windowWidth: NotificationOptions.getNotificationOptions().mpNotificationWindowWidth,
+          fontSize:    NotificationOptions.getNotificationOptions().mpNotificationFontSize
+        }
+      });
+
+      actor.gainMp(value);
+    }.bind(this));
+    return true;
+};
+
+// Change TP
+Game_Interpreter.prototype.command326 = function() {
+    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    var text = '';
+    var self = this;
+
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+      if (value < 0) {
+        text = actor.name() + " \\c[16]Loses "+Math.abs(value)+" TP \\c[0]";
+      } else {
+        text = actor.name() + " \\c[16]Gains "+Math.abs(value)+" TP \\c[0]";;
+      }
+
+      self.processNotificationEvents(text, "showTpChangingForActor", value, {
+        moveDown:       NotificationOptions.getNotificationOptions().tpNotificationWindowMoveDown,
+        fadeOut:        NotificationOptions.getNotificationOptions().tpNotificationWindowFadeOut,
+        windowOptions:  {
+          windowWidth: NotificationOptions.getNotificationOptions().tpNotificationWindowWidth,
+          fontSize:    NotificationOptions.getNotificationOptions().tpNotificationFontSize
+        }
+      });
+
+      actor.gainTp(value);
+    }.bind(this));
+    return true;
+};
+
+// Change State
+Game_Interpreter.prototype.command313 = function() {
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+        var alreadyDead = actor.isDead();
+        var text = '';
+
+        if (this._params[2] === 0) {
+
+          text = actor.name() + " \\c[16]Gets \\i["+$dataStates[this._params[3]].iconIndex+"] "+$dataStates[this._params[3]].name+" applied\\c[0]";
+
+          this.processNotificationEvents(text, "showStateChangingForActor", value, {
+            moveDown:       NotificationOptions.getNotificationOptions().stateNotificationWindowMoveDown,
+            fadeOut:        NotificationOptions.getNotificationOptions().stateNotificationWindowFadeOut,
+            windowOptions:  {
+              windowWidth: NotificationOptions.getNotificationOptions().stateNotificationWindowWidth,
+              fontSize:    NotificationOptions.getNotificationOptions().stateNotificationFontSize
+            }
+          });
+
+          actor.addState(this._params[3]);
+        } else {
+          text = actor.name() + " \\c[16]Has \\i["+$dataStates[this._params[3]].iconIndex+"] "+$dataStates[this._params[3]].name+" removed\\c[0]";
+
+          this.processNotificationEvents(text, "showStateChangingForActor", value, {
+            moveDown:       NotificationOptions.getNotificationOptions().stateNotificationWindowMoveDown,
+            fadeOut:        NotificationOptions.getNotificationOptions().stateNotificationWindowFadeOut,
+            windowOptions:  {
+              windowWidth: NotificationOptions.getNotificationOptions().stateNotificationWindowWidth,
+              fontSize:    NotificationOptions.getNotificationOptions().stateNotificationFontSize
+            }
+          });
+          actor.removeState(this._params[3]);
+        }
+        if (actor.isDead() && !alreadyDead) {
+          actor.performCollapse();
+        }
+        actor.clearResult();
+    }.bind(this));
+    return true;
+};
+
+// Recover All
+Game_Interpreter.prototype.command314 = function() {
+    var text = '';
+
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+      text = actor.name() + " \\c[16]has fully recovered!\\c[0]";
+
+      this.processNotificationEvents(text, "showRecoverAllForActor", value, {
+        moveDown:       NotificationOptions.getNotificationOptions().recoverAllNotificationWindowMoveDown,
+        fadeOut:        NotificationOptions.getNotificationOptions().recoverAllNotificationWindowFadeOut,
+        windowOptions:  {
+          windowWidth: NotificationOptions.getNotificationOptions().recoverAllNotificationWindowWidth,
+          fontSize:    NotificationOptions.getNotificationOptions().recoverAllNotificationFontSize
+        }
+      });
+
+      actor.recoverAll();
+    }.bind(this));
+    return true;
+};
+
+// Change EXP
+Game_Interpreter.prototype.command315 = function() {
+    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    var text = '';
+
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+      if (value < 0) {
+        text = actor.name() + " \\c[16]Looses " + Math.abs(value) + " XP\\c[0]";
+      } else {
+        text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " XP\\c[0]";
+      }
+
+      this.processNotificationEvents(text, "showXpForActor", value, {
+        moveDown:       NotificationOptions.getNotificationOptions().xpNotificationWindowMoveDown,
+        fadeOut:        NotificationOptions.getNotificationOptions().xpNotificationWindowFadeOut,
+        windowOptions:  {
+          windowWidth: NotificationOptions.getNotificationOptions().xpNotificationWindowWidth,
+          fontSize:    NotificationOptions.getNotificationOptions().xpNotificationFontSize
+        }
+      });
+
+      actor.changeExp(actor.currentExp() + value, this._params[5]);
+    }.bind(this));
+    return true;
+};
+
+// Change Level
+Game_Interpreter.prototype.command316 = function() {
+    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    var text = '';
+
+    this.iterateActorEx(this._params[0], this._params[1], function(actor) {
+      if (value < 0) {
+        text = actor.name() + " \\c[16]Looses " + Math.abs(value) + " Level(s)\\c[0]";
+      } else {
+        text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " Levels(s)\\c[0]";
+      }
+
+      this.processNotificationEvents(text, "showLevelGainForActor", value, {
+        moveDown:       NotificationOptions.getNotificationOptions().levelGainNotificationWindowMoveDown,
+        fadeOut:        NotificationOptions.getNotificationOptions().levelGainNotificationWindowFadeOut,
+        windowOptions:  {
+          windowWidth: NotificationOptions.getNotificationOptions().levelGainNotificationWindowWidth,
+          fontSize:    NotificationOptions.getNotificationOptions().levelGainNotificationFontSize
+        }
+      });
+
+      actor.changeLevel(actor.level + value, this._params[5]);
+    }.bind(this));
+    return true;
+};
+
 /**
  * Allows us to process notification options.
  *
