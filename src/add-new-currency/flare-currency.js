@@ -2,8 +2,10 @@
  * @namespace FlareCurrency
  */
 
-import lodashFind   from 'lodash/collection/find';
-import CurrencyShop from './shop/currency_shop';
+import lodashFind         from 'lodash/collection/find';
+import lodashFilter       from 'lodash/collection/filter';
+import lodashIsUndefined  from 'lodash/lang/isUndefined';
+import CurrencyShop       from './shop/currency_shop';
 
  /*:
   * @plugindesc Allows you to add a new currency or set of currencies to the game
@@ -403,7 +405,15 @@ class FlareCurrencies {
    * @param Int currencyAmount
    */
   static addAmount(currencyName, currencyAmount) {
-    var currencies = window.flareCurrency.getCurrencyStore();
+    var filteredArray = lodashFilter(flareCurrency.getCurrencyStore(), function(currency) {
+      return currency.name && currency.icon && currency.description;
+    });
+
+    if (filteredArray.length === 0) {
+      throw new Error('There are no currencies fully defined');
+    }
+
+    var currencies = flareCurrency.getCurrencyStore();
 
     var self = this;
 
@@ -429,6 +439,14 @@ class FlareCurrencies {
    * @param int variableId
    */
   static setAmountBasedOnVariableId(currencyName, variableId) {
+    var filteredArray = lodashFilter(flareCurrency.getCurrencyStore(), function(currency) {
+      return currency.name && currency.icon && currency.description;
+    });
+
+    if (filteredArray.length === 0) {
+      throw new Error('There are no currencies fully defined');
+    }
+
     this.addAmount(currencyName, $gameVariables.value(parseInt(variableId)));
   }
 
@@ -439,6 +457,14 @@ class FlareCurrencies {
    * @param boolean purchaseOnly
    */
   static openShop(currency, purchaseOnly) {
+    var filteredArray = lodashFilter(flareCurrency.getCurrencyStore(), function(currency) {
+      return currency.name && currency.icon && currency.description;
+    });
+
+    if (filteredArray.length === 0) {
+      throw new Error('There are no currencies fully defined');
+    }
+
     if (purchaseOnly === undefined) {
       purchaseOnly = false;
     }
@@ -448,7 +474,15 @@ class FlareCurrencies {
   }
 
   static getCurrentCurrencyAmount(currencyName) {
-    var currencies = window.flareCurrency.getCurrencyStore();
+    var filteredArray = lodashFilter(flareCurrency.getCurrencyStore(), function(currency) {
+      return currency.name && currency.icon && currency.description;
+    });
+
+    if (filteredArray.length === 0) {
+      throw new Error('There are no currencies fully defined');
+    }
+
+    var currencies = flareCurrency.getCurrencyStore();
     var self       = this;
 
     var currencyObject = lodashFind(currencies, function(currency){

@@ -12,10 +12,9 @@ Scene_Shop.prototype.createCurrencyWindow = function(currencyName) {
   this.addWindow(this._curencyValueWindow);
 }
 
-
 var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
 Scene_Shop.prototype.create = function() {
-    if (CurrencyShopInfo.getCurrency() !== undefined) {
+    if (CurrencyShopInfo.getCurrency() !== undefined && CurrencyShopInfo.getCurrency() !== null) {
       Scene_MenuBase.prototype.create.call(this);
       this.createHelpWindow();
       this.createCurrencyWindow(CurrencyShopInfo.getCurrency());
@@ -66,7 +65,6 @@ Scene_Shop.prototype.activateBuyWindow = function(currencyName) {
     } else {
       oldSceneShopProtottypeActivateBuyWindowMethod.call(this);
     }
-
 };
 
 var oldSceneShopPrototypeCreateBuyWindow = Scene_Shop.prototype.createBuyWindow;
