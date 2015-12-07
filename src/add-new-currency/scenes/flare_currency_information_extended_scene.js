@@ -4,7 +4,7 @@
 
 import ItemForCurrencySelectableWindow from '../windows/currency_info/item_info/item_for_currency';
 import ItemInformation                 from '../windows/currency_info/item_info/item_information';
-import SceneWindowContainer            from '../../scene_window_container';
+import SceneWindowContainer            from '../../lib/containers/scene/window/scene_window_container';
 
 /**
  * Create the actual currency information scene.

@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-import FlareRandomNumber from '../../flare_random_number';
+import FlareRandomNumber from '../../lib/number/flare_random_number';
 
 /**
  * Determine if the playr gets currencies.

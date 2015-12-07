@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-import FlareWindowBase          from '../../../../flare_window_base';
+import FlareWindowBase          from '../../../../lib/windows/flare_window_base';
 import StoreCurrencyItemInfo    from '../helper/store_currency_item_info';
 import wordWrap                 from 'underscore.string/wrap';
 import lodashIsUndefined        from 'lodash/lang/isUndefined';

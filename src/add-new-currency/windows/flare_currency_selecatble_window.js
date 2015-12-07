@@ -3,8 +3,8 @@
  */
 
 
-import FlareWindowSelectable from '../../flare_window_selectable';
-import SceneWindowContainer  from '../../scene_window_container';
+import FlareWindowSelectable from '../../lib/windows/flare_window_selectable';
+import SceneWindowContainer  from '../../lib/containers/scene/window/scene_window_container';
 import FlareMoreInfoScene    from '../scenes/flare_currency_information_extended_scene';
 import StoreCurrencyName     from './currency_info/helper/store_current_currency_name';
 import CurrencyExists        from './currency_info/helper/currency_exists';

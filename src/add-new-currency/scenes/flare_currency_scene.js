@@ -4,7 +4,7 @@
 
 import FlareCurrencySelectableWindow from '../windows/flare_currency_selecatble_window';
 import FlareCurrencyInfo             from '../windows/currency_info/currency_details';
-import SceneWindowContainer          from '../../scene_window_container';
+import SceneWindowContainer          from '../../lib/containers/scene/window/scene_window_container';
 
 /**
  * Create the actual currency scene.

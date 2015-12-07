@@ -2,8 +2,8 @@
  * @namespace FlareCollection
  */
 
-import lodashFind        from '../node_modules/lodash/collection/find';
-import lodashIsUndefined from '../node_modules/lodash/lang/isUndefined';
+import lodashFind        from 'lodash/collection/find';
+import lodashIsUndefined from 'lodash/lang/isUndefined';
 
 /**
  * Allows us to store a window object.

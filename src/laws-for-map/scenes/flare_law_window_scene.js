@@ -7,8 +7,8 @@ import FlareLawDetails            from '../windows/details/laws_details';
 import FlareItemsForLawTitle      from '../windows/details/items_for_laws_title';
 import FlareItemsForLawSelectable from '../windows/details/items_for_laws_selectable';
 import FlareCalculatedLaws        from '../windows/details/calculated_laws';
-import SceneWindowContainer       from '../../scene_window_container';
-import SelectableWindowContainer  from '../../selectable_window_container';
+import SceneWindowContainer       from '../../lib/containers/scene/window/scene_window_container';
+import SelectableWindowContainer  from '../../lib/containers/window/selectable/selectable_window_container';
 import OptionsHandler             from '../options/option_handler';
 
 /**

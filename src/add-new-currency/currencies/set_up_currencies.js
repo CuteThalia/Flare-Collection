@@ -3,7 +3,7 @@
  */
 
 import Currency    from './currency';
-import FlareError  from '../../flare_error';
+import FlareError  from '../../lib/errors/flare_error';
 import TextHandler from './text_handler';
 
 var FlareCurrencyPluginParamters = PluginManager.parameters('Flare-Currency');

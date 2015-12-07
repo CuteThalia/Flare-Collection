@@ -3809,7 +3809,7 @@ var _currency = require('./currency');
 
 var _currency2 = _interopRequireDefault(_currency);
 
-var _flare_error = require('../../flare_error');
+var _flare_error = require('../../lib/errors/flare_error');
 
 var _flare_error2 = _interopRequireDefault(_flare_error);
 
@@ -3889,7 +3889,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":113,"./currency":85,"./text_handler":87}],87:[function(require,module,exports){
+},{"../../lib/errors/flare_error":114,"./currency":85,"./text_handler":87}],87:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4498,7 +4498,7 @@ var _item_information = require('../windows/currency_info/item_info/item_informa
 
 var _item_information2 = _interopRequireDefault(_item_information);
 
-var _scene_window_container = require('../../scene_window_container');
+var _scene_window_container = require('../../lib/containers/scene/window/scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
 
@@ -4582,7 +4582,7 @@ var FlareCurrencyInformationExtendedScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyInformationExtendedScene;
 
-},{"../../scene_window_container":117,"../windows/currency_info/item_info/item_for_currency":106,"../windows/currency_info/item_info/item_information":107}],90:[function(require,module,exports){
+},{"../../lib/containers/scene/window/scene_window_container":113,"../windows/currency_info/item_info/item_for_currency":106,"../windows/currency_info/item_info/item_information":107}],90:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4597,7 +4597,7 @@ var _currency_details = require('../windows/currency_info/currency_details');
 
 var _currency_details2 = _interopRequireDefault(_currency_details);
 
-var _scene_window_container = require('../../scene_window_container');
+var _scene_window_container = require('../../lib/containers/scene/window/scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
 
@@ -4681,7 +4681,7 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../../scene_window_container":117,"../windows/currency_info/currency_details":101,"../windows/flare_currency_selecatble_window":108}],91:[function(require,module,exports){
+},{"../../lib/containers/scene/window/scene_window_container":113,"../windows/currency_info/currency_details":101,"../windows/flare_currency_selecatble_window":108}],91:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5321,7 +5321,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * @namespace FlareCurrency
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
 
-var _flare_random_number = require('../../flare_random_number');
+var _flare_random_number = require('../../lib/number/flare_random_number');
 
 var _flare_random_number2 = _interopRequireDefault(_flare_random_number);
 
@@ -5430,7 +5430,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":114}],97:[function(require,module,exports){
+},{"../../lib/number/flare_random_number":115}],97:[function(require,module,exports){
 'use strict';
 
 var _flare_currency_scene = require('../scenes/flare_currency_scene');
@@ -5847,7 +5847,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_base = require('../../../flare_window_base');
+var _flare_window_base = require('../../../lib/windows/flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 
@@ -5920,7 +5920,7 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
 module.exports = CurrencyDetails;
 
-},{"../../../flare_window_base":115,"../../currencies/text_handler":87,"underscore.string/wrap":84}],102:[function(require,module,exports){
+},{"../../../lib/windows/flare_window_base":116,"../../currencies/text_handler":87,"underscore.string/wrap":84}],102:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6237,7 +6237,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_selectable = require('../../../../flare_window_selectable');
+var _flare_window_selectable = require('../../../../lib/windows/flare_window_selectable');
 
 var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
 
@@ -6261,7 +6261,7 @@ var _store_currency_item_info = require('../helper/store_currency_item_info');
 
 var _store_currency_item_info2 = _interopRequireDefault(_store_currency_item_info);
 
-var _scene_window_container = require('../../../../scene_window_container');
+var _scene_window_container = require('../../../../lib/containers/scene/window/scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
 
@@ -6422,14 +6422,14 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemForCurrency;
 
-},{"../../../../flare_window_selectable":116,"../../../../scene_window_container":117,"../../../currencies/text_handler":87,"../helper/store_currency_item_info":104,"../helper/store_current_currency_name":105,"lodash/array/uniq":3,"lodash/collection/find":7,"lodash/lang/clone":67}],107:[function(require,module,exports){
+},{"../../../../lib/containers/scene/window/scene_window_container":113,"../../../../lib/windows/flare_window_selectable":117,"../../../currencies/text_handler":87,"../helper/store_currency_item_info":104,"../helper/store_current_currency_name":105,"lodash/array/uniq":3,"lodash/collection/find":7,"lodash/lang/clone":67}],107:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_base = require('../../../../flare_window_base');
+var _flare_window_base = require('../../../../lib/windows/flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 
@@ -6535,18 +6535,18 @@ var ItemInformation = (function (_FlareWindowBase) {
 
 module.exports = ItemInformation;
 
-},{"../../../../flare_window_base":115,"../../../currencies/text_handler":87,"../helper/map_has_currency_shop":103,"../helper/store_currency_item_info":104,"lodash/lang/isUndefined":75,"rmmv-mrp-core/option-parser":81,"underscore.string/wrap":84}],108:[function(require,module,exports){
+},{"../../../../lib/windows/flare_window_base":116,"../../../currencies/text_handler":87,"../helper/map_has_currency_shop":103,"../helper/store_currency_item_info":104,"lodash/lang/isUndefined":75,"rmmv-mrp-core/option-parser":81,"underscore.string/wrap":84}],108:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_selectable = require('../../flare_window_selectable');
+var _flare_window_selectable = require('../../lib/windows/flare_window_selectable');
 
 var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
 
-var _scene_window_container = require('../../scene_window_container');
+var _scene_window_container = require('../../lib/containers/scene/window/scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
 
@@ -6694,7 +6694,7 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
 
 module.exports = FlareCurrencies;
 
-},{"../../flare_window_selectable":116,"../../scene_window_container":117,"../currencies/text_handler":87,"../scenes/flare_currency_information_extended_scene":89,"./currency_info/helper/currency_exists":102,"./currency_info/helper/store_current_currency_name":105}],109:[function(require,module,exports){
+},{"../../lib/containers/scene/window/scene_window_container":113,"../../lib/windows/flare_window_selectable":117,"../currencies/text_handler":87,"../scenes/flare_currency_information_extended_scene":89,"./currency_info/helper/currency_exists":102,"./currency_info/helper/store_current_currency_name":105}],109:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -7029,253 +7029,17 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 module.exports = FlareCurrencyRewardWindow;
 
 },{"lodash/collection/find":7,"lodash/lang/clone":67,"lodash/lang/isUndefined":75}],113:[function(require,module,exports){
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Custom Error Handler Class.
- *
- * Use by doing: FlareError.error('Error Text'); then do:
- * FlareError.getError() in the Scene Map initializer to throw
- * errors on the start of the game.
- *
- * This class wont be useful in classes that subclass core RPG Maker
- * classes because the error handler there knows how to catch errors
- * and deal with them.
- *
- * So when would you use this? In classes that dont extend any of the
- * core RPG Maker classes.
- *
- * Alias the Scene_Map initialize method, check if the getError()
- * returns undefined or not, if not, throw a new Error with the value of
- * getError()
- */
-
-var FlareError = (function () {
-  function FlareError() {
-    _classCallCheck(this, FlareError);
-  }
-
-  _createClass(FlareError, null, [{
-    key: "error",
-
-    /**
-     * Use this to set a new error message.
-     *
-     * @param String message
-     */
-    value: function error(message) {
-      this._error = message;
-    }
-
-    /**
-     * Get the error message.
-     *
-     * @return undefined or string
-     */
-
-  }, {
-    key: "getError",
-    value: function getError() {
-      return this._error;
-    }
-  }]);
-
-  return FlareError;
-})();
-
-module.exports = FlareError = FlareError;
-
-},{}],114:[function(require,module,exports){
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Create a ranom number
- *
- * Methods here are useful for creating random numbers.
- */
-
-var FlareRandomNumber = (function () {
-  function FlareRandomNumber() {
-    _classCallCheck(this, FlareRandomNumber);
-  }
-
-  _createClass(FlareRandomNumber, null, [{
-    key: "minMax",
-
-    /**
-     * Create random number between nim and max.
-     *
-     * @param Int min
-     * @param Int max
-     * @return int
-     */
-    value: function minMax(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-  }]);
-
-  return FlareRandomNumber;
-})();
-
-module.exports = FlareRandomNumber = FlareRandomNumber;
-
-},{}],115:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * All Flare based items use this window base.
- *
- * Flare Window Base extends the Window Base Class
- * and adds some additional generic helper methods
- * that are useful for creating windows and their contents.
- */
-
-var FlareWindowBase = (function (_Window_Base) {
-  _inherits(FlareWindowBase, _Window_Base);
-
-  function FlareWindowBase(args) {
-    _classCallCheck(this, FlareWindowBase);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowBase).call(this, args));
-  }
-
-  /**
-   * Custom drawtextEx function.
-   *
-   * We do not reset font settings, which is what the default method does.
-   * I dont like giant text in my windows.
-   *
-   * It is usp to the implementor to call: this.resetFontSettings();
-   */
-
-  _createClass(FlareWindowBase, [{
-    key: 'flareDrawTextEx',
-    value: function flareDrawTextEx(text, x, y) {
-      if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
-        textState.text = this.convertEscapeCharacters(text);
-        textState.text = textState.text.replace(/\\/g, '');
-        textState.height = this.calcTextHeight(textState, false);
-
-        while (textState.index < textState.text.length) {
-          this.processCharacter(textState);
-        }
-        return textState.x - x;
-      } else {
-        return 0;
-      }
-    }
-  }]);
-
-  return FlareWindowBase;
-})(Window_Base);
-
-module.exports = FlareWindowBase = FlareWindowBase;
-
-},{}],116:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Flares custom window selectable.
- *
- * Allows a specific level of abstraction to be addd.
- */
-
-var FlareWindowSelectable = (function (_Window_Selectable) {
-  _inherits(FlareWindowSelectable, _Window_Selectable);
-
-  function FlareWindowSelectable(args) {
-    _classCallCheck(this, FlareWindowSelectable);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowSelectable).call(this, args));
-  }
-
-  /**
-   * Custom drawtextEx function.
-   *
-   * We do not reset font settings, which is what the default method does.
-   * I dont like giant text in my windows.
-   *
-   * It is usp to the implementor to call: this.resetFontSettings();
-   */
-
-  _createClass(FlareWindowSelectable, [{
-    key: 'flareDrawTextEx',
-    value: function flareDrawTextEx(text, x, y) {
-      if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
-        textState.text = this.convertEscapeCharacters(text);
-        textState.text = textState.text.replace(/\\/g, '');
-        textState.height = this.calcTextHeight(textState, false);
-
-        while (textState.index < textState.text.length) {
-          this.processCharacter(textState);
-        }
-
-        return textState.x - x;
-      } else {
-        return 0;
-      }
-    }
-  }]);
-
-  return FlareWindowSelectable;
-})(Window_Selectable);
-
-module.exports = FlareWindowSelectable = FlareWindowSelectable;
-
-},{}],117:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * @namespace FlareCollection
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
 
-var _find = require('../node_modules/lodash/collection/find');
+var _find = require('lodash/collection/find');
 
 var _find2 = _interopRequireDefault(_find);
 
-var _isUndefined = require('../node_modules/lodash/lang/isUndefined');
+var _isUndefined = require('lodash/lang/isUndefined');
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -7379,4 +7143,240 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":7,"../node_modules/lodash/lang/isUndefined":75}]},{},[88,97,100,86,94,93,99,98,111,110,112]);
+},{"lodash/collection/find":7,"lodash/lang/isUndefined":75}],114:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Custom Error Handler Class.
+ *
+ * Use by doing: FlareError.error('Error Text'); then do:
+ * FlareError.getError() in the Scene Map initializer to throw
+ * errors on the start of the game.
+ *
+ * This class wont be useful in classes that subclass core RPG Maker
+ * classes because the error handler there knows how to catch errors
+ * and deal with them.
+ *
+ * So when would you use this? In classes that dont extend any of the
+ * core RPG Maker classes.
+ *
+ * Alias the Scene_Map initialize method, check if the getError()
+ * returns undefined or not, if not, throw a new Error with the value of
+ * getError()
+ */
+
+var FlareError = (function () {
+  function FlareError() {
+    _classCallCheck(this, FlareError);
+  }
+
+  _createClass(FlareError, null, [{
+    key: "error",
+
+    /**
+     * Use this to set a new error message.
+     *
+     * @param String message
+     */
+    value: function error(message) {
+      this._error = message;
+    }
+
+    /**
+     * Get the error message.
+     *
+     * @return undefined or string
+     */
+
+  }, {
+    key: "getError",
+    value: function getError() {
+      return this._error;
+    }
+  }]);
+
+  return FlareError;
+})();
+
+module.exports = FlareError = FlareError;
+
+},{}],115:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Create a ranom number
+ *
+ * Methods here are useful for creating random numbers.
+ */
+
+var FlareRandomNumber = (function () {
+  function FlareRandomNumber() {
+    _classCallCheck(this, FlareRandomNumber);
+  }
+
+  _createClass(FlareRandomNumber, null, [{
+    key: "minMax",
+
+    /**
+     * Create random number between nim and max.
+     *
+     * @param Int min
+     * @param Int max
+     * @return int
+     */
+    value: function minMax(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  }]);
+
+  return FlareRandomNumber;
+})();
+
+module.exports = FlareRandomNumber = FlareRandomNumber;
+
+},{}],116:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * All Flare based items use this window base.
+ *
+ * Flare Window Base extends the Window Base Class
+ * and adds some additional generic helper methods
+ * that are useful for creating windows and their contents.
+ */
+
+var FlareWindowBase = (function (_Window_Base) {
+  _inherits(FlareWindowBase, _Window_Base);
+
+  function FlareWindowBase(args) {
+    _classCallCheck(this, FlareWindowBase);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowBase).call(this, args));
+  }
+
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
+  _createClass(FlareWindowBase, [{
+    key: 'flareDrawTextEx',
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
+        textState.height = this.calcTextHeight(textState, false);
+
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+        return textState.x - x;
+      } else {
+        return 0;
+      }
+    }
+  }]);
+
+  return FlareWindowBase;
+})(Window_Base);
+
+module.exports = FlareWindowBase = FlareWindowBase;
+
+},{}],117:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Flares custom window selectable.
+ *
+ * Allows a specific level of abstraction to be addd.
+ */
+
+var FlareWindowSelectable = (function (_Window_Selectable) {
+  _inherits(FlareWindowSelectable, _Window_Selectable);
+
+  function FlareWindowSelectable(args) {
+    _classCallCheck(this, FlareWindowSelectable);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowSelectable).call(this, args));
+  }
+
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
+  _createClass(FlareWindowSelectable, [{
+    key: 'flareDrawTextEx',
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
+        textState.height = this.calcTextHeight(textState, false);
+
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+
+        return textState.x - x;
+      } else {
+        return 0;
+      }
+    }
+  }]);
+
+  return FlareWindowSelectable;
+})(Window_Selectable);
+
+module.exports = FlareWindowSelectable = FlareWindowSelectable;
+
+},{}]},{},[88,97,100,86,94,93,99,98,111,110,112]);

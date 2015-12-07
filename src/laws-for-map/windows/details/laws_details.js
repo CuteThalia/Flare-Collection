@@ -2,7 +2,7 @@
  * @namespace FlareLawsForMap.
  */
 
-import FlareWindowBase   from '../../../flare_window_base';
+import FlareWindowBase   from '../../../lib/windows/flare_window_base';
 import wordWrap          from 'underscore.string/wrap';
 import lodashIsUndefined from 'lodash/lang/isUndefined';
 

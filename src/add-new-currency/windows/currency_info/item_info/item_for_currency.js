@@ -2,13 +2,13 @@
  * @namespace FlareCurrency
  */
 
-import FlareWindowSelectable     from '../../../../flare_window_selectable';
+import FlareWindowSelectable     from '../../../../lib/windows/flare_window_selectable';
 import StoreCurrentCurrencyName  from '../helper/store_current_currency_name';
 import lodashFind                from 'lodash/collection/find';
 import lodashArrayUnique         from 'lodash/array/uniq';
 import lodashClone               from 'lodash/lang/clone';
 import StoreCurrencyItemInfo     from '../helper/store_currency_item_info';
-import SceneWindowContainer      from '../../../../scene_window_container';
+import SceneWindowContainer      from '../../../../lib/containers/scene/window/scene_window_container';
 import TextHandler               from '../../../currencies/text_handler';
 
 

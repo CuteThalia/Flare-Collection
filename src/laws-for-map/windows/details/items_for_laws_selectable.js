@@ -2,11 +2,11 @@
  * @namespace FlareLawsForMap.
  */
 
-import FlareWindowSelectable      from '../../../flare_window_selectable';
+import FlareWindowSelectable      from '../../../lib/windows/flare_window_selectable';
 import wordWrap                   from 'underscore.string/wrap';
 import RewardProcessor            from '../../reward_storage/reward_processor';
 import lodashIsUndefined          from 'lodash/lang/isUndefined';
-import SelectableWindowContainer  from '../../../selectable_window_container';
+import SelectableWindowContainer  from '../../../lib/containers/window/selectable/selectable_window_container';
 import CompiledStorageContainer   from '../../reward_storage/compiled_storage_container';
 
 /**

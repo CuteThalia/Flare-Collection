@@ -5,7 +5,7 @@
 import lodashClone              from 'lodash/lang/clone';
 import lodashIsUndefined        from 'lodash/lang/isUndefined';
 import lodashFind               from 'lodash/collection/find';
-import FlareWindowSelectable    from '../../../flare_window_selectable';
+import FlareWindowSelectable    from '../../../lib/windows/flare_window_selectable';
 import CompiledStorageContainer from '../../reward_storage/compiled_storage_container';
 
 /**

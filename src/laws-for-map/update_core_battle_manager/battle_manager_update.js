@@ -2,7 +2,7 @@
  * @namespace FlareLawsForMap.
  */
 
-import CountContainer           from  '../../flare_counter';
+import CountContainer           from  '../../lib/number/flare_counter';
 import lodashClone              from  'lodash/lang/clone';
 import CompiledStorageContainer from  '../reward_storage/compiled_storage_container';
 import lodashIsUndefined        from  'lodash/lang/isUndefined';

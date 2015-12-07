@@ -1,7 +1,7 @@
 import RewardStorage       from './reward_storage/reward_storage';
 import {extractAllOfType}  from 'rmmv-mrp-core/option-parser';
 import lodashIsUndefined   from 'lodash/lang/isUndefined';
-import FlareRandomNumber   from '../flare_random_number'
+import FlareRandomNumber   from '../lib/number/flare_random_number'
 
 class GatherReward {
 

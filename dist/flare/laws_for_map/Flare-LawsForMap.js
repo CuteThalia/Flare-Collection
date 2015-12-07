@@ -3641,236 +3641,6 @@ module.exports = function wrap(str, options){
 	}
 };
 },{"./helper/makeString":86}],92:[function(require,module,exports){
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Store the current count.
- *
- * Used if you want to store the current count of
- * something and then use the value of that count else where.
- */
-
-var FlareCounter = (function () {
-  function FlareCounter() {
-    _classCallCheck(this, FlareCounter);
-  }
-
-  _createClass(FlareCounter, null, [{
-    key: "resetCounter",
-
-    /**
-     * Reset the counter to 0.
-     */
-    value: function resetCounter() {
-      this._counter = 0;
-    }
-
-    /**
-     * Appends the value to the current counter.
-     *
-     * @param int value
-     */
-
-  }, {
-    key: "addValue",
-    value: function addValue(value) {
-      this._counter += parseInt(value);
-    }
-
-    /**
-     * Get the current state of the count.
-     *
-     * @return int
-     */
-
-  }, {
-    key: "getCurrentState",
-    value: function getCurrentState() {
-      return this._counter;
-    }
-  }]);
-
-  return FlareCounter;
-})();
-
-module.exports = FlareCounter;
-
-},{}],93:[function(require,module,exports){
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Create a ranom number
- *
- * Methods here are useful for creating random numbers.
- */
-
-var FlareRandomNumber = (function () {
-  function FlareRandomNumber() {
-    _classCallCheck(this, FlareRandomNumber);
-  }
-
-  _createClass(FlareRandomNumber, null, [{
-    key: "minMax",
-
-    /**
-     * Create random number between nim and max.
-     *
-     * @param Int min
-     * @param Int max
-     * @return int
-     */
-    value: function minMax(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-  }]);
-
-  return FlareRandomNumber;
-})();
-
-module.exports = FlareRandomNumber = FlareRandomNumber;
-
-},{}],94:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * All Flare based items use this window base.
- *
- * Flare Window Base extends the Window Base Class
- * and adds some additional generic helper methods
- * that are useful for creating windows and their contents.
- */
-
-var FlareWindowBase = (function (_Window_Base) {
-  _inherits(FlareWindowBase, _Window_Base);
-
-  function FlareWindowBase(args) {
-    _classCallCheck(this, FlareWindowBase);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowBase).call(this, args));
-  }
-
-  /**
-   * Custom drawtextEx function.
-   *
-   * We do not reset font settings, which is what the default method does.
-   * I dont like giant text in my windows.
-   *
-   * It is usp to the implementor to call: this.resetFontSettings();
-   */
-
-  _createClass(FlareWindowBase, [{
-    key: 'flareDrawTextEx',
-    value: function flareDrawTextEx(text, x, y) {
-      if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
-        textState.text = this.convertEscapeCharacters(text);
-        textState.text = textState.text.replace(/\\/g, '');
-        textState.height = this.calcTextHeight(textState, false);
-
-        while (textState.index < textState.text.length) {
-          this.processCharacter(textState);
-        }
-        return textState.x - x;
-      } else {
-        return 0;
-      }
-    }
-  }]);
-
-  return FlareWindowBase;
-})(Window_Base);
-
-module.exports = FlareWindowBase = FlareWindowBase;
-
-},{}],95:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @namespace FlareCollection
- */
-
-/**
- * Flares custom window selectable.
- *
- * Allows a specific level of abstraction to be addd.
- */
-
-var FlareWindowSelectable = (function (_Window_Selectable) {
-  _inherits(FlareWindowSelectable, _Window_Selectable);
-
-  function FlareWindowSelectable(args) {
-    _classCallCheck(this, FlareWindowSelectable);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowSelectable).call(this, args));
-  }
-
-  /**
-   * Custom drawtextEx function.
-   *
-   * We do not reset font settings, which is what the default method does.
-   * I dont like giant text in my windows.
-   *
-   * It is usp to the implementor to call: this.resetFontSettings();
-   */
-
-  _createClass(FlareWindowSelectable, [{
-    key: 'flareDrawTextEx',
-    value: function flareDrawTextEx(text, x, y) {
-      if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
-        textState.text = this.convertEscapeCharacters(text);
-        textState.text = textState.text.replace(/\\/g, '');
-        textState.height = this.calcTextHeight(textState, false);
-
-        while (textState.index < textState.text.length) {
-          this.processCharacter(textState);
-        }
-
-        return textState.x - x;
-      } else {
-        return 0;
-      }
-    }
-  }]);
-
-  return FlareWindowSelectable;
-})(Window_Selectable);
-
-module.exports = FlareWindowSelectable = FlareWindowSelectable;
-
-},{}],96:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4019,7 +3789,7 @@ var AddLawsForMap = (function () {
 
 module.exports = AddLawsForMap;
 
-},{"./law_storage/laws_for_map":101,"./options/option_handler":103,"./punishment_storage/punishments":104,"lodash/array/uniq":2,"lodash/lang/clone":64,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],97:[function(require,module,exports){
+},{"./law_storage/laws_for_map":97,"./options/option_handler":99,"./punishment_storage/punishments":100,"lodash/array/uniq":2,"lodash/lang/clone":64,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],93:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4217,7 +3987,7 @@ _option_handler2.default.createOptionsStorage();
 // Opens this up for the user.
 window.FlareLawsForMap = FlareLawsForMap;
 
-},{"./law_storage/laws_for_map":101,"./options/option_handler":103}],98:[function(require,module,exports){
+},{"./law_storage/laws_for_map":97,"./options/option_handler":99}],94:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4232,7 +4002,7 @@ var _isUndefined = require('lodash/lang/isUndefined');
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _flare_random_number = require('../flare_random_number');
+var _flare_random_number = require('../lib/number/flare_random_number');
 
 var _flare_random_number2 = _interopRequireDefault(_flare_random_number);
 
@@ -4364,7 +4134,7 @@ var GatherReward = (function () {
 
 module.exports = GatherReward;
 
-},{"../flare_random_number":93,"./reward_storage/reward_storage":108,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],99:[function(require,module,exports){
+},{"../lib/number/flare_random_number":125,"./reward_storage/reward_storage":104,"lodash/lang/isUndefined":71,"rmmv-mrp-core/option-parser":79}],95:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4433,7 +4203,7 @@ var StoreBrokenLawObject = (function () {
 
 module.exports = StoreBrokenLawObject;
 
-},{}],100:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4690,7 +4460,7 @@ module.exports = ProcessBrokenLaw;
 window._lawMessageForLawBattleWindow = null;
 window._brokenLawObject = null;
 
-},{"../law_storage/laws_for_map":101,"../law_storage/store_no_gold_message":102,"../options/option_handler":103,"../scenes/flare_law_was_broken_window_scene":109,"./helper/store_broken_law_object":99,"lodash/collection/findWhere":4,"underscore.string/slugify":88}],101:[function(require,module,exports){
+},{"../law_storage/laws_for_map":97,"../law_storage/store_no_gold_message":98,"../options/option_handler":99,"../scenes/flare_law_was_broken_window_scene":105,"./helper/store_broken_law_object":95,"lodash/collection/findWhere":4,"underscore.string/slugify":88}],97:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4806,7 +4576,7 @@ var LawsForMap = (function () {
 
 module.exports = LawsForMap;
 
-},{"lodash/collection/findWhere":4,"lodash/lang/isUndefined":71,"lodash/string/capitalize":75,"lodash/string/trim":76,"underscore.string/humanize":87}],102:[function(require,module,exports){
+},{"lodash/collection/findWhere":4,"lodash/lang/isUndefined":71,"lodash/string/capitalize":75,"lodash/string/trim":76,"underscore.string/humanize":87}],98:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4866,7 +4636,7 @@ var StoreNoGoldMessage = (function () {
 
 module.exports = StoreNoGoldMessage;
 
-},{}],103:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4923,7 +4693,7 @@ var OptionHandler = (function () {
 
 module.exports = OptionHandler;
 
-},{}],104:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4985,7 +4755,7 @@ var Punishments = (function () {
 
 module.exports = Punishments;
 
-},{"lodash/collection/find":3}],105:[function(require,module,exports){
+},{"lodash/collection/find":3}],101:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5053,7 +4823,7 @@ var CompileStorageContianer = (function () {
 
 module.exports = CompileStorageContianer;
 
-},{}],106:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5137,7 +4907,7 @@ var CreateRewardStorage = (function () {
 
 module.exports = CreateRewardStorage;
 
-},{"./compiled_storage_container":105,"./reward_processor":107}],107:[function(require,module,exports){
+},{"./compiled_storage_container":101,"./reward_processor":103}],103:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5372,7 +5142,7 @@ var RewardProcessor = (function () {
 
 module.exports = RewardProcessor;
 
-},{"./reward_storage":108,"lodash/lang/isUndefined":71}],108:[function(require,module,exports){
+},{"./reward_storage":104,"lodash/lang/isUndefined":71}],104:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5436,7 +5206,7 @@ var RewardStorage = (function () {
 
 module.exports = RewardStorage;
 
-},{}],109:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5507,7 +5277,7 @@ var FlareLawWasBrokenWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWasBrokenWindowScene;
 
-},{"../windows/broken_law/broken_law_window":119}],110:[function(require,module,exports){
+},{"../windows/broken_law/broken_law_window":115}],106:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5534,11 +5304,11 @@ var _calculated_laws = require('../windows/details/calculated_laws');
 
 var _calculated_laws2 = _interopRequireDefault(_calculated_laws);
 
-var _scene_window_container = require('../../scene_window_container');
+var _scene_window_container = require('../../lib/containers/scene/window/scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
 
-var _selectable_window_container = require('../../selectable_window_container');
+var _selectable_window_container = require('../../lib/containers/window/selectable/selectable_window_container');
 
 var _selectable_window_container2 = _interopRequireDefault(_selectable_window_container);
 
@@ -5618,10 +5388,10 @@ var FlareLawWindowScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareLawWindowScene;
 
-},{"../../scene_window_container":126,"../../selectable_window_container":127,"../options/option_handler":103,"../windows/details/calculated_laws":120,"../windows/details/items_for_laws_selectable":121,"../windows/details/items_for_laws_title":122,"../windows/details/laws_details":123,"../windows/laws_window_selectable":124}],111:[function(require,module,exports){
+},{"../../lib/containers/scene/window/scene_window_container":122,"../../lib/containers/window/selectable/selectable_window_container":123,"../options/option_handler":99,"../windows/details/calculated_laws":116,"../windows/details/items_for_laws_selectable":117,"../windows/details/items_for_laws_title":118,"../windows/details/laws_details":119,"../windows/laws_window_selectable":120}],107:[function(require,module,exports){
 'use strict';
 
-var _flare_counter = require('../../flare_counter');
+var _flare_counter = require('../../lib/number/flare_counter');
 
 var _flare_counter2 = _interopRequireDefault(_flare_counter);
 
@@ -5743,14 +5513,14 @@ BattleManager.displayRewards = function () {
   }
 };
 
-},{"../../flare_counter":92,"../gather_reward":98,"../options/option_handler":103,"../reward_storage/compiled_storage_container":105,"../reward_storage/create_reward_storage":106,"lodash/lang/clone":64,"lodash/lang/isUndefined":71}],112:[function(require,module,exports){
+},{"../../lib/number/flare_counter":124,"../gather_reward":94,"../options/option_handler":99,"../reward_storage/compiled_storage_container":101,"../reward_storage/create_reward_storage":102,"lodash/lang/clone":64,"lodash/lang/isUndefined":71}],108:[function(require,module,exports){
 'use strict';
 
 var _process_broken_law = require('../law_handler/process_broken_law');
 
 var _process_broken_law2 = _interopRequireDefault(_process_broken_law);
 
-var _flare_counter = require('../../flare_counter');
+var _flare_counter = require('../../lib/number/flare_counter');
 
 var _flare_counter2 = _interopRequireDefault(_flare_counter);
 
@@ -5831,7 +5601,7 @@ Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, ta
   }
 };
 
-},{"../../flare_counter":92,"../law_handler/process_broken_law":100}],113:[function(require,module,exports){
+},{"../../lib/number/flare_counter":124,"../law_handler/process_broken_law":96}],109:[function(require,module,exports){
 'use strict';
 
 var _add_laws_for_map = require('../add_laws_for_map');
@@ -5874,7 +5644,7 @@ Game_Map.prototype.setup = function (mapId) {
   }
 };
 
-},{"../add_laws_for_map":96,"../gather_reward":98,"../options/option_handler":103,"../reward_storage/create_reward_storage":106}],114:[function(require,module,exports){
+},{"../add_laws_for_map":92,"../gather_reward":94,"../options/option_handler":99,"../reward_storage/create_reward_storage":102}],110:[function(require,module,exports){
 'use strict';
 
 var _flare_law_was_broken_window_scene = require('../scenes/flare_law_was_broken_window_scene');
@@ -5902,7 +5672,7 @@ Scene_Base.prototype.checkGameover = function () {
   }
 };
 
-},{"../law_storage/laws_for_map":101,"../scenes/flare_law_was_broken_window_scene":109}],115:[function(require,module,exports){
+},{"../law_storage/laws_for_map":97,"../scenes/flare_law_was_broken_window_scene":105}],111:[function(require,module,exports){
 'use strict';
 
 var _flare_law_window_scene = require('../scenes/flare_law_window_scene');
@@ -5924,7 +5694,7 @@ Scene_Menu.prototype.lawsCommand = function () {
   SceneManager.push(_flare_law_window_scene2.default);
 };
 
-},{"../scenes/flare_law_window_scene":110}],116:[function(require,module,exports){
+},{"../scenes/flare_law_window_scene":106}],112:[function(require,module,exports){
 'use strict';
 
 var _reward_window = require('../windows/yanfly_aftermath/reward_window');
@@ -5985,7 +5755,7 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
   };
 }
 
-},{"../windows/yanfly_aftermath/reward_window":125,"lodash/lang/isUndefined":71}],117:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/reward_window":121,"lodash/lang/isUndefined":71}],113:[function(require,module,exports){
 'use strict';
 
 var _laws_for_map = require('../law_storage/laws_for_map');
@@ -6024,7 +5794,7 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
   }
 };
 
-},{"../law_storage/laws_for_map":101}],118:[function(require,module,exports){
+},{"../law_storage/laws_for_map":97}],114:[function(require,module,exports){
 'use strict';
 
 var _reward_storage = require('../reward_storage/reward_storage');
@@ -6050,14 +5820,14 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   }
 };
 
-},{"../reward_storage/reward_storage":108,"lodash/lang/isUndefined":71}],119:[function(require,module,exports){
+},{"../reward_storage/reward_storage":104,"lodash/lang/isUndefined":71}],115:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_base = require('../../../flare_window_base');
+var _flare_window_base = require('../../../lib/windows/flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 
@@ -6152,14 +5922,14 @@ var BrokenLawWindow = (function (_FlareWindowBase) {
 
 module.exports = BrokenLawWindow;
 
-},{"../../../flare_window_base":94,"../../law_handler/helper/store_broken_law_object":99,"../../law_storage/store_no_gold_message":102,"lodash/lang/isUndefined":71}],120:[function(require,module,exports){
+},{"../../../lib/windows/flare_window_base":126,"../../law_handler/helper/store_broken_law_object":95,"../../law_storage/store_no_gold_message":98,"lodash/lang/isUndefined":71}],116:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_base = require('../../../flare_window_base');
+var _flare_window_base = require('../../../lib/windows/flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 
@@ -6222,14 +5992,14 @@ var ClaculatedLaws = (function (_FlareWindowBase) {
 
 module.exports = ClaculatedLaws;
 
-},{"../../../flare_window_base":94,"underscore.string/wrap":91}],121:[function(require,module,exports){
+},{"../../../lib/windows/flare_window_base":126,"underscore.string/wrap":91}],117:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_selectable = require('../../../flare_window_selectable');
+var _flare_window_selectable = require('../../../lib/windows/flare_window_selectable');
 
 var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
 
@@ -6245,7 +6015,7 @@ var _isUndefined = require('lodash/lang/isUndefined');
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _selectable_window_container = require('../../../selectable_window_container');
+var _selectable_window_container = require('../../../lib/containers/window/selectable/selectable_window_container');
 
 var _selectable_window_container2 = _interopRequireDefault(_selectable_window_container);
 
@@ -6371,14 +6141,14 @@ var ItemsForLawSelectable = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemsForLawSelectable;
 
-},{"../../../flare_window_selectable":95,"../../../selectable_window_container":127,"../../reward_storage/compiled_storage_container":105,"../../reward_storage/reward_processor":107,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],122:[function(require,module,exports){
+},{"../../../lib/containers/window/selectable/selectable_window_container":123,"../../../lib/windows/flare_window_selectable":127,"../../reward_storage/compiled_storage_container":101,"../../reward_storage/reward_processor":103,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],118:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_base = require('../../../flare_window_base');
+var _flare_window_base = require('../../../lib/windows/flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 
@@ -6440,14 +6210,14 @@ var ItemsForLawTitle = (function (_FlareWindowBase) {
 
 module.exports = ItemsForLawTitle;
 
-},{"../../../flare_window_base":94,"underscore.string/wrap":91}],123:[function(require,module,exports){
+},{"../../../lib/windows/flare_window_base":126,"underscore.string/wrap":91}],119:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_base = require('../../../flare_window_base');
+var _flare_window_base = require('../../../lib/windows/flare_window_base');
 
 var _flare_window_base2 = _interopRequireDefault(_flare_window_base);
 
@@ -6517,14 +6287,14 @@ var LawDetails = (function (_FlareWindowBase) {
 
 module.exports = LawDetails;
 
-},{"../../../flare_window_base":94,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],124:[function(require,module,exports){
+},{"../../../lib/windows/flare_window_base":126,"lodash/lang/isUndefined":71,"underscore.string/wrap":91}],120:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _flare_window_selectable = require('../../flare_window_selectable');
+var _flare_window_selectable = require('../../lib/windows/flare_window_selectable');
 
 var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
 
@@ -6532,11 +6302,11 @@ var _laws_for_map = require('../law_storage/laws_for_map');
 
 var _laws_for_map2 = _interopRequireDefault(_laws_for_map);
 
-var _scene_window_container = require('../../scene_window_container');
+var _scene_window_container = require('../../lib/containers/scene/window/scene_window_container');
 
 var _scene_window_container2 = _interopRequireDefault(_scene_window_container);
 
-var _selectable_window_container = require('../../selectable_window_container');
+var _selectable_window_container = require('../../lib/containers/window/selectable/selectable_window_container');
 
 var _selectable_window_container2 = _interopRequireDefault(_selectable_window_container);
 
@@ -6667,7 +6437,7 @@ var LawsWindowSelectable = (function (_FlareWindowSelecatbl) {
 
 module.exports = LawsWindowSelectable;
 
-},{"../../flare_window_selectable":95,"../../scene_window_container":126,"../../selectable_window_container":127,"../law_storage/laws_for_map":101,"../options/option_handler":103,"lodash/lang/isUndefined":71}],125:[function(require,module,exports){
+},{"../../lib/containers/scene/window/scene_window_container":122,"../../lib/containers/window/selectable/selectable_window_container":123,"../../lib/windows/flare_window_selectable":127,"../law_storage/laws_for_map":97,"../options/option_handler":99,"lodash/lang/isUndefined":71}],121:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6686,7 +6456,7 @@ var _find = require('lodash/collection/find');
 
 var _find2 = _interopRequireDefault(_find);
 
-var _flare_window_selectable = require('../../../flare_window_selectable');
+var _flare_window_selectable = require('../../../lib/windows/flare_window_selectable');
 
 var _flare_window_selectable2 = _interopRequireDefault(_flare_window_selectable);
 
@@ -6790,18 +6560,18 @@ var LawRewardWindowYanfly = (function (_FlareWindowSelectabl) {
 
 module.exports = LawRewardWindowYanfly;
 
-},{"../../../flare_window_selectable":95,"../../reward_storage/compiled_storage_container":105,"lodash/collection/find":3,"lodash/lang/clone":64,"lodash/lang/isUndefined":71}],126:[function(require,module,exports){
+},{"../../../lib/windows/flare_window_selectable":127,"../../reward_storage/compiled_storage_container":101,"lodash/collection/find":3,"lodash/lang/clone":64,"lodash/lang/isUndefined":71}],122:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * @namespace FlareCollection
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
 
-var _find = require('../node_modules/lodash/collection/find');
+var _find = require('lodash/collection/find');
 
 var _find2 = _interopRequireDefault(_find);
 
-var _isUndefined = require('../node_modules/lodash/lang/isUndefined');
+var _isUndefined = require('lodash/lang/isUndefined');
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -6905,7 +6675,7 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":3,"../node_modules/lodash/lang/isUndefined":71}],127:[function(require,module,exports){
+},{"lodash/collection/find":3,"lodash/lang/isUndefined":71}],123:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -6984,4 +6754,234 @@ var SelectableWindowContainer = (function () {
 
 module.exports = SelectableWindowContainer;
 
-},{"lodash/lang/isUndefined":71}]},{},[117,97,115,118,114,112,113,111,116]);
+},{"lodash/lang/isUndefined":71}],124:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Store the current count.
+ *
+ * Used if you want to store the current count of
+ * something and then use the value of that count else where.
+ */
+
+var FlareCounter = (function () {
+  function FlareCounter() {
+    _classCallCheck(this, FlareCounter);
+  }
+
+  _createClass(FlareCounter, null, [{
+    key: "resetCounter",
+
+    /**
+     * Reset the counter to 0.
+     */
+    value: function resetCounter() {
+      this._counter = 0;
+    }
+
+    /**
+     * Appends the value to the current counter.
+     *
+     * @param int value
+     */
+
+  }, {
+    key: "addValue",
+    value: function addValue(value) {
+      this._counter += parseInt(value);
+    }
+
+    /**
+     * Get the current state of the count.
+     *
+     * @return int
+     */
+
+  }, {
+    key: "getCurrentState",
+    value: function getCurrentState() {
+      return this._counter;
+    }
+  }]);
+
+  return FlareCounter;
+})();
+
+module.exports = FlareCounter;
+
+},{}],125:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Create a ranom number
+ *
+ * Methods here are useful for creating random numbers.
+ */
+
+var FlareRandomNumber = (function () {
+  function FlareRandomNumber() {
+    _classCallCheck(this, FlareRandomNumber);
+  }
+
+  _createClass(FlareRandomNumber, null, [{
+    key: "minMax",
+
+    /**
+     * Create random number between nim and max.
+     *
+     * @param Int min
+     * @param Int max
+     * @return int
+     */
+    value: function minMax(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  }]);
+
+  return FlareRandomNumber;
+})();
+
+module.exports = FlareRandomNumber = FlareRandomNumber;
+
+},{}],126:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * All Flare based items use this window base.
+ *
+ * Flare Window Base extends the Window Base Class
+ * and adds some additional generic helper methods
+ * that are useful for creating windows and their contents.
+ */
+
+var FlareWindowBase = (function (_Window_Base) {
+  _inherits(FlareWindowBase, _Window_Base);
+
+  function FlareWindowBase(args) {
+    _classCallCheck(this, FlareWindowBase);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowBase).call(this, args));
+  }
+
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
+  _createClass(FlareWindowBase, [{
+    key: 'flareDrawTextEx',
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
+        textState.height = this.calcTextHeight(textState, false);
+
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+        return textState.x - x;
+      } else {
+        return 0;
+      }
+    }
+  }]);
+
+  return FlareWindowBase;
+})(Window_Base);
+
+module.exports = FlareWindowBase = FlareWindowBase;
+
+},{}],127:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @namespace FlareCollection
+ */
+
+/**
+ * Flares custom window selectable.
+ *
+ * Allows a specific level of abstraction to be addd.
+ */
+
+var FlareWindowSelectable = (function (_Window_Selectable) {
+  _inherits(FlareWindowSelectable, _Window_Selectable);
+
+  function FlareWindowSelectable(args) {
+    _classCallCheck(this, FlareWindowSelectable);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlareWindowSelectable).call(this, args));
+  }
+
+  /**
+   * Custom drawtextEx function.
+   *
+   * We do not reset font settings, which is what the default method does.
+   * I dont like giant text in my windows.
+   *
+   * It is usp to the implementor to call: this.resetFontSettings();
+   */
+
+  _createClass(FlareWindowSelectable, [{
+    key: 'flareDrawTextEx',
+    value: function flareDrawTextEx(text, x, y) {
+      if (text) {
+        var textState = { index: 0, x: x, y: y, left: x };
+        textState.text = this.convertEscapeCharacters(text);
+        textState.text = textState.text.replace(/\\/g, '');
+        textState.height = this.calcTextHeight(textState, false);
+
+        while (textState.index < textState.text.length) {
+          this.processCharacter(textState);
+        }
+
+        return textState.x - x;
+      } else {
+        return 0;
+      }
+    }
+  }]);
+
+  return FlareWindowSelectable;
+})(Window_Selectable);
+
+module.exports = FlareWindowSelectable = FlareWindowSelectable;
+
+},{}]},{},[113,93,111,114,110,108,109,107,112]);

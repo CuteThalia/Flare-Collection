@@ -3,7 +3,7 @@
  */
 
 import ProcessBrokenLaw from '../law_handler/process_broken_law';
-import FlareCounter     from '../../flare_counter';
+import FlareCounter     from '../../lib/number/flare_counter';
 
 var oldGameActionPrototypeInitializeMethod = Game_Action.prototype.initialize;
 Game_Action.prototype.initialize = function(subject, forcing) {

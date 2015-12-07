@@ -2,10 +2,10 @@
  * @namespace FlareLawsForMap.
  */
 
-import FlareWindowSelecatble     from '../../flare_window_selectable';
+import FlareWindowSelecatble     from '../../lib/windows/flare_window_selectable';
 import LawsForMap                from '../law_storage/laws_for_map';
-import SceneWindowContainer      from '../../scene_window_container';
-import SelectableWindowContainer from '../../selectable_window_container';
+import SceneWindowContainer      from '../../lib/containers/scene/window/scene_window_container';
+import SelectableWindowContainer from '../../lib/containers/window/selectable/selectable_window_container';
 import lodashIsUndefined         from 'lodash/lang/isUndefined';
 import OptionsHandler            from '../options/option_handler';
 
