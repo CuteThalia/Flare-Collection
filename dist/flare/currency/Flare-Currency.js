@@ -6521,89 +6521,61 @@ Window_ShopBuy.prototype.makeItemList = function () {
 };
 
 },{}],103:[function(require,module,exports){
-'use strict';
+"use strict";
 
-var _currency_shop_info_container = require('../../shop/helper/currency_shop_info_container');
+var _currency_shop_info_container = require("../../shop/helper/currency_shop_info_container");
 
 var _currency_shop_info_container2 = _interopRequireDefault(_currency_shop_info_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var oldWindowShopNumberPrototTypeSetCurrencyUnitMethod = Window_ShopNumber.prototype.setCurrencyUnit; /**
-                                                                                                       * @namespace FlareCurrency
-                                                                                                       */
+var oldWindowShopNumberPrototypeSetCurrencyUnitMethod = Window_ShopNumber.prototype.setCurrencyUnit; /**
+                                                                                                      * @namespace FlareCurrency
+                                                                                                      */
 
 Window_ShopNumber.prototype.setCurrencyUnit = function (currencyUnit, currencyName) {
-    if (currencyName !== undefined) {
-        this._currencyName = currencyName;
-        _currency_shop_info_container2.default.setCurrentAmountOfCurrency(FlareCurrencies.getCurrentCurrencyAmount(this._currencyName));
-    }
+  if (currencyName !== undefined) {
+    this._currencyName = currencyName;
+    _currency_shop_info_container2.default.setCurrentAmountOfCurrency(FlareCurrencies.getCurrentCurrencyAmount(this._currencyName));
+  }
 
-    oldWindowShopNumberPrototTypeSetCurrencyUnitMethod.call(this, currencyUnit);
+  oldWindowShopNumberPrototypeSetCurrencyUnitMethod.call(this, currencyUnit);
 };
 
 var oldWindowShopNumberPrototypeSetup = Window_ShopNumber.prototype.setup;
 Window_ShopNumber.prototype.setup = function (item, max, price) {
-    if (max === undefined) {
-        max = $gameParty.maxItems(item) - $gameParty.numItems(item);
+  if (max === undefined) {
+    max = $gameParty.maxItems(item) - $gameParty.numItems(item);
 
-        if (price > 0) {
-            if (_currency_shop_info_container2.default.getAmount() !== undefined) {
-                max = Math.min(max, Math.floor(_currency_shop_info_container2.default.getAmount() / price));
-            } else {
-                max = Math.min(max, Math.floor($gameParty._gold / price));
-            }
-        }
+    if (price > 0) {
+      if (_currency_shop_info_container2.default.getAmount() !== undefined) {
+        max = Math.min(max, Math.floor(_currency_shop_info_container2.default.getAmount() / price));
+      } else {
+        max = Math.min(max, Math.floor($gameParty._gold / price));
+      }
     }
+  }
 
-    oldWindowShopNumberPrototypeSetup.call(this, item, max, price);
+  oldWindowShopNumberPrototypeSetup.call(this, item, max, price);
 };
 
-var oldWindowShopNumberPrototTypeDrawTotalPriceMethod = Window_ShopNumber.prototype.drawTotalPrice;
+var oldWindowShopNumberPrototypeDrawTotalPriceMethod = Window_ShopNumber.prototype.drawTotalPrice;
 Window_ShopNumber.prototype.drawTotalPrice = function () {
-    if (this._currencyName !== undefined) {
-        var total = this._price * this._number;
-        var width = this.contentsWidth() - this.textPadding();
-        this.drawCurrencyInfo(total, this._currencyUnit, 0, this.priceY(), width);
-    } else {
-        oldWindowShopNumberPrototTypeDrawTotalPriceMethod.call(this);
-    }
+  if (this._currencyName !== undefined) {
+    var total = this._price * this._number;
+    var width = this.contentsWidth() - this.textPadding();
+    this.drawCurrencyInfo(total, this._currencyUnit, 0, this.priceY(), width);
+  } else {
+    oldWindowShopNumberPrototypeDrawTotalPriceMethod.call(this);
+  }
 };
 
 Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, width) {
-    var unitWidth = Math.min(80, this.textWidth(unit));
-    this.resetTextColor();
-    this.drawText(value, x, y, width - unitWidth - 6, 'right');
-    this.changeTextColor(this.systemColor());
-    this.drawIcon(unit, x + width - unitWidth, y);
-};
-
-Window_ShopNumber.prototype.processNumberChange = function () {
-    if (this.isOpenAndActive()) {
-        if (Input.isRepeated('right')) {
-            this.changeNumber(1, this._max);
-        }
-        if (Input.isRepeated('left')) {
-            this.changeNumber(-1, this._max);
-        }
-        if (Input.isRepeated('up')) {
-            this.changeNumber(10, this._max);
-        }
-        if (Input.isRepeated('down')) {
-            this.changeNumber(-10, this._max);
-        }
-    }
-};
-
-var oldWindowShopNumberPrototTypeChangeNumberMethod = Window_ShopNumber.prototype.changeNumber;
-Window_ShopNumber.prototype.changeNumber = function (amount, max) {
-
-    var lastNumber = this._number;
-    this._number = (this._number + amount).clamp(1, max);
-    if (this._number !== lastNumber) {
-        SoundManager.playCursor();
-        this.refresh();
-    }
+  var unitWidth = Math.min(80, this.textWidth(unit));
+  this.resetTextColor();
+  this.drawText(value, x, y, width - unitWidth - 6, 'right');
+  this.changeTextColor(this.systemColor());
+  this.drawIcon(unit, x + width - unitWidth, y);
 };
 
 },{"../../shop/helper/currency_shop_info_container":84}],104:[function(require,module,exports){
