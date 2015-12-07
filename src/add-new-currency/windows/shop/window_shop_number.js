@@ -1,11 +1,13 @@
 /**
  * @namespace FlareCurrency
  */
+
 import CurrencyShopInfo    from "../../shop/helper/currency_shop_info_container";
+import lodashIsUndefined   from "lodash/lang/isUndefined";
 
 var oldWindowShopNumberPrototypeSetCurrencyUnitMethod = Window_ShopNumber.prototype.setCurrencyUnit;
 Window_ShopNumber.prototype.setCurrencyUnit = function(currencyUnit, currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       this._currencyName = currencyName;
       CurrencyShopInfo.setCurrentAmountOfCurrency(FlareCurrencies.getCurrentCurrencyAmount(this._currencyName));
     }
@@ -15,7 +17,7 @@ Window_ShopNumber.prototype.setCurrencyUnit = function(currencyUnit, currencyNam
 
 var oldWindowShopNumberPrototypeSetup = Window_ShopNumber.prototype.setup;
 Window_ShopNumber.prototype.setup = function(item, max, price) {
-    if (max === undefined) {
+    if (lodashIsUndefined(max)) {
       max = $gameParty.maxItems(item) - $gameParty.numItems(item);
 
       if (price > 0) {
@@ -32,7 +34,7 @@ Window_ShopNumber.prototype.setup = function(item, max, price) {
 
 var oldWindowShopNumberPrototypeDrawTotalPriceMethod = Window_ShopNumber.prototype.drawTotalPrice;
 Window_ShopNumber.prototype.drawTotalPrice = function() {
-    if (this._currencyName !== undefined){
+    if (!lodashIsUndefined(this._currencyName)){
       var total = this._price * this._number;
       var width = this.contentsWidth() - this.textPadding();
       this.drawCurrencyInfo(total, this._currencyUnit, 0, this.priceY(), width);

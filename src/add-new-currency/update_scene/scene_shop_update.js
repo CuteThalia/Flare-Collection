@@ -15,7 +15,7 @@ Scene_Shop.prototype.createCurrencyWindow = function(currencyName) {
 
 var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
 Scene_Shop.prototype.create = function() {
-    if (CurrencyShopInfo.getCurrency() !== undefined && CurrencyShopInfo.getCurrency() !== null) {
+    if (!lodashIsUndefined(CurrencyShopInfo.getCurrency()) && CurrencyShopInfo.getCurrency() !== null) {
       Scene_MenuBase.prototype.create.call(this);
       this.createHelpWindow();
       this.createCurrencyWindow(CurrencyShopInfo.getCurrency());
@@ -34,7 +34,7 @@ Scene_Shop.prototype.create = function() {
 
 var oldSceneMapPrototypeCreateCommandWindowMethod = Scene_Shop.prototype.createCommandWindow;
 Scene_Shop.prototype.createCommandWindow = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       this._commandWindow = new Window_ShopCommand(this._curencyValueWindow.x, this._purchaseOnly);
       this._commandWindow.y = this._helpWindow.height;
       this._commandWindow.setHandler('buy',    this.commandBuy.bind(this, currencyName));
@@ -48,7 +48,7 @@ Scene_Shop.prototype.createCommandWindow = function(currencyName) {
 
 var oldSceneShopPrototypeCommandBuy = Scene_Shop.prototype.commandBuy;
 Scene_Shop.prototype.commandBuy = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       this._dummyWindow.hide();
       this.activateBuyWindow(currencyName);
     } else {
@@ -58,7 +58,7 @@ Scene_Shop.prototype.commandBuy = function(currencyName) {
 
 var oldSceneShopProtottypeActivateBuyWindowMethod = Scene_Shop.prototype.activateBuyWindow;
 Scene_Shop.prototype.activateBuyWindow = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       this._buyWindow.setMoney(this.money(currencyName));
       this._buyWindow.show();
       this._buyWindow.activate();
@@ -71,7 +71,7 @@ Scene_Shop.prototype.activateBuyWindow = function(currencyName) {
 
 var oldSceneShopPrototypeCreateBuyWindow = Scene_Shop.prototype.createBuyWindow;
 Scene_Shop.prototype.createBuyWindow = function(currencyName) {
-    if (currencyName !== undefined){
+    if (!lodashIsUndefined(currencyName)){
       var wy = this._dummyWindow.y;
       var wh = this._dummyWindow.height;
       this._buyWindow = new Window_ShopBuy(0, wy, wh, this._goods, currencyName);
@@ -88,7 +88,7 @@ Scene_Shop.prototype.createBuyWindow = function(currencyName) {
 
 var oldSceneShopPrototypeCreateSellWindow = Scene_Shop.prototype.createSellWindow;
 Scene_Shop.prototype.createSellWindow = function(currencyName) {
-  if (currencyName !== undefined) {
+  if (!lodashIsUndefined(currencyName)) {
     var wy = this._categoryWindow.y + this._categoryWindow.height;
     var wh = Graphics.boxHeight - wy;
     this._sellWindow = new Window_ShopSell(0, wy, Graphics.boxWidth, wh);
@@ -105,7 +105,7 @@ Scene_Shop.prototype.createSellWindow = function(currencyName) {
 
 var oldSceneShopPrototypeCreateNumberWindow = Scene_Shop.prototype.createNumberWindow;
 Scene_Shop.prototype.createNumberWindow = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       var wy = this._dummyWindow.y;
       var wh = this._dummyWindow.height;
       this._numberWindow = new Window_ShopNumber(0, wy, wh);
@@ -120,7 +120,7 @@ Scene_Shop.prototype.createNumberWindow = function(currencyName) {
 
 var oldSceneShopPrototypeOnBuyOkMethod = Scene_Shop.prototype.onBuyOk;
 Scene_Shop.prototype.onBuyOk = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       this._item = this._buyWindow.item();
       this._buyWindow.hide();
       this._numberWindow.setup(this._item, this.maxBuy(currencyName), this.buyingPrice(currencyName));
@@ -134,7 +134,7 @@ Scene_Shop.prototype.onBuyOk = function(currencyName) {
 
 var oldSceneShopPrototypeOnSellOk = Scene_Shop.prototype.onSellOk;
 Scene_Shop.prototype.onSellOk = function(currencyName) {
-  if (currencyName !== undefined) {
+  if (!lodashIsUndefined(currencyName)) {
     this._item = this._sellWindow.item();
     this._categoryWindow.hide();
     this._sellWindow.hide();
@@ -151,7 +151,7 @@ Scene_Shop.prototype.onSellOk = function(currencyName) {
 
 var oldSceneShopPrototypeOnNumberOkMethod = Scene_Shop.prototype.onNumberOk;
 Scene_Shop.prototype.onNumberOk = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       SoundManager.playShop();
       switch (this._commandWindow.currentSymbol()) {
       case 'buy':
@@ -171,7 +171,7 @@ Scene_Shop.prototype.onNumberOk = function(currencyName) {
 
 var oldSceneShopPrototypeOnNumberCancel = Scene_Shop.prototype.onNumberCancel;
 Scene_Shop.prototype.onNumberCancel = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       SoundManager.playCancel();
       this.endNumberInput(currencyName);
     } else {
@@ -181,7 +181,7 @@ Scene_Shop.prototype.onNumberCancel = function(currencyName) {
 
 var oldSceneShopPrototypeDobuyMethod = Scene_Shop.prototype.doBuy;
 Scene_Shop.prototype.doBuy = function(number, currencyName) {
-  if (currencyName !== undefined) {
+  if (!lodashIsUndefined(currencyName)) {
     var cost = number * this.buyingPrice(currencyName, false);
 
     FlareCurrencies.addAmount(currencyName, -cost);
@@ -193,7 +193,7 @@ Scene_Shop.prototype.doBuy = function(number, currencyName) {
 
 var oldSceneShopPrototypeDoSellMethod = Scene_Shop.prototype.doSell;
 Scene_Shop.prototype.doSell = function(number, currencyName) {
-  if (currencyName !== undefined) {
+  if (!lodashIsUndefined(currencyName)) {
     var cost = number * this.buyingPrice(currencyName, true);
 
     FlareCurrencies.addAmount(currencyName, cost);
@@ -205,7 +205,7 @@ Scene_Shop.prototype.doSell = function(number, currencyName) {
 
 var oldSceneShopPrototypeEndNumberInput = Scene_Shop.prototype.endNumberInput;
 Scene_Shop.prototype.endNumberInput = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       this._numberWindow.hide();
       switch (this._commandWindow.currentSymbol()) {
       case 'buy':
@@ -222,7 +222,7 @@ Scene_Shop.prototype.endNumberInput = function(currencyName) {
 
 var oldSceneShopPrototypeMaxbuyMethod = Scene_Shop.prototype.maxBuy;
 Scene_Shop.prototype.maxBuy = function(currencyName) {
-  if (currencyName !== undefined) {
+  if (!lodashIsUndefined(currencyName)) {
     var max = $gameParty.maxItems(this._item) - $gameParty.numItems(this._item);
     var price = this.buyingPrice(currencyName);
     if (price > 0) {
@@ -237,7 +237,7 @@ Scene_Shop.prototype.maxBuy = function(currencyName) {
 
 var oldSceneShopPrototypeMoneyMethod = Scene_Shop.prototype.money;
 Scene_Shop.prototype.money = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       return this._curencyValueWindow.value()
     } else {
       return oldSceneShopPrototypeMoneyMethod.call(this);
@@ -246,7 +246,7 @@ Scene_Shop.prototype.money = function(currencyName) {
 
 var oldSceneShopPrototypeCurrencyUnitMethod = Scene_Shop.prototype.currencyUnit;
 Scene_Shop.prototype.currencyUnit = function(currencyName) {
-    if (currencyName !== undefined) {
+    if (!lodashIsUndefined(currencyName)) {
       return this._curencyValueWindow.currencyIcon();
     } else {
       return oldSceneShopPrototypeCurrencyUnitMethod.call(this);
@@ -255,7 +255,7 @@ Scene_Shop.prototype.currencyUnit = function(currencyName) {
 
 var oldSceneShopPrototypeBuyingPrice = Scene_Shop.prototype.buyingPrice;
 Scene_Shop.prototype.buyingPrice = function(currencyName, selling) {
-  if (currencyName !== undefined && !selling) {
+  if (!lodashIsUndefined(currencyName) && !selling) {
     return this._buyWindow.price(this._item, currencyName);
   } else if (currencyName !== undefined && selling) {
     return this._buyWindow.price(this._item, currencyName, selling);

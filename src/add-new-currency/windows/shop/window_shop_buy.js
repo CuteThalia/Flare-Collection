@@ -2,6 +2,8 @@
  * @namespace FlareCurrency
  */
 
+var lodashIsNull from 'lodash/lang/isNull';
+
 Window_ShopBuy.prototype.initialize = function(x, y, height, shopGoods, currencyName) {
     var width = this.windowWidth();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
@@ -14,7 +16,7 @@ Window_ShopBuy.prototype.initialize = function(x, y, height, shopGoods, currency
 
 var oldWindowShopBuyPrototypePrice = Window_ShopBuy.prototype.price;
 Window_ShopBuy.prototype.price = function(item, curencyName, selling) {
-  if (curencyName !== null && !selling) {
+  if (!lodashIsNull(curencyName) && !selling) {
     return this._price[this._data.indexOf(item)] || 0;
   } else if (curencyName !== null && selling) {
     return item.currencyCost || 0;
@@ -25,7 +27,7 @@ Window_ShopBuy.prototype.price = function(item, curencyName, selling) {
 
 var oldWindowShopBuyPrototypeMakeItemList = Window_ShopBuy.prototype.makeItemList;
 Window_ShopBuy.prototype.makeItemList = function() {
-  if (this._currencyName !== null) {
+  if (!lodashIsNull(this._currencyName)) {
     this._data = [];
     this._price = [];
     this._shopGoods.forEach(function(goods) {
