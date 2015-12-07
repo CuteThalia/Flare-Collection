@@ -5416,6 +5416,7 @@ Scene_Shop.prototype.endNumberInput = function (currencyName) {
 
 var oldSceneShopPrototypeMaxbuyMethod = Scene_Shop.prototype.maxBuy;
 Scene_Shop.prototype.maxBuy = function (currencyName) {
+  console.log(currencyName);
   if (!(0, _isUndefined2.default)(currencyName)) {
     var max = $gameParty.maxItems(this._item) - $gameParty.numItems(this._item);
     var price = this.buyingPrice(currencyName);
