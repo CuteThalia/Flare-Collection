@@ -2,7 +2,7 @@
  * @namespace FlareCurrency
  */
 
-var lodashIsNull from 'lodash/lang/isNull';
+import lodashIsNull from 'lodash/lang/isNull';
 
 Window_ShopBuy.prototype.initialize = function(x, y, height, shopGoods, currencyName) {
     var width = this.windowWidth();

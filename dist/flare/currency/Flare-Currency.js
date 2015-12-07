@@ -330,7 +330,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":68,"./baseCopy":12}],10:[function(require,module,exports){
+},{"../object/keys":69,"./baseCopy":12}],10:[function(require,module,exports){
 var baseMatches = require('./baseMatches'),
     baseMatchesProperty = require('./baseMatchesProperty'),
     bindCallback = require('./bindCallback'),
@@ -367,7 +367,7 @@ function baseCallback(func, thisArg, argCount) {
 
 module.exports = baseCallback;
 
-},{"../utility/identity":71,"../utility/property":72,"./baseMatches":23,"./baseMatchesProperty":24,"./bindCallback":30}],11:[function(require,module,exports){
+},{"../utility/identity":72,"../utility/property":73,"./baseMatches":23,"./baseMatchesProperty":24,"./bindCallback":30}],11:[function(require,module,exports){
 var arrayCopy = require('./arrayCopy'),
     arrayEach = require('./arrayEach'),
     baseAssign = require('./baseAssign'),
@@ -497,7 +497,7 @@ function baseClone(value, isDeep, customizer, key, object, stackA, stackB) {
 
 module.exports = baseClone;
 
-},{"../lang/isArray":62,"../lang/isObject":65,"./arrayCopy":6,"./arrayEach":7,"./baseAssign":9,"./baseForOwn":17,"./initCloneArray":46,"./initCloneByTag":47,"./initCloneObject":48}],12:[function(require,module,exports){
+},{"../lang/isArray":62,"../lang/isObject":66,"./arrayCopy":6,"./arrayEach":7,"./baseAssign":9,"./baseForOwn":17,"./initCloneArray":46,"./initCloneByTag":47,"./initCloneObject":48}],12:[function(require,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -629,7 +629,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"../object/keys":68,"./baseFor":16}],18:[function(require,module,exports){
+},{"../object/keys":69,"./baseFor":16}],18:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -719,7 +719,7 @@ function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
 
 module.exports = baseIsEqual;
 
-},{"../lang/isObject":65,"./baseIsEqualDeep":21,"./isObjectLike":54}],21:[function(require,module,exports){
+},{"../lang/isObject":66,"./baseIsEqualDeep":21,"./isObjectLike":54}],21:[function(require,module,exports){
 var equalArrays = require('./equalArrays'),
     equalByTag = require('./equalByTag'),
     equalObjects = require('./equalObjects'),
@@ -823,7 +823,7 @@ function baseIsEqualDeep(object, other, equalFunc, customizer, isLoose, stackA, 
 
 module.exports = baseIsEqualDeep;
 
-},{"../lang/isArray":62,"../lang/isTypedArray":66,"./equalArrays":39,"./equalByTag":40,"./equalObjects":41}],22:[function(require,module,exports){
+},{"../lang/isArray":62,"../lang/isTypedArray":67,"./equalArrays":39,"./equalByTag":40,"./equalObjects":41}],22:[function(require,module,exports){
 var baseIsEqual = require('./baseIsEqual'),
     toObject = require('./toObject');
 
@@ -1145,7 +1145,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":71}],31:[function(require,module,exports){
+},{"../utility/identity":72}],31:[function(require,module,exports){
 (function (global){
 /** Native method references. */
 var ArrayBuffer = global.ArrayBuffer,
@@ -1190,7 +1190,7 @@ function cacheIndexOf(cache, value) {
 
 module.exports = cacheIndexOf;
 
-},{"../lang/isObject":65}],33:[function(require,module,exports){
+},{"../lang/isObject":66}],33:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1212,7 +1212,7 @@ function cachePush(value) {
 
 module.exports = cachePush;
 
-},{"../lang/isObject":65}],34:[function(require,module,exports){
+},{"../lang/isObject":66}],34:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength'),
     toObject = require('./toObject');
@@ -1521,7 +1521,7 @@ function equalObjects(object, other, equalFunc, customizer, isLoose, stackA, sta
 
 module.exports = equalObjects;
 
-},{"../object/keys":68}],42:[function(require,module,exports){
+},{"../object/keys":69}],42:[function(require,module,exports){
 var baseProperty = require('./baseProperty');
 
 /**
@@ -1561,7 +1561,7 @@ function getMatchData(object) {
 
 module.exports = getMatchData;
 
-},{"../object/pairs":70,"./isStrictComparable":55}],44:[function(require,module,exports){
+},{"../object/pairs":71,"./isStrictComparable":55}],44:[function(require,module,exports){
 var isNative = require('../lang/isNative');
 
 /**
@@ -1788,7 +1788,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":65,"./isArrayLike":49,"./isIndex":50}],52:[function(require,module,exports){
+},{"../lang/isObject":66,"./isArrayLike":49,"./isIndex":50}],52:[function(require,module,exports){
 var isArray = require('../lang/isArray'),
     toObject = require('./toObject');
 
@@ -1871,7 +1871,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"../lang/isObject":65}],56:[function(require,module,exports){
+},{"../lang/isObject":66}],56:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('./isIndex'),
@@ -1914,7 +1914,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":61,"../lang/isArray":62,"../object/keysIn":69,"./isIndex":50,"./isLength":53}],57:[function(require,module,exports){
+},{"../lang/isArguments":61,"../lang/isArray":62,"../object/keysIn":70,"./isIndex":50,"./isLength":53}],57:[function(require,module,exports){
 /**
  * An implementation of `_.uniq` optimized for sorted arrays without support
  * for callback shorthands and `this` binding.
@@ -1961,7 +1961,7 @@ function toObject(value) {
 
 module.exports = toObject;
 
-},{"../lang/isObject":65}],59:[function(require,module,exports){
+},{"../lang/isObject":66}],59:[function(require,module,exports){
 var baseToString = require('./baseToString'),
     isArray = require('../lang/isArray');
 
@@ -2181,7 +2181,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":65}],64:[function(require,module,exports){
+},{"./isObject":66}],64:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -2233,6 +2233,29 @@ module.exports = isNative;
 
 },{"../internal/isObjectLike":54,"./isFunction":63}],65:[function(require,module,exports){
 /**
+ * Checks if `value` is `null`.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `null`, else `false`.
+ * @example
+ *
+ * _.isNull(null);
+ * // => true
+ *
+ * _.isNull(void 0);
+ * // => false
+ */
+function isNull(value) {
+  return value === null;
+}
+
+module.exports = isNull;
+
+},{}],66:[function(require,module,exports){
+/**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
  *
@@ -2261,7 +2284,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -2337,7 +2360,7 @@ function isTypedArray(value) {
 
 module.exports = isTypedArray;
 
-},{"../internal/isLength":53,"../internal/isObjectLike":54}],67:[function(require,module,exports){
+},{"../internal/isLength":53,"../internal/isObjectLike":54}],68:[function(require,module,exports){
 /**
  * Checks if `value` is `undefined`.
  *
@@ -2360,7 +2383,7 @@ function isUndefined(value) {
 
 module.exports = isUndefined;
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isArrayLike = require('../internal/isArrayLike'),
     isObject = require('../lang/isObject'),
@@ -2407,7 +2430,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":44,"../internal/isArrayLike":49,"../internal/shimKeys":56,"../lang/isObject":65}],69:[function(require,module,exports){
+},{"../internal/getNative":44,"../internal/isArrayLike":49,"../internal/shimKeys":56,"../lang/isObject":66}],70:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -2473,7 +2496,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":50,"../internal/isLength":53,"../lang/isArguments":61,"../lang/isArray":62,"../lang/isObject":65}],70:[function(require,module,exports){
+},{"../internal/isIndex":50,"../internal/isLength":53,"../lang/isArguments":61,"../lang/isArray":62,"../lang/isObject":66}],71:[function(require,module,exports){
 var keys = require('./keys'),
     toObject = require('../internal/toObject');
 
@@ -2508,7 +2531,7 @@ function pairs(object) {
 
 module.exports = pairs;
 
-},{"../internal/toObject":58,"./keys":68}],71:[function(require,module,exports){
+},{"../internal/toObject":58,"./keys":69}],72:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -2530,7 +2553,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 var baseProperty = require('../internal/baseProperty'),
     basePropertyDeep = require('../internal/basePropertyDeep'),
     isKey = require('../internal/isKey');
@@ -2563,7 +2586,7 @@ function property(path) {
 
 module.exports = property;
 
-},{"../internal/baseProperty":25,"../internal/basePropertyDeep":26,"../internal/isKey":52}],73:[function(require,module,exports){
+},{"../internal/baseProperty":25,"../internal/basePropertyDeep":26,"../internal/isKey":52}],74:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -2973,7 +2996,7 @@ function extractAllOfType(str, type) {
     return opts.type === type;
   });
 }
-},{"./lexer-utils":74}],74:[function(require,module,exports){
+},{"./lexer-utils":75}],75:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -3307,7 +3330,7 @@ function Lexer(_lexer) {
     return matcher([], charStream).tokens;
   };
 }
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /**
  * Ensure some object is a coerced to a string
  **/
@@ -3316,7 +3339,7 @@ module.exports = function makeString(object) {
   return '' + object;
 };
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 // Wrap
 // wraps a string by a certain width
 
@@ -3417,7 +3440,7 @@ module.exports = function wrap(str, options){
 		return result;
 	}
 };
-},{"./helper/makeString":75}],77:[function(require,module,exports){
+},{"./helper/makeString":76}],78:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3541,7 +3564,7 @@ var Currency = (function () {
 
 module.exports = Currency;
 
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -3632,7 +3655,7 @@ Scene_Map.prototype.initialize = function () {
   }
 };
 
-},{"../../flare_error":105,"./currency":77,"./text_handler":79}],79:[function(require,module,exports){
+},{"../../flare_error":106,"./currency":78,"./text_handler":80}],80:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3672,7 +3695,7 @@ var TexHandler = (function () {
 
 module.exports = TexHandler;
 
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4186,7 +4209,7 @@ var FlareCurrencies = (function () {
 window.FlareCurrencies = FlareCurrencies;
 window._baseYForText = 0;
 
-},{"./shop/currency_shop":83,"lodash/collection/find":4}],81:[function(require,module,exports){
+},{"./shop/currency_shop":84,"lodash/collection/find":4}],82:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4285,7 +4308,7 @@ var FlareCurrencyInformationExtendedScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyInformationExtendedScene;
 
-},{"../../scene_window_container":109,"../windows/currency_info/item_info/item_for_currency":98,"../windows/currency_info/item_info/item_information":99}],82:[function(require,module,exports){
+},{"../../scene_window_container":110,"../windows/currency_info/item_info/item_for_currency":99,"../windows/currency_info/item_info/item_information":100}],83:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4384,7 +4407,7 @@ var FlareCurrencyScene = (function (_Scene_MenuBase) {
 
 module.exports = FlareCurrencyScene;
 
-},{"../../scene_window_container":109,"../windows/currency_info/currency_details":93,"../windows/flare_currency_selecatble_window":100}],83:[function(require,module,exports){
+},{"../../scene_window_container":110,"../windows/currency_info/currency_details":94,"../windows/flare_currency_selecatble_window":101}],84:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -4546,7 +4569,7 @@ var CurrencyShop = (function () {
 
 module.exports = CurrencyShop;
 
-},{"./helper/currency_shop_info_container":84,"lodash/array/findIndex":1}],84:[function(require,module,exports){
+},{"./helper/currency_shop_info_container":85,"lodash/array/findIndex":1}],85:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4633,7 +4656,7 @@ var CurrencyShopInfoContainer = (function () {
 
 module.exports = CurrencyShopInfoContainer;
 
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 'use strict';
 
 var _clone = require('lodash/lang/clone');
@@ -4773,7 +4796,7 @@ BattleManager._getCurrenciesAndRewardThem = function (enemy) {
   });
 };
 
-},{"../update_core_data_manager/reward_currencies_check":88,"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],86:[function(require,module,exports){
+},{"../update_core_data_manager/reward_currencies_check":89,"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":68}],87:[function(require,module,exports){
 'use strict';
 
 var _gather_items = require('./gather_items');
@@ -4894,7 +4917,7 @@ DataManager._returnIconFromName = function (currencyName) {
   return parseInt(foundCurrency.icon);
 };
 
-},{"./gather_items":87,"lodash/collection/find":4,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],87:[function(require,module,exports){
+},{"./gather_items":88,"lodash/collection/find":4,"lodash/lang/isUndefined":68,"rmmv-mrp-core/option-parser":74}],88:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5017,7 +5040,7 @@ var GatherItems = (function () {
 
 module.exports = GatherItems;
 
-},{"lodash/collection/find":4,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73}],88:[function(require,module,exports){
+},{"lodash/collection/find":4,"lodash/lang/isUndefined":68,"rmmv-mrp-core/option-parser":74}],89:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5133,7 +5156,7 @@ var RewardCurrenciesCheck = (function () {
 
 module.exports = RewardCurrenciesCheck;
 
-},{"../../flare_random_number":106}],89:[function(require,module,exports){
+},{"../../flare_random_number":107}],90:[function(require,module,exports){
 'use strict';
 
 var _flare_currency_scene = require('../scenes/flare_currency_scene');
@@ -5160,7 +5183,7 @@ Scene_Menu.prototype.currencyCommand = function () {
   SceneManager.push(_flare_currency_scene2.default);
 };
 
-},{"../currencies/text_handler":79,"../scenes/flare_currency_scene":82}],90:[function(require,module,exports){
+},{"../currencies/text_handler":80,"../scenes/flare_currency_scene":83}],91:[function(require,module,exports){
 "use strict";
 
 var _currency_value_window = require("../windows/shop/currency_value_window");
@@ -5187,7 +5210,7 @@ Scene_Shop.prototype.createCurrencyWindow = function (currencyName) {
 
 var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
 Scene_Shop.prototype.create = function () {
-  if (_currency_shop_info_container2.default.getCurrency() !== undefined && _currency_shop_info_container2.default.getCurrency() !== null) {
+  if (!(0, _isUndefined2.default)(_currency_shop_info_container2.default.getCurrency()) && _currency_shop_info_container2.default.getCurrency() !== null) {
     Scene_MenuBase.prototype.create.call(this);
     this.createHelpWindow();
     this.createCurrencyWindow(_currency_shop_info_container2.default.getCurrency());
@@ -5206,7 +5229,7 @@ Scene_Shop.prototype.create = function () {
 
 var oldSceneMapPrototypeCreateCommandWindowMethod = Scene_Shop.prototype.createCommandWindow;
 Scene_Shop.prototype.createCommandWindow = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._commandWindow = new Window_ShopCommand(this._curencyValueWindow.x, this._purchaseOnly);
     this._commandWindow.y = this._helpWindow.height;
     this._commandWindow.setHandler('buy', this.commandBuy.bind(this, currencyName));
@@ -5220,7 +5243,7 @@ Scene_Shop.prototype.createCommandWindow = function (currencyName) {
 
 var oldSceneShopPrototypeCommandBuy = Scene_Shop.prototype.commandBuy;
 Scene_Shop.prototype.commandBuy = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._dummyWindow.hide();
     this.activateBuyWindow(currencyName);
   } else {
@@ -5230,7 +5253,7 @@ Scene_Shop.prototype.commandBuy = function (currencyName) {
 
 var oldSceneShopProtottypeActivateBuyWindowMethod = Scene_Shop.prototype.activateBuyWindow;
 Scene_Shop.prototype.activateBuyWindow = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._buyWindow.setMoney(this.money(currencyName));
     this._buyWindow.show();
     this._buyWindow.activate();
@@ -5242,7 +5265,7 @@ Scene_Shop.prototype.activateBuyWindow = function (currencyName) {
 
 var oldSceneShopPrototypeCreateBuyWindow = Scene_Shop.prototype.createBuyWindow;
 Scene_Shop.prototype.createBuyWindow = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     var wy = this._dummyWindow.y;
     var wh = this._dummyWindow.height;
     this._buyWindow = new Window_ShopBuy(0, wy, wh, this._goods, currencyName);
@@ -5259,7 +5282,7 @@ Scene_Shop.prototype.createBuyWindow = function (currencyName) {
 
 var oldSceneShopPrototypeCreateSellWindow = Scene_Shop.prototype.createSellWindow;
 Scene_Shop.prototype.createSellWindow = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     var wy = this._categoryWindow.y + this._categoryWindow.height;
     var wh = Graphics.boxHeight - wy;
     this._sellWindow = new Window_ShopSell(0, wy, Graphics.boxWidth, wh);
@@ -5276,7 +5299,7 @@ Scene_Shop.prototype.createSellWindow = function (currencyName) {
 
 var oldSceneShopPrototypeCreateNumberWindow = Scene_Shop.prototype.createNumberWindow;
 Scene_Shop.prototype.createNumberWindow = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     var wy = this._dummyWindow.y;
     var wh = this._dummyWindow.height;
     this._numberWindow = new Window_ShopNumber(0, wy, wh);
@@ -5291,7 +5314,7 @@ Scene_Shop.prototype.createNumberWindow = function (currencyName) {
 
 var oldSceneShopPrototypeOnBuyOkMethod = Scene_Shop.prototype.onBuyOk;
 Scene_Shop.prototype.onBuyOk = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._item = this._buyWindow.item();
     this._buyWindow.hide();
     this._numberWindow.setup(this._item, this.maxBuy(currencyName), this.buyingPrice(currencyName));
@@ -5305,7 +5328,7 @@ Scene_Shop.prototype.onBuyOk = function (currencyName) {
 
 var oldSceneShopPrototypeOnSellOk = Scene_Shop.prototype.onSellOk;
 Scene_Shop.prototype.onSellOk = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._item = this._sellWindow.item();
     this._categoryWindow.hide();
     this._sellWindow.hide();
@@ -5322,7 +5345,7 @@ Scene_Shop.prototype.onSellOk = function (currencyName) {
 
 var oldSceneShopPrototypeOnNumberOkMethod = Scene_Shop.prototype.onNumberOk;
 Scene_Shop.prototype.onNumberOk = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     SoundManager.playShop();
     switch (this._commandWindow.currentSymbol()) {
       case 'buy':
@@ -5342,7 +5365,7 @@ Scene_Shop.prototype.onNumberOk = function (currencyName) {
 
 var oldSceneShopPrototypeOnNumberCancel = Scene_Shop.prototype.onNumberCancel;
 Scene_Shop.prototype.onNumberCancel = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     SoundManager.playCancel();
     this.endNumberInput(currencyName);
   } else {
@@ -5352,7 +5375,7 @@ Scene_Shop.prototype.onNumberCancel = function (currencyName) {
 
 var oldSceneShopPrototypeDobuyMethod = Scene_Shop.prototype.doBuy;
 Scene_Shop.prototype.doBuy = function (number, currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     var cost = number * this.buyingPrice(currencyName, false);
 
     FlareCurrencies.addAmount(currencyName, -cost);
@@ -5364,7 +5387,7 @@ Scene_Shop.prototype.doBuy = function (number, currencyName) {
 
 var oldSceneShopPrototypeDoSellMethod = Scene_Shop.prototype.doSell;
 Scene_Shop.prototype.doSell = function (number, currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     var cost = number * this.buyingPrice(currencyName, true);
 
     FlareCurrencies.addAmount(currencyName, cost);
@@ -5376,7 +5399,7 @@ Scene_Shop.prototype.doSell = function (number, currencyName) {
 
 var oldSceneShopPrototypeEndNumberInput = Scene_Shop.prototype.endNumberInput;
 Scene_Shop.prototype.endNumberInput = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._numberWindow.hide();
     switch (this._commandWindow.currentSymbol()) {
       case 'buy':
@@ -5393,7 +5416,7 @@ Scene_Shop.prototype.endNumberInput = function (currencyName) {
 
 var oldSceneShopPrototypeMaxbuyMethod = Scene_Shop.prototype.maxBuy;
 Scene_Shop.prototype.maxBuy = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     var max = $gameParty.maxItems(this._item) - $gameParty.numItems(this._item);
     var price = this.buyingPrice(currencyName);
     if (price > 0) {
@@ -5408,7 +5431,7 @@ Scene_Shop.prototype.maxBuy = function (currencyName) {
 
 var oldSceneShopPrototypeMoneyMethod = Scene_Shop.prototype.money;
 Scene_Shop.prototype.money = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     return this._curencyValueWindow.value();
   } else {
     return oldSceneShopPrototypeMoneyMethod.call(this);
@@ -5417,7 +5440,7 @@ Scene_Shop.prototype.money = function (currencyName) {
 
 var oldSceneShopPrototypeCurrencyUnitMethod = Scene_Shop.prototype.currencyUnit;
 Scene_Shop.prototype.currencyUnit = function (currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     return this._curencyValueWindow.currencyIcon();
   } else {
     return oldSceneShopPrototypeCurrencyUnitMethod.call(this);
@@ -5426,7 +5449,7 @@ Scene_Shop.prototype.currencyUnit = function (currencyName) {
 
 var oldSceneShopPrototypeBuyingPrice = Scene_Shop.prototype.buyingPrice;
 Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
-  if (currencyName !== undefined && !selling) {
+  if (!(0, _isUndefined2.default)(currencyName) && !selling) {
     return this._buyWindow.price(this._item, currencyName);
   } else if (currencyName !== undefined && selling) {
     return this._buyWindow.price(this._item, currencyName, selling);
@@ -5435,7 +5458,7 @@ Scene_Shop.prototype.buyingPrice = function (currencyName, selling) {
   }
 };
 
-},{"../shop/helper/currency_shop_info_container":84,"../windows/shop/currency_value_window":101,"lodash/lang/isUndefined":67}],91:[function(require,module,exports){
+},{"../shop/helper/currency_shop_info_container":85,"../windows/shop/currency_value_window":102,"lodash/lang/isUndefined":68}],92:[function(require,module,exports){
 'use strict';
 
 var _flare_currency_reward_window = require('../windows/yanfly_aftermath/flare_currency_reward_window');
@@ -5482,7 +5505,7 @@ if (Scene_Battle.prototype.addCustomVictorySteps) {
    * @namespace FlareCurrency
    */
 
-},{"../windows/yanfly_aftermath/flare_currency_reward_window":104}],92:[function(require,module,exports){
+},{"../windows/yanfly_aftermath/flare_currency_reward_window":105}],93:[function(require,module,exports){
 'use strict';
 
 var _text_handler = require('../currencies/text_handler');
@@ -5515,7 +5538,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
   }
 };
 
-},{"../currencies/text_handler":79,"lodash/lang/isUndefined":67}],93:[function(require,module,exports){
+},{"../currencies/text_handler":80,"lodash/lang/isUndefined":68}],94:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5595,7 +5618,7 @@ var CurrencyDetails = (function (_FlareWindowBase) {
 
 module.exports = CurrencyDetails;
 
-},{"../../../flare_window_base":107,"../../currencies/text_handler":79,"underscore.string/wrap":76}],94:[function(require,module,exports){
+},{"../../../flare_window_base":108,"../../currencies/text_handler":80,"underscore.string/wrap":77}],95:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5668,7 +5691,7 @@ var CurrencyExists = (function () {
 
 module.exports = CurrencyExists;
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -5796,7 +5819,7 @@ var MapHasCurrencyShop = (function () {
 
 module.exports = MapHasCurrencyShop;
 
-},{"./store_current_currency_name":97,"rmmv-mrp-core/option-parser":73}],96:[function(require,module,exports){
+},{"./store_current_currency_name":98,"rmmv-mrp-core/option-parser":74}],97:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5853,7 +5876,7 @@ var StoreCurrencyItemInfo = (function () {
 
 module.exports = StoreCurrencyItemInfo;
 
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -5905,7 +5928,7 @@ var StoreCurrentCurrencyName = (function () {
 
 module.exports = StoreCurrentCurrencyName;
 
-},{}],98:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6097,7 +6120,7 @@ var ItemForCurrency = (function (_FlareWindowSelectabl) {
 
 module.exports = ItemForCurrency;
 
-},{"../../../../flare_window_selectable":108,"../../../../scene_window_container":109,"../../../currencies/text_handler":79,"../helper/store_currency_item_info":96,"../helper/store_current_currency_name":97,"lodash/array/uniq":3,"lodash/collection/find":4,"lodash/lang/clone":60}],99:[function(require,module,exports){
+},{"../../../../flare_window_selectable":109,"../../../../scene_window_container":110,"../../../currencies/text_handler":80,"../helper/store_currency_item_info":97,"../helper/store_current_currency_name":98,"lodash/array/uniq":3,"lodash/collection/find":4,"lodash/lang/clone":60}],100:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6210,7 +6233,7 @@ var ItemInformation = (function (_FlareWindowBase) {
 
 module.exports = ItemInformation;
 
-},{"../../../../flare_window_base":107,"../../../currencies/text_handler":79,"../helper/map_has_currency_shop":95,"../helper/store_currency_item_info":96,"lodash/lang/isUndefined":67,"rmmv-mrp-core/option-parser":73,"underscore.string/wrap":76}],100:[function(require,module,exports){
+},{"../../../../flare_window_base":108,"../../../currencies/text_handler":80,"../helper/map_has_currency_shop":96,"../helper/store_currency_item_info":97,"lodash/lang/isUndefined":68,"rmmv-mrp-core/option-parser":74,"underscore.string/wrap":77}],101:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6369,7 +6392,7 @@ var FlareCurrencies = (function (_FlareWindowSelectabl) {
 
 module.exports = FlareCurrencies;
 
-},{"../../flare_window_selectable":108,"../../scene_window_container":109,"../currencies/text_handler":79,"../scenes/flare_currency_information_extended_scene":81,"./currency_info/helper/currency_exists":94,"./currency_info/helper/store_current_currency_name":97}],101:[function(require,module,exports){
+},{"../../flare_window_selectable":109,"../../scene_window_container":110,"../currencies/text_handler":80,"../scenes/flare_currency_information_extended_scene":82,"./currency_info/helper/currency_exists":95,"./currency_info/helper/store_current_currency_name":98}],102:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6464,12 +6487,14 @@ var CurrencyValueWindow = (function (_Window_Base) {
 
 module.exports = CurrencyValueWindow;
 
-},{"lodash/collection/find":4}],102:[function(require,module,exports){
-"use strict";
+},{"lodash/collection/find":4}],103:[function(require,module,exports){
+'use strict';
 
-/**
- * @namespace FlareCurrency
- */
+var _isNull = require('lodash/lang/isNull');
+
+var _isNull2 = _interopRequireDefault(_isNull);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currencyName) {
   var width = this.windowWidth();
@@ -6479,11 +6504,13 @@ Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods, currenc
   this._currencyName = currencyName || null;
   this.refresh();
   this.select(0);
-};
+}; /**
+    * @namespace FlareCurrency
+    */
 
 var oldWindowShopBuyPrototypePrice = Window_ShopBuy.prototype.price;
 Window_ShopBuy.prototype.price = function (item, curencyName, selling) {
-  if (curencyName !== null && !selling) {
+  if (!(0, _isNull2.default)(curencyName) && !selling) {
     return this._price[this._data.indexOf(item)] || 0;
   } else if (curencyName !== null && selling) {
     return item.currencyCost || 0;
@@ -6494,7 +6521,7 @@ Window_ShopBuy.prototype.price = function (item, curencyName, selling) {
 
 var oldWindowShopBuyPrototypeMakeItemList = Window_ShopBuy.prototype.makeItemList;
 Window_ShopBuy.prototype.makeItemList = function () {
-  if (this._currencyName !== null) {
+  if (!(0, _isNull2.default)(this._currencyName)) {
     this._data = [];
     this._price = [];
     this._shopGoods.forEach(function (goods) {
@@ -6520,21 +6547,26 @@ Window_ShopBuy.prototype.makeItemList = function () {
   }
 };
 
-},{}],103:[function(require,module,exports){
+},{"lodash/lang/isNull":65}],104:[function(require,module,exports){
 "use strict";
 
 var _currency_shop_info_container = require("../../shop/helper/currency_shop_info_container");
 
 var _currency_shop_info_container2 = _interopRequireDefault(_currency_shop_info_container);
 
+var _isUndefined = require("lodash/lang/isUndefined");
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var oldWindowShopNumberPrototypeSetCurrencyUnitMethod = Window_ShopNumber.prototype.setCurrencyUnit; /**
-                                                                                                      * @namespace FlareCurrency
-                                                                                                      */
+/**
+ * @namespace FlareCurrency
+ */
 
+var oldWindowShopNumberPrototypeSetCurrencyUnitMethod = Window_ShopNumber.prototype.setCurrencyUnit;
 Window_ShopNumber.prototype.setCurrencyUnit = function (currencyUnit, currencyName) {
-  if (currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(currencyName)) {
     this._currencyName = currencyName;
     _currency_shop_info_container2.default.setCurrentAmountOfCurrency(FlareCurrencies.getCurrentCurrencyAmount(this._currencyName));
   }
@@ -6544,7 +6576,7 @@ Window_ShopNumber.prototype.setCurrencyUnit = function (currencyUnit, currencyNa
 
 var oldWindowShopNumberPrototypeSetup = Window_ShopNumber.prototype.setup;
 Window_ShopNumber.prototype.setup = function (item, max, price) {
-  if (max === undefined) {
+  if ((0, _isUndefined2.default)(max)) {
     max = $gameParty.maxItems(item) - $gameParty.numItems(item);
 
     if (price > 0) {
@@ -6561,7 +6593,7 @@ Window_ShopNumber.prototype.setup = function (item, max, price) {
 
 var oldWindowShopNumberPrototypeDrawTotalPriceMethod = Window_ShopNumber.prototype.drawTotalPrice;
 Window_ShopNumber.prototype.drawTotalPrice = function () {
-  if (this._currencyName !== undefined) {
+  if (!(0, _isUndefined2.default)(this._currencyName)) {
     var total = this._price * this._number;
     var width = this.contentsWidth() - this.textPadding();
     this.drawCurrencyInfo(total, this._currencyUnit, 0, this.priceY(), width);
@@ -6578,7 +6610,7 @@ Window_ShopNumber.prototype.drawCurrencyInfo = function (value, unit, x, y, widt
   this.drawIcon(unit, x + width - unitWidth, y);
 };
 
-},{"../../shop/helper/currency_shop_info_container":84}],104:[function(require,module,exports){
+},{"../../shop/helper/currency_shop_info_container":85,"lodash/lang/isUndefined":68}],105:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6694,7 +6726,7 @@ var FlareCurrencyRewardWindow = (function (_Window_Base) {
 
 module.exports = FlareCurrencyRewardWindow;
 
-},{"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":67}],105:[function(require,module,exports){
+},{"lodash/collection/find":4,"lodash/lang/clone":60,"lodash/lang/isUndefined":68}],106:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6759,7 +6791,7 @@ var FlareError = (function () {
 
 module.exports = FlareError = FlareError;
 
-},{}],106:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6801,7 +6833,7 @@ var FlareRandomNumber = (function () {
 
 module.exports = FlareRandomNumber = FlareRandomNumber;
 
-},{}],107:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6866,7 +6898,7 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}],108:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6930,7 +6962,7 @@ var FlareWindowSelectable = (function (_Window_Selectable) {
 
 module.exports = FlareWindowSelectable = FlareWindowSelectable;
 
-},{}],109:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -7045,4 +7077,4 @@ var SceneWindowContainer = (function () {
 
 module.exports = SceneWindowContainer = SceneWindowContainer;
 
-},{"../node_modules/lodash/collection/find":4,"../node_modules/lodash/lang/isUndefined":67}]},{},[80,89,92,78,86,85,91,90,103,102,104]);
+},{"../node_modules/lodash/collection/find":4,"../node_modules/lodash/lang/isUndefined":68}]},{},[81,90,93,79,87,86,92,91,104,103,105]);
