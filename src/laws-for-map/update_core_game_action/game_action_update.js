@@ -34,6 +34,17 @@ Game_Action.prototype.apply = function(target) {
  * On the map we show a window.
  */
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function(item, subject, target) {
+
+  // If we are a battle test, don't validate
+  if (DataManager.isBattleTest()) {
+    item.effects.forEach(function(effect) {
+        this.applyItemEffect(target, effect);
+    }, this);
+
+    this.applyItemUserEffect(target);
+    return;
+  }
+
   var processWhatShouldHappenOnHit = new ProcessBrokenLaw(item.name, subject);
   FlareCounter.resetCounter();
 

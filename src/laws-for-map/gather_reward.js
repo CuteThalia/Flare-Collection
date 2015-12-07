@@ -11,6 +11,10 @@ class GatherReward {
   }
 
   processPotentialRewards() {
+    if (DataManager.isBattleTest()) {
+      return;
+    }
+    
     var rewardData = extractAllOfType($dataMap.note, 'lawReward');
     rewardData = rewardData[0];
 

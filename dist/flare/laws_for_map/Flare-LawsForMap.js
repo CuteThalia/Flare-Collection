@@ -4251,6 +4251,10 @@ var GatherReward = (function () {
   _createClass(GatherReward, [{
     key: 'processPotentialRewards',
     value: function processPotentialRewards() {
+      if (DataManager.isBattleTest()) {
+        return;
+      }
+
       var rewardData = (0, _optionParser.extractAllOfType)($dataMap.note, 'lawReward');
       rewardData = rewardData[0];
 
@@ -5781,6 +5785,17 @@ Game_Action.prototype.apply = function (target) {
  * On the map we show a window.
  */
 Game_Action.prototype.applyPunishmentIfLawIsBroken = function (item, subject, target) {
+
+  // If we are a battle test, don't validate
+  if (DataManager.isBattleTest()) {
+    item.effects.forEach(function (effect) {
+      this.applyItemEffect(target, effect);
+    }, this);
+
+    this.applyItemUserEffect(target);
+    return;
+  }
+
   var processWhatShouldHappenOnHit = new _process_broken_law2.default(item.name, subject);
   _flare_counter2.default.resetCounter();
 
