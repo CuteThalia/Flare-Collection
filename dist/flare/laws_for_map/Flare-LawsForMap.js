@@ -5797,9 +5797,9 @@ Window_Base.prototype.drawGauge = function (dx, dy, dw, rate, color1, color2) {
 },{"../law_storage/laws_for_map":97}],114:[function(require,module,exports){
 'use strict';
 
-var _reward_storage = require('../reward_storage/reward_storage');
+var _laws_for_map = require('../law_storage/laws_for_map');
 
-var _reward_storage2 = _interopRequireDefault(_reward_storage);
+var _laws_for_map2 = _interopRequireDefault(_laws_for_map);
 
 var _isUndefined = require('lodash/lang/isUndefined');
 
@@ -5815,12 +5815,12 @@ var oldWindowMenuCommandProtottypeAddOriginalCommandsMethod = Window_MenuCommand
 Window_MenuCommand.prototype.addOriginalCommands = function () {
   oldWindowMenuCommandProtottypeAddOriginalCommandsMethod.call(this);
 
-  if (!(0, _isUndefined2.default)(_reward_storage2.default.getContainer())) {
+  if (!(0, _isUndefined2.default)(_laws_for_map2.default.getLawsForMap()) && _laws_for_map2.default.getLawsForMap().length > 0) {
     this.addCommand('Laws', 'Laws');
   }
 };
 
-},{"../reward_storage/reward_storage":104,"lodash/lang/isUndefined":71}],115:[function(require,module,exports){
+},{"../law_storage/laws_for_map":97,"lodash/lang/isUndefined":71}],115:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
