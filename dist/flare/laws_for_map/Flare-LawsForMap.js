@@ -4258,6 +4258,10 @@ var GatherReward = (function () {
       var rewardData = (0, _optionParser.extractAllOfType)($dataMap.note, 'lawReward');
       rewardData = rewardData[0];
 
+      if ((0, _isUndefined2.default)(rewardData)) {
+        return;
+      }
+
       // Collects things we can give phyiscally to the player
       this._storeReward(rewardData.a, $dataArmors, 'armors');
       this._storeReward(rewardData.w, $dataWeapons, 'weapons');
