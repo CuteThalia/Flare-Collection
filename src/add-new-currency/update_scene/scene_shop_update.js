@@ -15,7 +15,7 @@ Scene_Shop.prototype.createCurrencyWindow = function(currencyName) {
 
 var OldSceneShopPrototypeCreateMethod = Scene_Shop.prototype.create;
 Scene_Shop.prototype.create = function() {
-    if (CurrencyShopInfo.getCurrency() !== undefined) {
+    if (CurrencyShopInfo.getCurrency() !== undefined && CurrencyShopInfo.getCurrency() !== null) {
       Scene_MenuBase.prototype.create.call(this);
       this.createHelpWindow();
       this.createCurrencyWindow(CurrencyShopInfo.getCurrency());
