@@ -4,4 +4,7 @@ The Flare Library is a collection of classes, containers and extensions of the J
 to extend and add additional functionality to any scripts that are written for the platform with out breaking
 backwards compatibility.
 
-The main components are: Windows, Containers, Error Handling and Number generation/Formatting.
+The main components are: Windows, Containers, Error Handling and Number generation/Formatting as well as Handlers.
+
+Each of these pieces of the library play a role in abstracting common and complicated logic out of the core script such
+that scripts are kept clean and neat.

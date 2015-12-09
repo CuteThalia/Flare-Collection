@@ -23,6 +23,17 @@ gulp.task('make:flare-currency', function() {
       .pipe(gulp.dest('dist/flare/currency/'));
 });
 
+gulp.task('make:flare-quest', function() {
+  return browserify({entries: [
+        'src/quest-system/flare_quest.js',
+        'src/quest-system/update_game/game_events.js',
+      ]})
+      .transform("babelify")
+      .bundle()
+      .pipe(source('Flare-Quest.js'))
+      .pipe(gulp.dest('dist/flare/quest/'));
+});
+
 gulp.task('make:flare-notification-window', function() {
   return browserify({entries: [
         'src/add-notification-window/flare_notification_window.js',

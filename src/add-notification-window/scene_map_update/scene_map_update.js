@@ -31,9 +31,7 @@ Scene_Map.prototype.updateMain = function() {
 
   if (this._waitForWindowToClose > 0) {
     this._waitForWindowToClose--;
-    console.log('waiting');
   } else if (FlareNotification._getQueue().length > 0) {
-    console.log('here');
     this.handleQueue();
   }
 }
