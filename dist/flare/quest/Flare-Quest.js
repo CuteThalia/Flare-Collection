@@ -2545,7 +2545,9 @@ window.FlareQuest = FlareQuest;
 },{}],55:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareQuestSystem.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _isUndefined = require('lodash/lang/isUndefined');
 
@@ -2559,6 +2561,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * The main container that stores all the quests in the system across maps, events and saves.
+ *
+ * This is the core container that contains all the quests and quest chains that is persisted across
+ * saves and maps as well as events.
+ */
+
 var QuestContainer = (function () {
   function QuestContainer() {
     _classCallCheck(this, QuestContainer);
@@ -2566,6 +2575,15 @@ var QuestContainer = (function () {
 
   _createClass(QuestContainer, null, [{
     key: 'storeQuestinformation',
+
+    /**
+     * Stores a new quest object for an event on a specific map.
+     *
+     * @param int mapId
+     * @param int eventId
+     * @param array singleQuest
+     * @param array questChains
+     */
     value: function storeQuestinformation(mapId, eventID, singleQuests, questChains) {
 
       if ((0, _isUndefined2.default)(this._questContainer)) {
@@ -2579,11 +2597,26 @@ var QuestContainer = (function () {
         questChains: questChains
       });
     }
+
+    /**
+     * Returns the current container.
+     *
+     * @return undefined or array
+     */
+
   }, {
     key: 'getQuestContainer',
     value: function getQuestContainer() {
       return this._questContainer;
     }
+
+    /**
+     * Returns an object matchin this id or false.
+     *
+     * @param int id
+     * @return false or object
+     */
+
   }, {
     key: 'getQuestObjectBasedOnEventId',
     value: function getQuestObjectBasedOnEventId(id) {
@@ -2601,6 +2634,14 @@ var QuestContainer = (function () {
 
       return containerObject;
     }
+
+    /**
+     * Returns an object matchin this id or false.
+     *
+     * @param int id
+     * @return false or object
+     */
+
   }, {
     key: 'getQuestObjectBasedOnMapId',
     value: function getQuestObjectBasedOnMapId(id) {
@@ -2628,7 +2669,9 @@ module.exports = QuestContainer;
 },{"lodash/collection/find":2,"lodash/lang/isUndefined":45}],56:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareQuestSystem.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _parse_quest_text = require('./parse_quest_text');
 
@@ -2642,7 +2685,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * We need to create quest objects based off event comment data.
+ *
+ * The process is super simple, you instantiate this class with the event text
+ * and the event's ID.
+ *
+ * This information is gotten from the event when the player interacts with the event in
+ * some manner.
+ *
+ * Next we have a function that creates whats known as a master event contsainer, This container
+ * is then processed to weed out two types of quests: single quests and quest chains.
+ *
+ * The information for quests is the same regardless of chain or not.
+ *
+ * Finally we store everything into a static class container called a Quest Container.
+ */
+
 var CreateQuestObjects = (function () {
+
+  /**
+   * You can do: new CreateQuestObjects(string, id);
+   *
+   * @param string eventText
+   * @param int eventId
+   */
+
   function CreateQuestObjects(eventText, eventId) {
     _classCallCheck(this, CreateQuestObjects);
 
@@ -2654,6 +2722,18 @@ var CreateQuestObjects = (function () {
 
     this.createQuestObjects(eventId);
   }
+
+  /**
+   * Creates the actual objects.
+   *
+   * Creates a master container, processes it creating two types of objects,
+   * single and chain based quests.
+   *
+   * These arrays of objects along with the current map id and the evcent id are then passed
+   * to the Quest Container class to create a container of quests.
+   *
+   * @param int eventID
+   */
 
   _createClass(CreateQuestObjects, [{
     key: 'createQuestObjects',
@@ -2682,12 +2762,22 @@ var CreateQuestObjects = (function () {
       this.processQuestChainData(this._questChainData);
 
       // Create the container of quests.
-      if (!_quest_container2.default.getQuestObjectBasedOnMapId($gameMap.mapId) && !_quest_container2.default.getQuestObjectBasedOnEventId(eventId)) {
+      if (!_quest_container2.default.getQuestObjectBasedOnMapId($gameMap.mapId) && !_quest_container2.default.getQuestObjectBasedOnEventId(eventId) && this._singleQuestData.length > 0 && this._questChainData.length > 0) {
         _quest_container2.default.storeQuestinformation($gameMap.mapId(), eventId, this._singleQuestData, this._questChainData);
       }
 
       console.log(_quest_container2.default.getQuestContainer());
     }
+
+    /**
+     * Processes the master quest cotnainer.
+     *
+     * Pushes either single quest items to a single quest data holder or
+     * pushes quests to the quest chains quest data information data holder.
+     *
+     * @param array container - All quest information
+     */
+
   }, {
     key: 'processMasterQuestContainer',
     value: function processMasterQuestContainer(container) {
@@ -2708,6 +2798,17 @@ var CreateQuestObjects = (function () {
           }
       });
     }
+
+    /**
+     * Processes a single quest object from a chain
+     *
+     * Because quest chains usually have multiple quests associated with
+     * them, we need to walk over each quest chain, and process the quests
+     * with in them.
+     *
+     * @param array questChainData - contains all the quest chains
+     */
+
   }, {
     key: 'processQuestChainData',
     value: function processQuestChainData(questChainData) {
@@ -2719,6 +2820,14 @@ var CreateQuestObjects = (function () {
         });
       }
     }
+
+    /**
+     * Creates a single quest object.
+     *
+     * @param array singleQuestData - container to push quest data too.
+     * @param object individualQuest - object containing quest info.
+     */
+
   }, {
     key: 'createSingleQuestObject',
     value: function createSingleQuestObject(singleQuestData, individualQuest) {
@@ -2740,7 +2849,9 @@ module.exports = CreateQuestObjects;
 },{"../container/quest_container":55,"./parse_quest_text":57}],57:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareQuestSystem.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
 
 var _optionParser = require('rmmv-mrp-core/option-parser');
 
@@ -2752,27 +2863,65 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Parses quest information from the event text.
+ *
+ * Event text is gained on player interaction with an event.
+ */
+
 var ParseQuestText = (function () {
+
+  /**
+   *
+   * @param string eventText
+   */
+
   function ParseQuestText(eventText) {
     _classCallCheck(this, ParseQuestText);
 
     this.eventText = eventText;
   }
 
+  /**
+   * Parse QuestChain tags.
+   *
+   * @return array of objects or empty array
+   */
+
   _createClass(ParseQuestText, [{
     key: 'parseQuestChain',
     value: function parseQuestChain() {
       return (0, _optionParser.extractAllOfType)(this.eventText, 'QuestChain');
     }
+
+    /**
+     * Parse Quest tags.
+     *
+     * You can pass in a string of text containing a quest tag.
+     *
+     * @param string text
+     * @return array of objects or empty array
+     */
+
   }, {
     key: 'parseQuest',
-    value: function parseQuest(textInsideQuestChainBlock) {
-      if ((0, _isUndefined2.default)(textInsideQuestChainBlock)) {
+    value: function parseQuest(text) {
+      if ((0, _isUndefined2.default)(text)) {
         return (0, _optionParser.extractAllOfType)(this.eventText, 'Quest');
       } else {
-        return (0, _optionParser.extractAllOfType)(textInsideQuestChainBlock, 'Quest');
+        return (0, _optionParser.extractAllOfType)(text, 'Quest');
       }
     }
+
+    /**
+     * Parse Quest Reward tag.
+     *
+     * You can pass in a string of text containing a quest reward tag.
+     *
+     * @param string textInsideQuestBlock
+     * @return array of objects or empty array
+     */
+
   }, {
     key: 'parseQuestReward',
     value: function parseQuestReward(textInsideQuestBlock) {
@@ -2782,6 +2931,14 @@ var ParseQuestText = (function () {
         return (0, _optionParser.extractAllOfType)(textInsideQuestBlock, 'questReward');
       }
     }
+
+    /**
+     * Parses the objective tag
+     *
+     * @param textInsideQuestBlock, string that contains <objective> tag
+     * @return array of objects,empty array or false if the textInsideQuestBlock is undefined.
+     */
+
   }, {
     key: 'parseQuestObjective',
     value: function parseQuestObjective(textInsideQuestBlock) {
@@ -2816,6 +2973,8 @@ var _create_quest_objects2 = _interopRequireDefault(_create_quest_objects);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Game_Event.prototype.start = function () {
+
+    // If user interacts with event, process its pages.
     if (this._trigger === 0) {
         var eventhandler = new _event_page_handler2.default(this.page());
         var eventText = eventhandler.mergeEventsPage();
@@ -2829,6 +2988,8 @@ Game_Event.prototype.start = function () {
             this.lock();
         }
     }
-};
+}; /**
+    * @namespace FlareQuestSystem.
+    */
 
 },{"../../lib/handler/events/pages/event_page_handler":53,"../system/handler/create_quest_objects":56,"../system/handler/parse_quest_text":57}]},{},[54,58]);

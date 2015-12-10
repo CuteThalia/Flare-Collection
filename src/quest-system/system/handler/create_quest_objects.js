@@ -2,8 +2,9 @@
  * @namespace FlareQuestSystem.
  */
 
-import ParseQuestText  from './parse_quest_text';
-import QuestContainer from '../container/quest_container';
+import ParseQuestText     from './parse_quest_text';
+import QuestContainer     from '../container/quest_container';
+import lodashIsUndefined  from 'lodash/lang/isUndefined';
 
 /**
  * We need to create quest objects based off event comment data.
@@ -75,9 +76,12 @@ class CreateQuestObjects {
     this.processQuestChainData(this._questChainData);
 
     // Create the container of quests.
-    if (!QuestContainer.getQuestObjectBasedOnMapId($gameMap.mapId) && !QuestContainer.getQuestObjectBasedOnEventId(eventId)) {
+    if (!QuestContainer.getQuestObjectBasedOnMapId($gameMap.mapId) && !QuestContainer.getQuestObjectBasedOnEventId(eventId) &&
+        this._singleQuestData.length > 0 && this._questChainData.length > 0) {
       QuestContainer.storeQuestinformation($gameMap.mapId(), eventId, this._singleQuestData, this._questChainData);
     }
+
+    console.log(QuestContainer.getQuestContainer());
   }
 
   /**
@@ -92,7 +96,7 @@ class CreateQuestObjects {
     var self = this;
 
     container.forEach(function(individualQuests){
-      if (individualQuests['id'] !== undefined) {
+      if (lodashIsUndefined(individualQuests['id'])) {
         // Creates a single QuestChainData object and pushes it to the array.
         // the quests key array will not be mutated.
         self._questChainData.push({
@@ -100,7 +104,7 @@ class CreateQuestObjects {
           quests:           self._parseQuestText.parseQuest(individualQuests.block),
           status:           "incomplete",
           questInformation: [] // Where the actual quest info for this chain will be stored.
-        })
+        });
       } else {
         self.createSingleQuestObject(self._singleQuestData, individualQuests);
       }
@@ -139,7 +143,7 @@ class CreateQuestObjects {
       objectives:   this._parseQuestText.parseQuestObjective(individualQuest.block),
       rewardInfo:   this._parseQuestText.parseQuestReward(individualQuest.block)[0],
       queststatus:  "incomplete"
-    })
+    });
   }
 }
 
