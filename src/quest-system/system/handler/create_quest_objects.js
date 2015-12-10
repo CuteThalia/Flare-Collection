@@ -70,7 +70,7 @@ class CreateQuestObjects {
     }
 
     // Store the Quest Chains
-    this.processMasterQuestContainer(this._masterQuestContainer);
+    this.processMasterQuestContainer(this._masterQuestContainer, eventId);
 
     // Remove duplicate quests from quest chain data.
     this.removeDuplicateQuestsFromQuestContainer(this._questChainData);
@@ -83,8 +83,7 @@ class CreateQuestObjects {
     this.processQuestChainData(this._questChainData);
 
     // Create the container of quests.
-    if (!QuestContainer.getQuestObjectBasedOnMapId($gameMap.mapId) && !QuestContainer.getQuestObjectBasedOnEventId(eventId) &&
-        this._singleQuestData.length > 0 && this._questChainData.length > 0) {
+    if (!QuestContainer.getQuestObjectBasedOnEventId(eventId)) {
       QuestContainer.storeQuestinformation($gameMap.mapId(), eventId, this._singleQuestData, this._questChainData);
     }
 
@@ -99,13 +98,13 @@ class CreateQuestObjects {
    *
    * @param array container - All quest information
    */
-  processMasterQuestContainer(container) {
+  processMasterQuestContainer(container, eventId) {
     var self = this;
     container.forEach(function(individualQuests){
       if (!lodashIsUndefined(individualQuests['id'])) {
         // Creates a single QuestChainData object and pushes it to the array.
         // the quests key array will not be mutated.
-        if (!QuestContainer.containsQuestChain(individualQuests.id)) {
+        if (!QuestContainer.containsQuestChain(individualQuests.id, eventId)) {
           self._questChainData.push({
             questChainId:     individualQuests.id,
             quests:           self._parseQuestText.parseQuest(individualQuests.block),

@@ -66,7 +66,7 @@ class QuestContainer {
       return false;
     }
 
-    return containerObject;
+    return true;
   }
 
   /**
@@ -88,7 +88,7 @@ class QuestContainer {
       return false;
     }
 
-    return containerObject;
+    return true;
   }
 
   /**
@@ -97,17 +97,18 @@ class QuestContainer {
    * @param int id
    * @return boolean
    */
-  static containsQuestChain(id) {
+  static containsQuestChain(id, eventId) {
     if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
       return false;
     }
 
-    var foundItem = lodashFindWhere(
-      lodashFlatten(
-        lodashPluck(this.getQuestContainer(), 'questChains')
-      ),
-      {questChainId: id}
-    )
+    var questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+
+    if (lodashIsUndefined(questObject)) {
+      return false;
+    }
+
+    var foundItem = lodashFindWhere(questObject.questChains, {questChainId: questChainId});
 
     if (lodashIsUndefined(foundItem)) {
       return false;

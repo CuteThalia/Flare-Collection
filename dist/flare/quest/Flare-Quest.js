@@ -3344,7 +3344,7 @@ var QuestContainer = (function () {
         return false;
       }
 
-      return containerObject;
+      return true;
     }
 
     /**
@@ -3369,7 +3369,7 @@ var QuestContainer = (function () {
         return false;
       }
 
-      return containerObject;
+      return true;
     }
 
     /**
@@ -3381,12 +3381,18 @@ var QuestContainer = (function () {
 
   }, {
     key: 'containsQuestChain',
-    value: function containsQuestChain(id) {
+    value: function containsQuestChain(id, eventId) {
       if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
         return false;
       }
 
-      var foundItem = (0, _findWhere2.default)((0, _flatten2.default)((0, _pluck2.default)(this.getQuestContainer(), 'questChains')), { questChainId: id });
+      var questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId });
+
+      if ((0, _isUndefined2.default)(questObject)) {
+        return false;
+      }
+
+      var foundItem = (0, _findWhere2.default)(questObject.questChains, { questChainId: questChainId });
 
       if ((0, _isUndefined2.default)(foundItem)) {
         return false;
@@ -3555,7 +3561,7 @@ var CreateQuestObjects = (function () {
       }
 
       // Store the Quest Chains
-      this.processMasterQuestContainer(this._masterQuestContainer);
+      this.processMasterQuestContainer(this._masterQuestContainer, eventId);
 
       // Remove duplicate quests from quest chain data.
       this.removeDuplicateQuestsFromQuestContainer(this._questChainData);
@@ -3568,7 +3574,7 @@ var CreateQuestObjects = (function () {
       this.processQuestChainData(this._questChainData);
 
       // Create the container of quests.
-      if (!_quest_container2.default.getQuestObjectBasedOnMapId($gameMap.mapId) && !_quest_container2.default.getQuestObjectBasedOnEventId(eventId) && this._singleQuestData.length > 0 && this._questChainData.length > 0) {
+      if (!_quest_container2.default.getQuestObjectBasedOnEventId(eventId)) {
         _quest_container2.default.storeQuestinformation($gameMap.mapId(), eventId, this._singleQuestData, this._questChainData);
       }
 
@@ -3586,13 +3592,13 @@ var CreateQuestObjects = (function () {
 
   }, {
     key: 'processMasterQuestContainer',
-    value: function processMasterQuestContainer(container) {
+    value: function processMasterQuestContainer(container, eventId) {
       var self = this;
       container.forEach(function (individualQuests) {
         if (!(0, _isUndefined2.default)(individualQuests['id'])) {
           // Creates a single QuestChainData object and pushes it to the array.
           // the quests key array will not be mutated.
-          if (!_quest_container2.default.containsQuestChain(individualQuests.id)) {
+          if (!_quest_container2.default.containsQuestChain(individualQuests.id, eventId)) {
             self._questChainData.push({
               questChainId: individualQuests.id,
               quests: self._parseQuestText.parseQuest(individualQuests.block),
