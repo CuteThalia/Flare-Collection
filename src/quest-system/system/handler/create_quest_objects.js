@@ -5,6 +5,7 @@
 import ParseQuestText     from './parse_quest_text';
 import QuestContainer     from '../container/quest_container';
 import lodashIsUndefined  from 'lodash/lang/isUndefined';
+import lodashUnique       from 'lodash/array/uniq';
 
 /**
  * We need to create quest objects based off event comment data.
@@ -71,6 +72,12 @@ class CreateQuestObjects {
     // Store the Quest Chains
     this.processMasterQuestContainer(this._masterQuestContainer);
 
+    // Remove duplicate quests from quest chain data.
+    this.removeDuplicateQuestsFromQuestContainer(this._questChainData);
+
+    // Remove duplicate quests from a list of single quests.
+    this.removeDuplicateQuestsFromSingleQuestContainer(this._singleQuestData);
+
     // process quest chain data to add additional info to to
     // questInformation array.
     this.processQuestChainData(this._questChainData);
@@ -94,17 +101,18 @@ class CreateQuestObjects {
    */
   processMasterQuestContainer(container) {
     var self = this;
-
     container.forEach(function(individualQuests){
-      if (lodashIsUndefined(individualQuests['id'])) {
+      if (!lodashIsUndefined(individualQuests['id'])) {
         // Creates a single QuestChainData object and pushes it to the array.
         // the quests key array will not be mutated.
-        self._questChainData.push({
-          questChainId:     individualQuests.id,
-          quests:           self._parseQuestText.parseQuest(individualQuests.block),
-          status:           "incomplete",
-          questInformation: [] // Where the actual quest info for this chain will be stored.
-        });
+        if (!QuestContainer.containsQuestChain(individualQuests.id)) {
+          self._questChainData.push({
+            questChainId:     individualQuests.id,
+            quests:           self._parseQuestText.parseQuest(individualQuests.block),
+            status:           "incomplete",
+            questInformation: [] // Where the actual quest info for this chain will be stored.
+          });
+        }
       } else {
         self.createSingleQuestObject(self._singleQuestData, individualQuests);
       }
@@ -128,6 +136,26 @@ class CreateQuestObjects {
         self.createSingleQuestObject(questChainData[i].questInformation, individualQuestData);
       });
     }
+  }
+
+  /**
+   * Remove duplicate quests from quest chain container
+   *
+   * @param array questChainData
+   */
+  removeDuplicateQuestsFromQuestContainer(questChainData) {
+    for (var i = 0; i < questChainData.length; i++) {
+      questChainData[i].quests = lodashUnique(questChainData[i].quests, 'title');
+    }
+  }
+
+  /**
+   * Remove duplicate quests from single quest container
+   *
+   * @param array singleQuestContainer
+   */
+  removeDuplicateQuestsFromSingleQuestContainer(singleQuestContainer) {
+    this._singleQuestData = lodashUnique(singleQuestContainer, 'questTitle');
   }
 
   /**

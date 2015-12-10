@@ -4,6 +4,9 @@
 
 import lodashIsUndefined from 'lodash/lang/isUndefined';
 import lodashFind        from 'lodash/collection/find';
+import lodashFlatten     from 'lodash/array/flatten';
+import lodashPluck       from 'lodash/collection/pluck';
+import lodashFindWhere   from 'lodash/collection/findWhere';
 
 /**
  * The main container that stores all the quests in the system across maps, events and saves.
@@ -86,6 +89,31 @@ class QuestContainer {
     }
 
     return containerObject;
+  }
+
+  /**
+   * Does the container already contain a quest chain with id?
+   *
+   * @param int id
+   * @return boolean
+   */
+  static containsQuestChain(id) {
+    if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+      return false;
+    }
+
+    var foundItem = lodashFindWhere(
+      lodashFlatten(
+        lodashPluck(this.getQuestContainer(), 'questChains')
+      ),
+      {questChainId: id}
+    )
+
+    if (lodashIsUndefined(foundItem)) {
+      return false;
+    }
+
+    return true;
   }
 }
 
