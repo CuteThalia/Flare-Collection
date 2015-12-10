@@ -70,28 +70,6 @@ class QuestContainer {
   }
 
   /**
-   * Returns an object matchin this id or false.
-   *
-   * @param int id
-   * @return false or object
-   */
-  static getQuestObjectBasedOnMapId(id) {
-    if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
-      return false;
-    }
-
-    var containerObject = lodashFind(this.getQuestContainer(), function(container){
-      return container.mapId === id
-    });
-
-    if (lodashIsUndefined(containerObject)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * Does the container already contain a quest chain with id?
    *
    * @param int id
@@ -144,6 +122,13 @@ class QuestContainer {
     return foundItem;
   }
 
+  /**
+   * Get a single quest from a quest chain.
+   *
+   * @param string title
+   * @param int questChainId
+   * @param int eventId
+   */
   static getQuestFromQuestChain(title, questChainId, eventId) {
     if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
       return false;

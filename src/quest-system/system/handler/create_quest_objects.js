@@ -86,8 +86,6 @@ class CreateQuestObjects {
     if (!QuestContainer.getQuestObjectBasedOnEventId(eventId)) {
       QuestContainer.storeQuestinformation($gameMap.mapId(), eventId, this._singleQuestData, this._questChainData);
     }
-
-    console.log(QuestContainer.getQuestContainer());
   }
 
   /**
