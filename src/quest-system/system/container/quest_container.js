@@ -115,6 +115,59 @@ class QuestContainer {
 
     return true;
   }
+
+  /**
+   * Returns a quest based on the title and event id.
+   *
+   * @param string title
+   * @param int event id
+   * @return array or false
+   */
+  static getQuestNameFromEvent(title, eventId) {
+    if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+      return false;
+    }
+
+    var questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+
+    if (lodashIsUndefined(questObject)) {
+      return false;
+    }
+
+    var foundItem = lodashFindWhere(questObject.singleQuests, {questTitle: title});
+
+    if (lodashIsUndefined(foundItem)) {
+      return false;
+    }
+
+    return foundItem;
+  }
+
+  static getQuestFromQuestChain(title, questChainId, eventId) {
+    if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+      return false;
+    }
+
+    var questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+
+    if (lodashIsUndefined(questObject)) {
+      return false;
+    }
+
+    var questChainObject = lodashFindWhere(questObject.questChains, {questChainId: questChainId});
+
+    if (lodashIsUndefined(questChainObject)) {
+      return false;
+    }
+
+    var foundItem = lodashFindWhere(questChainObject.questInformation, {questTitle: title});
+
+    if (lodashIsUndefined(foundItem)) {
+      return false;
+    }
+
+    return foundItem;
+  }
 }
 
 module.exports = QuestContainer;

@@ -3153,13 +3153,19 @@ var EventPageHandler = (function () {
 module.exports = EventPageHandler;
 
 },{}],72:[function(require,module,exports){
-"use strict";
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * @namespace FlareQuestSystem.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
+
+var _quest_container = require('./system/container/quest_container');
+
+var _quest_container2 = _interopRequireDefault(_quest_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @namespace FlareQuestSystem.
- */
 
 /*:
  * @plugindesc Create quests for specific events
@@ -3173,16 +3179,70 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Contains public faceing data about laws on said map.
  */
 
-var FlareQuest = function FlareQuest() {
-  _classCallCheck(this, FlareQuest);
-};
+var FlareQuest = (function () {
+  function FlareQuest() {
+    _classCallCheck(this, FlareQuest);
+  }
+
+  _createClass(FlareQuest, null, [{
+    key: 'getSingleQuest',
+
+    /**
+     * Get a single quest whos title matches the title you passed in.
+     *
+     * Searches through the array of single non quest chain quests looking
+     * for one that belongs to said event and has the same title.
+     *
+     * @param string title
+     * @param int eventId
+     * @return object
+     */
+    value: function getSingleQuest(title, eventId) {
+      return _quest_container2.default.getQuestNameFromEvent(title, eventId);
+    }
+
+    /**
+     * Get all quests based on event ID.
+     *
+     * Get the entire container of single and quest chain quests for an event.
+     *
+     * @param int eventId
+     * @return object or array
+     */
+
+  }, {
+    key: 'getAllQuests',
+    value: function getAllQuests(eventId) {
+      return _quest_container2.default.getQuestObjectBasedOnEventId(eventId);
+    }
+
+    /**
+     * Get quest from quest chain of id x where name matches and belongs to event of id y.
+     *
+     * Search the quest container for a quest object that matches said quest title, belongs to said event
+     * and belongs to a quest chain with an id of x.
+     *
+     * @param string title
+     * @param int questChainID
+     * @param int eventID
+     */
+
+  }, {
+    key: 'getQuestChainQuest',
+    value: function getQuestChainQuest(title, questChainId, eventId) {
+      return _quest_container2.default.getQuestFromQuestChain(title, questChainId, eventId);
+    }
+  }]);
+
+  return FlareQuest;
+})();
 
 ;
 
 // Opens this up for the user.
 window.FlareQuest = FlareQuest;
 
-},{}],73:[function(require,module,exports){
+},{"./system/container/quest_container":73}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -3333,6 +3393,63 @@ var QuestContainer = (function () {
       }
 
       return true;
+    }
+
+    /**
+     * Returns a quest based on the title and event id.
+     *
+     * @param string title
+     * @param int event id
+     * @return array or false
+     */
+
+  }, {
+    key: 'getQuestNameFromEvent',
+    value: function getQuestNameFromEvent(title, eventId) {
+      if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+        return false;
+      }
+
+      var questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId });
+
+      if ((0, _isUndefined2.default)(questObject)) {
+        return false;
+      }
+
+      var foundItem = (0, _findWhere2.default)(questObject.singleQuests, { questTitle: title });
+
+      if ((0, _isUndefined2.default)(foundItem)) {
+        return false;
+      }
+
+      return foundItem;
+    }
+  }, {
+    key: 'getQuestFromQuestChain',
+    value: function getQuestFromQuestChain(title, questChainId, eventId) {
+      if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+        return false;
+      }
+
+      var questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId });
+
+      if ((0, _isUndefined2.default)(questObject)) {
+        return false;
+      }
+
+      var questChainObject = (0, _findWhere2.default)(questObject.questChains, { questChainId: questChainId });
+
+      if ((0, _isUndefined2.default)(questChainObject)) {
+        return false;
+      }
+
+      var foundItem = (0, _findWhere2.default)(questChainObject.questInformation, { questTitle: title });
+
+      if ((0, _isUndefined2.default)(foundItem)) {
+        return false;
+      }
+
+      return foundItem;
     }
   }]);
 

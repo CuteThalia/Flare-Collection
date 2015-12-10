@@ -50,3 +50,14 @@ A simple quest is broken into a couple pieces:
 >How ever
 > in each quest chain you may have a the same quest name as another quest chain quest. That is, if quest chain id 2 has a quest called
 > "Save Me" and quest chain with an id of 4 has a quest with the title of "Save Me", that is acceptable.
+
+## API For Scriptors
+
+The following is a set of API commands you can call in your own scripts in order to manipulate quests, get information about quests
+or handle quests differently.
+
+The following methods can be called on `FlareQuest` with out instantiating `FlareQuest`:
+
+- `getSingleQuest(title, eventId)`: Returns an object of the quest you were looking for, assuming the title matches and the event id also matches. This will only search through a list of single quests and not quest chains.
+- `getAllQuests(eventId)`: Returns all quest objects that match this event id. This can be either an array or a single object.
+- `getQuestChainQuest(title, questChainId, eventId)`: Returns a single quest from a quest chain with an ID of x and an event id of y.
