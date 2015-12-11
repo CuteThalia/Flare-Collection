@@ -165,9 +165,9 @@ class CreateQuestObjects {
     singleQuestData.push({
       questTitle:   individualQuest.title,
       questLevel:   individualQuest.level,
+      questStatus:  "incomplete",
       objectives:   this._parseQuestText.parseQuestObjective(individualQuest.block),
       rewardInfo:   this._parseQuestText.parseQuestReward(individualQuest.block)[0],
-      queststatus:  "incomplete"
     });
   }
 }

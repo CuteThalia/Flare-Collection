@@ -3163,6 +3163,10 @@ var _quest_container = require('./system/container/quest_container');
 
 var _quest_container2 = _interopRequireDefault(_quest_container);
 
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3176,7 +3180,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 
 /**
- * Contains public faceing data about laws on said map.
+ * Contains a way for users to get access to the api.
+ *
+ * This class contains both developer API and user API.
+ *
+ * Developer API allows you develop third party scripts that interact with the
+ * questing system. It also allows you to expand upon the questing system with your
+ * own ideas.
+ *
+ * User API is used in the game editor to set up quests, validate quest completion
+ * and hand out rewards.
  */
 
 var FlareQuest = (function () {
@@ -3185,7 +3198,257 @@ var FlareQuest = (function () {
   }
 
   _createClass(FlareQuest, null, [{
-    key: 'getSingleQuest',
+    key: 'setSingleQuestToActive',
+
+    /**
+     * Set A single quest to active.
+     *
+     * Non quest chain quest can be set to active.
+     *
+     * @param string title
+     * @param id eventId
+     * @param int mapId - optional, find object based on map id as well
+     */
+    value: function setSingleQuestToActive(title, eventId, mapId) {
+      var questObject = this.getSingleQuest(title, eventId, mapId);
+
+      if (questObject.status !== 'complete') {}
+      questObject.status = 'active';
+    }
+
+    /**
+     * Set A single quest to active.
+     *
+     * Non quest chain quest can be set to complete.
+     *
+     * @param string title
+     * @param id eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return false if quest is not found.
+     */
+
+  }, {
+    key: 'setSingleQuestToComplete',
+    value: function setSingleQuestToComplete(title, eventId, mapId) {
+      var questObject = this.getSingleQuest(title, eventId, mapId);
+
+      if (!questObject) {
+        return false;
+      }
+
+      questObject.status = 'complete';
+    }
+
+    /**
+     * Set A single quest to active.
+     *
+     * Non quest chain quest can be set to incomplete.
+     *
+     * @param string title
+     * @param id eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return false if quest is not found.
+     */
+
+  }, {
+    key: 'setSingleQuestToIncomeplete',
+    value: function setSingleQuestToIncomeplete(title, eventId, mapId) {
+      var questObject = this.getSingleQuest(title, eventId, mapId);
+
+      if (!questObject) {
+        throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      if (!this.isSingleQuestActive(title, eventId, mapId) && !this.isSingleQuestComplete(title, eventId, mapId)) {
+        questObject.status = 'incomplete';
+      } else {
+        throw new Error(questObject.questTitle + ' is already complete, cannot be reactivated.');
+      }
+    }
+
+    /**
+     * Activate a quest chain.
+     *
+     * This is done by first finding a quest chain object that belongs to
+     * said event and then activating the first quest in the array of quests.
+     *
+     * @param int questChainId
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return false if quest chain object cannot be found.
+     */
+
+  }, {
+    key: 'activateQuestChain',
+    value: function activateQuestChain(questChainId, eventId, mapId) {
+      var questChainObject = this.getQuestChain(questChainId, eventId, mapId);
+
+      if (!questChainObject) {
+        throw new Error('No Quest Chain with id of: ' + questChainId + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      questChainObject.questInformation[0].questStatus = 'active';
+      questChainObject.status = 'active';
+    }
+
+    /**
+     * Move the quest chain along.
+     *
+     * We will move the quest chain to the next quest in the set of quests
+     * assuming there is a next quest to move too. If there isnt we will
+     * set the quest chain status to complete, meaning you have completed all
+     * quests in the quest chain.
+     *
+     * @param int questChainId
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return false if a quest object is not found.
+     */
+
+  }, {
+    key: 'moveToNextQuestInChain',
+    value: function moveToNextQuestInChain(questChainId, eventId, mapId) {
+      var questChainObject = this.getQuestChain(questChainId, eventId, mapId);
+
+      if (!questChainObject) {
+        throw new Error('No Quest Chain with id of: ' + questChainId + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      for (var i = 0; i < questChainObject.questInformation.length; i++) {
+        if (questChainObject.questInformation[i].questStatus === 'active') {
+
+          // Set quest to complete
+          questChainObject.questInformation[i].questStatus = 'complete';
+
+          // Advance one more index, if its undefined: set the quest chain to
+          // complete. else set the next quest to active.
+          if ((0, _isUndefined2.default)(questChainObject.questInformation[i + 1])) {
+            questChainObject.status = 'complete';
+            return;
+          } else {
+            questChainObject.questInformation[i + 1].questStatus = 'active';
+            return;
+          }
+        }
+      }
+    }
+
+    /**
+     * is the current quest chain complete?
+     *
+     * Quest chains are either complete or incomplete based on the status of
+     * the quests in them. If all the quests are complete then the quest chain is
+     * complete.
+     *
+     * @param int questChainId
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return return boolean
+     */
+
+  }, {
+    key: 'isQuestChainComplete',
+    value: function isQuestChainComplete(questChainId, eventId, mapId) {
+      var questChainObject = this.getQuestChain(questChainId, eventId, mapId);
+
+      if (!questChainObject) {
+        throw new Error('No Quest Chain with id of: ' + questChainId + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      return questChainObject.status === 'complete';
+    }
+
+    /**
+     * Determins if the quest chain its self is active.
+     *
+     * @param int questChainId
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return boolean
+     */
+
+  }, {
+    key: 'isQuestChainActive',
+    value: function isQuestChainActive(questChainId, eventId, mapId) {
+      var questChainObject = this.getQuestChain(questChainId, eventId, mapId);
+
+      if (!questChainObject) {
+        throw new Error('No Quest Chain with id of: ' + questChainId + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      return questChainObject.status === 'active';
+
+      return false;
+    }
+
+    /**
+     * Is a single quest active?
+     *
+     * Is a non quest chain quest active?
+     *
+     * @param string title
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return boolean
+     */
+
+  }, {
+    key: 'isSingleQuestActive',
+    value: function isSingleQuestActive(title, eventId, mapId) {
+      var questObject = this.getSingleQuest(title, eventId, mapId);
+
+      if (!questObject) {
+        throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      return questObject.status === 'active';
+    }
+
+    /**
+     * Is a single quest complete?
+     *
+     * Is a non quest chain quest complete?
+     *
+     * @param string title
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return boolean
+     */
+
+  }, {
+    key: 'isSingleQuestComplete',
+    value: function isSingleQuestComplete(title, eventId, mapId) {
+      var questObject = this.getSingleQuest(title, eventId, mapId);
+
+      if (!questObject) {
+        throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      return questObject.status === 'complete';
+    }
+
+    /**
+     * Is a single quest incomplete?
+     *
+     * Is a non quest chain quest incomplete?
+     *
+     * @param string title
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return boolean
+     */
+
+  }, {
+    key: 'isSingleQuestIncomplete',
+    value: function isSingleQuestIncomplete(title, eventId, mapId) {
+      var questObject = this.getSingleQuest(title, eventId, mapId);
+
+      if (!questObject) {
+        throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      }
+
+      return questObject.status === 'incomplete';
+    }
 
     /**
      * Get a single quest whos title matches the title you passed in.
@@ -3195,10 +3458,14 @@ var FlareQuest = (function () {
      *
      * @param string title
      * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
      * @return object
      */
-    value: function getSingleQuest(title, eventId) {
-      return _quest_container2.default.getQuestNameFromEvent(title, eventId);
+
+  }, {
+    key: 'getSingleQuest',
+    value: function getSingleQuest(title, eventId, mapId) {
+      return _quest_container2.default.getQuestNameFromEvent(title, eventId, mapId);
     }
 
     /**
@@ -3232,6 +3499,23 @@ var FlareQuest = (function () {
     value: function getQuestChainQuest(title, questChainId, eventId) {
       return _quest_container2.default.getQuestFromQuestChain(title, questChainId, eventId);
     }
+
+    /**
+     * Returns a quest chain object for an event.
+     *
+     * Returns withr the quest chain object or false.
+     *
+     * @param int questChainId
+     * @param int eventId
+     * @param int mapId - optional, find object based on map id as well
+     * @return boolean
+     */
+
+  }, {
+    key: 'getQuestChain',
+    value: function getQuestChain(questChainId, eventId, mapId) {
+      return _quest_container2.default.getQuestChainObjectForEvent(questChainId, eventId, mapId);
+    }
   }]);
 
   return FlareQuest;
@@ -3242,7 +3526,7 @@ var FlareQuest = (function () {
 // Opens this up for the user.
 window.FlareQuest = FlareQuest;
 
-},{"./system/container/quest_container":73}],73:[function(require,module,exports){
+},{"./system/container/quest_container":73,"lodash/lang/isUndefined":63}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -3344,44 +3628,19 @@ var QuestContainer = (function () {
         return false;
       }
 
-      return true;
-    }
-
-    /**
-     * Returns an object matchin this id or false.
-     *
-     * @param int id
-     * @return false or object
-     */
-
-  }, {
-    key: 'getQuestObjectBasedOnMapId',
-    value: function getQuestObjectBasedOnMapId(id) {
-      if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
-        return false;
-      }
-
-      var containerObject = (0, _find2.default)(this.getQuestContainer(), function (container) {
-        return container.mapId === id;
-      });
-
-      if ((0, _isUndefined2.default)(containerObject)) {
-        return false;
-      }
-
-      return true;
+      return containerObject;
     }
 
     /**
      * Does the container already contain a quest chain with id?
      *
-     * @param int id
+     * @param int questChainId
      * @return boolean
      */
 
   }, {
     key: 'containsQuestChain',
-    value: function containsQuestChain(id, eventId) {
+    value: function containsQuestChain(questChainId, eventId) {
       if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
         return false;
       }
@@ -3411,12 +3670,18 @@ var QuestContainer = (function () {
 
   }, {
     key: 'getQuestNameFromEvent',
-    value: function getQuestNameFromEvent(title, eventId) {
+    value: function getQuestNameFromEvent(title, eventId, mapId) {
+      var questObject = null;
+
       if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
         return false;
       }
 
-      var questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId });
+      if (!(0, _isUndefined2.default)(mapId) && mapId !== 0) {
+        questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId, mapId: mapId });;
+      } else {
+        questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId });
+      }
 
       if ((0, _isUndefined2.default)(questObject)) {
         return false;
@@ -3430,6 +3695,15 @@ var QuestContainer = (function () {
 
       return foundItem;
     }
+
+    /**
+     * Get a single quest from a quest chain.
+     *
+     * @param string title
+     * @param int questChainId
+     * @param int eventId
+     */
+
   }, {
     key: 'getQuestFromQuestChain',
     value: function getQuestFromQuestChain(title, questChainId, eventId) {
@@ -3456,6 +3730,44 @@ var QuestContainer = (function () {
       }
 
       return foundItem;
+    }
+
+    /**
+     * Get a whiole quest chain object.
+     *
+     * Returns the entire quest chain object based on id and event id.
+     *
+     * @param int questChainId
+     * @param int eventId
+     * @return false or object
+     */
+
+  }, {
+    key: 'getQuestChainObjectForEvent',
+    value: function getQuestChainObjectForEvent(questChainId, eventId, mapId) {
+      var questObject;
+
+      if ((0, _isUndefined2.default)(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+        return false;
+      }
+
+      if (!(0, _isUndefined2.default)(mapId) && mapId !== 0) {
+        questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId, mapId: mapId });;
+      } else {
+        questObject = (0, _findWhere2.default)(this.getQuestContainer(), { eventId: eventId });
+      }
+
+      if ((0, _isUndefined2.default)(questObject)) {
+        return false;
+      }
+
+      var questChainObject = (0, _findWhere2.default)(questObject.questChains, { questChainId: questChainId });
+
+      if ((0, _isUndefined2.default)(questChainObject)) {
+        return false;
+      }
+
+      return questChainObject;
     }
   }]);
 
@@ -3577,8 +3889,6 @@ var CreateQuestObjects = (function () {
       if (!_quest_container2.default.getQuestObjectBasedOnEventId(eventId)) {
         _quest_container2.default.storeQuestinformation($gameMap.mapId(), eventId, this._singleQuestData, this._questChainData);
       }
-
-      console.log(_quest_container2.default.getQuestContainer());
     }
 
     /**
@@ -3673,9 +3983,9 @@ var CreateQuestObjects = (function () {
       singleQuestData.push({
         questTitle: individualQuest.title,
         questLevel: individualQuest.level,
+        questStatus: "incomplete",
         objectives: this._parseQuestText.parseQuestObjective(individualQuest.block),
-        rewardInfo: this._parseQuestText.parseQuestReward(individualQuest.block)[0],
-        queststatus: "incomplete"
+        rewardInfo: this._parseQuestText.parseQuestReward(individualQuest.block)[0]
       });
     }
   }]);

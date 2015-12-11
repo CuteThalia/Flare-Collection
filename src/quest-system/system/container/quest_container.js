@@ -66,16 +66,16 @@ class QuestContainer {
       return false;
     }
 
-    return true;
+    return containerObject;
   }
 
   /**
    * Does the container already contain a quest chain with id?
    *
-   * @param int id
+   * @param int questChainId
    * @return boolean
    */
-  static containsQuestChain(id, eventId) {
+  static containsQuestChain(questChainId, eventId) {
     if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
       return false;
     }
@@ -102,12 +102,18 @@ class QuestContainer {
    * @param int event id
    * @return array or false
    */
-  static getQuestNameFromEvent(title, eventId) {
+  static getQuestNameFromEvent(title, eventId, mapId) {
+    var questObject = null;
+
     if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
       return false;
     }
 
-    var questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+    if (!lodashIsUndefined(mapId) && mapId !== 0) {
+      questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId, mapId: mapId});;
+    } else {
+      questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+    }
 
     if (lodashIsUndefined(questObject)) {
       return false;
@@ -153,6 +159,41 @@ class QuestContainer {
     }
 
     return foundItem;
+  }
+
+  /**
+   * Get a whiole quest chain object.
+   *
+   * Returns the entire quest chain object based on id and event id.
+   *
+   * @param int questChainId
+   * @param int eventId
+   * @return false or object
+   */
+  static getQuestChainObjectForEvent(questChainId, eventId, mapId) {
+    var questObject;
+
+    if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+      return false;
+    }
+
+    if (!lodashIsUndefined(mapId) && mapId !== 0) {
+      questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId, mapId: mapId});;
+    } else {
+      questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+    }
+
+    if (lodashIsUndefined(questObject)) {
+      return false;
+    }
+
+    var questChainObject = lodashFindWhere(questObject.questChains, {questChainId: questChainId});
+
+    if (lodashIsUndefined(questChainObject)) {
+      return false;
+    }
+
+    return questChainObject
   }
 }
 
