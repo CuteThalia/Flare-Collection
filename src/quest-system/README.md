@@ -60,26 +60,26 @@ directly on the `FlareQuest` class.
 either active: `setSingleQuestToActive`, complete: `setSingleQuestToComplete` or incomplete: `setSingleQuestToIncomplete` by passing in the title of the quest and
 event id that the quest belongs to.
 
-  These functions can return `false` if the quest in question is not found.
-
   Map Id is optional, how ever if passed in we activate a quest on that map belonging to that event
 
 - `isSingleQuestActive/Complete/InComplete(title, eventId, mapId)` - As the method name suggests, we will check if the quest, a non quest chain quest, is complete: `isSingleQuestComplete`, incomplete: `isSingleQuestIncomplete` or active: `isSingleQuestActive`. Depending on the method called.
 
-  These methods can all be used in conditional branches as they return `true`/`false` depending on the status of the quest.
-
   Map Id is optional, how ever if passed in we check a quest on that map belonging to that event
 
-- `activateQuestChain(questChainId, eventId, mapId)` - Activates a quest chain by setting the status of the first quest to active. Can return false if no quest chain is found.
+- `activateQuestChain(questChainId, eventId, mapId)` - Activates a quest chain by setting the status of the first quest to active.
 
   Map Id is optional, how ever if passed in we activate a quest chain on that map belonging to that event
 
-- `moveToNextQuestInChain(questChainId, eventId, mapId)` - As long as a quest chain exists for this event (can return false if one isn't found) then we will walk through the quests, find the first active, set it to complete and then set the next quest, assuming there is one, to active. If another quest doesn't exist we set the quest chain status to complete. Can return false if no quest chain is found.
+- `moveToNextQuestInChain(questChainId, eventId, mapId)` - As long as a quest chain exists for this event (can return false if one isn't found) then we will walk through the quests, find the first active, set it to complete and then set the next quest, assuming there is one, to active. If another quest doesn't exist we set the quest chain status to complete.
 
   Map Id is optional, how ever if passed in we process a quest chain on that map belonging to that event
 
-- `isQuestChainComplete/Active(questChainId, eventId, mapId)` - Determines if a quest chains status is complete or incomplete. `false` is also returned if a quest chain object cannot be found. By using `isQuestChainComplete` or `isQuestChainActive` we look to see if you have activated the quest chain by simply calling `activateQuestChain`, if so the quest chain
+- `isQuestChainComplete/Active(questChainId, eventId, mapId)` - Determines if a quest chains status is complete or incomplete. By using `isQuestChainComplete` or `isQuestChainActive` we look to see if you have activated the quest chain by simply calling `activateQuestChain`, if so the quest chain
 is then active. To make the quest chain complete you have call `moveToNextQuestInChain` until all quests are complete, if they are, then the `moveToNextQuestInChain` will automatically set the quest chain status from active to complete.
+
+  Map Id is optional, how ever if passed in we check if the quest chain is complete or active on that map belonging to that event
+
+- `resetQuestChain(questChainId, eventId, mapId)` - Resets a quest chain based on quest chain id, event id and/or map id. This resets the quest chain and all quests to incomplete status.
 
   Map Id is optional, how ever if passed in we check if the quest chain is complete or active on that map belonging to that event
 

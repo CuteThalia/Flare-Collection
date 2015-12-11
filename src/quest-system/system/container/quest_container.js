@@ -96,10 +96,11 @@ class QuestContainer {
   }
 
   /**
-   * Returns a quest based on the title and event id.
+   * Returns a quest based on the title and event id as well as map id
    *
    * @param string title
    * @param int event id
+   * @param int mapId
    * @return array or false
    */
   static getQuestNameFromEvent(title, eventId, mapId) {
@@ -162,12 +163,13 @@ class QuestContainer {
   }
 
   /**
-   * Get a whiole quest chain object.
+   * Get a whole quest chain object.
    *
-   * Returns the entire quest chain object based on id and event id.
+   * Returns the entire quest chain object based on id and event id as well as map id.
    *
    * @param int questChainId
    * @param int eventId
+   * @param int mapId
    * @return false or object
    */
   static getQuestChainObjectForEvent(questChainId, eventId, mapId) {
@@ -188,6 +190,43 @@ class QuestContainer {
     }
 
     var questChainObject = lodashFindWhere(questObject.questChains, {questChainId: questChainId});
+
+    if (lodashIsUndefined(questChainObject)) {
+      return false;
+    }
+
+    return questChainObject
+  }
+
+  /**
+   * Get a whole quest chain object.
+   *
+   * Returns the entire quest chain object based on id and event id as well as possibly map and the status
+   *
+   * @param int questChainId
+   * @param int eventId
+   * @param int mapId
+   * param string
+   * @return false or object
+   */
+  static getCompletedQuestChainObject(questChainId, eventId, mapId, status) {
+    var questObject;
+
+    if (lodashIsUndefined(this.getQuestContainer()) || this.getQuestContainer().length === 0) {
+      return false;
+    }
+
+    if (!lodashIsUndefined(mapId) && mapId !== 0) {
+      questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId, mapId: mapId});;
+    } else {
+      questObject = lodashFindWhere(this.getQuestContainer(), {eventId: eventId});
+    }
+
+    if (lodashIsUndefined(questObject)) {
+      return false;
+    }
+
+    var questChainObject = lodashFindWhere(questObject.questChains, {questChainId: questChainId, status: status});
 
     if (lodashIsUndefined(questChainObject)) {
       return false;

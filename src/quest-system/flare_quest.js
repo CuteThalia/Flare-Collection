@@ -39,8 +39,17 @@ class FlareQuest {
   static setSingleQuestToActive(title, eventId, mapId) {
     var questObject = this.getSingleQuest(title, eventId, mapId);
 
-    if (questObject.status !== 'complete') {}
-    questObject.status = 'active'
+    if (!questObject) {
+      throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + 'exist on this map? If not pass in an Map Id as well.');
+    }
+
+    if (questObject.status === 'complete') {
+      throw new Error('Woops! Cannot activate a complete quest. Please use: setSingleQuestToIncomeplete to set a quest to incomplete beffore activating it again.')
+    }
+
+    if (questObject.status !== 'active') {
+      questObject.status = 'active'
+    }
   }
 
   /**
@@ -57,7 +66,7 @@ class FlareQuest {
     var questObject = this.getSingleQuest(title, eventId, mapId);
 
     if (!questObject) {
-      return false;
+      throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + 'exist on this map? If not pass in an Map Id as well.');
     }
 
     questObject.status = 'complete'
@@ -77,7 +86,7 @@ class FlareQuest {
     var questObject = this.getSingleQuest(title, eventId, mapId);
 
     if (!questObject) {
-      throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+      throw new Error('No Quest: ' + title + ' exists. Does the event: ' + eventId + 'exist on this map? If not pass in an Map Id as well.');
     }
 
     if (!this.isSingleQuestActive(title, eventId, mapId) && !this.isSingleQuestComplete(title, eventId, mapId)) {
@@ -105,8 +114,14 @@ class FlareQuest {
       throw new Error('No Quest Chain with id of: ' + questChainId + ' exists. Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
     }
 
-    questChainObject.questInformation[0].questStatus = 'active';
-    questChainObject.status = 'active';
+    if (questChainObject.status !== 'complete') {
+      throw new Error('Woops! Cannot activate a complete quest chain. Please use: resetQuestChain to set a quest chain to incomplete beffore activating it again.');
+    }
+
+    if (questChainObject.status !== 'active') {
+      questChainObject.questInformation[0].questStatus = 'active';
+      questChainObject.status = 'active';
+    }
   }
 
   /**
@@ -188,6 +203,27 @@ class FlareQuest {
     return questChainObject.status === 'active';
 
     return false;
+  }
+
+  /**
+   * Resets a whole quest chain so you can re-activate it.
+   *
+   * @param int questChainId
+   * @param int eventId
+   * @param int mapId - optional, find object based on map id as well
+   */
+  static resetQuestChain(questChainId, eventId, mapId) {
+    var questChainObject = this.getQuesCompletetChain(questChainId, eventId, mapId, 'complete');
+
+    if (!questChainObject) {
+      throw new Error('No Quest Chain with id of: ' + questChainId + ' exists that is "complete". Does the event: ' + eventId + ' exist on this map? If not pass in an Map Id as well.');
+    }
+
+    for (var i = 0; i < questChainObject.length; i++) {
+      questChainObject.questInformation[i].questStatus = 'incomplete'
+    }
+
+    return questChainObject.status === 'incomplete';
   }
 
   /**
@@ -303,6 +339,21 @@ class FlareQuest {
    */
   static getQuestChain(questChainId, eventId, mapId) {
     return QuestContainer.getQuestChainObjectForEvent(questChainId, eventId, mapId);
+  }
+
+  /**
+   * Gets a complete quest chain object.
+   *
+   * Returns false if no quest chain object is found matching the questChain/event/map or status.
+   *
+   * @param int questChainId
+   * @param int eventId
+   * @param int mapId
+   * @param string status
+   * @return object or false
+   */
+  static getQuesCompletetChain(questChainId, eventId, mapId, status) {
+    return QuestContainer.getCompletedQuestChainObject(questChainId, eventId, mapId, status);
   }
 };
 
