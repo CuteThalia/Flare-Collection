@@ -6,6 +6,7 @@
   "plugins": [
     "syntax-exponentiation-operator",
     "syntax-class-constructor-call",
-    "transform-class-constructor-call"
+    "transform-class-constructor-call",
+    "lodash"
   ]
 }
