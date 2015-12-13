@@ -78,7 +78,7 @@ class FlarePlayMusicOnRegionTouch {
    * @param int pan
    */
   static playMusic(regions, type, name, volume, pitch, pan) {
-    if (Array.isArray(regions)) {
+    if (!Array.isArray(regions)) {
       throw new Error('regions must be an array: [1,...,x] or [1]');
     }
 
@@ -94,7 +94,7 @@ class FlarePlayMusicOnRegionTouch {
    * @param int length
    */
   static fadeOutOnRegions(regions, type, length) {
-    if (Array.isArray(regions)) {
+    if (!Array.isArray(regions)) {
       throw new Error('regions must be an array: [1,...,x] or [1]');
     }
 
