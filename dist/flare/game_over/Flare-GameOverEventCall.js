@@ -1723,6 +1723,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /*:
  * @plugindesc Allows you to call an event instead of an immediate game over.
  * @author Adam Balan (AKA: DarknessFalls)
+ *
+ * @help
+ *
+ * Create a common event with a trigger of none. Then create a second
+ * parallel process with the following script call:
+ *
+ *  FlareGameOverEventCall.callEvent(commonEventIdYouCreated)
+ *
+ * Thats it. When the party either dies on map via script calls or events that
+ * kill every one, or when the party dies in a battle they can loose, this
+ * will script will kick in, it will revive every one and then call the common
+ * event. If you are in battle then we revive, pop the scene and call
+ * the common event.
+ */
+
+/**
+ * Allows you to call a common event when the party is all dead.
  */
 
 var FlareGameOverEventCall = (function () {
@@ -1732,6 +1749,15 @@ var FlareGameOverEventCall = (function () {
 
   _createClass(FlareGameOverEventCall, null, [{
     key: 'callEvent',
+
+    /**
+     * Public method. Call a common event
+     *
+     * When the party is dead call a common event. This also works if the party is in a battle
+     * and they die.
+     *
+     * @param int eventId
+     */
     value: function callEvent(eventId) {
       this._eventId = eventId;
       this._callEvent = true;
@@ -1741,6 +1767,13 @@ var FlareGameOverEventCall = (function () {
         $gameTemp.reserveCommonEvent(FlareGameOverEventCall._getEventId());
       }
     }
+
+    /**
+     * Private function. Should we call an event?
+     *
+     * @return boolean
+     */
+
   }, {
     key: '_calleEvent',
     value: function _calleEvent() {
@@ -1750,6 +1783,13 @@ var FlareGameOverEventCall = (function () {
 
       return this._callEvent;
     }
+
+    /**
+     * Get the event id to call.
+     *
+     * @return id if its set or throw an error.
+     */
+
   }, {
     key: '_getEventId',
     value: function _getEventId() {
@@ -1783,7 +1823,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var oldBattleManagerUpdateBattleEndMethod = BattleManager.updateBattleEnd;
 BattleManager.updateBattleEnd = function () {
-  if (!this.isBattleTest() && $gameParty.isAllDead() && FlareGameOverEventCall._calleEvent()) {
+  // If you are not a battle test, all dead, have an event to call and cannot loose, then we call the common event
+  // After reviving you and poping the battle scene off.
+  ///
+  // Else, call the original method.
+  if (!this.isBattleTest() && $gameParty.isAllDead() && FlareGameOverEventCall._calleEvent() && !this._canLose) {
     $gameParty.reviveBattleMembers();
     SceneManager.pop();
     $gameTemp.reserveCommonEvent(FlareGameOverEventCall._getEventId());
