@@ -844,7 +844,7 @@ var FlarePlayMusicOnRegionTouch = (function () {
      * @param int pan
      */
     value: function playMusic(regions, type, name, volume, pitch, pan) {
-      if (Array.isArray(regions)) {
+      if (!Array.isArray(regions)) {
         throw new Error('regions must be an array: [1,...,x] or [1]');
       }
 
@@ -863,7 +863,7 @@ var FlarePlayMusicOnRegionTouch = (function () {
   }, {
     key: 'fadeOutOnRegions',
     value: function fadeOutOnRegions(regions, type, length) {
-      if (Array.isArray(regions)) {
+      if (!Array.isArray(regions)) {
         throw new Error('regions must be an array: [1,...,x] or [1]');
       }
 
