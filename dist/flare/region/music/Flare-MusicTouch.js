@@ -1078,16 +1078,22 @@ var oldSceneMapPrototypeUpdateMethod = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function () {
   oldSceneMapPrototypeUpdateMethod.call(this);
 
+  // Do we have a Music Handler instance?
   if (!(0, _isUndefined2.default)(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
 
+    // Grab some info.
     var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
     var foundItem = (0, _includes2.default)(musicHandler.getRegions(), $gamePlayer.regionId());
 
+    // Musics not playing and we found that player is on region x.
+    // Play music and then state "yes we are playing music".
     if (foundItem && !FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
       musicHandler.playMusic();
       FlarePlayMusicOnRegionTouch.setMusicToPlay(true);
     }
 
+    // Music is plating and player is on region y.
+    // Fade out or stop music and then state: No we are not playing music.
     if (FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
       var foundItem = (0, _includes2.default)(musicHandler.getFadeOutRegions(), $gamePlayer.regionId());
 
