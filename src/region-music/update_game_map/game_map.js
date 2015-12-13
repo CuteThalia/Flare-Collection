@@ -1,28 +1,27 @@
 import lodashIsUndefined from 'lodash/lang/isUndefined';
 import lodashIncludes    from 'lodash/collection/includes';
 
-var oldGameMapPrototypeRegionId = Game_Map.prototype.regionId;
-Game_Map.prototype.regionId = function(x, y) {
-    if (!lodashIsUndefined(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
-      var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
-      var id           = this.isValid(x, y) ? this.tileId(x, y, 5) : 0;
+var oldSceneMapPrototypeUpdateMethod = Scene_Map.prototype.update;
+Scene_Map.prototype.update = function() {
+  oldSceneMapPrototypeUpdateMethod.call(this);
 
-      var foundItem = lodashIncludes(musicHandler.getRegions(), id);
+  if (!lodashIsUndefined(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
 
-      if (foundItem && !FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
-        musicHandler.playMusic();
-        FlarePlayMusicOnRegionTouch.setMusicToPlay(true);
-      }
+    var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
+    var foundItem = lodashIncludes(musicHandler.getRegions(), $gamePlayer.regionId());
 
-      if (FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
-        var foundItem = lodashIncludes(musicHandler.getFadeOutRegions(), id);
-
-        if (foundItem) {
-          musicHandler.fadeOutSpecifiedTypeOnRegionTouch();
-          FlarePlayMusicOnRegionTouch.setMusicToPlay(false);
-        }
-      }
+    if (foundItem && !FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
+      musicHandler.playMusic();
+      FlarePlayMusicOnRegionTouch.setMusicToPlay(true);
     }
 
-    return oldGameMapPrototypeRegionId.call(this, x, y);
+    if (FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
+      var foundItem = lodashIncludes(musicHandler.getFadeOutRegions(), $gamePlayer.regionId());
+
+      if (foundItem) {
+        musicHandler.fadeOutSpecifiedTypeOnRegionTouch();
+        FlarePlayMusicOnRegionTouch.setMusicToPlay(false);
+      }
+    }
+  }
 };

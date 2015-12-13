@@ -1074,13 +1074,14 @@ var _includes2 = _interopRequireDefault(_includes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var oldGameMapPrototypeRegionId = Game_Map.prototype.regionId;
-Game_Map.prototype.regionId = function (x, y) {
-  if (!(0, _isUndefined2.default)(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
-    var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
-    var id = this.isValid(x, y) ? this.tileId(x, y, 5) : 0;
+var oldSceneMapPrototypeUpdateMethod = Scene_Map.prototype.update;
+Scene_Map.prototype.update = function () {
+  oldSceneMapPrototypeUpdateMethod.call(this);
 
-    var foundItem = (0, _includes2.default)(musicHandler.getRegions(), id);
+  if (!(0, _isUndefined2.default)(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
+
+    var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
+    var foundItem = (0, _includes2.default)(musicHandler.getRegions(), $gamePlayer.regionId());
 
     if (foundItem && !FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
       musicHandler.playMusic();
@@ -1088,7 +1089,7 @@ Game_Map.prototype.regionId = function (x, y) {
     }
 
     if (FlarePlayMusicOnRegionTouch.isMusicPlaying()) {
-      var foundItem = (0, _includes2.default)(musicHandler.getFadeOutRegions(), id);
+      var foundItem = (0, _includes2.default)(musicHandler.getFadeOutRegions(), $gamePlayer.regionId());
 
       if (foundItem) {
         musicHandler.fadeOutSpecifiedTypeOnRegionTouch();
@@ -1096,8 +1097,6 @@ Game_Map.prototype.regionId = function (x, y) {
       }
     }
   }
-
-  return oldGameMapPrototypeRegionId.call(this, x, y);
 };
 
 },{"lodash/collection/includes":1,"lodash/lang/isUndefined":20}]},{},[24,26]);
