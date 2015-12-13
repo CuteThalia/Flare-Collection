@@ -43,6 +43,7 @@ gulp.task('make:flare-play-music', function() {
       .bundle()
       .pipe(source('Flare-MusicTouch.js'))
       .pipe(gulp.dest('dist/flare/region/music/'));
+});
 
 gulp.task('make:flare-game-over-event', function() {
   return browserify({entries: [
@@ -53,7 +54,6 @@ gulp.task('make:flare-game-over-event', function() {
       .bundle()
       .pipe(source('Flare-GameOverEventCall.js'))
       .pipe(gulp.dest('dist/flare/game_over/'));
->>>>>>> fd7c72bf083f100d8383ef76441842b93ccd3d2a
 });
 
 gulp.task('make:flare-laws-for-map', function() {

@@ -1,6 +1,7 @@
 import lodashIsUndefined from 'lodash/lang/isUndefined';
 import lodashIncludes    from 'lodash/collection/includes';
 
+var oldGameMapPrototypeRegionId = Game_Map.prototype.regionId;
 Game_Map.prototype.regionId = function(x, y) {
     if (!lodashIsUndefined(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
       var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
@@ -23,5 +24,5 @@ Game_Map.prototype.regionId = function(x, y) {
       }
     }
 
-    return this.isValid(x, y) ? this.tileId(x, y, 5) : 0;
+    return oldGameMapPrototypeRegionId.call(this, x, y);
 };

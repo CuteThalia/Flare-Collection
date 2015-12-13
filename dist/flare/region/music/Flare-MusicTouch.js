@@ -766,6 +766,64 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @author Adam Balan (AKA: DarknessFalls)
  *
  * @help
+ *
+ * Playing music on region touch is super simple. All you
+ * have to do is the following:
+ *
+ * Paint down a couple regions, one or more is fine. These are the regions
+ * that when a player touches the sound will play.
+ *
+ * Paint down a couple other regions. One or more is fine.
+ * These are the regions that when a player touches, the
+ * music fades out.
+ *
+ * Next create a parallel event, add the following code:
+ *
+ * FlarePlayMusicOnRegionTouch.playMusic(
+ *  regions, type, name, volume, pitch, pan
+ * );
+ *
+ * FlarePlayMusicOnRegionTouch.fadeOutOnRegions(
+ *  regions, type, length
+ * );
+ *
+ * - Regions is an array of regions, it must be an array.
+ *   Example: [1,2,3] or [1]
+ * - type is: BGS, ME, SE, BGM as a string.
+ * - name is the name of the file you want to play.
+ *   If this doesnt exist and erro is thrown.
+ *
+ * - volume, 0 - 100
+ * - pitch, 0 - 100
+ * - pan, the higher it is the more to the right it plays,
+ *   the lower more to the left. Pass in 0 for
+ *   for equal speaker play.
+ *
+ * - length, for fadeOut. The length (default 15) of how
+ *   long the music takes to
+ *   fade out for BGM and BGS and ME. The higher the length,
+ *   the longer it takes.
+ *
+ * Example:
+ *
+ *   FlarePlayMusicOnRegionTouch.playMusic(
+ *     [19], 'BGS', 'River', 50, 100, 0
+ *   )
+ *
+ *   FlarePlayMusicOnRegionTouch.fadeOutOnRegions(
+ *     [20], 'BGS', 2
+ *   )
+ *
+ * The above states that, turn on BGS River at volume 50 with pitch
+ * of 100 and pan of 0, when the player touches region 19.
+ *
+ * Then  we, turn off  (or fade out) BGS music when the player touches
+ * region 20 at a length of 2 seconds.
+ *
+ */
+
+/**
+ * Class for dealing with music on region touch.
  */
 
 var FlarePlayMusicOnRegionTouch = (function () {
@@ -775,13 +833,40 @@ var FlarePlayMusicOnRegionTouch = (function () {
 
   _createClass(FlarePlayMusicOnRegionTouch, null, [{
     key: 'playMusic',
+
+    /**
+     * Plays music when the user touches any of the regions listed.
+     *
+     * @param array regions
+     * @param string type
+     * @param int volume
+     * @param int pitch
+     * @param int pan
+     */
     value: function playMusic(regions, type, name, volume, pitch, pan) {
+      if (Array.isArray(regions)) {
+        throw new Error('regions must be an array: [1,...,x] or [1]');
+      }
+
       var musicHandler = new _music_handler2.default(regions, type, name, volume, pitch, pan);
       this._setMusicHandlerInstance(musicHandler);
     }
+
+    /**
+     * Fades out the music when the player touches any of the regions specified.
+     *
+     * @param Array regions
+     * @param string type
+     * @param int length
+     */
+
   }, {
     key: 'fadeOutOnRegions',
     value: function fadeOutOnRegions(regions, type, length) {
+      if (Array.isArray(regions)) {
+        throw new Error('regions must be an array: [1,...,x] or [1]');
+      }
+
       if ((0, _isUndefined2.default)(this._getMusicHandlerInstance())) {
         throw new Error('Cannot fade out music on specified regions, because we dont know which regions to fade in music on.');
       }
@@ -792,11 +877,25 @@ var FlarePlayMusicOnRegionTouch = (function () {
 
       this._getMusicHandlerInstance().fadeOutMusic(regions, type, length);
     }
+
+    /**
+     * Set the music to playing.
+     *
+     * @param boolean
+     */
+
   }, {
     key: 'setMusicToPlay',
     value: function setMusicToPlay(playing) {
       this._musicIsPlaying = playing;
     }
+
+    /**
+     * Is the music playing?
+     *
+     * @return boolean
+     */
+
   }, {
     key: 'isMusicPlaying',
     value: function isMusicPlaying() {
@@ -806,6 +905,13 @@ var FlarePlayMusicOnRegionTouch = (function () {
 
       return this._musicIsPlaying;
     }
+
+    /**
+     * Create a music handler instance.
+     *
+     * @param MusicHandler musicClass
+     */
+
   }, {
     key: '_setMusicHandlerInstance',
     value: function _setMusicHandlerInstance(musicClass) {
@@ -815,6 +921,13 @@ var FlarePlayMusicOnRegionTouch = (function () {
         throw new Error(musicClass + 'is not an instance of MusicHandler class');
       }
     }
+
+    /**
+     * Get the Music Handler instance.
+     *
+     * @return undefined or MusicHandler
+     */
+
   }, {
     key: '_getMusicHandlerInstance',
     value: function _getMusicHandlerInstance() {
@@ -834,7 +947,23 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Make music play when user touches region.
+ */
+
 var MusicHandler = (function () {
+
+  /**
+   * Core constructor.
+   *
+   * @param array regions
+   * @param string type
+   * @param string name
+   * @param int volume
+   * @param int pitch
+   * @param int pan
+   */
+
   function MusicHandler(regions, type, name, volume, pitch, pan) {
     _classCallCheck(this, MusicHandler);
 
@@ -845,6 +974,10 @@ var MusicHandler = (function () {
     this._fadeOutRegions = null;
     this._fadeOutLength = 0;
   }
+
+  /**
+   * Use the AudioManager to play music.
+   */
 
   _createClass(MusicHandler, [{
     key: 'playMusic',
@@ -860,6 +993,15 @@ var MusicHandler = (function () {
           return AudioManager.playMe(this._musicObject);
       }
     }
+
+    /**
+     * Set up the fade out music information.
+     *
+     * @param array regions
+     * @param string type
+     * @param int length
+     */
+
   }, {
     key: 'fadeOutMusic',
     value: function fadeOutMusic(regions, type, length) {
@@ -867,6 +1009,11 @@ var MusicHandler = (function () {
       this._fadeOutType = type;
       this._fadeOutLength = length;
     }
+
+    /**
+     * Fade out music over time.
+     */
+
   }, {
     key: 'fadeOutSpecifiedTypeOnRegionTouch',
     value: function fadeOutSpecifiedTypeOnRegionTouch() {
@@ -877,26 +1024,31 @@ var MusicHandler = (function () {
           case 'BGS':
             return AudioManager.fadeOutBgs(this._fadeOutLength);
           case 'SE':
-            while (this._fadeOutLength > 0) {
-              if (this._musicObject.volume > 0) {
-                AudioManager.playSe(this._musicObject);
-                this._musicObject.volume -= 10;
-                this._fadeOutLength--;
-              } else {
-                return AudioManager.stopSe();
-              }
-            }
             return AudioManager.stopSe();
           case 'ME':
             return AudioManager.fadeOutMe(this._fadeOutLength);
         }
       }
     }
+
+    /**
+     * Get the regions
+     *
+     * @return array or undefined
+     */
+
   }, {
     key: 'getRegions',
     value: function getRegions() {
       return this._regions;
     }
+
+    /**
+     * Get the fade out regions.
+     *
+     * @return array or undefined
+     */
+
   }, {
     key: 'getFadeOutRegions',
     value: function getFadeOutRegions() {
@@ -922,6 +1074,7 @@ var _includes2 = _interopRequireDefault(_includes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var oldGameMapPrototypeRegionId = Game_Map.prototype.regionId;
 Game_Map.prototype.regionId = function (x, y) {
   if (!(0, _isUndefined2.default)(FlarePlayMusicOnRegionTouch._getMusicHandlerInstance())) {
     var musicHandler = FlarePlayMusicOnRegionTouch._getMusicHandlerInstance();
@@ -944,7 +1097,7 @@ Game_Map.prototype.regionId = function (x, y) {
     }
   }
 
-  return this.isValid(x, y) ? this.tileId(x, y, 5) : 0;
+  return oldGameMapPrototypeRegionId.call(this, x, y);
 };
 
 },{"lodash/collection/includes":1,"lodash/lang/isUndefined":20}]},{},[24,26]);

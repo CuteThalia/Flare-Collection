@@ -1,5 +1,18 @@
+/**
+ * Make music play when user touches region.
+ */
 class MusicHandler {
 
+  /**
+   * Core constructor.
+   *
+   * @param array regions
+   * @param string type
+   * @param string name
+   * @param int volume
+   * @param int pitch
+   * @param int pan
+   */
   constructor(regions, type, name, volume, pitch, pan) {
     this._musicType      = type;
     this._musicObject    = {name: name, volume: volume, pitch: pitch, pan: pan};
@@ -9,6 +22,9 @@ class MusicHandler {
     this._fadeOutLength  = 0;
   }
 
+  /**
+   * Use the AudioManager to play music.
+   */
   playMusic() {
     switch(this._musicType) {
       case 'BGM':
@@ -22,12 +38,22 @@ class MusicHandler {
     }
   }
 
+  /**
+   * Set up the fade out music information.
+   *
+   * @param array regions
+   * @param string type
+   * @param int length
+   */
   fadeOutMusic(regions, type, length) {
     this._fadeOutRegions  = regions;
     this._fadeOutType     = type;
     this._fadeOutLength   = length
   }
 
+  /**
+   * Fade out music over time.
+   */
   fadeOutSpecifiedTypeOnRegionTouch() {
     if (this._fadeOutType && this._fadeOutLength > 0) {
       switch(this._musicType) {
@@ -36,15 +62,6 @@ class MusicHandler {
         case 'BGS':
           return AudioManager.fadeOutBgs(this._fadeOutLength);
         case 'SE':
-          while (this._fadeOutLength > 0) {
-            if (this._musicObject.volume > 0) {
-              AudioManager.playSe(this._musicObject);
-              this._musicObject.volume -= 10
-              this._fadeOutLength --
-            } else {
-              return AudioManager.stopSe();
-            }
-          }
           return AudioManager.stopSe();
         case 'ME':
           return AudioManager.fadeOutMe(this._fadeOutLength);
@@ -52,10 +69,20 @@ class MusicHandler {
     }
   }
 
+  /**
+   * Get the regions
+   *
+   * @return array or undefined
+   */
   getRegions() {
     return this._regions;
   }
 
+  /**
+   * Get the fade out regions.
+   *
+   * @return array or undefined
+   */
   getFadeOutRegions() {
     return this._fadeOutRegions;
   }

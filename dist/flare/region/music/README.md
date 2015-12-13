@@ -21,7 +21,7 @@ So How is this done?
 
   ```js
   FlarePlayMusicOnRegionTouch.playMusic([19], 'BGS', 'River', 50, 100, 0)
-  FlarePlayMusicOnRegionTouch.fadeOutOnRegions([20], 'BGS', 2)
+FlarePlayMusicOnRegionTouch.fadeOutOnRegions([20], 'BGS', 2)
   ```
 
 - Run the game.
