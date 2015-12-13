@@ -37,13 +37,23 @@ gulp.task('make:flare-quest', function() {
 gulp.task('make:flare-notification-window', function() {
   return browserify({entries: [
         'src/add-notification-window/flare_notification_window.js',
-        'src/add-notification-window/scene_map_update/scene_map_update.js',
-        'src/add-notification-window/update_game_interpreter/update_game_interpreter.js'
+        'src/add-notification-window/update_battle_manager/battle_manager.js'
       ]})
       .transform(babelify)
       .bundle()
       .pipe(source('Flare-NotificationWindow.js'))
       .pipe(gulp.dest('dist/flare/notify/'));
+});
+
+gulp.task('make:flare-game-over-event', function() {
+  return browserify({entries: [
+        'src/game-over-event-call/flare_game_over_event_call.js',
+        'src/game-over-event-call/update_battle_manager/battle_manager.js'
+      ]})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('Flare-GameOverEventCall.js'))
+      .pipe(gulp.dest('dist/flare/game_over/'));
 });
 
 gulp.task('make:flare-laws-for-map', function() {
