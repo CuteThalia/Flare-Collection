@@ -26,8 +26,7 @@ gulp.task('make:flare-currency', function() {
 gulp.task('make:flare-notification-window', function() {
   return browserify({entries: [
         'src/add-notification-window/flare_notification_window.js',
-        'src/add-notification-window/scene_map_update/scene_map_update.js',
-        'src/add-notification-window/update_game_interpreter/update_game_interpreter.js'
+        'src/add-notification-window/update_battle_manager/battle_manager.js'
       ]})
       .transform(babelify)
       .bundle()
@@ -44,6 +43,17 @@ gulp.task('make:flare-play-music', function() {
       .bundle()
       .pipe(source('Flare-MusicTouch.js'))
       .pipe(gulp.dest('dist/flare/region/music/'));
+
+gulp.task('make:flare-game-over-event', function() {
+  return browserify({entries: [
+        'src/game-over-event-call/flare_game_over_event_call.js',
+        'src/game-over-event-call/update_battle_manager/battle_manager.js'
+      ]})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('Flare-GameOverEventCall.js'))
+      .pipe(gulp.dest('dist/flare/game_over/'));
+>>>>>>> fd7c72bf083f100d8383ef76441842b93ccd3d2a
 });
 
 gulp.task('make:flare-laws-for-map', function() {

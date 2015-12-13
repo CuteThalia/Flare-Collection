@@ -37,6 +37,8 @@ The current scripts are:
  ![Laws in Menu](http://i.imgur.com/IPlCqXn.png)
  ![broke law in battle](http://i.imgur.com/ZYdBEz9.png)
 
+- **[Flare Call Event On Game Over](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/game_over)**: Allows for you to call a common event on a game over, via party death in battle or through game party death on the map.
+
 ## How to build the script?
 
 Building the scripts is easy:
