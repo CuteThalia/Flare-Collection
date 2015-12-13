@@ -37,7 +37,7 @@ gulp.task('make:flare-notification-window', function() {
 gulp.task('make:flare-play-music', function() {
   return browserify({entries: [
         'src/region-music/flare_play_music_on_region_touch.js',
-        'src/region-music/update_game_map/game_map.js',
+        'src/region-music/update_scene_map/scene_map.js',
       ]})
       .transform(babelify)
       .bundle()
