@@ -10,15 +10,16 @@ import lodashIsUndefined from 'lodash/lang/isUndefined';
  *
  * @help
  *
- * === Usage ===
- *
- * Create a common event with a trigger of none. Then create a second parallel process with the following script call:
+ * Create a common event with a trigger of none. Then create a second
+ * parallel process with the following script call:
  *
  *  FlareGameOverEventCall.callEvent(commonEventIdYouCreated)
  *
- * Thats it. When the party either dies on map via script calls or events that kill every one, or when the party
- * dies in a battle they can loose, this will script will kick in, it will revive every one and then call the common event. If
- * you are in battle then we revive, pop the scene and call the common event.
+ * Thats it. When the party either dies on map via script calls or events that
+ * kill every one, or when the party dies in a battle they can loose, this
+ * will script will kick in, it will revive every one and then call the common
+ * event. If you are in battle then we revive, pop the scene and call
+ * the common event.
  */
 
 /**
