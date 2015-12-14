@@ -19,13 +19,30 @@ BattleManager.processVictory = function() {
         // If we contain the region in the encounter list an the troop id
         // matches that of the troop in that region encounter list add it to the
         // encounter list container.
+        var includesTroopId = false;
+        if (Array.isArray(FlareRemoveTroopFromRegion._getTroopId())) {
+           includesTroopId = lodashIncludes(FlareRemoveTroopFromRegion._getTroopId(), $gameTroop._troopId);
+        }
+        
         if (lodashIncludes($dataMap.encounterList[i].regionSet,
             FlareRemoveTroopFromRegion._getRegionId()) &&
             $gameMap.encounterList()[i].troopId === FlareRemoveTroopFromRegion._getTroopId() &&
-            !EncounterContainer.doesIndexExist($gameMap.mapId(), i)) {
+            !EncounterContainer.doesIndexExist($gameMap.mapId(), i) &&
+            ($gameTroop._troopId === FlareRemoveTroopFromRegion._getTroopId() || includesTroopId)) {
 
           // Add the index to a container and store it by map id.
           EncounterContainer.setEncounterForRemoval($gameMap.mapId(), i);
+
+          // What if enemy belongs to multiple regions?
+          // Well we only want to remove from the specific region.
+          if ($gameMap.encounterList()[i].regionSet.length > 1) {
+            console.log($gameMap.encounterList()[i]);
+            for (var j = 0; j < $gameMap.encounterList()[i].regionSet.length; i++) {
+              if ($gameMap.encounterList()[i].regionSet[i] === FlareRemoveTroopFromRegion._getRegionId()) {
+                EncounterContainer.addRegionToRemove($gameMap.mapId(), i, $gameTroop._troopId);
+              }
+            }
+          }
         }
       }
     }

@@ -1,4 +1,59 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var createFindIndex = require('../internal/createFindIndex');
+
+/**
+ * This method is like `_.find` except that it returns the index of the first
+ * element `predicate` returns truthy for instead of the element itself.
+ *
+ * If a property name is provided for `predicate` the created `_.property`
+ * style callback returns the property value of the given element.
+ *
+ * If a value is also provided for `thisArg` the created `_.matchesProperty`
+ * style callback returns `true` for elements that have a matching property
+ * value, else `false`.
+ *
+ * If an object is provided for `predicate` the created `_.matches` style
+ * callback returns `true` for elements that have the properties of the given
+ * object, else `false`.
+ *
+ * @static
+ * @memberOf _
+ * @category Array
+ * @param {Array} array The array to search.
+ * @param {Function|Object|string} [predicate=_.identity] The function invoked
+ *  per iteration.
+ * @param {*} [thisArg] The `this` binding of `predicate`.
+ * @returns {number} Returns the index of the found element, else `-1`.
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney',  'active': false },
+ *   { 'user': 'fred',    'active': false },
+ *   { 'user': 'pebbles', 'active': true }
+ * ];
+ *
+ * _.findIndex(users, function(chr) {
+ *   return chr.user == 'barney';
+ * });
+ * // => 0
+ *
+ * // using the `_.matches` callback shorthand
+ * _.findIndex(users, { 'user': 'fred', 'active': false });
+ * // => 1
+ *
+ * // using the `_.matchesProperty` callback shorthand
+ * _.findIndex(users, 'active', false);
+ * // => 0
+ *
+ * // using the `_.property` callback shorthand
+ * _.findIndex(users, 'active');
+ * // => 2
+ */
+var findIndex = createFindIndex();
+
+module.exports = findIndex;
+
+},{"../internal/createFindIndex":29}],2:[function(require,module,exports){
 /**
  * Gets the last element of `array`.
  *
@@ -19,7 +74,7 @@ function last(array) {
 
 module.exports = last;
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var baseEach = require('../internal/baseEach'),
     createFind = require('../internal/createFind');
 
@@ -77,7 +132,7 @@ var find = createFind(baseEach);
 
 module.exports = find;
 
-},{"../internal/baseEach":7,"../internal/createFind":27}],3:[function(require,module,exports){
+},{"../internal/baseEach":8,"../internal/createFind":28}],4:[function(require,module,exports){
 var baseMatches = require('../internal/baseMatches'),
     find = require('./find');
 
@@ -116,7 +171,7 @@ function findWhere(collection, source) {
 
 module.exports = findWhere;
 
-},{"../internal/baseMatches":17,"./find":2}],4:[function(require,module,exports){
+},{"../internal/baseMatches":18,"./find":3}],5:[function(require,module,exports){
 var baseIndexOf = require('../internal/baseIndexOf'),
     getLength = require('../internal/getLength'),
     isArray = require('../lang/isArray'),
@@ -175,7 +230,7 @@ function includes(collection, target, fromIndex, guard) {
 
 module.exports = includes;
 
-},{"../internal/baseIndexOf":13,"../internal/getLength":31,"../internal/isIterateeCall":37,"../internal/isLength":39,"../lang/isArray":46,"../lang/isString":50,"../object/values":56}],5:[function(require,module,exports){
+},{"../internal/baseIndexOf":14,"../internal/getLength":33,"../internal/isIterateeCall":39,"../internal/isLength":41,"../lang/isArray":48,"../lang/isString":52,"../object/values":58}],6:[function(require,module,exports){
 /**
  * A specialized version of `_.some` for arrays without support for callback
  * shorthands and `this` binding.
@@ -200,7 +255,7 @@ function arraySome(array, predicate) {
 
 module.exports = arraySome;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var baseMatches = require('./baseMatches'),
     baseMatchesProperty = require('./baseMatchesProperty'),
     bindCallback = require('./bindCallback'),
@@ -237,7 +292,7 @@ function baseCallback(func, thisArg, argCount) {
 
 module.exports = baseCallback;
 
-},{"../utility/identity":57,"../utility/property":58,"./baseMatches":17,"./baseMatchesProperty":18,"./bindCallback":24}],7:[function(require,module,exports){
+},{"../utility/identity":59,"../utility/property":60,"./baseMatches":18,"./baseMatchesProperty":19,"./bindCallback":25}],8:[function(require,module,exports){
 var baseForOwn = require('./baseForOwn'),
     createBaseEach = require('./createBaseEach');
 
@@ -254,7 +309,7 @@ var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
 
-},{"./baseForOwn":11,"./createBaseEach":25}],8:[function(require,module,exports){
+},{"./baseForOwn":12,"./createBaseEach":26}],9:[function(require,module,exports){
 /**
  * The base implementation of `_.find`, `_.findLast`, `_.findKey`, and `_.findLastKey`,
  * without support for callback shorthands and `this` binding, which iterates
@@ -281,7 +336,7 @@ function baseFind(collection, predicate, eachFunc, retKey) {
 
 module.exports = baseFind;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * The base implementation of `_.findIndex` and `_.findLastIndex` without
  * support for callback shorthands and `this` binding.
@@ -306,7 +361,7 @@ function baseFindIndex(array, predicate, fromRight) {
 
 module.exports = baseFindIndex;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var createBaseFor = require('./createBaseFor');
 
 /**
@@ -325,7 +380,7 @@ var baseFor = createBaseFor();
 
 module.exports = baseFor;
 
-},{"./createBaseFor":26}],11:[function(require,module,exports){
+},{"./createBaseFor":27}],12:[function(require,module,exports){
 var baseFor = require('./baseFor'),
     keys = require('../object/keys');
 
@@ -344,7 +399,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"../object/keys":53,"./baseFor":10}],12:[function(require,module,exports){
+},{"../object/keys":55,"./baseFor":11}],13:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -375,7 +430,7 @@ function baseGet(object, path, pathKey) {
 
 module.exports = baseGet;
 
-},{"./toObject":43}],13:[function(require,module,exports){
+},{"./toObject":45}],14:[function(require,module,exports){
 var indexOfNaN = require('./indexOfNaN');
 
 /**
@@ -404,7 +459,7 @@ function baseIndexOf(array, value, fromIndex) {
 
 module.exports = baseIndexOf;
 
-},{"./indexOfNaN":34}],14:[function(require,module,exports){
+},{"./indexOfNaN":36}],15:[function(require,module,exports){
 var baseIsEqualDeep = require('./baseIsEqualDeep'),
     isObject = require('../lang/isObject'),
     isObjectLike = require('./isObjectLike');
@@ -434,7 +489,7 @@ function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
 
 module.exports = baseIsEqual;
 
-},{"../lang/isObject":49,"./baseIsEqualDeep":15,"./isObjectLike":40}],15:[function(require,module,exports){
+},{"../lang/isObject":51,"./baseIsEqualDeep":16,"./isObjectLike":42}],16:[function(require,module,exports){
 var equalArrays = require('./equalArrays'),
     equalByTag = require('./equalByTag'),
     equalObjects = require('./equalObjects'),
@@ -538,7 +593,7 @@ function baseIsEqualDeep(object, other, equalFunc, customizer, isLoose, stackA, 
 
 module.exports = baseIsEqualDeep;
 
-},{"../lang/isArray":46,"../lang/isTypedArray":51,"./equalArrays":28,"./equalByTag":29,"./equalObjects":30}],16:[function(require,module,exports){
+},{"../lang/isArray":48,"../lang/isTypedArray":53,"./equalArrays":30,"./equalByTag":31,"./equalObjects":32}],17:[function(require,module,exports){
 var baseIsEqual = require('./baseIsEqual'),
     toObject = require('./toObject');
 
@@ -592,7 +647,7 @@ function baseIsMatch(object, matchData, customizer) {
 
 module.exports = baseIsMatch;
 
-},{"./baseIsEqual":14,"./toObject":43}],17:[function(require,module,exports){
+},{"./baseIsEqual":15,"./toObject":45}],18:[function(require,module,exports){
 var baseIsMatch = require('./baseIsMatch'),
     getMatchData = require('./getMatchData'),
     toObject = require('./toObject');
@@ -624,7 +679,7 @@ function baseMatches(source) {
 
 module.exports = baseMatches;
 
-},{"./baseIsMatch":16,"./getMatchData":32,"./toObject":43}],18:[function(require,module,exports){
+},{"./baseIsMatch":17,"./getMatchData":34,"./toObject":45}],19:[function(require,module,exports){
 var baseGet = require('./baseGet'),
     baseIsEqual = require('./baseIsEqual'),
     baseSlice = require('./baseSlice'),
@@ -671,7 +726,7 @@ function baseMatchesProperty(path, srcValue) {
 
 module.exports = baseMatchesProperty;
 
-},{"../array/last":1,"../lang/isArray":46,"./baseGet":12,"./baseIsEqual":14,"./baseSlice":21,"./isKey":38,"./isStrictComparable":41,"./toObject":43,"./toPath":44}],19:[function(require,module,exports){
+},{"../array/last":2,"../lang/isArray":48,"./baseGet":13,"./baseIsEqual":15,"./baseSlice":22,"./isKey":40,"./isStrictComparable":43,"./toObject":45,"./toPath":46}],20:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -687,7 +742,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var baseGet = require('./baseGet'),
     toPath = require('./toPath');
 
@@ -708,7 +763,7 @@ function basePropertyDeep(path) {
 
 module.exports = basePropertyDeep;
 
-},{"./baseGet":12,"./toPath":44}],21:[function(require,module,exports){
+},{"./baseGet":13,"./toPath":46}],22:[function(require,module,exports){
 /**
  * The base implementation of `_.slice` without an iteratee call guard.
  *
@@ -742,7 +797,7 @@ function baseSlice(array, start, end) {
 
 module.exports = baseSlice;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /**
  * Converts `value` to a string if it's not one. An empty string is returned
  * for `null` or `undefined` values.
@@ -757,7 +812,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /**
  * The base implementation of `_.values` and `_.valuesIn` which creates an
  * array of `object` property values corresponding to the property names
@@ -781,7 +836,7 @@ function baseValues(object, props) {
 
 module.exports = baseValues;
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var identity = require('../utility/identity');
 
 /**
@@ -822,7 +877,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":57}],25:[function(require,module,exports){
+},{"../utility/identity":59}],26:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength'),
     toObject = require('./toObject');
@@ -855,7 +910,7 @@ function createBaseEach(eachFunc, fromRight) {
 
 module.exports = createBaseEach;
 
-},{"./getLength":31,"./isLength":39,"./toObject":43}],26:[function(require,module,exports){
+},{"./getLength":33,"./isLength":41,"./toObject":45}],27:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -884,7 +939,7 @@ function createBaseFor(fromRight) {
 
 module.exports = createBaseFor;
 
-},{"./toObject":43}],27:[function(require,module,exports){
+},{"./toObject":45}],28:[function(require,module,exports){
 var baseCallback = require('./baseCallback'),
     baseFind = require('./baseFind'),
     baseFindIndex = require('./baseFindIndex'),
@@ -911,7 +966,30 @@ function createFind(eachFunc, fromRight) {
 
 module.exports = createFind;
 
-},{"../lang/isArray":46,"./baseCallback":6,"./baseFind":8,"./baseFindIndex":9}],28:[function(require,module,exports){
+},{"../lang/isArray":48,"./baseCallback":7,"./baseFind":9,"./baseFindIndex":10}],29:[function(require,module,exports){
+var baseCallback = require('./baseCallback'),
+    baseFindIndex = require('./baseFindIndex');
+
+/**
+ * Creates a `_.findIndex` or `_.findLastIndex` function.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new find function.
+ */
+function createFindIndex(fromRight) {
+  return function(array, predicate, thisArg) {
+    if (!(array && array.length)) {
+      return -1;
+    }
+    predicate = baseCallback(predicate, thisArg, 3);
+    return baseFindIndex(array, predicate, fromRight);
+  };
+}
+
+module.exports = createFindIndex;
+
+},{"./baseCallback":7,"./baseFindIndex":10}],30:[function(require,module,exports){
 var arraySome = require('./arraySome');
 
 /**
@@ -964,7 +1042,7 @@ function equalArrays(array, other, equalFunc, customizer, isLoose, stackA, stack
 
 module.exports = equalArrays;
 
-},{"./arraySome":5}],29:[function(require,module,exports){
+},{"./arraySome":6}],31:[function(require,module,exports){
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]',
     dateTag = '[object Date]',
@@ -1014,7 +1092,7 @@ function equalByTag(object, other, tag) {
 
 module.exports = equalByTag;
 
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var keys = require('../object/keys');
 
 /** Used for native method references. */
@@ -1083,7 +1161,7 @@ function equalObjects(object, other, equalFunc, customizer, isLoose, stackA, sta
 
 module.exports = equalObjects;
 
-},{"../object/keys":53}],31:[function(require,module,exports){
+},{"../object/keys":55}],33:[function(require,module,exports){
 var baseProperty = require('./baseProperty');
 
 /**
@@ -1100,7 +1178,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":19}],32:[function(require,module,exports){
+},{"./baseProperty":20}],34:[function(require,module,exports){
 var isStrictComparable = require('./isStrictComparable'),
     pairs = require('../object/pairs');
 
@@ -1123,7 +1201,7 @@ function getMatchData(object) {
 
 module.exports = getMatchData;
 
-},{"../object/pairs":55,"./isStrictComparable":41}],33:[function(require,module,exports){
+},{"../object/pairs":57,"./isStrictComparable":43}],35:[function(require,module,exports){
 var isNative = require('../lang/isNative');
 
 /**
@@ -1141,7 +1219,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":48}],34:[function(require,module,exports){
+},{"../lang/isNative":50}],36:[function(require,module,exports){
 /**
  * Gets the index at which the first occurrence of `NaN` is found in `array`.
  *
@@ -1166,7 +1244,7 @@ function indexOfNaN(array, fromIndex, fromRight) {
 
 module.exports = indexOfNaN;
 
-},{}],35:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength');
 
@@ -1183,7 +1261,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":31,"./isLength":39}],36:[function(require,module,exports){
+},{"./getLength":33,"./isLength":41}],38:[function(require,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -1209,7 +1287,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],37:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isIndex = require('./isIndex'),
     isObject = require('../lang/isObject');
@@ -1239,7 +1317,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":49,"./isArrayLike":35,"./isIndex":36}],38:[function(require,module,exports){
+},{"../lang/isObject":51,"./isArrayLike":37,"./isIndex":38}],40:[function(require,module,exports){
 var isArray = require('../lang/isArray'),
     toObject = require('./toObject');
 
@@ -1269,7 +1347,7 @@ function isKey(value, object) {
 
 module.exports = isKey;
 
-},{"../lang/isArray":46,"./toObject":43}],39:[function(require,module,exports){
+},{"../lang/isArray":48,"./toObject":45}],41:[function(require,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -1291,7 +1369,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],40:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -1305,7 +1383,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],41:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1322,7 +1400,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"../lang/isObject":49}],42:[function(require,module,exports){
+},{"../lang/isObject":51}],44:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('./isIndex'),
@@ -1365,7 +1443,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":45,"../lang/isArray":46,"../object/keysIn":54,"./isIndex":36,"./isLength":39}],43:[function(require,module,exports){
+},{"../lang/isArguments":47,"../lang/isArray":48,"../object/keysIn":56,"./isIndex":38,"./isLength":41}],45:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1381,7 +1459,7 @@ function toObject(value) {
 
 module.exports = toObject;
 
-},{"../lang/isObject":49}],44:[function(require,module,exports){
+},{"../lang/isObject":51}],46:[function(require,module,exports){
 var baseToString = require('./baseToString'),
     isArray = require('../lang/isArray');
 
@@ -1411,7 +1489,7 @@ function toPath(value) {
 
 module.exports = toPath;
 
-},{"../lang/isArray":46,"./baseToString":22}],45:[function(require,module,exports){
+},{"../lang/isArray":48,"./baseToString":23}],47:[function(require,module,exports){
 var isArrayLike = require('../internal/isArrayLike'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1447,7 +1525,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":35,"../internal/isObjectLike":40}],46:[function(require,module,exports){
+},{"../internal/isArrayLike":37,"../internal/isObjectLike":42}],48:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
@@ -1489,7 +1567,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":33,"../internal/isLength":39,"../internal/isObjectLike":40}],47:[function(require,module,exports){
+},{"../internal/getNative":35,"../internal/isLength":41,"../internal/isObjectLike":42}],49:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** `Object#toString` result references. */
@@ -1529,7 +1607,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":49}],48:[function(require,module,exports){
+},{"./isObject":51}],50:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1579,7 +1657,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":40,"./isFunction":47}],49:[function(require,module,exports){
+},{"../internal/isObjectLike":42,"./isFunction":49}],51:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1609,7 +1687,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 var isObjectLike = require('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -1646,7 +1724,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":40}],51:[function(require,module,exports){
+},{"../internal/isObjectLike":42}],53:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1722,7 +1800,7 @@ function isTypedArray(value) {
 
 module.exports = isTypedArray;
 
-},{"../internal/isLength":39,"../internal/isObjectLike":40}],52:[function(require,module,exports){
+},{"../internal/isLength":41,"../internal/isObjectLike":42}],54:[function(require,module,exports){
 /**
  * Checks if `value` is `undefined`.
  *
@@ -1745,7 +1823,7 @@ function isUndefined(value) {
 
 module.exports = isUndefined;
 
-},{}],53:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isArrayLike = require('../internal/isArrayLike'),
     isObject = require('../lang/isObject'),
@@ -1792,7 +1870,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":33,"../internal/isArrayLike":35,"../internal/shimKeys":42,"../lang/isObject":49}],54:[function(require,module,exports){
+},{"../internal/getNative":35,"../internal/isArrayLike":37,"../internal/shimKeys":44,"../lang/isObject":51}],56:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -1858,7 +1936,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":36,"../internal/isLength":39,"../lang/isArguments":45,"../lang/isArray":46,"../lang/isObject":49}],55:[function(require,module,exports){
+},{"../internal/isIndex":38,"../internal/isLength":41,"../lang/isArguments":47,"../lang/isArray":48,"../lang/isObject":51}],57:[function(require,module,exports){
 var keys = require('./keys'),
     toObject = require('../internal/toObject');
 
@@ -1893,7 +1971,7 @@ function pairs(object) {
 
 module.exports = pairs;
 
-},{"../internal/toObject":43,"./keys":53}],56:[function(require,module,exports){
+},{"../internal/toObject":45,"./keys":55}],58:[function(require,module,exports){
 var baseValues = require('../internal/baseValues'),
     keys = require('./keys');
 
@@ -1928,7 +2006,7 @@ function values(object) {
 
 module.exports = values;
 
-},{"../internal/baseValues":23,"./keys":53}],57:[function(require,module,exports){
+},{"../internal/baseValues":24,"./keys":55}],59:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -1950,7 +2028,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],58:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 var baseProperty = require('../internal/baseProperty'),
     basePropertyDeep = require('../internal/basePropertyDeep'),
     isKey = require('../internal/isKey');
@@ -1983,10 +2061,16 @@ function property(path) {
 
 module.exports = property;
 
-},{"../internal/baseProperty":19,"../internal/basePropertyDeep":20,"../internal/isKey":38}],59:[function(require,module,exports){
-"use strict";
+},{"../internal/baseProperty":20,"../internal/basePropertyDeep":21,"../internal/isKey":40}],61:[function(require,module,exports){
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _encounter_list = require('./system/container/encounter_list');
+
+var _encounter_list2 = _interopRequireDefault(_encounter_list);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1996,7 +2080,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @help
  *
+ * Super Easy script, create a parallel event that removes
+ * troops from the encounterList on $dataMap. For example,
+ * if you have a region with troop id x  it and you call:
  *
+ * FlareRemoveTroopFromRegion.removeOnBattleEnd(1, 1);
+ *
+ * You are saying, remove troop id 1 from region 1. This only
+ * works if the troop id is associated with the region in question.
+ *
+ * Now what if you leave the map? Well if you come back to the map
+ * that troop will still not be encountable.
+ *
+ * So what do you do?
+ *
+ * FlareRemoveTroopFromRegion.removeFromTroopContainer(1)
+ *
+ * What this does is state, remove the container for this map id
+ * that holds all the enounters to be removed from a encounterList
+ * associated to the map.
+ *
+ * If you want to reset all enemies that are to be removed from all
+ * maps:
+ *
+ * FlareRemoveTroopFromRegion.emptyWholeContainer()
+ *
+ * This will allow all regions to have the encounters you stated
+ * to be removed to be encountable again.
+ */
+
+/**
+ * Public API Class - Removes troop from region.
  */
 
 var FlareRemoveTroopFromRegion = (function () {
@@ -2005,20 +2119,63 @@ var FlareRemoveTroopFromRegion = (function () {
   }
 
   _createClass(FlareRemoveTroopFromRegion, null, [{
-    key: "removeOnBattleEnd",
+    key: 'removeOnBattleEnd',
+
+    /**
+     * Remove a troop id based on region id.
+     *
+     * @param int troopId
+     * @param int regionId
+     */
     value: function removeOnBattleEnd(troopId, regionId) {
       if ($gameMap.encounterList().length > 0) {
         this._toopId = troopId;
         this._regionId = regionId;
       }
     }
+
+    /**
+     * Remove from the troop container.
+     *
+     * @param int mapId
+     */
+
   }, {
-    key: "_getTroopId",
+    key: 'removeFromTroopContainer',
+    value: function removeFromTroopContainer(mapId) {
+      _encounter_list2.default.removeFromContainer(mapId);
+    }
+
+    /**
+     * Empty the whole container.
+     */
+
+  }, {
+    key: 'emptyWholeContainer',
+    value: function emptyWholeContainer() {
+      _encounter_list2.default.emptyContainer();
+    }
+
+    /**
+     * Get the troop id that you want removed.
+     *
+     * @return int
+     */
+
+  }, {
+    key: '_getTroopId',
     value: function _getTroopId() {
       return this._toopId;
     }
+
+    /**
+     * Get the region id.
+     *
+     * @return int
+     */
+
   }, {
-    key: "_getRegionId",
+    key: '_getRegionId',
     value: function _getRegionId() {
       return this._regionId;
     }
@@ -2029,7 +2186,7 @@ var FlareRemoveTroopFromRegion = (function () {
 
 window.FlareRemoveTroopFromRegion = FlareRemoveTroopFromRegion;
 
-},{}],60:[function(require,module,exports){
+},{"./system/container/encounter_list":62}],62:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2054,6 +2211,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Container Object for Encounters.
+ *
+ * Contains a list of objects that have a map id and
+ * a array of indexes that are used to remove the data
+ * from the $dataMap.encounterList
+ */
+
 var EnocounterList = (function () {
   function EnocounterList() {
     _classCallCheck(this, EnocounterList);
@@ -2061,6 +2226,13 @@ var EnocounterList = (function () {
 
   _createClass(EnocounterList, null, [{
     key: 'setEncounterForRemoval',
+
+    /**
+     * Set the encounter for removal.
+     *
+     * @param int mapId
+     * @param int encounterIndex
+     */
     value: function setEncounterForRemoval(mapId, enounterIndex) {
       if ((0, _isUndefined2.default)(this._troopContainer)) {
         this._troopContainer = [];
@@ -2075,11 +2247,81 @@ var EnocounterList = (function () {
         this.setEncounterForRemoval(mapId, enounterIndex);
       }
     }
+
+    /**
+     * Add a region to remove from id.
+     *
+     * Assuming the enemy belongs to multiple regions, we then need
+     * to go ahead and set a "Region to remove from" which then only removes
+     * the region id from the troop object and not the whole object.
+     */
+
+  }, {
+    key: 'addRegionToRemove',
+    value: function addRegionToRemove(mapId, regionToRemove, troopId) {
+      if (!(0, _isUndefined2.default)(this.getEcounterContainer())) {
+        var foundItem = (0, _findWhere2.default)(this.getEcounterContainer(), { mapId: mapId });
+
+        if (!(0, _isUndefined2.default)(foundItem)) {
+          foundItem['regionToRemoveFrom'] = regionToRemove;
+          fountItem['troopId'] = troopId;
+        }
+      }
+    }
+
+    /**
+     * Get the troop container object.
+     *
+     * @return array or undefined.
+     */
+
   }, {
     key: 'getEcounterContainer',
     value: function getEcounterContainer() {
       return this._troopContainer;
     }
+
+    /**
+     * Remove an object from the container based on map id.
+     *
+     * @param int mapId
+     */
+
+  }, {
+    key: 'removeFromContainer',
+    value: function removeFromContainer(mapId) {
+      if (!(0, _isUndefined2.default)(this.getEcounterContainer())) {
+        for (var i = 0; i < this.getEcounterContainer().length; i++) {
+          if (this.getEcounterContainer()[i].mapId === mapId) {
+            this.getEcounterContainer().splice(i, 1);
+          }
+        }
+      }
+    }
+
+    /**
+     * Empty the whole container.
+     */
+
+  }, {
+    key: 'emptyContainer',
+    value: function emptyContainer() {
+      if ((0, _isUndefined2.default)(this.getEcounterContainer())) {
+        this._troopContainer = [];
+      }
+    }
+
+    /**
+     * Does the index exist?
+     *
+     * Index refers to the index to remove from the
+     * $dataMap.encounterList array.
+     *
+     * @param int mapId
+     * @param int index
+     * @return boolean
+     */
+
   }, {
     key: 'doesIndexExist',
     value: function doesIndexExist(mapId, index) {
@@ -2102,7 +2344,7 @@ var EnocounterList = (function () {
 
 module.exports = EnocounterList;
 
-},{"lodash/collection/find":2,"lodash/collection/findWhere":3,"lodash/collection/includes":4,"lodash/lang/isUndefined":52}],61:[function(require,module,exports){
+},{"lodash/collection/find":3,"lodash/collection/findWhere":4,"lodash/collection/includes":5,"lodash/lang/isUndefined":54}],63:[function(require,module,exports){
 'use strict';
 
 var _isUndefined = require('lodash/lang/isUndefined');
@@ -2137,16 +2379,32 @@ BattleManager.processVictory = function () {
       // If we contain the region in the encounter list an the troop id
       // matches that of the troop in that region encounter list add it to the
       // encounter list container.
-      if ((0, _includes2.default)($dataMap.encounterList[i].regionSet, FlareRemoveTroopFromRegion._getRegionId()) && $gameMap.encounterList()[i].troopId === FlareRemoveTroopFromRegion._getTroopId() && !_encounter_list2.default.doesIndexExist($gameMap.mapId(), i)) {
+      var includesTroopId = false;
+      if (Array.isArray(FlareRemoveTroopFromRegion._getTroopId())) {
+        includesTroopId = (0, _includes2.default)(FlareRemoveTroopFromRegion._getTroopId(), $gameTroop._troopId);
+      }
+
+      if ((0, _includes2.default)($dataMap.encounterList[i].regionSet, FlareRemoveTroopFromRegion._getRegionId()) && $gameMap.encounterList()[i].troopId === FlareRemoveTroopFromRegion._getTroopId() && !_encounter_list2.default.doesIndexExist($gameMap.mapId(), i) && ($gameTroop._troopId === FlareRemoveTroopFromRegion._getTroopId() || includesTroopId)) {
 
         // Add the index to a container and store it by map id.
         _encounter_list2.default.setEncounterForRemoval($gameMap.mapId(), i);
+
+        // What if enemy belongs to multiple regions?
+        // Well we only want to remove from the specific region.
+        if ($gameMap.encounterList()[i].regionSet.length > 1) {
+          console.log($gameMap.encounterList()[i]);
+          for (var j = 0; j < $gameMap.encounterList()[i].regionSet.length; i++) {
+            if ($gameMap.encounterList()[i].regionSet[i] === FlareRemoveTroopFromRegion._getRegionId()) {
+              _encounter_list2.default.addRegionToRemove($gameMap.mapId(), i, $gameTroop._troopId);
+            }
+          }
+        }
       }
     }
   }
 };
 
-},{"../system/container/encounter_list":60,"lodash/collection/find":2,"lodash/collection/includes":4,"lodash/lang/isUndefined":52}],62:[function(require,module,exports){
+},{"../system/container/encounter_list":62,"lodash/collection/find":3,"lodash/collection/includes":5,"lodash/lang/isUndefined":54}],64:[function(require,module,exports){
 'use strict';
 
 var _isUndefined = require('lodash/lang/isUndefined');
@@ -2161,22 +2419,40 @@ var _findWhere = require('lodash/collection/findWhere');
 
 var _findWhere2 = _interopRequireDefault(_findWhere);
 
+var _findIndex = require('lodash/array/findIndex');
+
+var _findIndex2 = _interopRequireDefault(_findIndex);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var oldSceneMapPrototypeUpdate = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function () {
   oldSceneMapPrototypeUpdate.call(this);
 
+  // If container isnt undefiend.
   if (!(0, _isUndefined2.default)(_encounter_list2.default.getEcounterContainer())) {
     var foundItem = (0, _findWhere2.default)(_encounter_list2.default.getEcounterContainer(), { mapId: $gameMap.mapId() });
 
+    // If the item is found
     if (!(0, _isUndefined2.default)(foundItem)) {
-      for (var i = 0; i < foundItem.troopIndexes.length; i++) {
-        $dataMap.encounterList.splice(foundItem[i], 1);
-        console.log('asdasdsad');
+      if (lodashIsUndefiend(foundItem.regionToRemoveFrom)) {
+        // Search the encounter listand remove based on index.
+        for (var i = 0; i < foundItem.troopIndexes.length; i++) {
+          $dataMap.encounterList.splice(foundItem[i], 1);
+        }
+      } else {
+        // Remove only the region from the enemy troop.
+        for (var i = 0; i < $dataMap.encounterList.length; i++) {
+          if ($dataMap.encounterList[i].troopId === foundItem.troopId) {
+            var index = (0, _findIndex2.default)($dataMap.encounterList[i].regionSet, foundItem.regionToRemoveFrom);
+            if (index !== -1) {
+              $dataMap.encounterList[i].regionSet.splice(index, 1);
+            }
+          }
+        }
       }
     }
   }
 };
 
-},{"../system/container/encounter_list":60,"lodash/collection/findWhere":3,"lodash/lang/isUndefined":52}]},{},[59,61,62]);
+},{"../system/container/encounter_list":62,"lodash/array/findIndex":1,"lodash/collection/findWhere":4,"lodash/lang/isUndefined":54}]},{},[61,63,64]);
