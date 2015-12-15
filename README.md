@@ -39,6 +39,11 @@ The current scripts are:
 
 - **[Flare Call Event On Game Over](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/game_over)**: Allows for you to call a common event on a game over, via party death in battle or through game party death on the map.
 
+- **[Flare Play Music On Region Touch](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/region/music)**: Allows you to play music when a user touches a region as well
+as fade out the music when they touch another region.
+
+- **[Flare Remove Troop From Region](https://github.com/AdamKyle/Flare-Collection/tree/master/dist/flare/region/troop)**: Allows you to remove one or more troops from a region after a successful battle.
+
 ## How to build the script?
 
 Building the scripts is easy:
@@ -53,6 +58,7 @@ Now to build, `gulp taskHere` where `taskHere` is one of the tasks below:
 - `make:flare-play-music` : Makes the Flare Play Music on Region Touch script.
 - `make:flare-game-over-event`: Makes the Flare Game Over Event script.
 - `make:flare-laws-for-map`: Makes the Flare Laws For Map script.
+- `make:flare-remove-troop-from-region`: Makes the Flare Remove Troop From Region script.
 
 All scripts are compiled to the `dist/` directory. Each script contains a
 README to explain some more of how to use said script.

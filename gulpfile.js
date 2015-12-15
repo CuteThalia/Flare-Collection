@@ -56,6 +56,20 @@ gulp.task('make:flare-play-music', function() {
       .pipe(gulp.dest('dist/flare/region/music/'));
 });
 
+gulp.task('make:flare-remove-troop-from-region', function() {
+  return browserify({entries: [
+        'src/remove-troop-from-region/flare_remove_troop_from_region.js',
+        'src/remove-troop-from-region/update_battle_manager/battle_manager.js',
+        'src/remove-troop-from-region/update_scene_map/scene_map.js',
+        'src/remove-troop-from-region/update_game_map/game_map.js',
+        'src/remove-troop-from-region/update_data_manager/data_manager.js'
+      ]})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('Flare-RemoveTroopFromRegion.js'))
+      .pipe(gulp.dest('dist/flare/region/troop/'));
+});
+
 gulp.task('make:flare-game-over-event', function() {
   return browserify({entries: [
         'src/game-over-event-call/flare_game_over_event_call.js',
