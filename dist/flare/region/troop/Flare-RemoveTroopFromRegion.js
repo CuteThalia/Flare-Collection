@@ -53,7 +53,7 @@ var findIndex = createFindIndex();
 
 module.exports = findIndex;
 
-},{"../internal/createFindIndex":29}],2:[function(require,module,exports){
+},{"../internal/createFindIndex":35}],2:[function(require,module,exports){
 /**
  * Gets the last element of `array`.
  *
@@ -132,7 +132,7 @@ var find = createFind(baseEach);
 
 module.exports = find;
 
-},{"../internal/baseEach":8,"../internal/createFind":28}],4:[function(require,module,exports){
+},{"../internal/baseEach":13,"../internal/createFind":34}],4:[function(require,module,exports){
 var baseMatches = require('../internal/baseMatches'),
     find = require('./find');
 
@@ -171,7 +171,7 @@ function findWhere(collection, source) {
 
 module.exports = findWhere;
 
-},{"../internal/baseMatches":18,"./find":3}],5:[function(require,module,exports){
+},{"../internal/baseMatches":23,"./find":3}],5:[function(require,module,exports){
 var baseIndexOf = require('../internal/baseIndexOf'),
     getLength = require('../internal/getLength'),
     isArray = require('../lang/isArray'),
@@ -230,7 +230,53 @@ function includes(collection, target, fromIndex, guard) {
 
 module.exports = includes;
 
-},{"../internal/baseIndexOf":14,"../internal/getLength":33,"../internal/isIterateeCall":39,"../internal/isLength":41,"../lang/isArray":48,"../lang/isString":52,"../object/values":58}],6:[function(require,module,exports){
+},{"../internal/baseIndexOf":19,"../internal/getLength":39,"../internal/isIterateeCall":48,"../internal/isLength":50,"../lang/isArray":58,"../lang/isString":62,"../object/values":68}],6:[function(require,module,exports){
+/**
+ * Copies the values of `source` to `array`.
+ *
+ * @private
+ * @param {Array} source The array to copy values from.
+ * @param {Array} [array=[]] The array to copy values to.
+ * @returns {Array} Returns `array`.
+ */
+function arrayCopy(source, array) {
+  var index = -1,
+      length = source.length;
+
+  array || (array = Array(length));
+  while (++index < length) {
+    array[index] = source[index];
+  }
+  return array;
+}
+
+module.exports = arrayCopy;
+
+},{}],7:[function(require,module,exports){
+/**
+ * A specialized version of `_.forEach` for arrays without support for callback
+ * shorthands and `this` binding.
+ *
+ * @private
+ * @param {Array} array The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
+ */
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array.length;
+
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
+
+module.exports = arrayEach;
+
+},{}],8:[function(require,module,exports){
 /**
  * A specialized version of `_.some` for arrays without support for callback
  * shorthands and `this` binding.
@@ -255,7 +301,28 @@ function arraySome(array, predicate) {
 
 module.exports = arraySome;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+var baseCopy = require('./baseCopy'),
+    keys = require('../object/keys');
+
+/**
+ * The base implementation of `_.assign` without support for argument juggling,
+ * multiple sources, and `customizer` functions.
+ *
+ * @private
+ * @param {Object} object The destination object.
+ * @param {Object} source The source object.
+ * @returns {Object} Returns `object`.
+ */
+function baseAssign(object, source) {
+  return source == null
+    ? object
+    : baseCopy(source, keys(source), object);
+}
+
+module.exports = baseAssign;
+
+},{"../object/keys":65,"./baseCopy":12}],10:[function(require,module,exports){
 var baseMatches = require('./baseMatches'),
     baseMatchesProperty = require('./baseMatchesProperty'),
     bindCallback = require('./bindCallback'),
@@ -292,7 +359,162 @@ function baseCallback(func, thisArg, argCount) {
 
 module.exports = baseCallback;
 
-},{"../utility/identity":59,"../utility/property":60,"./baseMatches":18,"./baseMatchesProperty":19,"./bindCallback":25}],8:[function(require,module,exports){
+},{"../utility/identity":69,"../utility/property":70,"./baseMatches":23,"./baseMatchesProperty":24,"./bindCallback":30}],11:[function(require,module,exports){
+var arrayCopy = require('./arrayCopy'),
+    arrayEach = require('./arrayEach'),
+    baseAssign = require('./baseAssign'),
+    baseForOwn = require('./baseForOwn'),
+    initCloneArray = require('./initCloneArray'),
+    initCloneByTag = require('./initCloneByTag'),
+    initCloneObject = require('./initCloneObject'),
+    isArray = require('../lang/isArray'),
+    isObject = require('../lang/isObject');
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    funcTag = '[object Function]',
+    mapTag = '[object Map]',
+    numberTag = '[object Number]',
+    objectTag = '[object Object]',
+    regexpTag = '[object RegExp]',
+    setTag = '[object Set]',
+    stringTag = '[object String]',
+    weakMapTag = '[object WeakMap]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
+
+/** Used to identify `toStringTag` values supported by `_.clone`. */
+var cloneableTags = {};
+cloneableTags[argsTag] = cloneableTags[arrayTag] =
+cloneableTags[arrayBufferTag] = cloneableTags[boolTag] =
+cloneableTags[dateTag] = cloneableTags[float32Tag] =
+cloneableTags[float64Tag] = cloneableTags[int8Tag] =
+cloneableTags[int16Tag] = cloneableTags[int32Tag] =
+cloneableTags[numberTag] = cloneableTags[objectTag] =
+cloneableTags[regexpTag] = cloneableTags[stringTag] =
+cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+cloneableTags[errorTag] = cloneableTags[funcTag] =
+cloneableTags[mapTag] = cloneableTags[setTag] =
+cloneableTags[weakMapTag] = false;
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/**
+ * The base implementation of `_.clone` without support for argument juggling
+ * and `this` binding `customizer` functions.
+ *
+ * @private
+ * @param {*} value The value to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @param {Function} [customizer] The function to customize cloning values.
+ * @param {string} [key] The key of `value`.
+ * @param {Object} [object] The object `value` belongs to.
+ * @param {Array} [stackA=[]] Tracks traversed source objects.
+ * @param {Array} [stackB=[]] Associates clones with source counterparts.
+ * @returns {*} Returns the cloned value.
+ */
+function baseClone(value, isDeep, customizer, key, object, stackA, stackB) {
+  var result;
+  if (customizer) {
+    result = object ? customizer(value, key, object) : customizer(value);
+  }
+  if (result !== undefined) {
+    return result;
+  }
+  if (!isObject(value)) {
+    return value;
+  }
+  var isArr = isArray(value);
+  if (isArr) {
+    result = initCloneArray(value);
+    if (!isDeep) {
+      return arrayCopy(value, result);
+    }
+  } else {
+    var tag = objToString.call(value),
+        isFunc = tag == funcTag;
+
+    if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
+      result = initCloneObject(isFunc ? {} : value);
+      if (!isDeep) {
+        return baseAssign(result, value);
+      }
+    } else {
+      return cloneableTags[tag]
+        ? initCloneByTag(value, tag, isDeep)
+        : (object ? value : {});
+    }
+  }
+  // Check for circular references and return its corresponding clone.
+  stackA || (stackA = []);
+  stackB || (stackB = []);
+
+  var length = stackA.length;
+  while (length--) {
+    if (stackA[length] == value) {
+      return stackB[length];
+    }
+  }
+  // Add the source value to the stack of traversed objects and associate it with its clone.
+  stackA.push(value);
+  stackB.push(result);
+
+  // Recursively populate clone (susceptible to call stack limits).
+  (isArr ? arrayEach : baseForOwn)(value, function(subValue, key) {
+    result[key] = baseClone(subValue, isDeep, customizer, key, value, stackA, stackB);
+  });
+  return result;
+}
+
+module.exports = baseClone;
+
+},{"../lang/isArray":58,"../lang/isObject":61,"./arrayCopy":6,"./arrayEach":7,"./baseAssign":9,"./baseForOwn":17,"./initCloneArray":43,"./initCloneByTag":44,"./initCloneObject":45}],12:[function(require,module,exports){
+/**
+ * Copies properties of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy properties from.
+ * @param {Array} props The property names to copy.
+ * @param {Object} [object={}] The object to copy properties to.
+ * @returns {Object} Returns `object`.
+ */
+function baseCopy(source, props, object) {
+  object || (object = {});
+
+  var index = -1,
+      length = props.length;
+
+  while (++index < length) {
+    var key = props[index];
+    object[key] = source[key];
+  }
+  return object;
+}
+
+module.exports = baseCopy;
+
+},{}],13:[function(require,module,exports){
 var baseForOwn = require('./baseForOwn'),
     createBaseEach = require('./createBaseEach');
 
@@ -309,7 +531,7 @@ var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
 
-},{"./baseForOwn":12,"./createBaseEach":26}],9:[function(require,module,exports){
+},{"./baseForOwn":17,"./createBaseEach":32}],14:[function(require,module,exports){
 /**
  * The base implementation of `_.find`, `_.findLast`, `_.findKey`, and `_.findLastKey`,
  * without support for callback shorthands and `this` binding, which iterates
@@ -336,7 +558,7 @@ function baseFind(collection, predicate, eachFunc, retKey) {
 
 module.exports = baseFind;
 
-},{}],10:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * The base implementation of `_.findIndex` and `_.findLastIndex` without
  * support for callback shorthands and `this` binding.
@@ -361,7 +583,7 @@ function baseFindIndex(array, predicate, fromRight) {
 
 module.exports = baseFindIndex;
 
-},{}],11:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var createBaseFor = require('./createBaseFor');
 
 /**
@@ -380,7 +602,7 @@ var baseFor = createBaseFor();
 
 module.exports = baseFor;
 
-},{"./createBaseFor":27}],12:[function(require,module,exports){
+},{"./createBaseFor":33}],17:[function(require,module,exports){
 var baseFor = require('./baseFor'),
     keys = require('../object/keys');
 
@@ -399,7 +621,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"../object/keys":55,"./baseFor":11}],13:[function(require,module,exports){
+},{"../object/keys":65,"./baseFor":16}],18:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -430,7 +652,7 @@ function baseGet(object, path, pathKey) {
 
 module.exports = baseGet;
 
-},{"./toObject":45}],14:[function(require,module,exports){
+},{"./toObject":54}],19:[function(require,module,exports){
 var indexOfNaN = require('./indexOfNaN');
 
 /**
@@ -459,7 +681,7 @@ function baseIndexOf(array, value, fromIndex) {
 
 module.exports = baseIndexOf;
 
-},{"./indexOfNaN":36}],15:[function(require,module,exports){
+},{"./indexOfNaN":42}],20:[function(require,module,exports){
 var baseIsEqualDeep = require('./baseIsEqualDeep'),
     isObject = require('../lang/isObject'),
     isObjectLike = require('./isObjectLike');
@@ -489,7 +711,7 @@ function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
 
 module.exports = baseIsEqual;
 
-},{"../lang/isObject":51,"./baseIsEqualDeep":16,"./isObjectLike":42}],16:[function(require,module,exports){
+},{"../lang/isObject":61,"./baseIsEqualDeep":21,"./isObjectLike":51}],21:[function(require,module,exports){
 var equalArrays = require('./equalArrays'),
     equalByTag = require('./equalByTag'),
     equalObjects = require('./equalObjects'),
@@ -593,7 +815,7 @@ function baseIsEqualDeep(object, other, equalFunc, customizer, isLoose, stackA, 
 
 module.exports = baseIsEqualDeep;
 
-},{"../lang/isArray":48,"../lang/isTypedArray":53,"./equalArrays":30,"./equalByTag":31,"./equalObjects":32}],17:[function(require,module,exports){
+},{"../lang/isArray":58,"../lang/isTypedArray":63,"./equalArrays":36,"./equalByTag":37,"./equalObjects":38}],22:[function(require,module,exports){
 var baseIsEqual = require('./baseIsEqual'),
     toObject = require('./toObject');
 
@@ -647,7 +869,7 @@ function baseIsMatch(object, matchData, customizer) {
 
 module.exports = baseIsMatch;
 
-},{"./baseIsEqual":15,"./toObject":45}],18:[function(require,module,exports){
+},{"./baseIsEqual":20,"./toObject":54}],23:[function(require,module,exports){
 var baseIsMatch = require('./baseIsMatch'),
     getMatchData = require('./getMatchData'),
     toObject = require('./toObject');
@@ -679,7 +901,7 @@ function baseMatches(source) {
 
 module.exports = baseMatches;
 
-},{"./baseIsMatch":17,"./getMatchData":34,"./toObject":45}],19:[function(require,module,exports){
+},{"./baseIsMatch":22,"./getMatchData":40,"./toObject":54}],24:[function(require,module,exports){
 var baseGet = require('./baseGet'),
     baseIsEqual = require('./baseIsEqual'),
     baseSlice = require('./baseSlice'),
@@ -726,7 +948,7 @@ function baseMatchesProperty(path, srcValue) {
 
 module.exports = baseMatchesProperty;
 
-},{"../array/last":2,"../lang/isArray":48,"./baseGet":13,"./baseIsEqual":15,"./baseSlice":22,"./isKey":40,"./isStrictComparable":43,"./toObject":45,"./toPath":46}],20:[function(require,module,exports){
+},{"../array/last":2,"../lang/isArray":58,"./baseGet":18,"./baseIsEqual":20,"./baseSlice":27,"./isKey":49,"./isStrictComparable":52,"./toObject":54,"./toPath":55}],25:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -742,7 +964,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],21:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var baseGet = require('./baseGet'),
     toPath = require('./toPath');
 
@@ -763,7 +985,7 @@ function basePropertyDeep(path) {
 
 module.exports = basePropertyDeep;
 
-},{"./baseGet":13,"./toPath":46}],22:[function(require,module,exports){
+},{"./baseGet":18,"./toPath":55}],27:[function(require,module,exports){
 /**
  * The base implementation of `_.slice` without an iteratee call guard.
  *
@@ -797,7 +1019,7 @@ function baseSlice(array, start, end) {
 
 module.exports = baseSlice;
 
-},{}],23:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 /**
  * Converts `value` to a string if it's not one. An empty string is returned
  * for `null` or `undefined` values.
@@ -812,7 +1034,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{}],24:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /**
  * The base implementation of `_.values` and `_.valuesIn` which creates an
  * array of `object` property values corresponding to the property names
@@ -836,7 +1058,7 @@ function baseValues(object, props) {
 
 module.exports = baseValues;
 
-},{}],25:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var identity = require('../utility/identity');
 
 /**
@@ -877,7 +1099,31 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":59}],26:[function(require,module,exports){
+},{"../utility/identity":69}],31:[function(require,module,exports){
+(function (global){
+/** Native method references. */
+var ArrayBuffer = global.ArrayBuffer,
+    Uint8Array = global.Uint8Array;
+
+/**
+ * Creates a clone of the given array buffer.
+ *
+ * @private
+ * @param {ArrayBuffer} buffer The array buffer to clone.
+ * @returns {ArrayBuffer} Returns the cloned array buffer.
+ */
+function bufferClone(buffer) {
+  var result = new ArrayBuffer(buffer.byteLength),
+      view = new Uint8Array(result);
+
+  view.set(new Uint8Array(buffer));
+  return result;
+}
+
+module.exports = bufferClone;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],32:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength'),
     toObject = require('./toObject');
@@ -910,7 +1156,7 @@ function createBaseEach(eachFunc, fromRight) {
 
 module.exports = createBaseEach;
 
-},{"./getLength":33,"./isLength":41,"./toObject":45}],27:[function(require,module,exports){
+},{"./getLength":39,"./isLength":50,"./toObject":54}],33:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -939,7 +1185,7 @@ function createBaseFor(fromRight) {
 
 module.exports = createBaseFor;
 
-},{"./toObject":45}],28:[function(require,module,exports){
+},{"./toObject":54}],34:[function(require,module,exports){
 var baseCallback = require('./baseCallback'),
     baseFind = require('./baseFind'),
     baseFindIndex = require('./baseFindIndex'),
@@ -966,7 +1212,7 @@ function createFind(eachFunc, fromRight) {
 
 module.exports = createFind;
 
-},{"../lang/isArray":48,"./baseCallback":7,"./baseFind":9,"./baseFindIndex":10}],29:[function(require,module,exports){
+},{"../lang/isArray":58,"./baseCallback":10,"./baseFind":14,"./baseFindIndex":15}],35:[function(require,module,exports){
 var baseCallback = require('./baseCallback'),
     baseFindIndex = require('./baseFindIndex');
 
@@ -989,7 +1235,7 @@ function createFindIndex(fromRight) {
 
 module.exports = createFindIndex;
 
-},{"./baseCallback":7,"./baseFindIndex":10}],30:[function(require,module,exports){
+},{"./baseCallback":10,"./baseFindIndex":15}],36:[function(require,module,exports){
 var arraySome = require('./arraySome');
 
 /**
@@ -1042,7 +1288,7 @@ function equalArrays(array, other, equalFunc, customizer, isLoose, stackA, stack
 
 module.exports = equalArrays;
 
-},{"./arraySome":6}],31:[function(require,module,exports){
+},{"./arraySome":8}],37:[function(require,module,exports){
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]',
     dateTag = '[object Date]',
@@ -1092,7 +1338,7 @@ function equalByTag(object, other, tag) {
 
 module.exports = equalByTag;
 
-},{}],32:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var keys = require('../object/keys');
 
 /** Used for native method references. */
@@ -1161,7 +1407,7 @@ function equalObjects(object, other, equalFunc, customizer, isLoose, stackA, sta
 
 module.exports = equalObjects;
 
-},{"../object/keys":55}],33:[function(require,module,exports){
+},{"../object/keys":65}],39:[function(require,module,exports){
 var baseProperty = require('./baseProperty');
 
 /**
@@ -1178,7 +1424,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":20}],34:[function(require,module,exports){
+},{"./baseProperty":25}],40:[function(require,module,exports){
 var isStrictComparable = require('./isStrictComparable'),
     pairs = require('../object/pairs');
 
@@ -1201,7 +1447,7 @@ function getMatchData(object) {
 
 module.exports = getMatchData;
 
-},{"../object/pairs":57,"./isStrictComparable":43}],35:[function(require,module,exports){
+},{"../object/pairs":67,"./isStrictComparable":52}],41:[function(require,module,exports){
 var isNative = require('../lang/isNative');
 
 /**
@@ -1219,7 +1465,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":50}],36:[function(require,module,exports){
+},{"../lang/isNative":60}],42:[function(require,module,exports){
 /**
  * Gets the index at which the first occurrence of `NaN` is found in `array`.
  *
@@ -1244,7 +1490,118 @@ function indexOfNaN(array, fromIndex, fromRight) {
 
 module.exports = indexOfNaN;
 
-},{}],37:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Initializes an array clone.
+ *
+ * @private
+ * @param {Array} array The array to clone.
+ * @returns {Array} Returns the initialized clone.
+ */
+function initCloneArray(array) {
+  var length = array.length,
+      result = new array.constructor(length);
+
+  // Add array properties assigned by `RegExp#exec`.
+  if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
+    result.index = array.index;
+    result.input = array.input;
+  }
+  return result;
+}
+
+module.exports = initCloneArray;
+
+},{}],44:[function(require,module,exports){
+var bufferClone = require('./bufferClone');
+
+/** `Object#toString` result references. */
+var boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    numberTag = '[object Number]',
+    regexpTag = '[object RegExp]',
+    stringTag = '[object String]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
+
+/** Used to match `RegExp` flags from their coerced string values. */
+var reFlags = /\w*$/;
+
+/**
+ * Initializes an object clone based on its `toStringTag`.
+ *
+ * **Note:** This function only supports cloning values with tags of
+ * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+ *
+ * @private
+ * @param {Object} object The object to clone.
+ * @param {string} tag The `toStringTag` of the object to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the initialized clone.
+ */
+function initCloneByTag(object, tag, isDeep) {
+  var Ctor = object.constructor;
+  switch (tag) {
+    case arrayBufferTag:
+      return bufferClone(object);
+
+    case boolTag:
+    case dateTag:
+      return new Ctor(+object);
+
+    case float32Tag: case float64Tag:
+    case int8Tag: case int16Tag: case int32Tag:
+    case uint8Tag: case uint8ClampedTag: case uint16Tag: case uint32Tag:
+      var buffer = object.buffer;
+      return new Ctor(isDeep ? bufferClone(buffer) : buffer, object.byteOffset, object.length);
+
+    case numberTag:
+    case stringTag:
+      return new Ctor(object);
+
+    case regexpTag:
+      var result = new Ctor(object.source, reFlags.exec(object));
+      result.lastIndex = object.lastIndex;
+  }
+  return result;
+}
+
+module.exports = initCloneByTag;
+
+},{"./bufferClone":31}],45:[function(require,module,exports){
+/**
+ * Initializes an object clone.
+ *
+ * @private
+ * @param {Object} object The object to clone.
+ * @returns {Object} Returns the initialized clone.
+ */
+function initCloneObject(object) {
+  var Ctor = object.constructor;
+  if (!(typeof Ctor == 'function' && Ctor instanceof Ctor)) {
+    Ctor = Object;
+  }
+  return new Ctor;
+}
+
+module.exports = initCloneObject;
+
+},{}],46:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength');
 
@@ -1261,7 +1618,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":33,"./isLength":41}],38:[function(require,module,exports){
+},{"./getLength":39,"./isLength":50}],47:[function(require,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -1287,7 +1644,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],39:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isIndex = require('./isIndex'),
     isObject = require('../lang/isObject');
@@ -1317,7 +1674,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":51,"./isArrayLike":37,"./isIndex":38}],40:[function(require,module,exports){
+},{"../lang/isObject":61,"./isArrayLike":46,"./isIndex":47}],49:[function(require,module,exports){
 var isArray = require('../lang/isArray'),
     toObject = require('./toObject');
 
@@ -1347,7 +1704,7 @@ function isKey(value, object) {
 
 module.exports = isKey;
 
-},{"../lang/isArray":48,"./toObject":45}],41:[function(require,module,exports){
+},{"../lang/isArray":58,"./toObject":54}],50:[function(require,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -1369,7 +1726,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],42:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -1383,7 +1740,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],43:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1400,7 +1757,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"../lang/isObject":51}],44:[function(require,module,exports){
+},{"../lang/isObject":61}],53:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('./isIndex'),
@@ -1443,7 +1800,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":47,"../lang/isArray":48,"../object/keysIn":56,"./isIndex":38,"./isLength":41}],45:[function(require,module,exports){
+},{"../lang/isArguments":57,"../lang/isArray":58,"../object/keysIn":66,"./isIndex":47,"./isLength":50}],54:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -1459,7 +1816,7 @@ function toObject(value) {
 
 module.exports = toObject;
 
-},{"../lang/isObject":51}],46:[function(require,module,exports){
+},{"../lang/isObject":61}],55:[function(require,module,exports){
 var baseToString = require('./baseToString'),
     isArray = require('../lang/isArray');
 
@@ -1489,7 +1846,79 @@ function toPath(value) {
 
 module.exports = toPath;
 
-},{"../lang/isArray":48,"./baseToString":23}],47:[function(require,module,exports){
+},{"../lang/isArray":58,"./baseToString":28}],56:[function(require,module,exports){
+var baseClone = require('../internal/baseClone'),
+    bindCallback = require('../internal/bindCallback'),
+    isIterateeCall = require('../internal/isIterateeCall');
+
+/**
+ * Creates a clone of `value`. If `isDeep` is `true` nested objects are cloned,
+ * otherwise they are assigned by reference. If `customizer` is provided it's
+ * invoked to produce the cloned values. If `customizer` returns `undefined`
+ * cloning is handled by the method instead. The `customizer` is bound to
+ * `thisArg` and invoked with up to three argument; (value [, index|key, object]).
+ *
+ * **Note:** This method is loosely based on the
+ * [structured clone algorithm](http://www.w3.org/TR/html5/infrastructure.html#internal-structured-cloning-algorithm).
+ * The enumerable properties of `arguments` objects and objects created by
+ * constructors other than `Object` are cloned to plain `Object` objects. An
+ * empty object is returned for uncloneable values such as functions, DOM nodes,
+ * Maps, Sets, and WeakMaps.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @param {Function} [customizer] The function to customize cloning values.
+ * @param {*} [thisArg] The `this` binding of `customizer`.
+ * @returns {*} Returns the cloned value.
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney' },
+ *   { 'user': 'fred' }
+ * ];
+ *
+ * var shallow = _.clone(users);
+ * shallow[0] === users[0];
+ * // => true
+ *
+ * var deep = _.clone(users, true);
+ * deep[0] === users[0];
+ * // => false
+ *
+ * // using a customizer callback
+ * var el = _.clone(document.body, function(value) {
+ *   if (_.isElement(value)) {
+ *     return value.cloneNode(false);
+ *   }
+ * });
+ *
+ * el === document.body
+ * // => false
+ * el.nodeName
+ * // => BODY
+ * el.childNodes.length;
+ * // => 0
+ */
+function clone(value, isDeep, customizer, thisArg) {
+  if (isDeep && typeof isDeep != 'boolean' && isIterateeCall(value, isDeep, customizer)) {
+    isDeep = false;
+  }
+  else if (typeof isDeep == 'function') {
+    thisArg = customizer;
+    customizer = isDeep;
+    isDeep = false;
+  }
+  return typeof customizer == 'function'
+    ? baseClone(value, isDeep, bindCallback(customizer, thisArg, 3))
+    : baseClone(value, isDeep);
+}
+
+module.exports = clone;
+
+},{"../internal/baseClone":11,"../internal/bindCallback":30,"../internal/isIterateeCall":48}],57:[function(require,module,exports){
 var isArrayLike = require('../internal/isArrayLike'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1525,7 +1954,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":37,"../internal/isObjectLike":42}],48:[function(require,module,exports){
+},{"../internal/isArrayLike":46,"../internal/isObjectLike":51}],58:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
@@ -1567,7 +1996,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":35,"../internal/isLength":41,"../internal/isObjectLike":42}],49:[function(require,module,exports){
+},{"../internal/getNative":41,"../internal/isLength":50,"../internal/isObjectLike":51}],59:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** `Object#toString` result references. */
@@ -1607,7 +2036,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":51}],50:[function(require,module,exports){
+},{"./isObject":61}],60:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1657,7 +2086,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":42,"./isFunction":49}],51:[function(require,module,exports){
+},{"../internal/isObjectLike":51,"./isFunction":59}],61:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1687,7 +2116,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],52:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 var isObjectLike = require('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -1724,7 +2153,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":42}],53:[function(require,module,exports){
+},{"../internal/isObjectLike":51}],63:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -1800,7 +2229,7 @@ function isTypedArray(value) {
 
 module.exports = isTypedArray;
 
-},{"../internal/isLength":41,"../internal/isObjectLike":42}],54:[function(require,module,exports){
+},{"../internal/isLength":50,"../internal/isObjectLike":51}],64:[function(require,module,exports){
 /**
  * Checks if `value` is `undefined`.
  *
@@ -1823,7 +2252,7 @@ function isUndefined(value) {
 
 module.exports = isUndefined;
 
-},{}],55:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isArrayLike = require('../internal/isArrayLike'),
     isObject = require('../lang/isObject'),
@@ -1870,7 +2299,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":35,"../internal/isArrayLike":37,"../internal/shimKeys":44,"../lang/isObject":51}],56:[function(require,module,exports){
+},{"../internal/getNative":41,"../internal/isArrayLike":46,"../internal/shimKeys":53,"../lang/isObject":61}],66:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -1936,7 +2365,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":38,"../internal/isLength":41,"../lang/isArguments":47,"../lang/isArray":48,"../lang/isObject":51}],57:[function(require,module,exports){
+},{"../internal/isIndex":47,"../internal/isLength":50,"../lang/isArguments":57,"../lang/isArray":58,"../lang/isObject":61}],67:[function(require,module,exports){
 var keys = require('./keys'),
     toObject = require('../internal/toObject');
 
@@ -1971,7 +2400,7 @@ function pairs(object) {
 
 module.exports = pairs;
 
-},{"../internal/toObject":45,"./keys":55}],58:[function(require,module,exports){
+},{"../internal/toObject":54,"./keys":65}],68:[function(require,module,exports){
 var baseValues = require('../internal/baseValues'),
     keys = require('./keys');
 
@@ -2006,7 +2435,7 @@ function values(object) {
 
 module.exports = values;
 
-},{"../internal/baseValues":24,"./keys":55}],59:[function(require,module,exports){
+},{"../internal/baseValues":29,"./keys":65}],69:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -2028,7 +2457,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],60:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var baseProperty = require('../internal/baseProperty'),
     basePropertyDeep = require('../internal/basePropertyDeep'),
     isKey = require('../internal/isKey');
@@ -2061,14 +2490,18 @@ function property(path) {
 
 module.exports = property;
 
-},{"../internal/baseProperty":20,"../internal/basePropertyDeep":21,"../internal/isKey":40}],61:[function(require,module,exports){
+},{"../internal/baseProperty":25,"../internal/basePropertyDeep":26,"../internal/isKey":49}],71:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _encounter_list = require('./system/container/encounter_list');
+var _encounter_holder = require('./system/container/encounter_holder');
 
-var _encounter_list2 = _interopRequireDefault(_encounter_list);
+var _encounter_holder2 = _interopRequireDefault(_encounter_holder);
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2135,25 +2568,36 @@ var FlareRemoveTroopFromRegion = (function () {
     }
 
     /**
-     * Remove from the troop container.
+     * Restore a specific map to default map encounter list.
      *
      * @param int mapId
      */
 
   }, {
-    key: 'removeFromTroopContainer',
-    value: function removeFromTroopContainer(mapId) {
-      _encounter_list2.default.removeFromContainer(mapId);
+    key: 'restoreToDefault',
+    value: function restoreToDefault(mapId) {
+
+      if (!(0, _isUndefined2.default)(_encounter_holder2.default.getContainer())) {
+        for (var i = 0; i < _encounter_holder2.default.getContainer().length; i++) {
+          if (_encounter_holder2.default.getContainer()[i].mapId = mapId) {
+            _encounter_holder2.default.getContainer()[i] = _encounter_holder2.default.getOriginalArray(mapId);
+          }
+        }
+      }
     }
 
     /**
-     * Empty the whole container.
+     * Gets the mutated container.
+     *
+     * @return array or undefined
      */
 
   }, {
-    key: 'emptyWholeContainer',
-    value: function emptyWholeContainer() {
-      _encounter_list2.default.emptyContainer();
+    key: 'getMutatedContainer',
+    value: function getMutatedContainer() {
+      if (!(0, _isUndefined2.default)(_encounter_holder2.default.getContainer())) {
+        return _encounter_holder2.default.getContainer();
+      }
     }
 
     /**
@@ -2186,7 +2630,7 @@ var FlareRemoveTroopFromRegion = (function () {
 
 window.FlareRemoveTroopFromRegion = FlareRemoveTroopFromRegion;
 
-},{"./system/container/encounter_list":62}],62:[function(require,module,exports){
+},{"./system/container/encounter_holder":72,"lodash/lang/isUndefined":64}],72:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2195,156 +2639,137 @@ var _isUndefined = require('lodash/lang/isUndefined');
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
+var _clone = require('lodash/lang/clone');
+
+var _clone2 = _interopRequireDefault(_clone);
+
 var _findWhere = require('lodash/collection/findWhere');
 
 var _findWhere2 = _interopRequireDefault(_findWhere);
-
-var _includes = require('lodash/collection/includes');
-
-var _includes2 = _interopRequireDefault(_includes);
-
-var _find = require('lodash/collection/find');
-
-var _find2 = _interopRequireDefault(_find);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Container Object for Encounters.
+ * Contains the dataMap.encounterList
  *
- * Contains a list of objects that have a map id and
- * a array of indexes that are used to remove the data
- * from the $dataMap.encounterList
+ * We need to clone the encounterList so that we can manipulate this object.
+ *
+ * These are stored by map id.
  */
 
-var EnocounterList = (function () {
-  function EnocounterList() {
-    _classCallCheck(this, EnocounterList);
+var EncounterHolder = (function () {
+  function EncounterHolder() {
+    _classCallCheck(this, EncounterHolder);
   }
 
-  _createClass(EnocounterList, null, [{
-    key: 'setEncounterForRemoval',
+  _createClass(EncounterHolder, null, [{
+    key: 'setTroopArray',
 
     /**
-     * Set the encounter for removal.
+     * Store the encounter list for the specific map.
      *
      * @param int mapId
-     * @param int encounterIndex
+     * @param array encounterList
      */
-    value: function setEncounterForRemoval(mapId, enounterIndex) {
-      if ((0, _isUndefined2.default)(this._troopContainer)) {
-        this._troopContainer = [];
+    value: function setTroopArray(mapId, encounterList) {
+      if ((0, _isUndefined2.default)(this._encounterContainer)) {
+        this._encounterContainer = [];
       }
 
-      var foundItem = (0, _findWhere2.default)(this._troopContainer, { mapId: mapId });
-
-      if (!(0, _isUndefined2.default)(foundItem)) {
-        foundItem.troopIndexes.push(enounterIndex);
-      } else {
-        this._troopContainer.push({ mapId: mapId, troopIndexes: [] });
-        this.setEncounterForRemoval(mapId, enounterIndex);
-      }
+      this._encounterContainer.push({ mapId: mapId, encounterList: (0, _clone2.default)(encounterList, true) });
     }
 
     /**
-     * Add a region to remove from id.
+     * Store the original data map encounter list based on map id.
      *
-     * Assuming the enemy belongs to multiple regions, we then need
-     * to go ahead and set a "Region to remove from" which then only removes
-     * the region id from the troop object and not the whole object.
+     * @param array originalDataMapEncounterList
      */
 
   }, {
-    key: 'addRegionToRemove',
-    value: function addRegionToRemove(mapId, regionToRemove, troopId) {
-      if (!(0, _isUndefined2.default)(this.getEcounterContainer())) {
-        var foundItem = (0, _findWhere2.default)(this.getEcounterContainer(), { mapId: mapId });
-
-        if (!(0, _isUndefined2.default)(foundItem)) {
-          foundItem['regionToRemoveFrom'] = regionToRemove;
-          fountItem['troopId'] = troopId;
-        }
+    key: 'storeOriginalArray',
+    value: function storeOriginalArray(mapId, originalDataMapEncounterList) {
+      if ((0, _isUndefined2.default)(this._originalEncounterContainer)) {
+        this._originalEncounterContainer = [];
       }
+
+      this._originalEncounterContainer.push({ mapId: mapId, encounterList: (0, _clone2.default)(originalDataMapEncounterList, true) });
     }
 
     /**
-     * Get the troop container object.
-     *
-     * @return array or undefined.
-     */
-
-  }, {
-    key: 'getEcounterContainer',
-    value: function getEcounterContainer() {
-      return this._troopContainer;
-    }
-
-    /**
-     * Remove an object from the container based on map id.
+     * Get an object based on map id.
      *
      * @param int mapId
+     * @return undefined or object
      */
 
   }, {
-    key: 'removeFromContainer',
-    value: function removeFromContainer(mapId) {
-      if (!(0, _isUndefined2.default)(this.getEcounterContainer())) {
-        for (var i = 0; i < this.getEcounterContainer().length; i++) {
-          if (this.getEcounterContainer()[i].mapId === mapId) {
-            this.getEcounterContainer().splice(i, 1);
-          }
-        }
+    key: 'getOriginalArray',
+    value: function getOriginalArray(mapId) {
+      if (!(0, _isUndefined2.default)(this.getOriginalContainer())) {
+        return (0, _findWhere2.default)(this.getOriginalContainer(), { mapId: mapId });
       }
     }
 
     /**
-     * Empty the whole container.
-     */
-
-  }, {
-    key: 'emptyContainer',
-    value: function emptyContainer() {
-      if ((0, _isUndefined2.default)(this.getEcounterContainer())) {
-        this._troopContainer = [];
-      }
-    }
-
-    /**
-     * Does the index exist?
+     * Get the container containing original encounter lists.
      *
-     * Index refers to the index to remove from the
-     * $dataMap.encounterList array.
+     * @return undefined or array
+     */
+
+  }, {
+    key: 'getOriginalContainer',
+    value: function getOriginalContainer() {
+      return this._originalEncounterContainer;
+    }
+
+    /**
+     * Returns the array of objects that contain cloned data
+     *
+     * @return array
+     */
+
+  }, {
+    key: 'getContainer',
+    value: function getContainer() {
+      return this._encounterContainer;
+    }
+
+    /**
+     * Find by map id from the container.
      *
      * @param int mapId
-     * @param int index
-     * @return boolean
+     * @return undefined or object
      */
 
   }, {
-    key: 'doesIndexExist',
-    value: function doesIndexExist(mapId, index) {
-      if (!(0, _isUndefined2.default)(this.getEcounterContainer())) {
-        var foundItem = (0, _findWhere2.default)(this.getEcounterContainer(), { mapId: mapId });
-
-        if (!(0, _isUndefined2.default)(foundItem)) {
-          return (0, _includes2.default)(foundItem.troopIndexes, index);
-        } else {
-          return false;
-        }
+    key: 'findByMapId',
+    value: function findByMapId(mapId) {
+      if (!(0, _isUndefined2.default)(this.getContainer())) {
+        return (0, _findWhere2.default)(this.getContainer(), { mapId: mapId });
       }
+    }
 
-      return false;
+    /**
+     * Set the encounter list to the container.
+     *
+     * @param array encounterList
+     */
+
+  }, {
+    key: 'loadArray',
+    value: function loadArray(encounterList) {
+      this._encounterContainer = encounterList;
     }
   }]);
 
-  return EnocounterList;
+  return EncounterHolder;
 })();
 
-module.exports = EnocounterList;
+module.exports = EncounterHolder;
 
-},{"lodash/collection/find":3,"lodash/collection/findWhere":4,"lodash/collection/includes":5,"lodash/lang/isUndefined":54}],63:[function(require,module,exports){
+},{"lodash/collection/findWhere":4,"lodash/lang/clone":56,"lodash/lang/isUndefined":64}],73:[function(require,module,exports){
 'use strict';
 
 var _isUndefined = require('lodash/lang/isUndefined');
@@ -2359,9 +2784,17 @@ var _includes = require('lodash/collection/includes');
 
 var _includes2 = _interopRequireDefault(_includes);
 
-var _encounter_list = require('../system/container/encounter_list');
+var _encounter_holder = require('../system/container/encounter_holder');
 
-var _encounter_list2 = _interopRequireDefault(_encounter_list);
+var _encounter_holder2 = _interopRequireDefault(_encounter_holder);
+
+var _findIndex = require('lodash/array/findIndex');
+
+var _findIndex2 = _interopRequireDefault(_findIndex);
+
+var _findWhere = require('lodash/collection/findWhere');
+
+var _findWhere2 = _interopRequireDefault(_findWhere);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2369,51 +2802,172 @@ var oldBattleManagerProcessVictoryMethod = BattleManager.processVictory;
 BattleManager.processVictory = function () {
   oldBattleManagerProcessVictoryMethod.call(this);
 
-  // If the toop id is not undefined, same with region id and the region id matches
-  // that of the region id the players on then do stff.
-  if (!(0, _isUndefined2.default)(FlareRemoveTroopFromRegion._getTroopId()) && !(0, _isUndefined2.default)(FlareRemoveTroopFromRegion._getRegionId()) && $gamePlayer.regionId() === FlareRemoveTroopFromRegion._getRegionId()) {
+  var removeTroopId = FlareRemoveTroopFromRegion._getTroopId();
+  var removeFromRegion = FlareRemoveTroopFromRegion._getRegionId();
+  var clonedDataStructure = this.findClonedDataStructure();
+  var foundAnObject = {};
 
-    // Loop over the game map encounter list.
-    for (var i = 0; i < $dataMap.encounterList.length; i++) {
+  if ((0, _isUndefined2.default)(removeTroopId) && (0, _isUndefined2.default)(removeFromRegion)) {
+    return;
+  }
 
-      // If we contain the region in the encounter list an the troop id
-      // matches that of the troop in that region encounter list add it to the
-      // encounter list container.
-      var includesTroopId = false;
-      if (Array.isArray(FlareRemoveTroopFromRegion._getTroopId())) {
-        includesTroopId = (0, _includes2.default)(FlareRemoveTroopFromRegion._getTroopId(), $gameTroop._troopId);
-      }
+  if (this.isTroopIdToRemoveAnArray(removeTroopId)) {
+    var troopId = this.getTroopIdFromArray(removeTroopId);
+    foundAnObject = (0, _findWhere2.default)(clonedDataStructure.encounterList, { troopId: troopId });
+  } else if (removeTroopId === $gameTroop._troopId) {
+    foundAnObject = (0, _findWhere2.default)(clonedDataStructure.encounterList, { troopId: removeTroopId });
+  } else {
+    return;
+  }
 
-      if ((0, _includes2.default)($dataMap.encounterList[i].regionSet, FlareRemoveTroopFromRegion._getRegionId()) && $gameMap.encounterList()[i].troopId === FlareRemoveTroopFromRegion._getTroopId() && !_encounter_list2.default.doesIndexExist($gameMap.mapId(), i) && ($gameTroop._troopId === FlareRemoveTroopFromRegion._getTroopId() || includesTroopId)) {
+  if (this.doesEncounterBelongToMoreThenOneRegion(foundAnObject.regionSet)) {
+    foundAnObject.regionSet.splice(this.getRegionIndex(foundAnObject.regionSet, removeFromRegion), 1);
+  } else {
+    clonedDataStructure.encounterList.splice(this.getTroopIndex(removeTroopId, $gameMap.mapId()), 1);
+  }
+};
 
-        // Add the index to a container and store it by map id.
-        _encounter_list2.default.setEncounterForRemoval($gameMap.mapId(), i);
+/**
+ * Find a clone data structure by map id.
+ *
+ * @return object or undefined
+ */
+BattleManager.findClonedDataStructure = function () {
+  return _encounter_holder2.default.findByMapId($gameMap.mapId());
+};
 
-        // What if enemy belongs to multiple regions?
-        // Well we only want to remove from the specific region.
-        if ($gameMap.encounterList()[i].regionSet.length > 1) {
-          console.log($gameMap.encounterList()[i]);
-          for (var j = 0; j < $gameMap.encounterList()[i].regionSet.length; i++) {
-            if ($gameMap.encounterList()[i].regionSet[i] === FlareRemoveTroopFromRegion._getRegionId()) {
-              _encounter_list2.default.addRegionToRemove($gameMap.mapId(), i, $gameTroop._troopId);
-            }
-          }
-        }
-      }
+/**
+ * Is the troop id an array?
+ *
+ * @param array or int troopIdToRemove
+ * @return boolean
+ */
+BattleManager.isTroopIdToRemoveAnArray = function (troopIdToRemove) {
+  return Array.isArray(troopIdToRemove);
+};
+
+/**
+ * Get the troop's id to remove from an array of troop id's
+ *
+ * @param array troopIdTroRemove
+ * @return int
+ */
+BattleManager.getTroopIdFromArray = function (troopIdToRemove) {
+
+  for (var i = 0; i < troopIdToRemove.length; i++) {
+    if (troopIdToRemove[i] === $gameTroop._troopId) {
+      return troopIdToRemove[i];
     }
   }
 };
 
-},{"../system/container/encounter_list":62,"lodash/collection/find":3,"lodash/collection/includes":5,"lodash/lang/isUndefined":54}],64:[function(require,module,exports){
+/**
+ * Get the troop index
+ *
+ * @param int troopIdToRemove
+ * @param array mapEncounterList
+ * @return object
+ */
+BattleManager.getTroopIndex = function (troopIdToRemove, mapEncounterList) {
+  for (var i = 0; i < mapEncounterList.length; i++) {
+    if (mapEncounterList[i].troopId == troopIdToRemove) {
+      return i;
+    }
+  }
+};
+
+/**
+ * Is the troops regionSet greator then 1?
+ *
+ * @param array regionSet
+ * @return boolean
+ */
+BattleManager.doesEncounterBelongToMoreThenOneRegion = function (regionSet) {
+  return regionSet.length > 1;
+};
+
+/**
+ * Get the index of the region for the troops region set.
+ *
+ * @param array regionSet
+ * @param int regionToRemove
+ * @return int index
+ */
+BattleManager.getRegionIndex = function (regionSet, regionToRemove) {
+  for (var i = 0; i < regionSet.length; i++) {
+    if (regionSet[i] === regionToRemove) {
+      return i;
+    }
+  }
+};
+
+},{"../system/container/encounter_holder":72,"lodash/array/findIndex":1,"lodash/collection/find":3,"lodash/collection/findWhere":4,"lodash/collection/includes":5,"lodash/lang/isUndefined":64}],74:[function(require,module,exports){
 'use strict';
 
 var _isUndefined = require('lodash/lang/isUndefined');
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _encounter_list = require('../system/container/encounter_list');
+var _encounter_holder = require('../system/container/encounter_holder');
 
-var _encounter_list2 = _interopRequireDefault(_encounter_list);
+var _encounter_holder2 = _interopRequireDefault(_encounter_holder);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var oldDataManagerMakeSaveContentsMethod = DataManager.makeSaveContents;
+DataManager.makeSaveContents = function () {
+  var contents = oldDataManagerMakeSaveContentsMethod.call(this);
+
+  if (!(0, _isUndefined2.default)(FlareRemoveTroopFromRegion.getMutatedContainer())) {
+    contents.encounterData = FlareRemoveTroopFromRegion.getMutatedContainer();
+  }
+
+  return contents;
+};
+
+var oldDataManagerExtractSaveContentMethod = DataManager.extractSaveContents;
+DataManager.extractSaveContents = function (contents) {
+  oldDataManagerExtractSaveContentMethod.call(this, contents);
+
+  if (!(0, _isUndefined2.default)(contents.encounterData)) {
+    _encounter_holder2.default.loadArray(contents.encounterData);
+  }
+};
+
+},{"../system/container/encounter_holder":72,"lodash/lang/isUndefined":64}],75:[function(require,module,exports){
+'use strict';
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _encounter_holder = require('../system/container/encounter_holder');
+
+var _encounter_holder2 = _interopRequireDefault(_encounter_holder);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var oldGameMapPrototypeSetup = Game_Map.prototype.setup;
+Game_Map.prototype.setup = function (mapId) {
+    oldGameMapPrototypeSetup.call(this, mapId);
+
+    // Store cloned array based on map id.
+    _encounter_holder2.default.setTroopArray(mapId, $dataMap.encounterList);
+
+    // Store original array
+    _encounter_holder2.default.storeOriginalArray(mapId, $dataMap.encounterList);
+};
+
+},{"../system/container/encounter_holder":72,"lodash/lang/isUndefined":64}],76:[function(require,module,exports){
+'use strict';
+
+var _isUndefined = require('lodash/lang/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _encounter_holder = require('../system/container/encounter_holder');
+
+var _encounter_holder2 = _interopRequireDefault(_encounter_holder);
 
 var _findWhere = require('lodash/collection/findWhere');
 
@@ -2429,30 +2983,10 @@ var oldSceneMapPrototypeUpdate = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function () {
   oldSceneMapPrototypeUpdate.call(this);
 
-  // If container isnt undefiend.
-  if (!(0, _isUndefined2.default)(_encounter_list2.default.getEcounterContainer())) {
-    var foundItem = (0, _findWhere2.default)(_encounter_list2.default.getEcounterContainer(), { mapId: $gameMap.mapId() });
-
-    // If the item is found
-    if (!(0, _isUndefined2.default)(foundItem)) {
-      if (lodashIsUndefiend(foundItem.regionToRemoveFrom)) {
-        // Search the encounter listand remove based on index.
-        for (var i = 0; i < foundItem.troopIndexes.length; i++) {
-          $dataMap.encounterList.splice(foundItem[i], 1);
-        }
-      } else {
-        // Remove only the region from the enemy troop.
-        for (var i = 0; i < $dataMap.encounterList.length; i++) {
-          if ($dataMap.encounterList[i].troopId === foundItem.troopId) {
-            var index = (0, _findIndex2.default)($dataMap.encounterList[i].regionSet, foundItem.regionToRemoveFrom);
-            if (index !== -1) {
-              $dataMap.encounterList[i].regionSet.splice(index, 1);
-            }
-          }
-        }
-      }
-    }
+  // Constantly replace the encounter list
+  if (!(0, _isUndefined2.default)(_encounter_holder2.default.getContainer())) {
+    $dataMap.encounterList = _encounter_holder2.default.findByMapId($gameMap.mapId()).encounterList;
   }
 };
 
-},{"../system/container/encounter_list":62,"lodash/array/findIndex":1,"lodash/collection/findWhere":4,"lodash/lang/isUndefined":54}]},{},[61,63,64]);
+},{"../system/container/encounter_holder":72,"lodash/array/findIndex":1,"lodash/collection/findWhere":4,"lodash/lang/isUndefined":64}]},{},[71,73,76,75,74]);

@@ -1,5 +1,6 @@
 
-import EnounterListContainer from './system/container/encounter_list';
+import EnounterListContainer from './system/container/encounter_holder';
+import lodashIsUndefined     from 'lodash/lang/isUndefined';
 
 /*:
  * @plugindesc Lets you remove a troop id from troops associated to a region after a battle.
@@ -55,19 +56,30 @@ class FlareRemoveTroopFromRegion {
   }
 
   /**
-   * Remove from the troop container.
+   * Restore a specific map to default map encounter list.
    *
    * @param int mapId
    */
-  static removeFromTroopContainer(mapId) {
-    EnounterListContainer.removeFromContainer(mapId);
+  static restoreToDefault(mapId) {
+
+    if (!lodashIsUndefined(EnounterListContainer.getContainer())) {
+      for (var i = 0; i < EnounterListContainer.getContainer().length; i++) {
+        if (EnounterListContainer.getContainer()[i].mapId = mapId) {
+          EnounterListContainer.getContainer()[i] = EnounterListContainer.getOriginalArray(mapId)
+        }
+      }
+    }
   }
 
   /**
-   * Empty the whole container.
+   * Gets the mutated container.
+   *
+   * @return array or undefined
    */
-  static emptyWholeContainer() {
-    EnounterListContainer.emptyContainer();
+  static getMutatedContainer() {
+    if (!lodashIsUndefined(EnounterListContainer.getContainer())) {
+      return EnounterListContainer.getContainer()
+    }
   }
 
   /**

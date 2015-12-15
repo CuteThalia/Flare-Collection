@@ -50,6 +50,8 @@ gulp.task('make:flare-remove-troop-from-region', function() {
         'src/remove-troop-from-region/flare_remove_troop_from_region.js',
         'src/remove-troop-from-region/update_battle_manager/battle_manager.js',
         'src/remove-troop-from-region/update_scene_map/scene_map.js',
+        'src/remove-troop-from-region/update_game_map/game_map.js',
+        'src/remove-troop-from-region/update_data_manager/data_manager.js'
       ]})
       .transform(babelify)
       .bundle()
