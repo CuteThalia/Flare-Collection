@@ -20,7 +20,10 @@ class EncounterHolder {
   static setTroopArray(mapId, encounterList) {
     if (lodashIsUndefined(this._encounterContainer)) {
       this._encounterContainer = [];
+    } else if (!lodashIsUndefined(lodashFindWhere(this._encounterContainer, {mapId: mapId}))) {
+      return;
     }
+
 
     this._encounterContainer.push({mapId: mapId, encounterList: lodashClone(encounterList, true)});
   }
@@ -33,6 +36,8 @@ class EncounterHolder {
   static storeOriginalArray(mapId, originalDataMapEncounterList) {
     if (lodashIsUndefined(this._originalEncounterContainer)) {
       this._originalEncounterContainer = [];
+    } else if (!lodashIsUndefined(lodashFindWhere(this._originalEncounterContainer, {mapId: mapId}))) {
+      return;
     }
 
     this._originalEncounterContainer.push({mapId: mapId, encounterList: lodashClone(originalDataMapEncounterList, true)});

@@ -8,33 +8,42 @@ import lodashIsUndefined     from 'lodash/lang/isUndefined';
  *
  * @help
  *
- * Super Easy script, create a parallel event that removes
- * troops from the encounterList on $dataMap. For example,
- * if you have a region with troop id x  it and you call:
+ * Super easy script that removed enemy troops x, y and z
+ * from the map region specified, even if enemy troop id
+ * belongs to multiple regions.
  *
- * FlareRemoveTroopFromRegion.removeOnBattleEnd(1, 1);
+ * We also save this data across maps, loading and so on.
  *
- * You are saying, remove troop id 1 from region 1. This only
- * works if the troop id is associated with the region in question.
+ * So how do we get started?
  *
- * Now what if you leave the map? Well if you come back to the map
- * that troop will still not be encountable.
+ * FlareRemoveTroopFromRegion.removeOnBattleEnd(x, y)
  *
- * So what do you do?
+ * x repersents the troop id, y repersents the region.
  *
- * FlareRemoveTroopFromRegion.removeFromTroopContainer(1)
+ * You can also do:
  *
- * What this does is state, remove the container for this map id
- * that holds all the enounters to be removed from a encounterList
- * associated to the map.
+ * FlareRemoveTroopFromRegion.removeOnBattleEnd([a,b,c], y)
  *
- * If you want to reset all enemies that are to be removed from all
- * maps:
+ * Which will remove, on success any on of those from the region assuming
+ * a, b or c match the troop id you are fighting.
  *
- * FlareRemoveTroopFromRegion.emptyWholeContainer()
+ * Both commands work in a parallel process event, infact that is
+ * what they are designed for.
  *
- * This will allow all regions to have the encounters you stated
- * to be removed to be encountable again.
+ * Because this data replaces the original map encounter list
+ * You can use:
+ *
+ * FlareRemoveTroopFromRegion.restoreToDefault(x)
+ *
+ * Where x is the map id you want to restore the original encounter
+ * list for.
+ *
+ * Keep in mind that if you restore the ecnounter list and do not create
+ * a switch to turn off the parallel process event then you will
+ * re-manipulate the data structure all over again.
+ *
+ * The mutated data structure is saved when you save the game and loded
+ * when you load the game. Kepp that in mind.
  */
 
 /**
