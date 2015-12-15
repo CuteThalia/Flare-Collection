@@ -58,8 +58,7 @@ This adds ten windows to an event that will then all be called.
 
 ## Event Based Notifications
 
-Now you can enable a set of options to turn on event based notifications for weapons, armor, items, xp, gold, hp, mp and so on. There are a ton of individual event notifications that you can turn on or off so that you
-are not creating events all the time that contain notifications after a party gains x item or loses x hp.
+Now you can enable a set of options to turn on event based notifications for weapons, armor, items, xp, gold, hp, mp and so on. There are a ton of individual event notifications that you can turn on or off so that you are not creating events all the time that contain notifications after a party gains x item or loses x hp.
 
 These only trigger on events that require the player to some how activate them. They do not play in battle or in
 menus.

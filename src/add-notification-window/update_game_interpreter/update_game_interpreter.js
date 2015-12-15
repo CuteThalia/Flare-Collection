@@ -6,9 +6,9 @@ Game_Interpreter.prototype.command125 = function() {
     var text  = '';
 
     if (value < 0) {
-      text = "\\c[16]Party Loses Gold in the amount of\\c[0]: " + Math.abs(value);
+      text = NotificationOptions.getNotificationOptions().goldNotificationGainsWindowText + Math.abs(value);
     } else {
-      text = "\\c[16]Party Gains Gold in the amount of\\c[0]: " + Math.abs(value);
+      text = NotificationOptions.getNotificationOptions().goldNotificationLossWindowText + Math.abs(value);
     }
 
     this.processNotificationEvents(text, "showGoldNotificationEvent", value, {

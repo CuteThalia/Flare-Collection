@@ -105,6 +105,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param Gold Notification Text (Loss)
+ * @desc Text to display when gold is lost.
+ * Default: \\c[16]Party Loses Gold in the amount of \\c[0]:
+ * @default \\c[16]Party Loses Gold in the amount of \\c[0]:
+ *
+ * @param Gold Notification Text (Gained)
+ * @desc Text to display when gold is gained.
+ * Default: \\c[16]Party Gains Gold in the amount of \\c[0]:
+ * @default \\c[16]Party Gains Gold in the amount of \\c[0]:
+ *
  * @param ---Item Event---
  * @desc
  *
@@ -132,6 +142,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @desc Should the item window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Item Notification Text (Loss)
+ * @desc Text to display when gold is lost.
+ * Default: Party Loses
+ * @default Party Loses
+ *
+ * @param Item Notification Text (Gained)
+ * @desc Text to display when gold is gained.
+ * Default: Party Gains
+ * @default Party Gains
+ *
+ * @param Item Notification Text (color)
+ * @desc color to be used.
+ * Default: 16
+ * @default 16 
  *
  * @param ---Weapon Event---
  * @desc
@@ -546,7 +571,7 @@ _NotificationOptions.createNotificationOptions();
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
 
-},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":7,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
+},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":6,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -657,11 +682,16 @@ var NotificationOptions = (function () {
         goldNotificationFontSize: parseInt(FlareNotificationWindow['Gold Notification Font Size']),
         goldNotificationWindowMoveDown: this._goldNotificationWindowMoveDown,
         goldNotificationWindowFadeOut: this._goldNotificationWindowFadeOut,
+        goldNotificationLossWindowText: FlareNotificationWindow['Gold Notification Text (Loss)'],
+        goldNotificationGainWindowText: FlareNotificationWindow['Gold Notification Text (Gained)'],
         showItemNotificationEvent: FlareNotificationWindow['Display Item Notification Event?'],
         itemNotificationWindowWidth: parseInt(FlareNotificationWindow['Item Notification Width']),
         itemNotificationFontSize: parseInt(FlareNotificationWindow['Item Notification Font Size']),
         itemNotificationWindowMoveDown: this._itemNotificationWindowMoveDown,
         itemNotificationWindowFadeOut: this._itemNotificationWindowFadeOut,
+        itemNotificationWindowTextGain: FlareNotificationWindow['Notification Text (Loss)'],
+        itemNotificationWindowTextLoss: FlareNotificationWindow['Item Notification Text (Gained)'],
+        itemNotificationWindowColor: parseInt(FlareNotificationWindow['Item Notification Text (color)']),
         showWeaponNotificationEvent: FlareNotificationWindow['Display Weapon Notification Event?'],
         weaponNotificationWindowWidth: parseInt(FlareNotificationWindow['Weapon Notification Width']),
         weaponNotificationFontSize: parseInt(FlareNotificationWindow['Weapon Notification Font Size']),
@@ -901,76 +931,6 @@ module.exports = NotificationOptions;
 },{}],5:[function(require,module,exports){
 'use strict';
 
-var _flare_notification_window = require('../windows/flare_notification_window');
-
-var _flare_notification_window2 = _interopRequireDefault(_flare_notification_window);
-
-var _options = require('../notification/window/options');
-
-var _options2 = _interopRequireDefault(_options);
-
-var _notification_options = require('../notification_options/notification_options');
-
-var _notification_options2 = _interopRequireDefault(_notification_options);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize; /**
-                                                                            * @namespace FlareNotification.
-                                                                            */
-
-/**
- * Responsible for updating scene map.
- *
- * Allows us to show notifications on the map.
- */
-
-Scene_Map.prototype.initialize = function () {
-  oldSceneMapPrototypeInitializeMethod.call(this);
-  this._isWindowOpen = false;
-
-  if (isNaN(parseInt(_notification_options2.default.getNotificationOptions().timeTillNextWindow))) {
-    throw new Error('Sorry but: ' + _notification_options2.default.getNotificationOptions().timeTillNextWindow + ' is not a number');
-  }
-
-  this._waitForWindowToClose = 0;
-  this._flareWindow = null;
-};
-
-var oldSceneMapPrototypeUpdateMainMethod = Scene_Map.prototype.updateMain;
-Scene_Map.prototype.updateMain = function () {
-  oldSceneMapPrototypeUpdateMainMethod.call(this);
-
-  if (this._waitForWindowToClose > 0) {
-    this._waitForWindowToClose--;
-  } else if (FlareNotification._getQueue().length > 0) {
-    this.handleQueue();
-  }
-};
-
-Scene_Map.prototype.handleQueue = function () {
-  this.openFlareNotificationWindow();
-  this.allowAnotherWindowToBeOpened(this._flareWindow);
-};
-
-Scene_Map.prototype.openFlareNotificationWindow = function () {
-  if (this._flareWindow === null) {
-    this._flareWindow = FlareNotification._getQueue().shift();
-    this.addChild(this._flareWindow.windowMethod);
-
-    this._flareWindow.windowMethod.open(this._flareWindow.text);
-  }
-};
-
-Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) {
-  this.removeChild(flareNotification);
-  this._flareWindow = null;
-  this._waitForWindowToClose = _notification_options2.default.getNotificationOptions().timeTillNextWindow;
-};
-
-},{"../notification/window/options":3,"../notification_options/notification_options":4,"../windows/flare_notification_window":7}],6:[function(require,module,exports){
-'use strict';
-
 var _notification_options = require('../notification_options/notification_options');
 
 var _notification_options2 = _interopRequireDefault(_notification_options);
@@ -983,9 +943,9 @@ Game_Interpreter.prototype.command125 = function () {
   var text = '';
 
   if (value < 0) {
-    text = "\\c[16]Party Loses Gold in the amount of\\c[0]: " + Math.abs(value);
+    text = _notification_options2.default.getNotificationOptions().goldNotificationGainsWindowText + Math.abs(value);
   } else {
-    text = "\\c[16]Party Gains Gold in the amount of\\c[0]: " + Math.abs(value);
+    text = _notification_options2.default.getNotificationOptions().goldNotificationLossWindowText + Math.abs(value);
   }
 
   this.processNotificationEvents(text, "showGoldNotificationEvent", value, {
@@ -1331,7 +1291,7 @@ Game_Interpreter.prototype.processNotificationEvents = function (text, showKey, 
   }
 };
 
-},{"../notification_options/notification_options":4}],7:[function(require,module,exports){
+},{"../notification_options/notification_options":4}],6:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1432,7 +1392,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
     key: 'update',
     value: function update() {
       _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), 'update', this).call(this, this);
-
+      console.log('asdasdas');
       if (this._showCount > 0) {
         this.updateFadeIn();
 
@@ -1519,7 +1479,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareNotificationWindow;
 
-},{"../../lib/windows/flare_window_base":8,"../notification/window/options":3,"lodash/lang/isUndefined":1}],8:[function(require,module,exports){
+},{"../../lib/windows/flare_window_base":7,"../notification/window/options":3,"lodash/lang/isUndefined":1}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1584,4 +1544,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}]},{},[2,5,6]);
+},{}]},{},[2,5]);

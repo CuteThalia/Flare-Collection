@@ -64,6 +64,16 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param Gold Notification Text (Loss)
+ * @desc Text to display when gold is lost.
+ * Default: \\c[16]Party Loses Gold in the amount of \\c[0]:
+ * @default \\c[16]Party Loses Gold in the amount of \\c[0]:
+ *
+ * @param Gold Notification Text (Gained)
+ * @desc Text to display when gold is gained.
+ * Default: \\c[16]Party Gains Gold in the amount of \\c[0]:
+ * @default \\c[16]Party Gains Gold in the amount of \\c[0]:
+ *
  * @param ---Item Event---
  * @desc
  *
@@ -91,6 +101,21 @@ import WindowOptions           from './notification/window/options';
  * @desc Should the item window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Item Notification Text (Loss)
+ * @desc Text to display when gold is lost.
+ * Default: Party Loses
+ * @default Party Loses
+ *
+ * @param Item Notification Text (Gained)
+ * @desc Text to display when gold is gained.
+ * Default: Party Gains
+ * @default Party Gains
+ *
+ * @param Item Notification Text (color)
+ * @desc color to be used.
+ * Default: 16
+ * @default 16 
  *
  * @param ---Weapon Event---
  * @desc

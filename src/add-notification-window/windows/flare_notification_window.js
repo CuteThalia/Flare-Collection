@@ -26,7 +26,7 @@ class FlareNotificationWindow extends FlareWindowBase {
       this._windowWidth = 350;
     }
 
-    var width = this._windowWidth;
+    var width  = this._windowWidth;
     var height = this.windowHeight();
 
     var x = 0;
@@ -67,7 +67,6 @@ class FlareNotificationWindow extends FlareWindowBase {
 
   update() {
     super.update(this);
-
     if (this._showCount > 0) {
       this.updateFadeIn();
 
