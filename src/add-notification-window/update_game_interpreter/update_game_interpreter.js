@@ -6,9 +6,9 @@ Game_Interpreter.prototype.command125 = function() {
     var text  = '';
 
     if (value < 0) {
-      text = NotificationOptions.getNotificationOptions().goldNotificationGainsWindowText + Math.abs(value);
+      text = "\\c[16]" + NotificationOptions.getNotificationOptions().goldNotificationLossWindowText + "\\c[0] "  + Math.abs(value);
     } else {
-      text = NotificationOptions.getNotificationOptions().goldNotificationLossWindowText + Math.abs(value);
+      text = "\\c[16]" + NotificationOptions.getNotificationOptions().goldNotificationGainWindowText + "\\c[0] " + Math.abs(value);
     }
 
     this.processNotificationEvents(text, "showGoldNotificationEvent", value, {
@@ -30,9 +30,9 @@ Game_Interpreter.prototype.command126 = function() {
     var text  = '';
 
     if (value < 0) {
-      text = "\\c[16]Party Loses "+Math.abs(value)+" \\i["+$dataItems[this._params[0]].iconIndex+"] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
+      text = "\\c[16]"+NotificationOptions.getNotificationOptions().itemNotificationWindowTextLoss+" "+Math.abs(value)+" \\i["+$dataItems[this._params[0]].iconIndex+"] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
     } else {
-      text = "\\c[16]Party Gains "+Math.abs(value)+" \\i["+$dataItems[this._params[0]].iconIndex+"] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
+      text = "\\c[16]"+NotificationOptions.getNotificationOptions().itemNotificationWindowTextGain+" "+Math.abs(value)+" \\i["+$dataItems[this._params[0]].iconIndex+"] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
     }
 
     this.processNotificationEvents(text, "showItemNotificationEvent", value, {
@@ -54,9 +54,9 @@ Game_Interpreter.prototype.command127 = function() {
     var text  = '';
 
     if (value < 0) {
-      text = "\\c[16]Party Loses "+Math.abs(value)+" \\i["+$dataWeapons[this._params[0]].iconIndex+"] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
+      text = "\\c[16]"+NotificationOptions.getNotificationOptions().weaponNotificationWindowTextLoss+" "+Math.abs(value)+" \\i["+$dataWeapons[this._params[0]].iconIndex+"] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
     } else {
-      text = "\\c[16]Party Gains "+Math.abs(value)+" \\i["+$dataWeapons[this._params[0]].iconIndex+"] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
+      text = "\\c[16]"+NotificationOptions.getNotificationOptions().weaponNotificationWindowTextGained+" "+Math.abs(value)+" \\i["+$dataWeapons[this._params[0]].iconIndex+"] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
     }
 
     this.processNotificationEvents(text, "showWeaponNotificationEvent", value, {
@@ -78,9 +78,9 @@ Game_Interpreter.prototype.command128 = function() {
     var text  = '';
 
     if (value < 0) {
-      text = "\\c[16]Party Loses "+Math.abs(value)+" \\i["+$dataArmors[this._params[0]].iconIndex+"] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
+      text = "\\c[16]"+NotificationOptions.getNotificationOptions().armorNotificationWindowTextLoss+" "+Math.abs(value)+" \\i["+$dataArmors[this._params[0]].iconIndex+"] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
     } else {
-      text = "\\c[16]Party Gains "+Math.abs(value)+" \\i["+$dataArmors[this._params[0]].iconIndex+"] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
+      text = "\\c[16]"+NotificationOptions.getNotificationOptions().armorNotificationWindowTextGained+" "+Math.abs(value)+" \\i["+$dataArmors[this._params[0]].iconIndex+"] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
     }
 
     this.processNotificationEvents(text, "showArmorNotificationEvent", value, {
@@ -107,7 +107,7 @@ Game_Interpreter.prototype.command129 = function() {
                 $gameActors.actor(this._params[0]).setup(this._params[0]);
             }
 
-            text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to join your party!\\c[0]";
+            text = $gameActors.actor(this._params[0]).name() + "\\c[16] "+NotificationOptions.getNotificationOptions().partyNotificationWindowJoinedText+"\\c[0]";
 
             this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
               moveDown:       NotificationOptions.getNotificationOptions().partyNotificationWindowMoveDown,
@@ -120,7 +120,7 @@ Game_Interpreter.prototype.command129 = function() {
 
             $gameParty.addActor(this._params[0]);
         } else {  // Remove
-            text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to leave your party.\\c[0]";
+            text = $gameActors.actor(this._params[0]).name() + "\\c[16] "+NotificationOptions.getNotificationOptions().partyNotificationWindowLeftText+"\\c[0]";
 
             this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
               moveDown:       NotificationOptions.getNotificationOptions().partyNotificationWindowMoveDown,
@@ -146,9 +146,9 @@ Game_Interpreter.prototype.command311 = function() {
     this.iterateActorEx(this._params[0], this._params[1], function(actor) {
 
       if (value < 0) {
-        text = actor.name() + " \\c[16]Loses "+Math.abs(value)+" HP \\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().hpNotificationWindowLoseText+" "+Math.abs(value)+" HP \\c[0]";
       } else {
-        text = actor.name() + " \\c[16]Gains "+Math.abs(value)+" HP \\c[0]";;
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().hpNotificationWindowGainText+" "+Math.abs(value)+" HP \\c[0]";;
       }
 
       self.processNotificationEvents(text, "showHpChangingForActor", value, {
@@ -174,9 +174,9 @@ Game_Interpreter.prototype.command312 = function() {
 
     this.iterateActorEx(this._params[0], this._params[1], function(actor) {
       if (value < 0) {
-        text = actor.name() + " \\c[16]Loses "+Math.abs(value)+" MP \\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().mpNotificationWindowLoseText+" "+Math.abs(value)+" MP \\c[0]";
       } else {
-        text = actor.name() + " \\c[16]Gains "+Math.abs(value)+" MP \\c[0]";;
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().mpNotificationWindowGainText+" "+Math.abs(value)+" MP \\c[0]";;
       }
 
       self.processNotificationEvents(text, "showMpChangingForActor", value, {
@@ -201,9 +201,9 @@ Game_Interpreter.prototype.command326 = function() {
 
     this.iterateActorEx(this._params[0], this._params[1], function(actor) {
       if (value < 0) {
-        text = actor.name() + " \\c[16]Loses "+Math.abs(value)+" TP \\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().tpNotificationWindowLoseText+" "+Math.abs(value)+" TP \\c[0]";
       } else {
-        text = actor.name() + " \\c[16]Gains "+Math.abs(value)+" TP \\c[0]";;
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().tpNotificationWindowGainText+" "+Math.abs(value)+" TP \\c[0]";;
       }
 
       self.processNotificationEvents(text, "showTpChangingForActor", value, {
@@ -228,7 +228,7 @@ Game_Interpreter.prototype.command313 = function() {
 
         if (this._params[2] === 0) {
 
-          text = actor.name() + " \\c[16]Gets \\i["+$dataStates[this._params[3]].iconIndex+"] "+$dataStates[this._params[3]].name+" applied\\c[0]";
+          text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().stateNotificationWindowLoseText[0].trim()+" "+$dataStates[this._params[3]].name+" "+NotificationOptions.getNotificationOptions().stateNotificationWindowGainText[1].trim()+"\\c[0]";
 
           this.processNotificationEvents(text, "showStateChangingForActor", value, {
             moveDown:       NotificationOptions.getNotificationOptions().stateNotificationWindowMoveDown,
@@ -241,7 +241,7 @@ Game_Interpreter.prototype.command313 = function() {
 
           actor.addState(this._params[3]);
         } else {
-          text = actor.name() + " \\c[16]Has \\i["+$dataStates[this._params[3]].iconIndex+"] "+$dataStates[this._params[3]].name+" removed\\c[0]";
+          text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().stateNotificationWindowGainText[0].trim()+" "+$dataStates[this._params[3]].name+" "+NotificationOptions.getNotificationOptions().stateNotificationWindowLoseText[1].trim()+"\\c[0]";
 
           this.processNotificationEvents(text, "showStateChangingForActor", value, {
             moveDown:       NotificationOptions.getNotificationOptions().stateNotificationWindowMoveDown,
@@ -266,7 +266,7 @@ Game_Interpreter.prototype.command314 = function() {
     var text = '';
 
     this.iterateActorEx(this._params[0], this._params[1], function(actor) {
-      text = actor.name() + " \\c[16]has fully recovered!\\c[0]";
+      text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().recoverAllNotificationWindowText+"\\c[0]";
 
       this.processNotificationEvents(text, "showRecoverAllForActor", value, {
         moveDown:       NotificationOptions.getNotificationOptions().recoverAllNotificationWindowMoveDown,
@@ -289,9 +289,9 @@ Game_Interpreter.prototype.command315 = function() {
 
     this.iterateActorEx(this._params[0], this._params[1], function(actor) {
       if (value < 0) {
-        text = actor.name() + " \\c[16]Looses " + Math.abs(value) + " XP\\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().xPNotificationWindowLoseText+" " + Math.abs(value) + " XP\\c[0]";
       } else {
-        text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " XP\\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().xPNotificationWindowGainText+" " + Math.abs(value) + " XP\\c[0]";
       }
 
       this.processNotificationEvents(text, "showXpForActor", value, {
@@ -315,9 +315,9 @@ Game_Interpreter.prototype.command316 = function() {
 
     this.iterateActorEx(this._params[0], this._params[1], function(actor) {
       if (value < 0) {
-        text = actor.name() + " \\c[16]Looses " + Math.abs(value) + " Level(s)\\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().levelNotificationWindowLoseText+" " + Math.abs(value) + " Level(s)\\c[0]";
       } else {
-        text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " Levels(s)\\c[0]";
+        text = actor.name() + " \\c[16]"+NotificationOptions.getNotificationOptions().levelNotificationWindowGainText+" " + Math.abs(value) + " Levels(s)\\c[0]";
       }
 
       this.processNotificationEvents(text, "showLevelGainForActor", value, {

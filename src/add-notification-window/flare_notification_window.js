@@ -66,13 +66,13 @@ import WindowOptions           from './notification/window/options';
  *
  * @param Gold Notification Text (Loss)
  * @desc Text to display when gold is lost.
- * Default: \\c[16]Party Loses Gold in the amount of \\c[0]:
- * @default \\c[16]Party Loses Gold in the amount of \\c[0]:
+ * Default: Party Loses Gold in the amount of
+ * @default Party Loses Gold in the amount of
  *
  * @param Gold Notification Text (Gained)
  * @desc Text to display when gold is gained.
- * Default: \\c[16]Party Gains Gold in the amount of \\c[0]:
- * @default \\c[16]Party Gains Gold in the amount of \\c[0]:
+ * Default: Party Gains Gold in the amount of
+ * @default Party Gains Gold in the amount of
  *
  * @param ---Item Event---
  * @desc
@@ -103,19 +103,14 @@ import WindowOptions           from './notification/window/options';
  * @default true
  *
  * @param Item Notification Text (Loss)
- * @desc Text to display when gold is lost.
+ * @desc Text to display when item is lost.
  * Default: Party Loses
  * @default Party Loses
  *
  * @param Item Notification Text (Gained)
- * @desc Text to display when gold is gained.
+ * @desc Text to display when item is gained.
  * Default: Party Gains
  * @default Party Gains
- *
- * @param Item Notification Text (color)
- * @desc color to be used.
- * Default: 16
- * @default 16 
  *
  * @param ---Weapon Event---
  * @desc
@@ -145,6 +140,16 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param Weapon Notification Text (Loss)
+ * @desc Text to display when weapon is lost.
+ * Default: Party Loses
+ * @default Party Loses
+ *
+ * @param Weapon Notification Text (Gained)
+ * @desc Text to display when weapon is gained.
+ * Default: Party Gains
+ * @default Party Gains
+ *
  * @param ---Armor Event---
  * @desc
  *
@@ -172,6 +177,16 @@ import WindowOptions           from './notification/window/options';
  * @desc Should the armor window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Armor Notification Text (Loss)
+ * @desc Text to display when armor is lost.
+ * Default: Party Loses
+ * @default Party Loses
+ *
+ * @param Armor Notification Text (Gained)
+ * @desc Text to display when armor is gained.
+ * Default: Party Gains
+ * @default Party Gains
  *
  * @param ---Party Event---
  * @desc
@@ -201,6 +216,16 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param Party Notification Text (Left)
+ * @desc Text to display when party member joins.
+ * Default: Has chosen to leave your party!
+ * @default Has chosen to leave your party!
+ *
+ * @param Party Notification Text (Joined)
+ * @desc Text to display when party member leaves.
+ * Default: Has chosen to join your party!
+ * @default Has chosen to join your party!
+ *
  * @param ---HP Change Event---
  * @desc
  *
@@ -228,6 +253,16 @@ import WindowOptions           from './notification/window/options';
  * @desc Should the hp window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Hp Notification Text (Lost)
+ * @desc Text to display when hp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Hp Notification Text (Gained)
+ * @desc Text to display when hp is gained.
+ * Default: Has gained
+ * @default Has gained
  *
  * @param ---MP Change Event---
  * @desc
@@ -257,6 +292,16 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param Mp Notification Text (Lost)
+ * @desc Text to display when mp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Mp Notification Text (Gained)
+ * @desc Text to display when mp is gained.
+ * Default: Has gained
+ * @default Has gained
+ *
  * @param ---TP Change Event---
  * @desc
  *
@@ -284,6 +329,16 @@ import WindowOptions           from './notification/window/options';
  * @desc Should the tp window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Tp Notification Text (Lost)
+ * @desc Text to display when tp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Tp Notification Text (Gained)
+ * @desc Text to display when tp is gained.
+ * Default: Has gained
+ * @default Has gained
  *
  * @param ---State Change Event---
  * @desc
@@ -313,6 +368,16 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param State Notification Text (Lost)
+ * @desc Text to display when state has been removed. Should be comma seperated.
+ * Default: Has, removed.
+ * @default Has, removed.
+ *
+ * @param State Notification Text (Gained)
+ * @desc Text to display when state has been gained. Should be comma seperated.
+ * Default: Has, gained.
+ * @default Has, gained.
+ *
  * @param ---Recover All Event---
  * @desc
  *
@@ -340,6 +405,11 @@ import WindowOptions           from './notification/window/options';
  * @desc Should the recover all window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Recovered all text
+ * @desc Text to display when the party or character recovers all.
+ * Default: has fully recovered!
+ * @default has fully recovered!
  *
  * @param ---XP Change Event---
  * @desc
@@ -369,6 +439,16 @@ import WindowOptions           from './notification/window/options';
  * Default: true
  * @default true
  *
+ * @param Xp Notification Text (Lost)
+ * @desc Text to display when xp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Xp Notification Text (Gained)
+ * @desc Text to display when xp is gained.
+ * Default: Has gained
+ * @default Has gained
+ *
  * @param ---Level Change Event---
  * @desc
  *
@@ -396,6 +476,16 @@ import WindowOptions           from './notification/window/options';
  * @desc Should the level window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Level Notification Text (Lost)
+ * @desc Text to display when level is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Level Notification Text (Gained)
+ * @desc Text to display when level is gained.
+ * Default: Has gained
+ * @default Has gained
  *
  * @help
  *

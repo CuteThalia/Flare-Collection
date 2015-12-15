@@ -26,6 +26,7 @@ gulp.task('make:flare-currency', function() {
 gulp.task('make:flare-notification-window', function() {
   return browserify({entries: [
         'src/add-notification-window/flare_notification_window.js',
+        'src/add-notification-window/scene_map_update/scene_map_update.js',
         'src/add-notification-window/update_game_interpreter/update_game_interpreter.js'
       ]})
       .transform(babelify)

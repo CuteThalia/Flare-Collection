@@ -107,13 +107,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @param Gold Notification Text (Loss)
  * @desc Text to display when gold is lost.
- * Default: \\c[16]Party Loses Gold in the amount of \\c[0]:
- * @default \\c[16]Party Loses Gold in the amount of \\c[0]:
+ * Default: Party Loses Gold in the amount of
+ * @default Party Loses Gold in the amount of
  *
  * @param Gold Notification Text (Gained)
  * @desc Text to display when gold is gained.
- * Default: \\c[16]Party Gains Gold in the amount of \\c[0]:
- * @default \\c[16]Party Gains Gold in the amount of \\c[0]:
+ * Default: Party Gains Gold in the amount of
+ * @default Party Gains Gold in the amount of
  *
  * @param ---Item Event---
  * @desc
@@ -144,19 +144,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @default true
  *
  * @param Item Notification Text (Loss)
- * @desc Text to display when gold is lost.
+ * @desc Text to display when item is lost.
  * Default: Party Loses
  * @default Party Loses
  *
  * @param Item Notification Text (Gained)
- * @desc Text to display when gold is gained.
+ * @desc Text to display when item is gained.
  * Default: Party Gains
  * @default Party Gains
- *
- * @param Item Notification Text (color)
- * @desc color to be used.
- * Default: 16
- * @default 16 
  *
  * @param ---Weapon Event---
  * @desc
@@ -186,6 +181,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param Weapon Notification Text (Loss)
+ * @desc Text to display when weapon is lost.
+ * Default: Party Loses
+ * @default Party Loses
+ *
+ * @param Weapon Notification Text (Gained)
+ * @desc Text to display when weapon is gained.
+ * Default: Party Gains
+ * @default Party Gains
+ *
  * @param ---Armor Event---
  * @desc
  *
@@ -213,6 +218,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @desc Should the armor window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Armor Notification Text (Loss)
+ * @desc Text to display when armor is lost.
+ * Default: Party Loses
+ * @default Party Loses
+ *
+ * @param Armor Notification Text (Gained)
+ * @desc Text to display when armor is gained.
+ * Default: Party Gains
+ * @default Party Gains
  *
  * @param ---Party Event---
  * @desc
@@ -242,6 +257,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param Party Notification Text (Left)
+ * @desc Text to display when party member joins.
+ * Default: Has chosen to leave your party!
+ * @default Has chosen to leave your party!
+ *
+ * @param Party Notification Text (Joined)
+ * @desc Text to display when party member leaves.
+ * Default: Has chosen to join your party!
+ * @default Has chosen to join your party!
+ *
  * @param ---HP Change Event---
  * @desc
  *
@@ -269,6 +294,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @desc Should the hp window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Hp Notification Text (Lost)
+ * @desc Text to display when hp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Hp Notification Text (Gained)
+ * @desc Text to display when hp is gained.
+ * Default: Has gained
+ * @default Has gained
  *
  * @param ---MP Change Event---
  * @desc
@@ -298,6 +333,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param Mp Notification Text (Lost)
+ * @desc Text to display when mp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Mp Notification Text (Gained)
+ * @desc Text to display when mp is gained.
+ * Default: Has gained
+ * @default Has gained
+ *
  * @param ---TP Change Event---
  * @desc
  *
@@ -325,6 +370,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @desc Should the tp window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Tp Notification Text (Lost)
+ * @desc Text to display when tp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Tp Notification Text (Gained)
+ * @desc Text to display when tp is gained.
+ * Default: Has gained
+ * @default Has gained
  *
  * @param ---State Change Event---
  * @desc
@@ -354,6 +409,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param State Notification Text (Lost)
+ * @desc Text to display when state has been removed. Should be comma seperated.
+ * Default: Has, removed.
+ * @default Has, removed.
+ *
+ * @param State Notification Text (Gained)
+ * @desc Text to display when state has been gained. Should be comma seperated.
+ * Default: Has, gained.
+ * @default Has, gained.
+ *
  * @param ---Recover All Event---
  * @desc
  *
@@ -381,6 +446,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @desc Should the recover all window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Recovered all text
+ * @desc Text to display when the party or character recovers all.
+ * Default: has fully recovered!
+ * @default has fully recovered!
  *
  * @param ---XP Change Event---
  * @desc
@@ -410,6 +480,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Default: true
  * @default true
  *
+ * @param Xp Notification Text (Lost)
+ * @desc Text to display when xp is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Xp Notification Text (Gained)
+ * @desc Text to display when xp is gained.
+ * Default: Has gained
+ * @default Has gained
+ *
  * @param ---Level Change Event---
  * @desc
  *
@@ -437,6 +517,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @desc Should the level window fade out, if it isn't staying at the top?
  * Default: true
  * @default true
+ *
+ * @param Level Notification Text (Lost)
+ * @desc Text to display when level is lost.
+ * Default: Has lost
+ * @default Has lost
+ *
+ * @param Level Notification Text (Gained)
+ * @desc Text to display when level is gained.
+ * Default: Has gained
+ * @default Has gained
  *
  * @help
  *
@@ -571,7 +661,7 @@ _NotificationOptions.createNotificationOptions();
 // Do not touch or manipulate this.
 FlareNotification._arrayOfNotifications = [];
 
-},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":6,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
+},{"./notification/window/options":3,"./notification_options/notification_options":4,"./windows/flare_notification_window":7,"lodash/lang/isUndefined":1}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
@@ -689,59 +779,77 @@ var NotificationOptions = (function () {
         itemNotificationFontSize: parseInt(FlareNotificationWindow['Item Notification Font Size']),
         itemNotificationWindowMoveDown: this._itemNotificationWindowMoveDown,
         itemNotificationWindowFadeOut: this._itemNotificationWindowFadeOut,
-        itemNotificationWindowTextGain: FlareNotificationWindow['Notification Text (Loss)'],
-        itemNotificationWindowTextLoss: FlareNotificationWindow['Item Notification Text (Gained)'],
-        itemNotificationWindowColor: parseInt(FlareNotificationWindow['Item Notification Text (color)']),
+        itemNotificationWindowTextGain: FlareNotificationWindow['Item Notification Text (Gained)'],
+        itemNotificationWindowTextLoss: FlareNotificationWindow['Item Notification Text (Loss)'],
         showWeaponNotificationEvent: FlareNotificationWindow['Display Weapon Notification Event?'],
         weaponNotificationWindowWidth: parseInt(FlareNotificationWindow['Weapon Notification Width']),
         weaponNotificationFontSize: parseInt(FlareNotificationWindow['Weapon Notification Font Size']),
         weaponNotificationWindowMoveDown: this._weaponNotificationWindowMoveDown,
         weaponNotificationWindowFadeOut: this._weaponNotificationWindowFadeOut,
+        weaponNotificationWindowTextGained: FlareNotificationWindow['Weapon Notification Text (Gained)'],
+        weaponNotificationWindowTextLoss: FlareNotificationWindow['Weapon Notification Text (Loss)'],
         showArmorNotificationEvent: FlareNotificationWindow['Display Armor Notification Event?'],
         armorNotificationWindowWidth: parseInt(FlareNotificationWindow['Armor Notification Width']),
         armorNotificationFontSize: parseInt(FlareNotificationWindow['Armor Notification Font Size']),
         armorNotificationWindowMoveDown: this._armorNotificationWindowMoveDown,
         armorNotificationWindowFadeOut: this._armorNotificationWindowFadeOut,
+        armorNotificationWindowTextGained: FlareNotificationWindow['Armor Notification Text (Gained)'],
+        armorNotificationWindowTextLoss: FlareNotificationWindow['Armor Notification Text (Loss)'],
         showPartyMemberJoiningParty: FlareNotificationWindow['Display Party Notification Event?'],
         partyNotificationWindowWidth: parseInt(FlareNotificationWindow['Party Notification Width']),
         partyNotificationFontSize: parseInt(FlareNotificationWindow['Party Notification Font Size']),
         partyNotificationWindowMoveDown: this._partyNotificationWindowMoveDown,
         partyNotificationWindowFadeOut: this._partyNotificationWindowFadeOut,
+        partyNotificationWindowJoinedText: FlareNotificationWindow['Party Notification Text (Joined)'],
+        partyNotificationWindowLeftText: FlareNotificationWindow['Party Notification Text (Left)'],
         showHpChangingForActor: FlareNotificationWindow['Display HP Notification Event?'],
         hpNotificationWindowWidth: parseInt(FlareNotificationWindow['HP Notification Width']),
         hpNotificationFontSize: parseInt(FlareNotificationWindow['HP Notification Font Size']),
         hpNotificationWindowMoveDown: this._hpNotificationWindowMoveDown,
         hpNotificationWindowFadeOut: this._hpNotificationWindowFadeOut,
+        hpNotificationWindowLoseText: FlareNotificationWindow['Hp Notification Text (Lost)'],
+        hpNotificationWindowGainText: FlareNotificationWindow['Hp Notification Text (Gained)'],
         showMpChangingForActor: FlareNotificationWindow['Display MP Notification Event?'],
         mpNotificationWindowWidth: parseInt(FlareNotificationWindow['MP Notification Width']),
         mpNotificationFontSize: parseInt(FlareNotificationWindow['MP Notification Font Size']),
         mpNotificationWindowMoveDown: this._mpNotificationWindowMoveDown,
         mpNotificationWindowFadeOut: this._mpNotificationWindowFadeOut,
+        mpNotificationWindowLoseText: FlareNotificationWindow['Mp Notification Text (Lost)'],
+        mpNotificationWindowGainText: FlareNotificationWindow['Mp Notification Text (Gained)'],
         showTpChangingForActor: FlareNotificationWindow['Display TP Notification Event?'],
         tpNotificationWindowWidth: parseInt(FlareNotificationWindow['TP Notification Width']),
         tpNotificationFontSize: parseInt(FlareNotificationWindow['TP Notification Font Size']),
         tpNotificationWindowMoveDown: this._tpNotificationWindowMoveDown,
         tpNotificationWindowFadeOut: this._tpNotificationWindowFadeOut,
+        tpNotificationWindowLoseText: FlareNotificationWindow['Tp Notification Text (Lost)'],
+        tpNotificationWindowGainText: FlareNotificationWindow['Tp Notification Text (Gained)'],
         showStateChangingForActor: FlareNotificationWindow['Display State Notification Event?'],
         stateNotificationWindowWidth: parseInt(FlareNotificationWindow['State Notification Width']),
         stateNotificationFontSize: parseInt(FlareNotificationWindow['State Notification Font Size']),
         stateNotificationWindowMoveDown: this._stateNotificationWindowMoveDown,
         stateNotificationWindowFadeOut: this._stateNotificationWindowFadeOut,
+        stateNotificationWindowLoseText: FlareNotificationWindow['State Notification Text (Lost)'].split(','),
+        stateNotificationWindowGainText: FlareNotificationWindow['State Notification Text (Gained)'].split(','),
         showRecoverAllForActor: FlareNotificationWindow['Display Recover All Notification Event?'],
         recoverAllNotificationWindowWidth: parseInt(FlareNotificationWindow['Recover All Notification Width']),
         recoverAllNotificationFontSize: parseInt(FlareNotificationWindow['Recover All Notification Font Size']),
         recoverAllNotificationWindowMoveDown: this._recoverAllNotificationWindowMoveDown,
         recoverAllNotificationWindowFadeOut: this._recoverAllNotificationWindowFadeOut,
+        recoverAllNotificationWindowText: FlareNotificationWindow['Recovered all text'],
         showXpForActor: FlareNotificationWindow['Display Xp Notification Event?'],
         xPNotificationWindowWidth: parseInt(FlareNotificationWindow['Xp Notification Width']),
         xPNotificationFontSize: parseInt(FlareNotificationWindow['Xp Notification Font Size']),
         xPNotificationWindowMoveDown: this._xPNotificationWindowMoveDown,
         xPNotificationWindowFadeOut: this._xPNotificationWindowFadeOut,
+        xPNotificationWindowLoseText: FlareNotificationWindow['Xp Notification Text (Lost)'],
+        xPNotificationWindowGainText: FlareNotificationWindow['Xp Notification Text (Gained)'],
         showLevelGainForActor: FlareNotificationWindow['Display Level gain Notification Event?'],
         levelGainNotificationWindowWidth: parseInt(FlareNotificationWindow['Level gain Notification Width']),
         levelGainNotificationFontSize: parseInt(FlareNotificationWindow['Level gain Notification Font Size']),
         levelGainNotificationWindowMoveDown: this._levelGainNotificationWindowMoveDown,
-        levelGainNotificationWindowFadeOut: this._levelGainNotificationWindowFadeOut
+        levelGainNotificationWindowFadeOut: this._levelGainNotificationWindowFadeOut,
+        levelNotificationWindowLoseText: FlareNotificationWindow['Level Notification Text (Lost)'],
+        levelNotificationWindowGainText: FlareNotificationWindow['Level Notification Text (Gained)']
       };
     }
   }, {
@@ -931,6 +1039,76 @@ module.exports = NotificationOptions;
 },{}],5:[function(require,module,exports){
 'use strict';
 
+var _flare_notification_window = require('../windows/flare_notification_window');
+
+var _flare_notification_window2 = _interopRequireDefault(_flare_notification_window);
+
+var _options = require('../notification/window/options');
+
+var _options2 = _interopRequireDefault(_options);
+
+var _notification_options = require('../notification_options/notification_options');
+
+var _notification_options2 = _interopRequireDefault(_notification_options);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var oldSceneMapPrototypeInitializeMethod = Scene_Map.prototype.initialize; /**
+                                                                            * @namespace FlareNotification.
+                                                                            */
+
+/**
+ * Responsible for updating scene map.
+ *
+ * Allows us to show notifications on the map.
+ */
+
+Scene_Map.prototype.initialize = function () {
+  oldSceneMapPrototypeInitializeMethod.call(this);
+  this._isWindowOpen = false;
+
+  if (isNaN(parseInt(_notification_options2.default.getNotificationOptions().timeTillNextWindow))) {
+    throw new Error('Sorry but: ' + _notification_options2.default.getNotificationOptions().timeTillNextWindow + ' is not a number');
+  }
+
+  this._waitForWindowToClose = 0;
+  this._flareWindow = null;
+};
+
+var oldSceneMapPrototypeUpdateMainMethod = Scene_Map.prototype.updateMain;
+Scene_Map.prototype.updateMain = function () {
+  oldSceneMapPrototypeUpdateMainMethod.call(this);
+
+  if (this._waitForWindowToClose > 0) {
+    this._waitForWindowToClose--;
+  } else if (FlareNotification._getQueue().length > 0) {
+    this.handleQueue();
+  }
+};
+
+Scene_Map.prototype.handleQueue = function () {
+  this.openFlareNotificationWindow();
+  this.allowAnotherWindowToBeOpened(this._flareWindow);
+};
+
+Scene_Map.prototype.openFlareNotificationWindow = function () {
+  if (this._flareWindow === null) {
+    this._flareWindow = FlareNotification._getQueue().shift();
+    this.addChild(this._flareWindow.windowMethod);
+
+    this._flareWindow.windowMethod.open(this._flareWindow.text);
+  }
+};
+
+Scene_Map.prototype.allowAnotherWindowToBeOpened = function (flareNotification) {
+  this.removeChild(flareNotification);
+  this._flareWindow = null;
+  this._waitForWindowToClose = _notification_options2.default.getNotificationOptions().timeTillNextWindow;
+};
+
+},{"../notification/window/options":3,"../notification_options/notification_options":4,"../windows/flare_notification_window":7}],6:[function(require,module,exports){
+'use strict';
+
 var _notification_options = require('../notification_options/notification_options');
 
 var _notification_options2 = _interopRequireDefault(_notification_options);
@@ -943,9 +1121,9 @@ Game_Interpreter.prototype.command125 = function () {
   var text = '';
 
   if (value < 0) {
-    text = _notification_options2.default.getNotificationOptions().goldNotificationGainsWindowText + Math.abs(value);
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().goldNotificationLossWindowText + "\\c[0] " + Math.abs(value);
   } else {
-    text = _notification_options2.default.getNotificationOptions().goldNotificationLossWindowText + Math.abs(value);
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().goldNotificationGainWindowText + "\\c[0] " + Math.abs(value);
   }
 
   this.processNotificationEvents(text, "showGoldNotificationEvent", value, {
@@ -967,9 +1145,9 @@ Game_Interpreter.prototype.command126 = function () {
   var text = '';
 
   if (value < 0) {
-    text = "\\c[16]Party Loses " + Math.abs(value) + " \\i[" + $dataItems[this._params[0]].iconIndex + "] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().itemNotificationWindowTextLoss + " " + Math.abs(value) + " \\i[" + $dataItems[this._params[0]].iconIndex + "] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
   } else {
-    text = "\\c[16]Party Gains " + Math.abs(value) + " \\i[" + $dataItems[this._params[0]].iconIndex + "] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().itemNotificationWindowTextGain + " " + Math.abs(value) + " \\i[" + $dataItems[this._params[0]].iconIndex + "] \\c[0]" + $dataItems[this._params[0]].name + "(s)";
   }
 
   this.processNotificationEvents(text, "showItemNotificationEvent", value, {
@@ -991,9 +1169,9 @@ Game_Interpreter.prototype.command127 = function () {
   var text = '';
 
   if (value < 0) {
-    text = "\\c[16]Party Loses " + Math.abs(value) + " \\i[" + $dataWeapons[this._params[0]].iconIndex + "] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().weaponNotificationWindowTextLoss + " " + Math.abs(value) + " \\i[" + $dataWeapons[this._params[0]].iconIndex + "] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
   } else {
-    text = "\\c[16]Party Gains " + Math.abs(value) + " \\i[" + $dataWeapons[this._params[0]].iconIndex + "] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().weaponNotificationWindowTextGained + " " + Math.abs(value) + " \\i[" + $dataWeapons[this._params[0]].iconIndex + "] \\c[0]" + $dataWeapons[this._params[0]].name + "(s)";
   }
 
   this.processNotificationEvents(text, "showWeaponNotificationEvent", value, {
@@ -1015,9 +1193,9 @@ Game_Interpreter.prototype.command128 = function () {
   var text = '';
 
   if (value < 0) {
-    text = "\\c[16]Party Loses " + Math.abs(value) + " \\i[" + $dataArmors[this._params[0]].iconIndex + "] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().armorNotificationWindowTextLoss + " " + Math.abs(value) + " \\i[" + $dataArmors[this._params[0]].iconIndex + "] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
   } else {
-    text = "\\c[16]Party Gains " + Math.abs(value) + " \\i[" + $dataArmors[this._params[0]].iconIndex + "] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
+    text = "\\c[16]" + _notification_options2.default.getNotificationOptions().armorNotificationWindowTextGained + " " + Math.abs(value) + " \\i[" + $dataArmors[this._params[0]].iconIndex + "] \\c[0]" + $dataArmors[this._params[0]].name + "(s)";
   }
 
   this.processNotificationEvents(text, "showArmorNotificationEvent", value, {
@@ -1046,7 +1224,7 @@ Game_Interpreter.prototype.command129 = function () {
         $gameActors.actor(this._params[0]).setup(this._params[0]);
       }
 
-      text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to join your party!\\c[0]";
+      text = $gameActors.actor(this._params[0]).name() + "\\c[16] " + _notification_options2.default.getNotificationOptions().partyNotificationWindowJoinedText + "\\c[0]";
 
       this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
         moveDown: _notification_options2.default.getNotificationOptions().partyNotificationWindowMoveDown,
@@ -1060,7 +1238,7 @@ Game_Interpreter.prototype.command129 = function () {
       $gameParty.addActor(this._params[0]);
     } else {
       // Remove
-      text = $gameActors.actor(this._params[0]).name() + "\\c[16] Has chosen to leave your party.\\c[0]";
+      text = $gameActors.actor(this._params[0]).name() + "\\c[16] " + _notification_options2.default.getNotificationOptions().partyNotificationWindowLeftText + "\\c[0]";
 
       this.processNotificationEvents(text, "showPartyMemberJoiningParty", value, {
         moveDown: _notification_options2.default.getNotificationOptions().partyNotificationWindowMoveDown,
@@ -1086,9 +1264,9 @@ Game_Interpreter.prototype.command311 = function () {
   this.iterateActorEx(this._params[0], this._params[1], (function (actor) {
 
     if (value < 0) {
-      text = actor.name() + " \\c[16]Loses " + Math.abs(value) + " HP \\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().hpNotificationWindowLoseText + " " + Math.abs(value) + " HP \\c[0]";
     } else {
-      text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " HP \\c[0]";;
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().hpNotificationWindowGainText + " " + Math.abs(value) + " HP \\c[0]";;
     }
 
     self.processNotificationEvents(text, "showHpChangingForActor", value, {
@@ -1113,9 +1291,9 @@ Game_Interpreter.prototype.command312 = function () {
 
   this.iterateActorEx(this._params[0], this._params[1], (function (actor) {
     if (value < 0) {
-      text = actor.name() + " \\c[16]Loses " + Math.abs(value) + " MP \\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().mpNotificationWindowLoseText + " " + Math.abs(value) + " MP \\c[0]";
     } else {
-      text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " MP \\c[0]";;
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().mpNotificationWindowGainText + " " + Math.abs(value) + " MP \\c[0]";;
     }
 
     self.processNotificationEvents(text, "showMpChangingForActor", value, {
@@ -1140,9 +1318,9 @@ Game_Interpreter.prototype.command326 = function () {
 
   this.iterateActorEx(this._params[0], this._params[1], (function (actor) {
     if (value < 0) {
-      text = actor.name() + " \\c[16]Loses " + Math.abs(value) + " TP \\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().tpNotificationWindowLoseText + " " + Math.abs(value) + " TP \\c[0]";
     } else {
-      text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " TP \\c[0]";;
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().tpNotificationWindowGainText + " " + Math.abs(value) + " TP \\c[0]";;
     }
 
     self.processNotificationEvents(text, "showTpChangingForActor", value, {
@@ -1167,7 +1345,7 @@ Game_Interpreter.prototype.command313 = function () {
 
     if (this._params[2] === 0) {
 
-      text = actor.name() + " \\c[16]Gets \\i[" + $dataStates[this._params[3]].iconIndex + "] " + $dataStates[this._params[3]].name + " applied\\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().stateNotificationWindowLoseText[0].trim() + " " + $dataStates[this._params[3]].name + " " + _notification_options2.default.getNotificationOptions().stateNotificationWindowGainText[1].trim() + "\\c[0]";
 
       this.processNotificationEvents(text, "showStateChangingForActor", value, {
         moveDown: _notification_options2.default.getNotificationOptions().stateNotificationWindowMoveDown,
@@ -1180,7 +1358,7 @@ Game_Interpreter.prototype.command313 = function () {
 
       actor.addState(this._params[3]);
     } else {
-      text = actor.name() + " \\c[16]Has \\i[" + $dataStates[this._params[3]].iconIndex + "] " + $dataStates[this._params[3]].name + " removed\\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().stateNotificationWindowGainText[0].trim() + " " + $dataStates[this._params[3]].name + " " + _notification_options2.default.getNotificationOptions().stateNotificationWindowLoseText[1].trim() + "\\c[0]";
 
       this.processNotificationEvents(text, "showStateChangingForActor", value, {
         moveDown: _notification_options2.default.getNotificationOptions().stateNotificationWindowMoveDown,
@@ -1205,7 +1383,7 @@ Game_Interpreter.prototype.command314 = function () {
   var text = '';
 
   this.iterateActorEx(this._params[0], this._params[1], (function (actor) {
-    text = actor.name() + " \\c[16]has fully recovered!\\c[0]";
+    text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().recoverAllNotificationWindowText + "\\c[0]";
 
     this.processNotificationEvents(text, "showRecoverAllForActor", value, {
       moveDown: _notification_options2.default.getNotificationOptions().recoverAllNotificationWindowMoveDown,
@@ -1228,9 +1406,9 @@ Game_Interpreter.prototype.command315 = function () {
 
   this.iterateActorEx(this._params[0], this._params[1], (function (actor) {
     if (value < 0) {
-      text = actor.name() + " \\c[16]Looses " + Math.abs(value) + " XP\\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().xPNotificationWindowLoseText + " " + Math.abs(value) + " XP\\c[0]";
     } else {
-      text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " XP\\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().xPNotificationWindowGainText + " " + Math.abs(value) + " XP\\c[0]";
     }
 
     this.processNotificationEvents(text, "showXpForActor", value, {
@@ -1254,9 +1432,9 @@ Game_Interpreter.prototype.command316 = function () {
 
   this.iterateActorEx(this._params[0], this._params[1], (function (actor) {
     if (value < 0) {
-      text = actor.name() + " \\c[16]Looses " + Math.abs(value) + " Level(s)\\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().levelNotificationWindowLoseText + " " + Math.abs(value) + " Level(s)\\c[0]";
     } else {
-      text = actor.name() + " \\c[16]Gains " + Math.abs(value) + " Levels(s)\\c[0]";
+      text = actor.name() + " \\c[16]" + _notification_options2.default.getNotificationOptions().levelNotificationWindowGainText + " " + Math.abs(value) + " Levels(s)\\c[0]";
     }
 
     this.processNotificationEvents(text, "showLevelGainForActor", value, {
@@ -1291,7 +1469,7 @@ Game_Interpreter.prototype.processNotificationEvents = function (text, showKey, 
   }
 };
 
-},{"../notification_options/notification_options":4}],6:[function(require,module,exports){
+},{"../notification_options/notification_options":4}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1392,7 +1570,6 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
     key: 'update',
     value: function update() {
       _get(Object.getPrototypeOf(FlareNotificationWindow.prototype), 'update', this).call(this, this);
-      console.log('asdasdas');
       if (this._showCount > 0) {
         this.updateFadeIn();
 
@@ -1479,7 +1656,7 @@ var FlareNotificationWindow = (function (_FlareWindowBase) {
 
 module.exports = FlareNotificationWindow;
 
-},{"../../lib/windows/flare_window_base":7,"../notification/window/options":3,"lodash/lang/isUndefined":1}],7:[function(require,module,exports){
+},{"../../lib/windows/flare_window_base":8,"../notification/window/options":3,"lodash/lang/isUndefined":1}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1544,4 +1721,4 @@ var FlareWindowBase = (function (_Window_Base) {
 
 module.exports = FlareWindowBase = FlareWindowBase;
 
-},{}]},{},[2,5]);
+},{}]},{},[2,5,6]);
