@@ -58,6 +58,7 @@ Now to build, `gulp taskHere` where `taskHere` is one of the tasks below:
 - `make:flare-play-music` : Makes the Flare Play Music on Region Touch script.
 - `make:flare-game-over-event`: Makes the Flare Game Over Event script.
 - `make:flare-laws-for-map`: Makes the Flare Laws For Map script.
+- `make:flare-remove-troop-from-region`: Makes the Flare Remove Troop From Region script.
 
 All scripts are compiled to the `dist/` directory. Each script contains a
 README to explain some more of how to use said script.
